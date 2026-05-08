@@ -1,0 +1,18 @@
+[
+  {
+    "id": "001_alchemy_deckbuilder",
+    "title": "Alchemy Deckbuilder",
+    "idea": "Alchemy deckbuilding roguelite",
+    "score": 31.85,
+    "status": "Battle prototype complete",
+    "href": "001_alchemy_deckbuilder.html"
+  },
+  {
+    "id": "002_logistics_flow",
+    "title": "Logistics Flow",
+    "idea": "Delivery and logistics flow optimization deckbuilder",
+    "score": 32.75,
+    "status": "Battle prototype complete",
+    "href": "002_logistics_flow.html"
+  }
+]

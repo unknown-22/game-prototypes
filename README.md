@@ -23,11 +23,14 @@ game-prototypes/
 # 依存関係インストール
 uv sync
 
-# プロトタイプ実行
+# プロトタイプ実行例
 uv run python prototypes/001_alchemy_deckbuilder/main.py
 
-# または
-uv run python prototypes/002_logistics_flow/main.py
+# app/webビルド、docs/への配置
+uv run pyxel package prototypes/001_alchemy_deckbuilder prototypes/001_alchemy_deckbuilder/main.py
+uv run pyxel app2html 001_alchemy_deckbuilder.pyxapp
+mv 001_alchemy_deckbuilder.html docs/
+# docs/prototypes.json の更新もお忘れなく
 ```
 
 > **WSL2 で実行する場合**: Pyxel は GUI が必要です。

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Game Prototypes</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f7f8f5;
+        --text: #1e2421;
+        --muted: #59645f;
+        --line: #cfd7d1;
+        --panel: #ffffff;
+        --accent: #156f69;
+        --accent-strong: #0d4f4b;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #121614;
+          --text: #edf2ee;
+          --muted: #a9b5ae;
+          --line: #344039;
+          --panel: #1a201d;
+          --accent: #5bc7bc;
+          --accent-strong: #91ded7;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(960px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        line-height: 1;
+      }
+
+      .summary {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .count {
+        min-width: 6rem;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+
+      .list {
+        display: grid;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: center;
+        min-height: 96px;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .item:hover,
+      .item:focus-visible {
+        border-color: var(--accent);
+        outline: none;
+      }
+
+      .item h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        line-height: 1.2;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .open {
+        color: var(--accent);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .message {
+        margin-top: 24px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 24px, 960px);
+          padding: 32px 0;
+        }
+
+        header,
+        .item {
+          display: block;
+        }
+
+        .count {
+          margin-top: 12px;
+          text-align: left;
+        }
+
+        .open {
+          display: inline-block;
+          margin-top: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Game Prototypes</h1>
+          <p class="summary">Playable Pyxel prototypes built from generated game ideas.</p>
+        </div>
+        <div class="count" id="prototype-count">Loading</div>
+      </header>
+
+      <div class="list" id="prototype-list" aria-live="polite"></div>
+      <p class="message" id="message">Loading prototype index...</p>
+    </main>
+
+    <script>
+      const list = document.querySelector("#prototype-list");
+      const message = document.querySelector("#message");
+      const count = document.querySelector("#prototype-count");
+
+      const formatScore = (score) =>
+        typeof score === "number" ? score.toFixed(2) : "N/A";
+
+      const renderPrototype = (prototype) => {
+        const link = document.createElement("a");
+        link.className = "item";
+        link.href = prototype.href;
+
+        const body = document.createElement("div");
+        const title = document.createElement("h2");
+        title.textContent = `${prototype.id} - ${prototype.title}`;
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+
+        const idea = document.createElement("span");
+        idea.textContent = prototype.idea;
+
+        const score = document.createElement("span");
+        score.textContent = `Score ${formatScore(prototype.score)}`;
+
+        const status = document.createElement("span");
+        status.textContent = prototype.status;
+
+        meta.append(idea, score, status);
+        body.append(title, meta);
+
+        const open = document.createElement("span");
+        open.className = "open";
+        open.textContent = "Open";
+
+        link.append(body, open);
+        return link;
+      };
+
+      fetch("prototypes.json")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((prototypes) => {
+          list.replaceChildren(...prototypes.map(renderPrototype));
+          count.textContent = `${prototypes.length} prototypes`;
+          message.hidden = true;
+        })
+        .catch((error) => {
+          count.textContent = "Unavailable";
+          message.textContent = `Could not load prototypes.json: ${error.message}`;
+        });
+    </script>
+  </body>
+</html>
