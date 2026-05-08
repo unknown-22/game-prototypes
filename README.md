@@ -2,20 +2,7 @@
 
 ゲームアイデアの生成とプロトタイプ作成を行うモノレポ。
 
-## 構成
-
-```
-game-prototypes/
-├── pyproject.toml          # uv プロジェクトルート
-├── ideas/                  # Game Idea Factory の生成結果
-│   ├── 2026-05-08_first5.md
-│   └── 2026-05-08_game_ideas.md
-└── prototypes/
-    ├── 001_alchemy_deckbuilder/ # 錬金術デッキ構築 (31.85)
-    │   └── main.py
-    └── 002_logistics_flow/      # 物流流量最適化 (32.75)
-        └── main.py
-```
+[Webプレビュー　Game Prototypes](https://unknown-22.github.io/game-prototypes/)
 
 ## 使い方
 
@@ -32,9 +19,6 @@ uv run pyxel app2html 001_alchemy_deckbuilder.pyxapp
 mv 001_alchemy_deckbuilder.html docs/
 # docs/prototypes.json の更新もお忘れなく
 ```
-
-> **WSL2 で実行する場合**: Pyxel は GUI が必要です。
-> Windows 側で VcXsrv (XLaunch) などを起動し、`export DISPLAY=:0` を設定してください。
 
 ## プロトタイプ一覧
 
