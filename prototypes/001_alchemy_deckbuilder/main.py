@@ -12,7 +12,7 @@ from __future__ import annotations
 import math
 import random
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
@@ -140,8 +140,8 @@ class Game:
 
     # ── State ──────────────────────────────────────────────────────────
     def reset(self) -> None:
-        self.phase: Phase = Phase.DRAW
-        self.turn = 0
+        self.phase: Phase = Phase.PLAYER_TURN
+        self.turn = 1
 
         # Player
         self.player_hp = START_HP
@@ -161,6 +161,7 @@ class Game:
         self.discard: list[Card] = []
         self.played_this_turn: list[Card] = []
         self.card_uid_counter = 0
+        self.msg_log: list[str] = []
         self._init_deck()
 
         # Turn state
@@ -182,8 +183,8 @@ class Game:
 
         # UI state
         self.hovered_card: Optional[int] = None  # index in hand
-        self.msg_log: list[str] = []
         self._add_msg("⚗️ Draw your opening hand!")
+        self._add_msg(f"─── Turn {self.turn} ───")
 
     def _gen_uid(self) -> int:
         self.card_uid_counter += 1
@@ -306,7 +307,6 @@ class Game:
         color = ELEMENTS[primary_elem]
 
         # Apply synthesis bonus based on element
-        synth_bonus_mult = 1.0
         if count >= 3:
             attr = color["bonus"]
             if attr == "dmg":
@@ -329,9 +329,6 @@ class Game:
         dmg = int(base_dmg * total_mult) if base_dmg > 0 else 0
         block = int(base_block * total_mult) if base_block > 0 else 0
         heal = int(base_heal * total_mult) if base_heal > 0 else 0
-
-        # Check for stun
-        stun = any(c.type == "stun" for c in self.played_this_turn)
 
         # Apply effects
         self.total_damage = dmg
@@ -423,7 +420,7 @@ class Game:
             self._add_msg(f"💥 Enemy deals {dmg} damage!")
             self._spawn_particles(200, 200, C_RED, 15)
         else:
-            self._add_msg(f"🛡️ Block absorbs the hit!")
+            self._add_msg("🛡️ Block absorbs the hit!")
 
         if self.player_hp <= 0:
             self.player_hp = 0
@@ -613,7 +610,7 @@ class Game:
         pyxel.rect(bar_x, bar_y, bar_w, 6, C_DARK)
         hp_col = C_RED if hp_pct < 0.3 else C_ORANGE if hp_pct < 0.6 else C_GREEN
         pyxel.rect(bar_x, bar_y, int(bar_w * hp_pct), 6, hp_col)
-        pyxel.text(bar_x, bar_y - 8, f"Alchemy Golem", C_WHITE)
+        pyxel.text(bar_x, bar_y - 8, "Alchemy Golem", C_WHITE)
         pyxel.text(bar_x, bar_y + 8,
                    f"HP: {self.enemy_hp}/{self.enemy_max_hp}", C_LIGHT)
 
@@ -681,7 +678,6 @@ class Game:
         if self.synth_display:
             cx, cy = W // 2, H // 2 - 40
             col = self.synth_display_col
-            scale = min(1.0, (60 - self.anim_timer) / 20) if self.anim_timer > 40 else 1.0
             # Pulsing effect
             pulse = abs(math.sin(pyxel.frame_count * 0.1))
             size_off = int(pulse * 20)
