@@ -1,10 +1,9 @@
 """
-Logistics Flow — Pyxel Prototype
+Logistics Flow - Pyxel Prototype
 ==================================
-Concept: 配送/物流（流量最適化）デッキ構築バトル。
-同じ種類のカードを連続使用すると「合成」され1枚に圧縮されて強化される。
-盤面に「輻輳（Congestion）」がセルオートマトン的に広がるのを制御しながら、
-物流ルートを敷設して敵（滞留在庫）を駆逐せよ。
+Concept: A logistics deck-building battle about route flow optimization.
+Playing the same card type repeatedly compresses cards into one stronger card.
+Control congestion spreading across the board and clear stalled inventory.
 Score 32.75 idea from Game Idea Factory.
 """
 
@@ -15,7 +14,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
-# ── Config ──
+# Config
 W, H = 420, 330
 FPS = 30
 C_BG = 0
@@ -35,13 +34,13 @@ GRID_COLS, GRID_ROWS = 4, 4
 CELL_SIZE = 28
 GRID_X, GRID_Y = 30, 50
 
-# ── Card Types ──
+# Card Types
 class CardType(Enum):
-    DELIVERY = ("配送", 1, 2, C_GREEN, "基本物流。低コスト安定")       # Delivery
-    EXPRESS = ("特急", 2, 3, C_ORANGE, "高速配送。輻輳+1")            # Express
-    LOGISTICS = ("物流", 1, 1, C_BLUE, "輻輳を1つ除去")               # Logistics
-    AIR = ("空輸", 3, 5, C_PURPLE, "高火力。輻輳を無視")              # Air
-    RAIL = ("鉄路", 2, 2, C_YELLOW, "隣接ルート×1.5")                # Rail
+    DELIVERY = ("Delivery", 1, 2, C_GREEN, "Low-cost steady flow")
+    EXPRESS = ("Express", 2, 3, C_ORANGE, "Fast route. +1 congestion")
+    LOGISTICS = ("Logistics", 1, 1, C_BLUE, "Clear 1 congestion")
+    AIR = ("Air", 3, 5, C_PURPLE, "High flow. Ignores congestion")
+    RAIL = ("Rail", 2, 2, C_YELLOW, "Adjacency bonus")
 
     def __init__(self, label, cost, flow, color, desc):
         self.label = label
@@ -66,7 +65,7 @@ class Card:
     @property
     def display_name(self):
         if self.compress_count >= 2:
-            return f"{self.type.label}×{self.compress_count}"
+            return f"{self.type.label}x{self.compress_count}"
         return self.type.label
 
     @property
@@ -107,7 +106,7 @@ class CellType(Enum):
 
 class Game:
     def __init__(self):
-        pyxel.init(W, H, title="Logistics Flow — Prototype", fps=FPS, display_scale=2)
+        pyxel.init(W, H, title="Logistics Flow - Prototype", fps=FPS, display_scale=2)
         pyxel.mouse(True)
         self.reset()
         pyxel.run(self.update, self.draw)
@@ -126,7 +125,7 @@ class Game:
         # Enemy
         self.enemy_hp = 35
         self.enemy_max_hp = 35
-        self.enemy_name = "滞留在庫"
+        self.enemy_name = "Backlog"
         self.turn = 1
 
         # Deck & Hand
@@ -172,7 +171,7 @@ class Game:
             self.deck = self.discard
             random.shuffle(self.deck)
             self.discard = []
-            self.show_message("山札をシャッフル！")
+            self.show_message("Deck reshuffled!")
 
     def show_message(self, text):
         self.message = text
@@ -211,7 +210,7 @@ class Game:
             return
         card = self.hand[idx]
         if card.cost > self.heat:
-            self.show_message(f"HEAT不足！ (必要:{card.cost})")
+            self.show_message(f"Not enough HEAT! Need {card.cost}")
             return
 
         self.heat -= card.cost
@@ -231,7 +230,7 @@ class Game:
             existing.compressed = True
             flow = existing.current_flow
             self.compress_flash = 15
-            self.show_message(f"合成！ {existing.display_name} → 流力{flow}")
+            self.show_message(f"Compressed! {existing.display_name} FLOW {flow}")
             self.add_explosion(
                 GRID_X + GRID_COLS * CELL_SIZE // 2,
                 GRID_Y + GRID_ROWS * CELL_SIZE // 2,
@@ -239,7 +238,7 @@ class Game:
             )
         else:
             self.played_this_turn.append(played_card)
-            self.show_message(f"{played_card.display_name} 配送開始！")
+            self.show_message(f"{played_card.display_name} route started!")
 
         # Place a route on the board
         self.place_route(card)
@@ -273,7 +272,7 @@ class Game:
                     )
                     return
         # If board is full, just deal bonus damage
-        self.show_message("盤面満杯！ 直接ダメージ+3")
+        self.show_message("Board full! Direct damage +3")
         self.enemy_hp -= 3
 
     def calc_rail_bonus(self):
@@ -319,7 +318,7 @@ class Game:
                         C_BLUE, 4
                     )
         if cleared > 0:
-            self.show_message(f"輻輳を{cleared}つ除去！")
+            self.show_message(f"Cleared {cleared} congestion!")
 
     def resolve_player_turn(self):
         """Resolve all played cards' effects"""
@@ -331,7 +330,7 @@ class Game:
                 bonus = self.calc_rail_bonus()
                 flow += bonus
                 if bonus > 0:
-                    self.show_message(f"鉄路隣接ボーナス +{bonus}！")
+                    self.show_message(f"Rail adjacency bonus +{bonus}!")
             total_flow += flow
             self.add_explosion(
                 W // 2, H // 2 - 30,
@@ -340,10 +339,10 @@ class Game:
 
         if total_flow > 0:
             self.enemy_hp -= total_flow
-            self.show_message(f"総流量 {total_flow}！ 敵に{total_flow}ダメージ！")
+            self.show_message(f"Total flow {total_flow}! Enemy takes {total_flow} dmg!")
             self.add_explosion(W // 2, 50, C_RED, 20)
         else:
-            self.show_message("カードをプレイして配送せよ！")
+            self.show_message("Play cards to build routes!")
 
         # Discard played cards
         self.discard.extend(self.played_this_turn)
@@ -392,7 +391,7 @@ class Game:
         base_damage = 2 + self.turn // 3
         damage = base_damage + congestion_damage
         self.player_hp -= damage
-        self.show_message(f"輻輳が拡大！ {damage}ダメージ！ (輻輳+{congestion_damage})")
+        self.show_message(f"Congestion spreads! {damage} dmg! (+{congestion_damage})")
         self.flash_timer = 10
 
     def end_player_turn(self):
@@ -418,11 +417,11 @@ class Game:
         congested = sum(1 for r in range(GRID_ROWS) for c in range(GRID_COLS)
                        if self.grid[r][c] == CellType.CONGESTED)
         if congested >= GRID_ROWS * GRID_COLS:
-            self.show_message("盤面が輻輳で埋まった！")
+            self.show_message("Board filled with congestion!")
             return "lose"
         return None
 
-    # ── Update ──
+    # Update
     def update(self):
         if self.message_timer > 0:
             self.message_timer -= 1
@@ -486,7 +485,7 @@ class Game:
         y = 280
         return x, y, cw, ch
 
-    # ── Draw ──
+    # Draw
     def draw(self):
         pyxel.cls(C_BG)
 
@@ -500,11 +499,11 @@ class Game:
         self.draw_game_over()
 
         # Title
-        pyxel.text(15, 8, "Logistics Flow — 物流流量最適化", C_LIGHT)
+        pyxel.text(15, 8, "Logistics Flow - Route Optimizer", C_LIGHT)
 
     def draw_enemy_area(self):
         # Enemy name + HP bar
-        pyxel.text(15, 28, f"敵: {self.enemy_name}", C_RED)
+        pyxel.text(15, 28, f"Enemy: {self.enemy_name}", C_RED)
         bar_x, bar_y, bar_w, bar_h = 100, 28, 200, 12
         pyxel.rect(bar_x, bar_y, bar_w, bar_h, C_DARK)
         hp_pct = max(0, self.enemy_hp / self.enemy_max_hp)
@@ -552,7 +551,7 @@ class Game:
                     pyxel.rectb(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2, C_DARK)
 
         # Board label
-        pyxel.text(GRID_X, GRID_Y - 14, "物流ネットワーク", C_LIGHT)
+        pyxel.text(GRID_X, GRID_Y - 14, "Logistics Network", C_LIGHT)
 
     def draw_player_info(self):
         info_x = 170
@@ -577,7 +576,7 @@ class Game:
         congested = sum(1 for r in range(GRID_ROWS) for c in range(GRID_COLS)
                        if self.grid[r][c] == CellType.CONGESTED)
         cong_y = heat_y + 25
-        pyxel.text(info_x, cong_y, f"輻輳: {congested}/{GRID_ROWS*GRID_COLS}",
+        pyxel.text(info_x, cong_y, f"Cong: {congested}/{GRID_ROWS*GRID_COLS}",
                    C_RED if congested > 4 else C_WHITE)
         # Congestion bar
         pyxel.rect(info_x, cong_y + 10, bar_w, 6, C_DARK)
@@ -588,12 +587,12 @@ class Game:
 
         # Played cards this turn
         if self.played_this_turn:
-            pyxel.text(info_x, cong_y + 25, "今ターンの配送:", C_LIGHT)
+            pyxel.text(info_x, cong_y + 25, "Routes this turn:", C_LIGHT)
             y_off = cong_y + 37
             for i, card in enumerate(self.played_this_turn):
                 label = card.display_name
                 if card.compress_count >= 2:
-                    label += " ⚡"
+                    label += " *"
                 pyxel.text(info_x + i * 50, y_off, label, card.color)
 
     def draw_hand(self):
@@ -621,7 +620,7 @@ class Game:
 
             # Flow value
             flow = card.current_flow
-            pyxel.text(cx + 3, cy + 22, f"流力:{flow}", C_GREEN if can_afford else C_DARK)
+            pyxel.text(cx + 3, cy + 22, f"FLOW:{flow}", C_GREEN if can_afford else C_DARK)
 
     def draw_end_turn_button(self):
         ex, ey, ew, eh = 340, 280, 65, 25
@@ -653,15 +652,15 @@ class Game:
         if result == "win":
             pyxel.rect(0, H // 2 - 30, W, 60, C_DARK)
             pyxel.rectb(0, H // 2 - 30, W, 60, C_YELLOW)
-            pyxel.text(W // 2 - 40, H // 2 - 20, "=== 物流完了！ ===", C_GREEN)
-            pyxel.text(W // 2 - 50, H // 2, "滞留在庫を一掃しました", C_WHITE)
-            pyxel.text(W // 2 - 50, H // 2 + 15, "[R] リスタート", C_LIGHT)
+            pyxel.text(W // 2 - 40, H // 2 - 20, "=== FLOW COMPLETE ===", C_GREEN)
+            pyxel.text(W // 2 - 50, H // 2, "Backlog cleared", C_WHITE)
+            pyxel.text(W // 2 - 50, H // 2 + 15, "[R] Restart", C_LIGHT)
         elif result == "lose":
             pyxel.rect(0, H // 2 - 30, W, 60, C_DARK)
             pyxel.rectb(0, H // 2 - 30, W, 60, C_RED)
-            pyxel.text(W // 2 - 50, H // 2 - 20, "=== システムダウン ===", C_RED)
-            pyxel.text(W // 2 - 50, H // 2, "輻輳により物流網が崩壊", C_WHITE)
-            pyxel.text(W // 2 - 50, H // 2 + 15, "[R] リスタート", C_LIGHT)
+            pyxel.text(W // 2 - 50, H // 2 - 20, "=== SYSTEM DOWN ===", C_RED)
+            pyxel.text(W // 2 - 50, H // 2, "Network collapsed", C_WHITE)
+            pyxel.text(W // 2 - 50, H // 2 + 15, "[R] Restart", C_LIGHT)
 
 
 if __name__ == "__main__":

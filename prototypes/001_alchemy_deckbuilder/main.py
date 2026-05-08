@@ -1,5 +1,5 @@
 """
-Alchemy Deckbuilder — Pyxel Prototype
+Alchemy Deckbuilder - Pyxel Prototype
 ======================================
 Concept: Deck-building roguelite where you can only play cards
 of ONE color per turn. Same-color cards synthesize for bonus effects.
@@ -18,7 +18,7 @@ from typing import Optional
 
 import pyxel
 
-# ── Config ────────────────────────────────────────────────────────────────
+# Config
 W, H = 400, 300
 FPS = 30
 CARD_W, CARD_H = 56, 76
@@ -42,7 +42,7 @@ C_PURPLE = 13
 C_PINK = 14
 C_PEACH = 15
 
-# ── Element Data ──────────────────────────────────────────────────────────
+# Element Data
 ELEMENTS: dict[str, dict] = {
     "fire":   {"col": C_RED,    "label": "Fire",   "short": "FIR",
                "synth_label": "Conflagrate", "bonus": "dmg"},
@@ -59,7 +59,7 @@ ELEMENTS: dict[str, dict] = {
 ELEMENT_ORDER = ["fire", "water", "earth", "air", "aether"]
 ELEMENT_NAMES = [e["label"] for e in ELEMENTS.values()]
 
-# ── Card Definitions ──────────────────────────────────────────────────────
+# Card Definitions
 CARD_DEFS: list[dict] = [
     # (name, element, cost, effect_type, value, desc)
     {"name": "Fireball",    "elem": "fire",   "cost": 2, "type": "dmg",   "val": 6,  "desc": "6 dmg"},
@@ -74,13 +74,13 @@ CARD_DEFS: list[dict] = [
     {"name": "Lightning",   "elem": "air",    "cost": 3, "type": "dmg",   "val": 8,  "desc": "8 dmg"},
     {"name": "Gust",        "elem": "air",    "cost": 1, "type": "draw",  "val": 1,  "desc": "Draw 1"},
     {"name": "Tornado",     "elem": "air",    "cost": 4, "type": "dmg",   "val": 12, "desc": "12 dmg"},
-    {"name": "Prism",       "elem": "aether", "cost": 3, "type": "buff",  "val": 2,  "desc": "×2 synth"},
+    {"name": "Prism",       "elem": "aether", "cost": 3, "type": "buff",  "val": 2,  "desc": "x2 synth"},
     {"name": "Transmute",   "elem": "aether", "cost": 2, "type": "wild",  "val": 1,  "desc": "Flex"},
     {"name": "Philosopher Stone", "elem": "aether", "cost": 4, "type": "draw", "val": 2, "desc": "Draw 2"},
 ]
 
 
-# ── Data classes ──────────────────────────────────────────────────────────
+# Data classes
 @dataclass
 class Card:
     name: str
@@ -128,17 +128,17 @@ class Phase(Enum):
     DEFEAT = "defeat"
 
 
-# ── Game ──────────────────────────────────────────────────────────────────
+# Game
 class Game:
     def __init__(self) -> None:
-        pyxel.init(W, H, title="Alchemy Deckbuilder — Prototype", fps=FPS,
+        pyxel.init(W, H, title="Alchemy Deckbuilder - Prototype", fps=FPS,
                    display_scale=2)
         pyxel.mouse(True)
 
         self.reset()
         pyxel.run(self.update, self.draw)
 
-    # ── State ──────────────────────────────────────────────────────────
+    # State
     def reset(self) -> None:
         self.phase: Phase = Phase.PLAYER_TURN
         self.turn = 1
@@ -183,8 +183,8 @@ class Game:
 
         # UI state
         self.hovered_card: Optional[int] = None  # index in hand
-        self._add_msg("⚗️ Draw your opening hand!")
-        self._add_msg(f"─── Turn {self.turn} ───")
+        self._add_msg("Draw your opening hand!")
+        self._add_msg(f"--- Turn {self.turn} ---")
 
     def _gen_uid(self) -> int:
         self.card_uid_counter += 1
@@ -206,7 +206,7 @@ class Game:
             self.deck = self.discard.copy()
             random.shuffle(self.deck)
             self.discard = []
-            self._add_msg("🔄 Deck reshuffled!")
+            self._add_msg("Deck reshuffled!")
         if not self.deck:
             return None
         card = self.deck.pop()
@@ -218,7 +218,7 @@ class Game:
         if len(self.msg_log) > 6:
             self.msg_log.pop(0)
 
-    # ── Particles ──────────────────────────────────────────────────────
+    # Particles
     def _spawn_particles(self, x: float, y: float, col: int,
                          count: int = 20) -> None:
         for _ in range(count):
@@ -246,17 +246,17 @@ class Game:
         for p in dead:
             self.particles.remove(p)
 
-    # ── Game Logic ─────────────────────────────────────────────────────
+    # Game Logic
     def _calc_synth_tier(self, count: int) -> tuple[int, str]:
         """Return (multiplier, label) for a given count of same-element cards."""
         if count >= 5:
-            return (5, "MAGNUM OPUS ★★★★★")
+            return (5, "MAGNUM OPUS *****")
         elif count == 4:
-            return (3, "ELIXIR ★★★★")
+            return (3, "ELIXIR ****")
         elif count == 3:
-            return (2, "COMPOUND ★★★")
+            return (2, "COMPOUND ***")
         elif count == 2:
-            return (1, "DISTILL ★★")
+            return (1, "DISTILL **")
         else:
             return (1, "")
 
@@ -338,17 +338,17 @@ class Game:
 
         # Visual
         if dmg > 0:
-            self._add_msg(f"⚡ {dmg} damage ({color['label']} ×{total_mult:.1f})")
+            self._add_msg(f"{dmg} damage ({color['label']} x{total_mult:.1f})")
             self._spawn_particles(80, 80, color["col"], 30)
         if block > 0:
-            self._add_msg(f"🛡️ {block} block")
+            self._add_msg(f"{block} block")
             self._spawn_particles(200, 80, C_LIGHT, 15)
         if heal > 0:
-            self._add_msg(f"💚 +{heal} HP")
+            self._add_msg(f"+{heal} HP")
         if mana_gain > 0:
-            self._add_msg(f"💎 +{mana_gain} mana")
+            self._add_msg(f"+{mana_gain} mana")
         if extra_draw > 0:
-            self._add_msg(f"📜 Draw {extra_draw} extra")
+            self._add_msg(f"Draw {extra_draw} extra")
 
         # Go to animation phase
         self.phase = Phase.ANIM_SYNTH
@@ -399,12 +399,12 @@ class Game:
         if self.enemy_hp <= 0:
             self.enemy_hp = 0
             self.phase = Phase.VICTORY
-            self._add_msg("🏆 VICTORY! Enemy defeated!")
+            self._add_msg("VICTORY! Enemy defeated!")
             return
 
         # Enemy turn
         if stun:
-            self._add_msg("🌀 Enemy is stunned! They skip their turn.")
+            self._add_msg("Enemy is stunned! They skip their turn.")
             self.phase = Phase.DRAW
             self._start_new_turn()
         else:
@@ -417,15 +417,15 @@ class Game:
         self.player_block = max(self.player_block - base_damage, 0)
         if dmg > 0:
             self.player_hp -= dmg
-            self._add_msg(f"💥 Enemy deals {dmg} damage!")
+            self._add_msg(f"Enemy deals {dmg} damage!")
             self._spawn_particles(200, 200, C_RED, 15)
         else:
-            self._add_msg("🛡️ Block absorbs the hit!")
+            self._add_msg("Block absorbs the hit!")
 
         if self.player_hp <= 0:
             self.player_hp = 0
             self.phase = Phase.DEFEAT
-            self._add_msg("💀 DEFEAT...")
+            self._add_msg("DEFEAT...")
             return
 
         self.phase = Phase.DRAW
@@ -450,13 +450,13 @@ class Game:
             self._draw_card()
 
         self.phase = Phase.PLAYER_TURN
-        self._add_msg(f"─── Turn {self.turn} ───")
+        self._add_msg(f"--- Turn {self.turn} ---")
 
     def _end_player_turn(self) -> None:
         self.phase = Phase.DRAW
         self._start_new_turn()
 
-    # ── Input ──────────────────────────────────────────────────────────
+    # Input
     def _handle_click(self) -> None:
         mx, my = pyxel.mouse_x, pyxel.mouse_y
         if not pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -508,13 +508,13 @@ class Game:
             for _ in range(card.val):
                 self._draw_card()
 
-        self._add_msg(f"▶ {card.name} ({card.cost} mana)")
+        self._add_msg(f"> {card.name} ({card.cost} mana)")
         self._spawn_particles(
             self._card_x(len(self.hand)) + CARD_W // 2, HAND_Y + CARD_H // 2,
             card.color, 10
         )
 
-    # ── Drawing helpers ────────────────────────────────────────────────
+    # Drawing helpers
     @staticmethod
     def _card_x(idx: int) -> int:
         total_w = HAND_CAP * (CARD_W + 4) - 4
@@ -553,7 +553,7 @@ class Game:
                    C_WHITE if not is_locked_out else C_DARK)
 
         # Cost
-        pyxel.text(x + 3, y + 24, f"⚡{card.cost}",
+        pyxel.text(x + 3, y + 24, f"C:{card.cost}",
                    C_WHITE if not is_locked_out else C_DARK)
 
         # Description
@@ -716,7 +716,7 @@ class Game:
         for i, msg in enumerate(self.msg_log[-5:]):
             pyxel.text(4, H - 8 * (5 - i), msg, C_LIGHT)
 
-    # ── Update ─────────────────────────────────────────────────────────
+    # Update
     def update(self) -> None:
         self._handle_click()
         self._update_particles()
@@ -745,7 +745,7 @@ class Game:
             if self.anim_timer <= 0:
                 self._enemy_attack()
 
-    # ── Draw ───────────────────────────────────────────────────────────
+    # Draw
     def draw(self) -> None:
         pyxel.cls(C_BG)
 
