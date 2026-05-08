@@ -10,7 +10,7 @@ game-prototypes/
 ├── ideas/                  # Game Idea Factory の生成結果
 │   └── 2026-05-08_first5.md
 └── prototypes/
-    └── alchemy-deckbuilder/ # Pyxel プロトタイプ
+    └── 001_alchemy_deckbuilder/ # Pyxel プロトタイプ
         └── main.py
 ```
 
@@ -21,7 +21,7 @@ game-prototypes/
 uv sync
 
 # プロトタイプ実行
-uv run python prototypes/alchemy-deckbuilder/main.py
+uv run python prototypes/001_alchemy_deckbuilder/main.py
 ```
 
 > **WSL2 で実行する場合**: Pyxel は GUI が必要です。
@@ -31,7 +31,7 @@ uv run python prototypes/alchemy-deckbuilder/main.py
 
 | プロトタイプ | 元アイデア | スコア | 状態 |
 |---|---|---|---|
-| alchemy-deckbuilder | 錬金術デッキ構築ローグライト | 31.85 | ✅ バトルプロト完了 |
+| 001_alchemy_deckbuilder | 錬金術デッキ構築ローグライト | 31.85 | ✅ バトルプロト完了 |
 
 ## 関連リポジトリ
 
