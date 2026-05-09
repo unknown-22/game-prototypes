@@ -14,5 +14,13 @@
     "score": 32.75,
     "status": "Battle prototype complete",
     "href": "002_logistics_flow.html"
+  },
+  {
+    "id": "003_magic_synthesis",
+    "title": "Magic Academy: Spell Synthesis",
+    "idea": "Magic Academy card synthesis battle (same-type spells merge into amplified effects)",
+    "score": 31.6,
+    "status": "Battle prototype complete",
+    "href": "003_magic_synthesis.html"
   }
 ]
