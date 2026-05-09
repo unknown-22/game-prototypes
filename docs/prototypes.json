@@ -30,5 +30,13 @@
     "score": 31.2,
     "status": "Battle prototype complete",
     "href": "004_circuit_breaker.html"
+  },
+  {
+    "id": "005_calamity_dice",
+    "title": "Calamity Dice",
+    "idea": "Dice battler: roll elemental dice, pick one element per turn. Channeled dice enter log and return next turn, building an avalanche of power. Manage heat to avoid feedback damage.",
+    "score": 31.45,
+    "status": "Battle prototype complete",
+    "href": "005_calamity_dice.html"
   }
 ]
