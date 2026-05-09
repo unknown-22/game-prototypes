@@ -22,5 +22,13 @@
     "score": 31.6,
     "status": "Battle prototype complete",
     "href": "003_magic_synthesis.html"
+  },
+  {
+    "id": "004_circuit_breaker",
+    "title": "Circuit Breaker",
+    "idea": "Hacking deckbuilder: stack same-type code cards; when stack reaches burden threshold, it COLLAPSES for amplified burst effect.",
+    "score": 31.2,
+    "status": "Battle prototype complete",
+    "href": "004_circuit_breaker.html"
   }
 ]
