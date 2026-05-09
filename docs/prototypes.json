@@ -38,5 +38,13 @@
     "score": 31.45,
     "status": "Battle prototype complete",
     "href": "005_calamity_dice.html"
+  },
+  {
+    "id": "006_power_grid",
+    "title": "Power Grid",
+    "idea": "Power plant deckbuilder: manage 3 generators, play cards to boost output and control heat. Trigger chain overloads for massive score multipliers.",
+    "score": 31.15,
+    "status": "Battle prototype complete",
+    "href": "006_power_grid.html"
   }
 ]
