@@ -70,5 +70,13 @@
     "score": 32.55,
     "status": "Battle prototype complete",
     "href": "009_viral_cascade.html"
+  },
+  {
+    "id": "010_synth_surge",
+    "title": "Synth Surge",
+    "idea": "Auto-shooter with color-match synthesis: collect 3 same-color shards to trigger super abilities (screen wipe, freeze, heal, overdrive). Risk/reward shard positioning.",
+    "score": 31.45,
+    "status": "Battle prototype complete",
+    "href": "010_synth_surge.html"
   }
 ]
