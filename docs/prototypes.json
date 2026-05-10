@@ -62,5 +62,13 @@
     "score": 31.6,
     "status": "Battle prototype complete",
     "href": "008_fork_bomb.html"
+  },
+  {
+    "id": "009_viral_cascade",
+    "title": "Viral Cascade",
+    "idea": "Hacking-themed cellular automaton grid battler: inject viruses, watch them spread, harvest connected clusters for chain damage. Overflow risk if clusters grow too large.",
+    "score": 32.55,
+    "status": "Battle prototype complete",
+    "href": "009_viral_cascade.html"
   }
 ]
