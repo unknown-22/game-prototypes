@@ -46,5 +46,13 @@
     "score": 31.15,
     "status": "Battle prototype complete",
     "href": "006_power_grid.html"
+  },
+  {
+    "id": "007_overload",
+    "title": "OVERLOAD",
+    "idea": "Power core survival auto-shooter: manage charge meter for fire rate boost, trigger screen-clearing OVERLOAD at HP cost. Chain reactions cascade through enemies.",
+    "score": 31.4,
+    "status": "Battle prototype complete",
+    "href": "007_overload.html"
   }
 ]
