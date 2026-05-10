@@ -54,5 +54,13 @@
     "score": 31.4,
     "status": "Battle prototype complete",
     "href": "007_overload.html"
+  },
+  {
+    "id": "008_fork_bomb",
+    "title": "Fork Bomb",
+    "idea": "Dice-splitting circuit battler: route signal dice through 3 lanes, split values across paths, and recombine matching adjacent values for multiplied burst damage.",
+    "score": 31.6,
+    "status": "Battle prototype complete",
+    "href": "008_fork_bomb.html"
   }
 ]
