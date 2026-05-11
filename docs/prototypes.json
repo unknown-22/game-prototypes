@@ -102,5 +102,13 @@
     "score": 31.45,
     "status": "Grid survival prototype complete",
     "href": "013_foresight.html"
+  },
+  {
+    "id": "014_chroma_break",
+    "title": "CHROMA BREAK",
+    "idea": "Color-match breakout: paddle cycles through 4 elements, ball only damages matching-color bricks, consecutive same-color breaks build COMBO for piercing SUPER BALL. Reinterpreted from alchemy synthesis idea (score 31.65).",
+    "score": 31.65,
+    "status": "Breakout prototype complete",
+    "href": "014_chroma_break.html"
   }
 ]
