@@ -94,5 +94,13 @@
     "score": 31.8,
     "status": "Tower defense prototype complete",
     "href": "012_mining_front.html"
+  },
+  {
+    "id": "013_foresight",
+    "title": "FORESIGHT",
+    "idea": "Grid survival: spend future knowledge to attack. Your vision of upcoming enemy spawns is the resource you spend. Reinterpreted from dice/bag roguelite idea (cost = future hand, not HP).",
+    "score": 31.45,
+    "status": "Grid survival prototype complete",
+    "href": "013_foresight.html"
   }
 ]
