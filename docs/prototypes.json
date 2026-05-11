@@ -86,5 +86,13 @@
     "score": 31.4,
     "status": "Puzzle prototype complete",
     "href": "011_alchemy_drop.html"
+  },
+  {
+    "id": "012_mining_front",
+    "title": "Mining Front",
+    "idea": "Lane-based tower defense: place mining turrets, chain adjacent reactors for amplified damage, manage ore economy across 10 waves. Reinterpreted from space-mining deckbuilder idea.",
+    "score": 31.8,
+    "status": "Tower defense prototype complete",
+    "href": "012_mining_front.html"
   }
 ]
