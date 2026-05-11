@@ -78,5 +78,13 @@
     "score": 31.45,
     "status": "Battle prototype complete",
     "href": "010_synth_surge.html"
+  },
+  {
+    "id": "011_alchemy_drop",
+    "title": "Alchemy Drop",
+    "idea": "Falling-block puzzle: stack elemental blocks, match 3+ to clear, chain reactions cascade for score multipliers. Reinterpreted from alchemy synthesis idea.",
+    "score": 31.4,
+    "status": "Puzzle prototype complete",
+    "href": "011_alchemy_drop.html"
   }
 ]
