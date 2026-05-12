@@ -110,5 +110,13 @@
     "score": 31.65,
     "status": "Breakout prototype complete",
     "href": "014_chroma_break.html"
+  },
+  {
+    "id": "015_element_drop",
+    "title": "Element Drop",
+    "idea": "Pachinko/Peggle ball-drop with alchemy synthesis: consecutive same-element peg hits double the combo multiplier. Reinterpreted from alchemy synthesis idea (score 31.65).",
+    "score": 31.65,
+    "status": "Pachinko prototype complete",
+    "href": "015_element_drop.html"
   }
 ]
