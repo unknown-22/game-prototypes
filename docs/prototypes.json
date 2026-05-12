@@ -134,5 +134,13 @@
     "score": 31.55,
     "status": "Platformer prototype complete",
     "href": "017_chain_vault.html"
+  },
+  {
+    "id": "018_ore_serpent",
+    "title": "ORE SERPENT",
+    "idea": "Snake-like mining: navigate a growing drill-serpent, collect same-color ores consecutively for COMBO multiplier. Body constrains movement — longer = more risk. Reinterpreted from auto-shooter/space-mining idea (score 32.2) with log/replay as assets hook.",
+    "score": 32.2,
+    "status": "Snake prototype complete",
+    "href": "018_ore_serpent.html"
   }
 ]
