@@ -126,5 +126,13 @@
     "score": 32.2,
     "status": "Orbital prototype complete",
     "href": "016_gravity_well.html"
+  },
+  {
+    "id": "017_chain_vault",
+    "title": "CHAIN VAULT",
+    "idea": "Color-chain platformer: jump between platforms, chain same-colored landings to trigger cascading SHATTER for massive score. Reinterpreted from hacking auto-shooter idea (score 31.55) with chain propagation + one-color constraint hooks.",
+    "score": 31.55,
+    "status": "Platformer prototype complete",
+    "href": "017_chain_vault.html"
   }
 ]
