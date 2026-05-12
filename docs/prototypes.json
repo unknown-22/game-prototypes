@@ -118,5 +118,13 @@
     "score": 31.65,
     "status": "Pachinko prototype complete",
     "href": "015_element_drop.html"
+  },
+  {
+    "id": "016_gravity_well",
+    "title": "Gravity Well",
+    "idea": "Orbital survival: capture drifting mass into orbit, then trigger chain collapse for combo score. Manage heat from orbiting mass. Reinterpreted from alchemy dice/bag roguelite idea (score 32.2) with resonance echoes from movement trail.",
+    "score": 32.2,
+    "status": "Orbital prototype complete",
+    "href": "016_gravity_well.html"
   }
 ]
