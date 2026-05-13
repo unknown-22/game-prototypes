@@ -150,5 +150,13 @@
     "score": 31.95,
     "status": "Shooter prototype complete",
     "href": "019_chain_reactor.html"
+  },
+  {
+    "id": "020_echo_drift",
+    "title": "ECHO DRIFT",
+    "idea": "Grid-based top-down racer: leave colored echo trail on track, re-entering same-color cells triggers COMBO chain multipliers while building dangerous heat. DISCHARGE to clear. Reinterpreted from auto-shooter/power-plant idea (score 32.15) with log/replay → echo trail, CA grid → volatile spread hooks.",
+    "score": 32.15,
+    "status": "Racing prototype complete",
+    "href": "020_echo_drift.html"
   }
 ]
