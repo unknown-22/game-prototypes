@@ -142,5 +142,13 @@
     "score": 32.2,
     "status": "Snake prototype complete",
     "href": "018_ore_serpent.html"
+  },
+  {
+    "id": "019_chain_reactor",
+    "title": "CHAIN REACTOR",
+    "idea": "Top-down arena shooter: destroy one enemy to trigger cascading same-color chain reactions. Reinterpreted from deckbuilder idea (score 31.95) with chain propagation + one-color-per-action hooks.",
+    "score": 31.95,
+    "status": "Shooter prototype complete",
+    "href": "019_chain_reactor.html"
   }
 ]
