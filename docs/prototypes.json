@@ -166,5 +166,13 @@
     "score": 32.15,
     "status": "Lunar lander prototype complete",
     "href": "021_thrust_chain.html"
+  },
+  {
+    "id": "022_calamity_siege",
+    "title": "CALAMITY SIEGE",
+    "idea": "Space-invaders style gallery shooter: contain enemies before they breach. Same-color combo unlocks piercing laser. Reinterpreted from calamity sealing deckbuilder idea (score 32.05).",
+    "score": 32.05,
+    "status": "Shooter prototype complete",
+    "href": "022_calamity_siege.html"
   }
 ]
