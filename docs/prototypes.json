@@ -158,5 +158,13 @@
     "score": 32.15,
     "status": "Racing prototype complete",
     "href": "020_echo_drift.html"
+  },
+  {
+    "id": "021_thrust_chain",
+    "title": "THRUST CHAIN",
+    "idea": "Lunar lander with color-matched combo chains: land on same-color pads consecutively for COMBO multipliers while managing fuel, HP, and gravity. Reinterpreted from deckbuilder/logistics idea (score 32.15) with circuit/pipe flow → color chain, split/converge → combo jackpot hooks.",
+    "score": 32.15,
+    "status": "Lunar lander prototype complete",
+    "href": "021_thrust_chain.html"
   }
 ]
