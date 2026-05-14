@@ -190,5 +190,13 @@
     "score": 31.65,
     "status": "Pinball prototype complete",
     "href": "024_chroma_bounce.html"
+  },
+  {
+    "id": "025_combo_burst",
+    "title": "COMBO BURST",
+    "idea": "Color-match target shooting gallery: same-color consecutive hits build COMBO. COMBO >= 3 triggers CHAIN BURST cascading through nearby same-color targets. Reinterpreted from space-mining deckbuilder idea (score 31.8) with floor rule changes + chain collapse hooks.",
+    "score": 31.8,
+    "status": "Reaction shooter prototype complete",
+    "href": "025_combo_burst.html"
   }
 ]
