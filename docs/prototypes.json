@@ -198,5 +198,13 @@
     "score": 31.8,
     "status": "Reaction shooter prototype complete",
     "href": "025_combo_burst.html"
+  },
+  {
+    "id": "026_color_flux",
+    "title": "COLOR FLUX",
+    "idea": "One-button color-matching flyer: flap through colored gates, match your bird's color to build COMBO. COMBO >= 5 triggers SYNTHESIS super-mode (3x score, rainbow gates). Reinterpreted from dice/bag roguelite idea (score 31.65) with synthesis compression + one-color-per-turn hooks.",
+    "score": 31.65,
+    "status": "Flyer prototype complete",
+    "href": "026_color_flux.html"
   }
 ]
