@@ -138,7 +138,7 @@
   {
     "id": "018_ore_serpent",
     "title": "ORE SERPENT",
-    "idea": "Snake-like mining: navigate a growing drill-serpent, collect same-color ores consecutively for COMBO multiplier. Body constrains movement — longer = more risk. Reinterpreted from auto-shooter/space-mining idea (score 32.2) with log/replay as assets hook.",
+    "idea": "Snake-like mining: navigate a growing drill-serpent, collect same-color ores consecutively for COMBO multiplier. Body constrains movement \u2014 longer = more risk. Reinterpreted from auto-shooter/space-mining idea (score 32.2) with log/replay as assets hook.",
     "score": 32.2,
     "status": "Snake prototype complete",
     "href": "018_ore_serpent.html"
@@ -154,7 +154,7 @@
   {
     "id": "020_echo_drift",
     "title": "ECHO DRIFT",
-    "idea": "Grid-based top-down racer: leave colored echo trail on track, re-entering same-color cells triggers COMBO chain multipliers while building dangerous heat. DISCHARGE to clear. Reinterpreted from auto-shooter/power-plant idea (score 32.15) with log/replay → echo trail, CA grid → volatile spread hooks.",
+    "idea": "Grid-based top-down racer: leave colored echo trail on track, re-entering same-color cells triggers COMBO chain multipliers while building dangerous heat. DISCHARGE to clear. Reinterpreted from auto-shooter/power-plant idea (score 32.15) with log/replay \u2192 echo trail, CA grid \u2192 volatile spread hooks.",
     "score": 32.15,
     "status": "Racing prototype complete",
     "href": "020_echo_drift.html"
@@ -162,7 +162,7 @@
   {
     "id": "021_thrust_chain",
     "title": "THRUST CHAIN",
-    "idea": "Lunar lander with color-matched combo chains: land on same-color pads consecutively for COMBO multipliers while managing fuel, HP, and gravity. Reinterpreted from deckbuilder/logistics idea (score 32.15) with circuit/pipe flow → color chain, split/converge → combo jackpot hooks.",
+    "idea": "Lunar lander with color-matched combo chains: land on same-color pads consecutively for COMBO multipliers while managing fuel, HP, and gravity. Reinterpreted from deckbuilder/logistics idea (score 32.15) with circuit/pipe flow \u2192 color chain, split/converge \u2192 combo jackpot hooks.",
     "score": 32.15,
     "status": "Lunar lander prototype complete",
     "href": "021_thrust_chain.html"
@@ -174,5 +174,13 @@
     "score": 32.05,
     "status": "Shooter prototype complete",
     "href": "022_calamity_siege.html"
+  },
+  {
+    "id": "023_cell_surge",
+    "title": "CELL SURGE",
+    "idea": "Grid territory control: place colored seeds that spread via cellular automaton. Contiguous same-color regions synthesize into fortress NODES. Compete against enemy spread from edges. Reinterpreted from dice/bag roguelite idea (score 32.35) with CA grid spread + synthesis compression hooks.",
+    "score": 32.35,
+    "status": "Territory control prototype complete",
+    "href": "023_cell_surge.html"
   }
 ]
