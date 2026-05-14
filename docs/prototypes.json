@@ -182,5 +182,13 @@
     "score": 32.35,
     "status": "Territory control prototype complete",
     "href": "023_cell_surge.html"
+  },
+  {
+    "id": "024_chroma_bounce",
+    "title": "CHROMA BOUNCE",
+    "idea": "Color-match pinball: bounce the ball off same-color bumpers to build COMBO. COMBO >= 4 triggers SYNTHESIS super-mode (rainbow bumpers, 3x score). Reinterpreted from dice/bag roguelite idea (score 31.65) with synthesis compression + one-color-per-turn hooks.",
+    "score": 31.65,
+    "status": "Pinball prototype complete",
+    "href": "024_chroma_bounce.html"
   }
 ]
