@@ -206,5 +206,13 @@
     "score": 31.65,
     "status": "Flyer prototype complete",
     "href": "026_color_flux.html"
+  },
+  {
+    "id": "027_gem_chain",
+    "title": "GEM CHAIN",
+    "idea": "Color-match swap puzzle with chain-reaction spread: swap adjacent gems to create 3+ same-color lines, BFS spread clears adjacent same-color gems, cascading combos multiply score while building HEAT (board quakes at threshold). Reinterpreted from alchemy synthesis deckbuilder idea #1 (score 32.75) with synthesis compression → chain cascade, CA spread → BFS color propagation hooks.",
+    "score": 32.75,
+    "status": "Match-3 swap puzzle prototype complete",
+    "href": "027_gem_chain.html"
   }
 ]
