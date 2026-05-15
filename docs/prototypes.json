@@ -214,5 +214,13 @@
     "score": 32.75,
     "status": "Match-3 swap puzzle prototype complete",
     "href": "027_gem_chain.html"
+  },
+  {
+    "id": "028_flux_cannon",
+    "title": "FLUX CANNON",
+    "idea": "Artillery chain-combo: aim and fire colored cannonballs at drifting targets, chain same-color hits for COMBO multipliers, COMBO >= 3 unlocks SUPER SHOT (AOE burst). Manage FOCUS (accuracy resource) and HEAT (overheat risk). Reinterpreted from deckbuilder idea #1 (score 32.05) with synthesis compression -> color-match COMBO chain, cost is future hand -> FOCUS accuracy mechanic.",
+    "score": 32.05,
+    "status": "Artillery prototype complete",
+    "href": "028_flux_cannon.html"
   }
 ]
