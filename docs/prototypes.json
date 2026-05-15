@@ -222,5 +222,21 @@
     "score": 32.05,
     "status": "Artillery prototype complete",
     "href": "028_flux_cannon.html"
+  },
+  {
+    "id": "029_pipe_surge",
+    "title": "PIPE SURGE",
+    "idea": "Pipe connection puzzle: place colored pipe tiles to connect Source to Drain, same-color adjacent pipes in the path chain-propagate for COMBO multipliers. COMBO >= 4 triggers SURGE — all connected pipes burst with particles and clear for a massive bonus. Reinterpreted from dice/bag roguelite idea #1 (score 32.2) with log/replay as asset -> persistent pipe infrastructure, chain collapse -> color-match chain propagation.",
+    "score": 32.2,
+    "status": "Pipe puzzle prototype complete",
+    "href": "029_pipe_surge.html"
+  },
+  {
+    "id": "030_chroma_drive",
+    "title": "CHROMA DRIVE",
+    "idea": "Top-down color-match putting game: sink colored balls into matching holes for COMBO multipliers. Ball color updates to the last hole sunk, creating constraint-driven risk/reward. Reinterpreted from deckbuilder idea #1 (score 31.85) with log/replay as assets -> ball color determined by last sink, one-color-per-turn -> color-match constraint.",
+    "score": 31.85,
+    "status": "Golf/putting prototype complete",
+    "href": "030_chroma_drive.html"
   }
 ]
