@@ -238,5 +238,13 @@
     "score": 31.85,
     "status": "Golf/putting prototype complete",
     "href": "030_chroma_drive.html"
+  },
+  {
+    "id": "031_overkill_chain",
+    "title": "OVERKILL CHAIN",
+    "idea": "Timing/precision overkill chain game: click enemies to attack, excess damage ripples left through the enemy line, building combos. Closer enemies = higher multiplier but more danger. Reinterpreted from auto-shooter idea #9 (score 30.8) with overkill carryover + combo meter hooks.",
+    "score": 30.8,
+    "status": "Timing/precision prototype complete",
+    "href": "031_overkill_chain.html"
   }
 ]
