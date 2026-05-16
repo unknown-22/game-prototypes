@@ -262,5 +262,13 @@
     "score": 32.2,
     "status": "Rhythm prototype complete",
     "href": "033_resonance_chain.html"
+  },
+  {
+    "id": "034_hook_chain",
+    "title": "HOOK CHAIN",
+    "idea": "Color-match fishing: time your strikes to catch same-colored fish consecutively for COMBO multipliers. COMBO >= 3 triggers SUPER mode (rainbow hook, auto-catch all same-color fish). Reinterpreted from deckbuilder/logistics idea #1 (score 32.0) with synthesis compression -> same-color COMBO chain, flow optimization -> color target selection + heat/cooldown timing.",
+    "score": 32.0,
+    "status": "Fishing prototype complete",
+    "href": "034_hook_chain.html"
   }
 ]
