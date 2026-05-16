@@ -246,5 +246,13 @@
     "score": 30.8,
     "status": "Timing/precision prototype complete",
     "href": "031_overkill_chain.html"
+  },
+  {
+    "id": "032_chroma_dash",
+    "title": "CHROMA DASH",
+    "idea": "Side-scrolling endless runner: collect same-color gems consecutively to build COMBO multipliers. COMBO >= 5 triggers FLUX super-mode (rainbow aura, 3x gem value, 5 seconds). Jump over spikes and pits, duck under bars. Speed increases with distance. Reinterpreted from deckbuilder idea #1 (score 32.0) with synthesis compression -> COMBO chain, chain collapse -> FLUX activation explosion.",
+    "score": 32.0,
+    "status": "Endless runner prototype complete",
+    "href": "032_chroma_dash.html"
   }
 ]
