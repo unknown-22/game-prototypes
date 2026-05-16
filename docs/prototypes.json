@@ -254,5 +254,13 @@
     "score": 32.0,
     "status": "Endless runner prototype complete",
     "href": "032_chroma_dash.html"
+  },
+  {
+    "id": "033_resonance_chain",
+    "title": "RESONANCE CHAIN",
+    "idea": "Rhythm-action: hit falling colored notes at timing zone, consecutive same-color hits build RESONANCE chain for score multipliers and chain-clear effects. Reinterpreted from dice/bag roguelite idea #1 (score 32.2) with UI chain collapse + hit/combo visualization hooks.",
+    "score": 32.2,
+    "status": "Rhythm prototype complete",
+    "href": "033_resonance_chain.html"
   }
 ]
