@@ -270,5 +270,13 @@
     "score": 32.0,
     "status": "Fishing prototype complete",
     "href": "034_hook_chain.html"
+  },
+  {
+    "id": "035_split_chain",
+    "title": "SPLIT CHAIN",
+    "idea": "Asteroids-like shooter with color-match chain splitting. Same-color asteroid kills build COMBO for extra fragments and score multipliers. Reinterpreted from alchemy deckbuilder idea #1 (score 31.85) with log/replay as asset + one-color-per-turn hooks.",
+    "score": 31.85,
+    "status": "Asteroids shooter prototype complete",
+    "href": "035_split_chain.html"
   }
 ]
