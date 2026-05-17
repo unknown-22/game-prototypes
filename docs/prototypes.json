@@ -286,5 +286,13 @@
     "score": 32.15,
     "status": "Maze chase prototype complete",
     "href": "036_chroma_chase.html"
+  },
+  {
+    "id": "037_echo_arc",
+    "title": "ECHO ARC",
+    "idea": "Color-match trajectory launcher (slingshot): aim and launch colored projectiles at targets, same-color hits build COMBO for SUPER SHOT. Each hit creates an echo ring (log/replay as asset) that amplifies subsequent shots.",
+    "score": 31.85,
+    "status": "Trajectory launcher prototype complete",
+    "href": "037_echo_arc.html"
   }
 ]
