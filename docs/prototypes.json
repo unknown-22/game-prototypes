@@ -278,5 +278,13 @@
     "score": 31.85,
     "status": "Asteroids shooter prototype complete",
     "href": "035_split_chain.html"
+  },
+  {
+    "id": "036_chroma_chase",
+    "title": "CHROMA CHASE",
+    "idea": "Color-match maze chase (Pac-Man-like): eat same-colored gems consecutively for COMBO multipliers. Player movement trail damages ghosts. Ghosts multiply over time. Reinterpreted from dice/bag roguelite idea #1 (score 32.15) with log/replay as asset (trail defense) + CA grid spread (ghost multiplication) hooks.",
+    "score": 32.15,
+    "status": "Maze chase prototype complete",
+    "href": "036_chroma_chase.html"
   }
 ]
