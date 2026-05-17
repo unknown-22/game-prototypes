@@ -294,5 +294,13 @@
     "score": 31.85,
     "status": "Trajectory launcher prototype complete",
     "href": "037_echo_arc.html"
+  },
+  {
+    "id": "038_burst_chain",
+    "title": "BURST CHAIN",
+    "idea": "Bubble shooter with chain-propagation popping: shoot colored bubbles at a hex-grid ceiling, match 3+ same-color to pop. Floating bubbles cascade down for bonus. COMBO multiplier rewards consecutive pops, HEAT accelerates ceiling drops. Reinterpreted from dice/bag roguelite idea (score 31.55) with chain propagation + one-color-per-turn hooks.",
+    "score": 31.55,
+    "status": "Bubble shooter prototype complete",
+    "href": "038_burst_chain.html"
   }
 ]
