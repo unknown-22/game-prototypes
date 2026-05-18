@@ -302,5 +302,13 @@
     "score": 31.55,
     "status": "Bubble shooter prototype complete",
     "href": "038_burst_chain.html"
+  },
+  {
+    "id": "039_pong_surge",
+    "title": "PONG SURGE",
+    "idea": "Color-match Pong rally: rally the ball with matching paddle colors to build COMBO, trigger SURGE mode for double points and screen-shaking chain effects. Reinterpreted from deckbuilder idea #1 (score 32.6) with log/replay \u2192 rally history and chain collapse \u2192 SURGE mode hooks.",
+    "score": 32.6,
+    "status": "Pong rally prototype complete",
+    "href": "039_pong_surge.html"
   }
 ]
