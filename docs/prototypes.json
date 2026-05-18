@@ -310,5 +310,13 @@
     "score": 32.6,
     "status": "Pong rally prototype complete",
     "href": "039_pong_surge.html"
+  },
+  {
+    "id": "040_chain_cross",
+    "title": "CHAIN CROSS",
+    "idea": "Color-match traffic intersection manager: match signal colors to car colors for safe passage. Same-color consecutive passes build COMBO \u2192 SUPER CLEAR. Crashes spread congestion (CA reimagined). Reinterpreted from dice/bag roguelite idea #1 (score 32.35) with synthesis compression + CA grid spread hooks.",
+    "score": 32.35,
+    "status": "Traffic control prototype complete",
+    "href": "040_chain_cross.html"
   }
 ]
