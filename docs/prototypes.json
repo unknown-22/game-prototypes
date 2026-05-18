@@ -326,5 +326,13 @@
     "score": 32.0,
     "status": "Tower collapse puzzle prototype complete",
     "href": "041_tower_collapse.html"
+  },
+  {
+    "id": "042_echo_stealth",
+    "title": "ECHO STEALTH",
+    "idea": "Top-down grid stealth: only one color of guard can see you at a time (cycling frequency). When caught, leave an echo behind that distracts same-color guards. Reinterpreted from alchemy deckbuilder idea #1 (score 31.85) with log/replay as asset + one-color-per-turn hooks.",
+    "score": 31.85,
+    "status": "Stealth prototype complete",
+    "href": "042_echo_stealth.html"
   }
 ]
