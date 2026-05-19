@@ -334,5 +334,13 @@
     "score": 31.85,
     "status": "Stealth prototype complete",
     "href": "042_echo_stealth.html"
+  },
+  {
+    "id": "043_starfall",
+    "title": "STARFALL",
+    "idea": "Color-match Missile Command defense: click to launch interceptors from cities, same-color consecutive intercepts build COMBO for surging score multipliers. Reinterpreted from calamity sealing deckbuilder idea (score 32.0) with synthesis compression + chain visualization hooks.",
+    "score": 32.0,
+    "status": "Defense prototype complete",
+    "href": "043_starfall.html"
   }
 ]
