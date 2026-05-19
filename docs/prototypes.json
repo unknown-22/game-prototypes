@@ -342,5 +342,13 @@
     "score": 32.0,
     "status": "Defense prototype complete",
     "href": "043_starfall.html"
+  },
+  {
+    "id": "044_cue_chain",
+    "title": "CUE CHAIN",
+    "idea": "Color-match billiards: sink same-color balls consecutively for COMBO multipliers. COMBO >= 3 triggers CHAIN BREAK super-mode (rainbow cue, 3x score). Reinterpreted from deckbuilder roguelite idea #1 (score 31.8) with consecutive same-card -> same-color-COMBO, chain collapse UI -> CHAIN BREAK hooks.",
+    "score": 31.8,
+    "status": "Billiards prototype complete",
+    "href": "044_cue_chain.html"
   }
 ]
