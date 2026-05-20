@@ -350,5 +350,13 @@
     "score": 31.8,
     "status": "Billiards prototype complete",
     "href": "044_cue_chain.html"
+  },
+  {
+    "id": "045_merge_tower",
+    "title": "MERGE TOWER",
+    "idea": "Tower stacking merge puzzle: drop colored blocks, 3+ same-color blocks merge into higher tier, chain reactions cascade through tower. Reinterpreted from alchemy deckbuilder idea (score 31.85) with synthesis compression + split/converge hooks.",
+    "score": 31.85,
+    "status": "Merge puzzle prototype complete",
+    "href": "045_merge_tower.html"
   }
 ]
