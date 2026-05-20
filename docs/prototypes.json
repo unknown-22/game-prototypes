@@ -358,5 +358,13 @@
     "score": 31.85,
     "status": "Merge puzzle prototype complete",
     "href": "045_merge_tower.html"
+  },
+  {
+    "id": "046_chain_juggle",
+    "title": "CHAIN JUGGLE",
+    "idea": "Color-match juggling: keep colored balls in the air, chain same-color hits for COMBO, compress into SUPER BALLS, avoid rising hazard zone. Reinterpreted from alchemy deckbuilder idea #1 (Score 31.25) with synthesis compression + damage strengthens enemies hooks.",
+    "score": 31.25,
+    "status": "Juggling prototype complete",
+    "href": "046_chain_juggle.html"
   }
 ]
