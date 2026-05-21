@@ -374,5 +374,13 @@
     "score": 32.55,
     "status": "Tron/light cycle prototype complete",
     "href": "047_echo_tron.html"
+  },
+  {
+    "id": "048_bullseye_chain",
+    "title": "BULLSEYE CHAIN",
+    "idea": "Color-match dart throwing with gravity arcs and chain combos. Reinterpreted from game_idea_factory #1 (Score 31.8) with log/replay as asset (ghost trails) + gravity/collapse chain (COMBO burst) hooks.",
+    "score": 31.8,
+    "status": "Darts/target shooting prototype complete",
+    "href": "048_bullseye_chain.html"
   }
 ]
