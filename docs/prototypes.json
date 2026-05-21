@@ -382,5 +382,13 @@
     "score": 31.8,
     "status": "Darts/target shooting prototype complete",
     "href": "048_bullseye_chain.html"
+  },
+  {
+    "id": "049_split_surge",
+    "title": "SPLIT SURGE",
+    "idea": "Zuma-style marble chain shooter: shoot colored marbles to match 3+ and split the chain; same-color segment reconvergence triggers COMBO SURGE. Reinterpreted from alchemy deckbuilder idea #1 (Score 32.0) with split/converge + synthesis compression hooks.",
+    "score": 32.0,
+    "status": "Marble shooter prototype complete",
+    "href": "049_split_surge.html"
   }
 ]
