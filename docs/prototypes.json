@@ -366,5 +366,13 @@
     "score": 31.25,
     "status": "Juggling prototype complete",
     "href": "046_chain_juggle.html"
+  },
+  {
+    "id": "047_echo_tron",
+    "title": "ECHO TRON",
+    "idea": "Light cycle arena survival: movement trail becomes permanent walls, same-color gem COMBO chain multipliers, trap enemies against walls. Reinterpreted from deckbuilder idea #1 (score 32.55) with log/replay as asset (trail walls) + CA grid fill (arena closure) hooks.",
+    "score": 32.55,
+    "status": "Tron/light cycle prototype complete",
+    "href": "047_echo_tron.html"
   }
 ]
