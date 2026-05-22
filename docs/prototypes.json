@@ -390,5 +390,13 @@
     "score": 32.0,
     "status": "Marble shooter prototype complete",
     "href": "049_split_surge.html"
+  },
+  {
+    "id": "050_blast_chain",
+    "title": "BLAST CHAIN",
+    "idea": "Bomberman-style grid action: place colored bombs, same-color explosions chain-react for combo multipliers, clear waves of enemies. Reinterpreted from dice/bag roguelite idea #1 (Score 31.95) with synthesis compression → same-color chain + circuit/pipe visualization → blast propagation hooks.",
+    "score": 31.95,
+    "status": "Grid action prototype complete",
+    "href": "050_blast_chain.html"
   }
 ]
