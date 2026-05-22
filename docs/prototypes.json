@@ -398,5 +398,13 @@
     "score": 31.95,
     "status": "Grid action prototype complete",
     "href": "050_blast_chain.html"
+  },
+  {
+    "id": "051_chain_push",
+    "title": "CHAIN PUSH",
+    "idea": "Sokoban-style block pushing puzzle with synthesis merge and CA chain spread. Push same-color blocks to merge and trigger cascading color-spread chain reactions.",
+    "score": 32.75,
+    "status": "Sokoban puzzle prototype complete",
+    "href": "051_chain_push.html"
   }
 ]
