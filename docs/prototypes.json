@@ -138,7 +138,7 @@
   {
     "id": "018_ore_serpent",
     "title": "ORE SERPENT",
-    "idea": "Snake-like mining: navigate a growing drill-serpent, collect same-color ores consecutively for COMBO multiplier. Body constrains movement — longer = more risk. Reinterpreted from auto-shooter/space-mining idea (score 32.2) with log/replay as assets hook.",
+    "idea": "Snake-like mining: navigate a growing drill-serpent, collect same-color ores consecutively for COMBO multiplier. Body constrains movement \u2014 longer = more risk. Reinterpreted from auto-shooter/space-mining idea (score 32.2) with log/replay as assets hook.",
     "score": 32.2,
     "status": "Snake prototype complete",
     "href": "018_ore_serpent.html"
@@ -154,7 +154,7 @@
   {
     "id": "020_echo_drift",
     "title": "ECHO DRIFT",
-    "idea": "Grid-based top-down racer: leave colored echo trail on track, re-entering same-color cells triggers COMBO chain multipliers while building dangerous heat. DISCHARGE to clear. Reinterpreted from auto-shooter/power-plant idea (score 32.15) with log/replay → echo trail, CA grid → volatile spread hooks.",
+    "idea": "Grid-based top-down racer: leave colored echo trail on track, re-entering same-color cells triggers COMBO chain multipliers while building dangerous heat. DISCHARGE to clear. Reinterpreted from auto-shooter/power-plant idea (score 32.15) with log/replay \u2192 echo trail, CA grid \u2192 volatile spread hooks.",
     "score": 32.15,
     "status": "Racing prototype complete",
     "href": "020_echo_drift.html"
@@ -162,7 +162,7 @@
   {
     "id": "021_thrust_chain",
     "title": "THRUST CHAIN",
-    "idea": "Lunar lander with color-matched combo chains: land on same-color pads consecutively for COMBO multipliers while managing fuel, HP, and gravity. Reinterpreted from deckbuilder/logistics idea (score 32.15) with circuit/pipe flow → color chain, split/converge → combo jackpot hooks.",
+    "idea": "Lunar lander with color-matched combo chains: land on same-color pads consecutively for COMBO multipliers while managing fuel, HP, and gravity. Reinterpreted from deckbuilder/logistics idea (score 32.15) with circuit/pipe flow \u2192 color chain, split/converge \u2192 combo jackpot hooks.",
     "score": 32.15,
     "status": "Lunar lander prototype complete",
     "href": "021_thrust_chain.html"
@@ -210,7 +210,7 @@
   {
     "id": "027_gem_chain",
     "title": "GEM CHAIN",
-    "idea": "Color-match swap puzzle with chain-reaction spread: swap adjacent gems to create 3+ same-color lines, BFS spread clears adjacent same-color gems, cascading combos multiply score while building HEAT (board quakes at threshold). Reinterpreted from alchemy synthesis deckbuilder idea #1 (score 32.75) with synthesis compression → chain cascade, CA spread → BFS color propagation hooks.",
+    "idea": "Color-match swap puzzle with chain-reaction spread: swap adjacent gems to create 3+ same-color lines, BFS spread clears adjacent same-color gems, cascading combos multiply score while building HEAT (board quakes at threshold). Reinterpreted from alchemy synthesis deckbuilder idea #1 (score 32.75) with synthesis compression \u2192 chain cascade, CA spread \u2192 BFS color propagation hooks.",
     "score": 32.75,
     "status": "Match-3 swap puzzle prototype complete",
     "href": "027_gem_chain.html"
@@ -226,7 +226,7 @@
   {
     "id": "029_pipe_surge",
     "title": "PIPE SURGE",
-    "idea": "Pipe connection puzzle: place colored pipe tiles to connect Source to Drain, same-color adjacent pipes in the path chain-propagate for COMBO multipliers. COMBO >= 4 triggers SURGE — all connected pipes burst with particles and clear for a massive bonus. Reinterpreted from dice/bag roguelite idea #1 (score 32.2) with log/replay as asset -> persistent pipe infrastructure, chain collapse -> color-match chain propagation.",
+    "idea": "Pipe connection puzzle: place colored pipe tiles to connect Source to Drain, same-color adjacent pipes in the path chain-propagate for COMBO multipliers. COMBO >= 4 triggers SURGE \u2014 all connected pipes burst with particles and clear for a massive bonus. Reinterpreted from dice/bag roguelite idea #1 (score 32.2) with log/replay as asset -> persistent pipe infrastructure, chain collapse -> color-match chain propagation.",
     "score": 32.2,
     "status": "Pipe puzzle prototype complete",
     "href": "029_pipe_surge.html"
@@ -306,7 +306,7 @@
   {
     "id": "039_pong_surge",
     "title": "PONG SURGE",
-    "idea": "Color-match Pong rally: rally the ball with matching paddle colors to build COMBO, trigger SURGE mode for double points and screen-shaking chain effects. Reinterpreted from deckbuilder idea #1 (score 32.6) with log/replay → rally history and chain collapse → SURGE mode hooks.",
+    "idea": "Color-match Pong rally: rally the ball with matching paddle colors to build COMBO, trigger SURGE mode for double points and screen-shaking chain effects. Reinterpreted from deckbuilder idea #1 (score 32.6) with log/replay \u2192 rally history and chain collapse \u2192 SURGE mode hooks.",
     "score": 32.6,
     "status": "Pong rally prototype complete",
     "href": "039_pong_surge.html"
@@ -314,7 +314,7 @@
   {
     "id": "040_chain_cross",
     "title": "CHAIN CROSS",
-    "idea": "Color-match traffic intersection manager: match signal colors to car colors for safe passage. Same-color consecutive passes build COMBO → SUPER CLEAR. Crashes spread congestion (CA reimagined). Reinterpreted from dice/bag roguelite idea #1 (score 32.35) with synthesis compression + CA grid spread hooks.",
+    "idea": "Color-match traffic intersection manager: match signal colors to car colors for safe passage. Same-color consecutive passes build COMBO \u2192 SUPER CLEAR. Crashes spread congestion (CA reimagined). Reinterpreted from dice/bag roguelite idea #1 (score 32.35) with synthesis compression + CA grid spread hooks.",
     "score": 32.35,
     "status": "Traffic control prototype complete",
     "href": "040_chain_cross.html"
@@ -394,7 +394,7 @@
   {
     "id": "050_blast_chain",
     "title": "BLAST CHAIN",
-    "idea": "Bomberman-style grid action: place colored bombs, same-color explosions chain-react for combo multipliers, clear waves of enemies. Reinterpreted from dice/bag roguelite idea #1 (Score 31.95) with synthesis compression → same-color chain + circuit/pipe visualization → blast propagation hooks.",
+    "idea": "Bomberman-style grid action: place colored bombs, same-color explosions chain-react for combo multipliers, clear waves of enemies. Reinterpreted from dice/bag roguelite idea #1 (Score 31.95) with synthesis compression \u2192 same-color chain + circuit/pipe visualization \u2192 blast propagation hooks.",
     "score": 31.95,
     "status": "Grid action prototype complete",
     "href": "050_blast_chain.html"
@@ -406,5 +406,13 @@
     "score": 32.75,
     "status": "Sokoban puzzle prototype complete",
     "href": "051_chain_push.html"
+  },
+  {
+    "id": "052_crawl_surge",
+    "title": "CRAWL SURGE",
+    "idea": "Centipede-like color-match arena shooter: shoot matching-color segments for COMBO, COMBO>=3 triggers SURGE BFS chain-destroy. Reinterpreted from deckbuilder idea #1 (Score 32.0) with split/converge + synthesis compression hooks.",
+    "score": 32.0,
+    "status": "Centipede arena shooter prototype complete",
+    "href": "052_crawl_surge.html"
   }
 ]
