@@ -43,8 +43,9 @@ from main import (
 
 def test_constants() -> None:
     """Verify all game constants are reasonable."""
-    assert SCREEN_W == 256
-    assert SCREEN_H == 256
+    assert SCREEN_W == 320
+    assert SCREEN_H == 240
+    assert SCREEN_W / SCREEN_H == 4 / 3
     assert DISPLAY_SCALE == 2
     assert FPS == 30
     assert GAME_TIME == 60

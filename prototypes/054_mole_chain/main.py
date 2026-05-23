@@ -17,8 +17,8 @@ from enum import Enum, auto
 import pyxel
 
 # ── Constants ──────────────────────────────────────────────────────────
-SCREEN_W = 256
-SCREEN_H = 256
+SCREEN_W = 320
+SCREEN_H = 240
 DISPLAY_SCALE = 2
 GAME_TIME = 60  # seconds
 FPS = 30
@@ -26,11 +26,13 @@ FPS = 30
 # Grid
 COLS = 4
 ROWS = 3
-CELL_W = 52
-CELL_H = 56
+CELL_W = 58
+CELL_H = 48
 GRID_X = (SCREEN_W - COLS * CELL_W) // 2
-GRID_Y = 60
-HOLE_R = 18  # hole radius
+GRID_Y = 64
+HOLE_R = 17  # hole radius
+GROUND_Y = GRID_Y + ROWS * CELL_H + 8
+CURSOR_R = 8
 
 # Colors (Pyxel palette)
 COLOR_IDS: tuple[int, int, int, int] = (
@@ -134,6 +136,7 @@ class Phase(Enum):
 class Game:
     def __init__(self) -> None:
         pyxel.init(SCREEN_W, SCREEN_H, title="MOLE CHAIN", display_scale=DISPLAY_SCALE, fps=FPS)
+        pyxel.mouse(False)
         self._rng: random.Random = random.Random()
         self.reset()
         pyxel.run(self.update, self.draw)
@@ -440,8 +443,9 @@ class Game:
             shake_y = self._rng.randint(-3, 3)
 
         # Draw ground
-        ground_y = GRID_Y + ROWS * CELL_H
-        pyxel.rect(0, ground_y, SCREEN_W, SCREEN_H - ground_y, pyxel.COLOR_BROWN)
+        pyxel.rect(0, GROUND_Y, SCREEN_W, SCREEN_H - GROUND_Y, pyxel.COLOR_BROWN)
+        for x in range(0, SCREEN_W, 16):
+            pyxel.line(x, GROUND_Y, x + 7, SCREEN_H - 1, pyxel.COLOR_DARK_BLUE)
 
         # Draw grid background
         pyxel.rect(GRID_X - 10 + shake_x, GRID_Y - 10 + shake_y,
@@ -486,6 +490,8 @@ class Game:
         # Game over screen
         if self.phase == Phase.GAME_OVER:
             self._draw_game_over()
+
+        self._draw_cursor()
 
     def _draw_mole(self, mole: Mole, shake_x: int, shake_y: int) -> None:
         if mole.state == MoleState.HIDDEN:
@@ -557,15 +563,15 @@ class Game:
     def _draw_hud(self) -> None:
         """Draw score, timer, combo at top."""
         # Background bar
-        pyxel.rect(0, 0, SCREEN_W, 36, pyxel.COLOR_DARK_BLUE)
+        pyxel.rect(0, 0, SCREEN_W, 38, pyxel.COLOR_DARK_BLUE)
 
         # Score
-        pyxel.text(6, 4, f"SCORE:{self.score:>7d}", pyxel.COLOR_WHITE)
+        pyxel.text(8, 5, f"SCORE:{self.score:>7d}", pyxel.COLOR_WHITE)
 
         # Timer
         secs = int(self.time_left)
         timer_color = pyxel.COLOR_RED if secs <= 10 else pyxel.COLOR_WHITE
-        pyxel.text(6, 16, f"TIME: {secs:>2d}s", timer_color)
+        pyxel.text(8, 18, f"TIME: {secs:>2d}s", timer_color)
 
         # COMBO (right side)
         combo_color = pyxel.COLOR_YELLOW
@@ -573,20 +579,37 @@ class Game:
             combo_color = pyxel.COLOR_RED
         elif self.combo >= 2:
             combo_color = pyxel.COLOR_ORANGE
-        pyxel.text(SCREEN_W - 80, 4, f"COMBO: x{self.combo}", combo_color)
+        pyxel.text(SCREEN_W - 92, 5, f"COMBO: x{self.combo}", combo_color)
 
         # Hits / Misses
-        pyxel.text(SCREEN_W - 80, 16, f"HIT:{self.hits} MIS:{self.misses}", pyxel.COLOR_GRAY)
+        pyxel.text(SCREEN_W - 92, 18, f"HIT:{self.hits} MIS:{self.misses}", pyxel.COLOR_GRAY)
 
         # Active color indicator
         if self._active_color is not None:
             ac = COLOR_IDS[self._active_color]
-            pyxel.rect(SCREEN_W - 80, 28, 22, 6, ac)
-            pyxel.text(SCREEN_W - 56, 28, COLOR_NAMES[self._active_color], ac)
+            pyxel.rect(SCREEN_W - 92, 31, 22, 5, ac)
+            pyxel.text(SCREEN_W - 66, 30, COLOR_NAMES[self._active_color], ac)
 
         # SUPER indicator
         if self.super_mode:
             pyxel.text(SCREEN_W // 2 - 20, 16, "SUPER!", pyxel.COLOR_RED)
+
+    def _draw_cursor(self) -> None:
+        """Draw a mole-smashing hammer cursor."""
+        mx = max(0, min(SCREEN_W - 1, pyxel.mouse_x))
+        my = max(0, min(SCREEN_H - 1, pyxel.mouse_y))
+        pulse = 1 if self.frame % 16 < 8 else 0
+        head_color = pyxel.COLOR_YELLOW if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) else pyxel.COLOR_WHITE
+
+        pyxel.line(mx - 10, my + 10, mx + 5, my - 5, pyxel.COLOR_BROWN)
+        pyxel.line(mx - 9, my + 11, mx + 6, my - 4, pyxel.COLOR_BROWN)
+        pyxel.rect(mx + 2, my - 11, 13, 7, head_color)
+        pyxel.rectb(mx + 2, my - 11, 13, 7, pyxel.COLOR_BLACK)
+        pyxel.line(mx - CURSOR_R - pulse, my, mx - 3, my, pyxel.COLOR_GRAY)
+        pyxel.line(mx + 3, my, mx + CURSOR_R + pulse, my, pyxel.COLOR_GRAY)
+        pyxel.line(mx, my - CURSOR_R - pulse, mx, my - 3, pyxel.COLOR_GRAY)
+        pyxel.line(mx, my + 3, mx, my + CURSOR_R + pulse, pyxel.COLOR_GRAY)
+        pyxel.circb(mx, my, 3, pyxel.COLOR_WHITE)
 
     def _draw_game_over(self) -> None:
         """Draw game over overlay."""

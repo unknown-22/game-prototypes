@@ -428,7 +428,7 @@
     "title": "MOLE CHAIN",
     "idea": "Color-match whack-a-mole: click same-colored moles consecutively for COMBO chains. COMBO>=4 triggers SUPER mode (auto-whack all visible moles). Reinterpreted from game_idea_factory #1 (Score 31.45) with log/replay as asset + one-color-per-turn hooks.",
     "score": 31.45,
-    "status": "Whack-a-mole prototype complete",
+    "status": "4:3 whack-a-mole prototype complete",
     "href": "054_mole_chain.html"
   },
   {
