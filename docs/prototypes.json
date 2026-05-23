@@ -438,5 +438,13 @@
     "score": 32.15,
     "status": "Shmup prototype complete",
     "href": "055_echo_wing.html"
+  },
+  {
+    "id": "056_split_overload",
+    "title": "SPLIT OVERLOAD",
+    "idea": "Power-core arena survival: build charge with auto-fire, then spend it on split lightning paths that converge into a stronger blast when enemies are clustered tightly. Reinterpreted from power plant auto-shooter idea #3 (Score 31.6) with split/converge + overload risk hooks.",
+    "score": 31.6,
+    "status": "Arena survival prototype complete",
+    "href": "056_split_overload.html"
   }
 ]
