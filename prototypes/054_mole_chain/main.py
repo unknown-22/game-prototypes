@@ -13,6 +13,7 @@ import math
 import random
 from dataclasses import dataclass
 from enum import Enum, auto
+from pathlib import Path
 
 import pyxel
 
@@ -22,6 +23,10 @@ SCREEN_H = 240
 DISPLAY_SCALE = 2
 GAME_TIME = 60  # seconds
 FPS = 30
+FONT_PATH = Path(__file__).with_name("k8x12.bdf")
+FONT_W = 8
+FONT_H = 12
+HUD_H = 50
 
 # Grid
 COLS = 4
@@ -137,6 +142,7 @@ class Game:
     def __init__(self) -> None:
         pyxel.init(SCREEN_W, SCREEN_H, title="MOLE CHAIN", display_scale=DISPLAY_SCALE, fps=FPS)
         pyxel.mouse(False)
+        self.font = pyxel.Font(str(FONT_PATH))
         self._rng: random.Random = random.Random()
         self.reset()
         pyxel.run(self.update, self.draw)
@@ -430,6 +436,17 @@ class Game:
             self._active_color = None
             self.misses += 1
 
+    def _text(self, x: int, y: int, s: str, col: int) -> None:
+        """Draw text with the shared BDF font."""
+        pyxel.text(x, y, s, col, self.font)
+
+    def _text_center(self, cx: int, y: int, s: str, col: int) -> None:
+        self._text(cx - self._text_width(s) // 2, y, s, col)
+
+    @staticmethod
+    def _text_width(s: str) -> int:
+        return len(s) * FONT_W
+
     # ── Draw ───────────────────────────────────────────────────────
 
     def draw(self) -> None:
@@ -482,7 +499,7 @@ class Game:
 
         # Draw floating texts
         for ft in self.floating_texts:
-            pyxel.text(int(ft.x) + shake_x, int(ft.y) + shake_y, ft.text, ft.color)
+            self._text(int(ft.x) + shake_x, int(ft.y) + shake_y, ft.text, ft.color)
 
         # Draw HUD
         self._draw_hud()
@@ -563,15 +580,16 @@ class Game:
     def _draw_hud(self) -> None:
         """Draw score, timer, combo at top."""
         # Background bar
-        pyxel.rect(0, 0, SCREEN_W, 38, pyxel.COLOR_DARK_BLUE)
+        pyxel.rect(0, 0, SCREEN_W, HUD_H, pyxel.COLOR_DARK_BLUE)
+        right_x = SCREEN_W - 124
 
         # Score
-        pyxel.text(8, 5, f"SCORE:{self.score:>7d}", pyxel.COLOR_WHITE)
+        self._text(8, 4, f"SCORE:{self.score:>7d}", pyxel.COLOR_WHITE)
 
         # Timer
         secs = int(self.time_left)
         timer_color = pyxel.COLOR_RED if secs <= 10 else pyxel.COLOR_WHITE
-        pyxel.text(8, 18, f"TIME: {secs:>2d}s", timer_color)
+        self._text(8, 20, f"TIME: {secs:>2d}s", timer_color)
 
         # COMBO (right side)
         combo_color = pyxel.COLOR_YELLOW
@@ -579,20 +597,20 @@ class Game:
             combo_color = pyxel.COLOR_RED
         elif self.combo >= 2:
             combo_color = pyxel.COLOR_ORANGE
-        pyxel.text(SCREEN_W - 92, 5, f"COMBO: x{self.combo}", combo_color)
+        self._text(right_x, 4, f"COMBO: x{self.combo}", combo_color)
 
         # Hits / Misses
-        pyxel.text(SCREEN_W - 92, 18, f"HIT:{self.hits} MIS:{self.misses}", pyxel.COLOR_GRAY)
+        self._text(right_x, 20, f"HIT:{self.hits} MIS:{self.misses}", pyxel.COLOR_GRAY)
 
         # Active color indicator
         if self._active_color is not None:
             ac = COLOR_IDS[self._active_color]
-            pyxel.rect(SCREEN_W - 92, 31, 22, 5, ac)
-            pyxel.text(SCREEN_W - 66, 30, COLOR_NAMES[self._active_color], ac)
+            pyxel.rect(right_x, 38, 22, 7, ac)
+            self._text(right_x + 30, 35, COLOR_NAMES[self._active_color], ac)
 
         # SUPER indicator
         if self.super_mode:
-            pyxel.text(SCREEN_W // 2 - 20, 16, "SUPER!", pyxel.COLOR_RED)
+            self._text_center(SCREEN_W // 2, 20, "SUPER!", pyxel.COLOR_RED)
 
     def _draw_cursor(self) -> None:
         """Draw a mole-smashing hammer cursor."""
@@ -614,24 +632,25 @@ class Game:
     def _draw_game_over(self) -> None:
         """Draw game over overlay."""
         # Semi-transparent overlay
-        pyxel.rect(0, SCREEN_H // 2 - 50, SCREEN_W, 100, pyxel.COLOR_BLACK)
-        pyxel.rectb(0, SCREEN_H // 2 - 50, SCREEN_W, 100, pyxel.COLOR_WHITE)
+        overlay_y = SCREEN_H // 2 - 60
+        pyxel.rect(0, overlay_y, SCREEN_W, 120, pyxel.COLOR_BLACK)
+        pyxel.rectb(0, overlay_y, SCREEN_W, 120, pyxel.COLOR_WHITE)
 
-        pyxel.text(SCREEN_W // 2 - 30, SCREEN_H // 2 - 40, "GAME OVER", pyxel.COLOR_RED)
-        pyxel.text(
-            SCREEN_W // 2 - 50, SCREEN_H // 2 - 20,
+        self._text_center(SCREEN_W // 2, SCREEN_H // 2 - 48, "GAME OVER", pyxel.COLOR_RED)
+        self._text_center(
+            SCREEN_W // 2, SCREEN_H // 2 - 28,
             f"SCORE: {self.score}", pyxel.COLOR_WHITE,
         )
-        pyxel.text(
-            SCREEN_W // 2 - 50, SCREEN_H // 2 - 6,
+        self._text_center(
+            SCREEN_W // 2, SCREEN_H // 2 - 10,
             f"MAX COMBO: x{self.max_combo}", pyxel.COLOR_YELLOW,
         )
-        pyxel.text(
-            SCREEN_W // 2 - 50, SCREEN_H // 2 + 8,
+        self._text_center(
+            SCREEN_W // 2, SCREEN_H // 2 + 8,
             f"HITS: {self.hits}  MISS: {self.misses}", pyxel.COLOR_GRAY,
         )
-        pyxel.text(
-            SCREEN_W // 2 - 52, SCREEN_H // 2 + 24,
+        self._text_center(
+            SCREEN_W // 2, SCREEN_H // 2 + 32,
             "CLICK or ENTER to retry", pyxel.COLOR_WHITE,
         )
 
