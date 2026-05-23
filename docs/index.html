@@ -213,7 +213,7 @@
           return response.json();
         })
         .then((prototypes) => {
-          list.replaceChildren(...prototypes.map(renderPrototype));
+          list.replaceChildren(...[...prototypes].reverse().map(renderPrototype));
           count.textContent = `${prototypes.length} prototypes`;
           message.hidden = true;
         })
