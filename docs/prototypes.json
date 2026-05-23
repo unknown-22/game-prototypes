@@ -454,5 +454,13 @@
     "score": 32.0,
     "status": "Lane crossing prototype complete",
     "href": "057_chroma_cross.html"
+  },
+  {
+    "id": "058_pulse_reactor",
+    "title": "PULSE REACTOR",
+    "idea": "Rhythm timing game — the first in the collection. Colored beats converge on the reactor from 4 directions. Same-color consecutive hits build COMBO (SYNTHESIS multiplier). COMBO >= 8 triggers OVERLOAD (HP drain) — press SPACE to DISCHARGE for a massive score bomb (combo * 200). Risk/reward squeeze: hold for bigger discharge bonus vs discharge early to save HP.",
+    "score": 32.0,
+    "status": "Rhythm/timing prototype complete",
+    "href": "058_pulse_reactor.html"
   }
 ]
