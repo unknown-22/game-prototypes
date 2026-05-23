@@ -462,5 +462,14 @@
     "score": 32.0,
     "status": "Rhythm/timing prototype complete",
     "href": "058_pulse_reactor.html"
+  },
+  {
+    "id": "059_tetra_surge",
+    "title": "TETRA SURGE",
+    "idea": "Color-match Tetris with BFS chain reactions. Clearing a row propagates to adjacent same-color blocks for cascading combos. COMBO >= 5 triggers a SURGE rainbow bomb clearing 5×5 area. Reinterpreted from alchemy deckbuilder idea #1 (Score 32.0): 'split across multiple paths → converge → explode' becomes tetromino pieces split across columns → full rows converge → chain-clear explosion.",
+    "score": 32.0,
+    "status": "Tetris rotation puzzle prototype complete",
+    "href": "059_tetra_surge.html"
   }
 ]
+
