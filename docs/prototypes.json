@@ -430,5 +430,13 @@
     "score": 31.45,
     "status": "Whack-a-mole prototype complete",
     "href": "054_mole_chain.html"
+  },
+  {
+    "id": "055_echo_wing",
+    "title": "ECHO WING",
+    "idea": "Side-scrolling shoot-em-up with color-match COMBO chains and BFS chain burst propagation. First shmup prototype — reinterpreted from dice/bag roguelite idea #1 (Score 32.15) with log/replay as asset (echo orbital) + CA grid spread (chain burst) hooks.",
+    "score": 32.15,
+    "status": "Shmup prototype complete",
+    "href": "055_echo_wing.html"
   }
 ]
