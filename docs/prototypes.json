@@ -470,6 +470,13 @@
     "score": 32.0,
     "status": "Tetris rotation puzzle prototype complete",
     "href": "059_tetra_surge.html"
+  },
+  {
+    "id": "060_echo_memory",
+    "title": "ECHO MEMORY",
+    "idea": "Color-match memory sequence game (Simon Says-like). Memorize and reproduce colored sequences. Same-color consecutive correct presses build COMBO, triggering ECHO CHAIN auto-completion with bonus score. Reinterpreted from hacking deckbuilder idea #1 (Score 32.6): 'log/replay as asset' → memorized sequence, 'chain collapse/expansion UI' → COMBO + ECHO CHAIN visual fireworks.",
+    "score": 32.6,
+    "status": "Memory sequence prototype complete",
+    "href": "060_echo_memory.html"
   }
 ]
-
