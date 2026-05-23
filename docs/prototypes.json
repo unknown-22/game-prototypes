@@ -446,5 +446,13 @@
     "score": 31.6,
     "status": "Arena survival prototype complete",
     "href": "056_split_overload.html"
+  },
+  {
+    "id": "057_chroma_cross",
+    "title": "CHROMA CROSS",
+    "idea": "Color-match lane crossing (Crossy Road/Frogger style): cross 8 colored lanes, matching-color obstacles are safe (build COMBO), COMBO >= 5 triggers SYNTHESIS super mode (all colors safe, 3x score). Reinterpreted from alchemy synthesis deckbuilder idea #1 (Score 32.0) with synthesis/compression + split/converge hooks.",
+    "score": 32.0,
+    "status": "Lane crossing prototype complete",
+    "href": "057_chroma_cross.html"
   }
 ]
