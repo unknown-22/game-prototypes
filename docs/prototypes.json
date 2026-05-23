@@ -2,7 +2,7 @@
   {
     "id": "001_alchemy_deckbuilder",
     "title": "Alchemy Deckbuilder",
-    "idea": "Alchemy deckbuilding roguelite",
+    "idea": "錬金術をテーマにしたデッキ構築型ローグライト",
     "score": 31.85,
     "status": "Battle prototype complete",
     "href": "001_alchemy_deckbuilder.html"
@@ -10,7 +10,7 @@
   {
     "id": "002_logistics_flow",
     "title": "Logistics Flow",
-    "idea": "Delivery and logistics flow optimization deckbuilder",
+    "idea": "配送と物流フローの最適化をテーマにしたデッキ構築ゲーム",
     "score": 32.75,
     "status": "Battle prototype complete",
     "href": "002_logistics_flow.html"
@@ -18,7 +18,7 @@
   {
     "id": "003_magic_synthesis",
     "title": "Magic Academy: Spell Synthesis",
-    "idea": "Magic Academy card synthesis battle (same-type spells merge into amplified effects)",
+    "idea": "魔法学院のカード合成バトル。同じ種類の呪文を合成して効果を増幅する",
     "score": 31.6,
     "status": "Battle prototype complete",
     "href": "003_magic_synthesis.html"
@@ -26,7 +26,7 @@
   {
     "id": "004_circuit_breaker",
     "title": "Circuit Breaker",
-    "idea": "Hacking deckbuilder: stack same-type code cards; when stack reaches burden threshold, it COLLAPSES for amplified burst effect.",
+    "idea": "ハッキングデッキ構築。同種のコードカードを積み重ね、負荷の限界に達すると崩壊して増幅バーストを発生させる",
     "score": 31.2,
     "status": "Battle prototype complete",
     "href": "004_circuit_breaker.html"
@@ -34,7 +34,7 @@
   {
     "id": "005_calamity_dice",
     "title": "Calamity Dice",
-    "idea": "Dice battler: roll elemental dice, pick one element per turn. Channeled dice enter log and return next turn, building an avalanche of power. Manage heat to avoid feedback damage.",
+    "idea": "属性ダイスバトル。毎ターン属性を1つ選び、蓄積したダイスが次ターンに戻って力の雪崩を作る。熱を管理して反動ダメージを避ける",
     "score": 31.45,
     "status": "Battle prototype complete",
     "href": "005_calamity_dice.html"
@@ -42,7 +42,7 @@
   {
     "id": "006_power_grid",
     "title": "Power Grid",
-    "idea": "Power plant deckbuilder: manage 3 generators, play cards to boost output and control heat. Trigger chain overloads for massive score multipliers.",
+    "idea": "発電所デッキ構築。3基の発電機を管理し、カードで出力を高めつつ熱を抑える。連鎖オーバーロードで大きなスコア倍率を狙う",
     "score": 31.15,
     "status": "Battle prototype complete",
     "href": "006_power_grid.html"
@@ -50,7 +50,7 @@
   {
     "id": "007_overload",
     "title": "OVERLOAD",
-    "idea": "Power core survival auto-shooter: manage charge meter for fire rate boost, trigger screen-clearing OVERLOAD at HP cost. Chain reactions cascade through enemies.",
+    "idea": "パワーコア生存オートシューター。チャージメーターで連射速度を上げ、HPを代償に画面一掃のOVERLOADを発動する。敵を巻き込む連鎖反応が広がる",
     "score": 31.4,
     "status": "Battle prototype complete",
     "href": "007_overload.html"
@@ -58,7 +58,7 @@
   {
     "id": "008_fork_bomb",
     "title": "Fork Bomb",
-    "idea": "Dice-splitting circuit battler: route signal dice through 3 lanes, split values across paths, and recombine matching adjacent values for multiplied burst damage.",
+    "idea": "ダイス分岐型の回路バトル。信号ダイスを3レーンに流し、値を分割して、隣接する一致値を再結合すると倍率付きバーストダメージが出る",
     "score": 31.6,
     "status": "Battle prototype complete",
     "href": "008_fork_bomb.html"
@@ -66,7 +66,7 @@
   {
     "id": "009_viral_cascade",
     "title": "Viral Cascade",
-    "idea": "Hacking-themed cellular automaton grid battler: inject viruses, watch them spread, harvest connected clusters for chain damage. Overflow risk if clusters grow too large.",
+    "idea": "ハッキング風セルオートマトンのグリッドバトル。ウイルスを注入して拡散させ、つながったクラスターを回収して連鎖ダメージを与える。大きく育てすぎるとオーバーフローの危険がある",
     "score": 32.55,
     "status": "Battle prototype complete",
     "href": "009_viral_cascade.html"
@@ -74,7 +74,7 @@
   {
     "id": "010_synth_surge",
     "title": "Synth Surge",
-    "idea": "Auto-shooter with color-match synthesis: collect 3 same-color shards to trigger super abilities (screen wipe, freeze, heal, overdrive). Risk/reward shard positioning.",
+    "idea": "色合わせ合成のオートシューター。同色の欠片を3つ集めると画面一掃、凍結、回復、オーバードライブなどの超能力が発動する。欠片の配置がリスクとリターンを生む",
     "score": 31.45,
     "status": "Battle prototype complete",
     "href": "010_synth_surge.html"
@@ -82,7 +82,7 @@
   {
     "id": "011_alchemy_drop",
     "title": "Alchemy Drop",
-    "idea": "Falling-block puzzle: stack elemental blocks, match 3+ to clear, chain reactions cascade for score multipliers. Reinterpreted from alchemy synthesis idea.",
+    "idea": "落ち物パズル。属性ブロックを積み、3個以上そろえて消す。連鎖反応が広がるほどスコア倍率が上がる。錬金合成アイデアの再解釈",
     "score": 31.4,
     "status": "Puzzle prototype complete",
     "href": "011_alchemy_drop.html"
@@ -90,7 +90,7 @@
   {
     "id": "012_mining_front",
     "title": "Mining Front",
-    "idea": "Lane-based tower defense: place mining turrets, chain adjacent reactors for amplified damage, manage ore economy across 10 waves. Reinterpreted from space-mining deckbuilder idea.",
+    "idea": "レーン型タワーディフェンス。採掘タレットを配置し、隣接リアクターを連鎖させて火力を増幅する。10ウェーブを通して鉱石経済を管理する。宇宙採掘デッキ構築アイデアの再解釈",
     "score": 31.8,
     "status": "Tower defense prototype complete",
     "href": "012_mining_front.html"
@@ -98,7 +98,7 @@
   {
     "id": "013_foresight",
     "title": "FORESIGHT",
-    "idea": "Grid survival: spend future knowledge to attack. Your vision of upcoming enemy spawns is the resource you spend. Reinterpreted from dice/bag roguelite idea (cost = future hand, not HP).",
+    "idea": "グリッド生存ゲーム。未来の知識を消費して攻撃する。敵の出現予測そのものが支払うリソースになる。ダイス/バッグ型ローグライトの再解釈（コストはHPではなく未来の手札）",
     "score": 31.45,
     "status": "Grid survival prototype complete",
     "href": "013_foresight.html"
@@ -106,7 +106,7 @@
   {
     "id": "014_chroma_break",
     "title": "CHROMA BREAK",
-    "idea": "Color-match breakout: paddle cycles through 4 elements, ball only damages matching-color bricks, consecutive same-color breaks build COMBO for piercing SUPER BALL. Reinterpreted from alchemy synthesis idea (score 31.65).",
+    "idea": "色合わせブロック崩し。パドルは4属性を巡回し、ボールは一致色のブロックだけを壊せる。同色破壊を連続させるとCOMBOが伸び、貫通SUPER BALLになる。錬金合成アイデアの再解釈（score 31.65）",
     "score": 31.65,
     "status": "Breakout prototype complete",
     "href": "014_chroma_break.html"
@@ -114,7 +114,7 @@
   {
     "id": "015_element_drop",
     "title": "Element Drop",
-    "idea": "Pachinko/Peggle ball-drop with alchemy synthesis: consecutive same-element peg hits double the combo multiplier. Reinterpreted from alchemy synthesis idea (score 31.65).",
+    "idea": "錬金合成を取り入れたパチンコ/Peggle風ボールドロップ。同属性のピンに連続ヒットするとコンボ倍率が倍増する。錬金合成アイデアの再解釈（score 31.65）",
     "score": 31.65,
     "status": "Pachinko prototype complete",
     "href": "015_element_drop.html"
@@ -122,7 +122,7 @@
   {
     "id": "016_gravity_well",
     "title": "Gravity Well",
-    "idea": "Orbital survival: capture drifting mass into orbit, then trigger chain collapse for combo score. Manage heat from orbiting mass. Reinterpreted from alchemy dice/bag roguelite idea (score 32.2) with resonance echoes from movement trail.",
+    "idea": "軌道生存ゲーム。漂う質量を軌道に捕まえ、連鎖崩壊を起こしてコンボスコアを稼ぐ。周回する質量が生む熱を管理する。移動軌跡の共鳴エコーを加えた錬金ダイス/バッグ型ローグライトの再解釈（score 32.2）",
     "score": 32.2,
     "status": "Orbital prototype complete",
     "href": "016_gravity_well.html"
@@ -130,7 +130,7 @@
   {
     "id": "017_chain_vault",
     "title": "CHAIN VAULT",
-    "idea": "Color-chain platformer: jump between platforms, chain same-colored landings to trigger cascading SHATTER for massive score. Reinterpreted from hacking auto-shooter idea (score 31.55) with chain propagation + one-color constraint hooks.",
+    "idea": "色連鎖プラットフォーマー。足場を飛び移り、同色着地を連鎖させると連続SHATTERが発生して大量スコアになる。連鎖伝播と一色制約を取り入れたハッキングオートシューター案の再解釈（score 31.55）",
     "score": 31.55,
     "status": "Platformer prototype complete",
     "href": "017_chain_vault.html"
@@ -138,7 +138,7 @@
   {
     "id": "018_ore_serpent",
     "title": "ORE SERPENT",
-    "idea": "Snake-like mining: navigate a growing drill-serpent, collect same-color ores consecutively for COMBO multiplier. Body constrains movement — longer = more risk. Reinterpreted from auto-shooter/space-mining idea (score 32.2) with log/replay as assets hook.",
+    "idea": "スネーク風採掘ゲーム。伸び続けるドリル蛇を操作し、同色鉱石を連続回収してCOMBO倍率を上げる。体が長いほど移動が制限されリスクが増す。ログ/リプレイを資産化する要素を加えたオートシューター/宇宙採掘案の再解釈（score 32.2）",
     "score": 32.2,
     "status": "Snake prototype complete",
     "href": "018_ore_serpent.html"
@@ -146,7 +146,7 @@
   {
     "id": "019_chain_reactor",
     "title": "CHAIN REACTOR",
-    "idea": "Top-down arena shooter: destroy one enemy to trigger cascading same-color chain reactions. Reinterpreted from deckbuilder idea (score 31.95) with chain propagation + one-color-per-action hooks.",
+    "idea": "トップダウンアリーナシューター。敵を1体倒すと同色の連鎖反応が広がる。連鎖伝播と1アクション1色制約を取り入れたデッキ構築案の再解釈（score 31.95）",
     "score": 31.95,
     "status": "Shooter prototype complete",
     "href": "019_chain_reactor.html"
@@ -154,7 +154,7 @@
   {
     "id": "020_echo_drift",
     "title": "ECHO DRIFT",
-    "idea": "Grid-based top-down racer: leave colored echo trail on track, re-entering same-color cells triggers COMBO chain multipliers while building dangerous heat. DISCHARGE to clear. Reinterpreted from auto-shooter/power-plant idea (score 32.15) with log/replay → echo trail, CA grid → volatile spread hooks.",
+    "idea": "グリッド型トップダウンレーサー。コースに色付きエコー軌跡を残し、同色セルへ再突入するとCOMBO連鎖倍率が発生する一方で危険な熱が増える。DISCHARGEで消去する。ログ/リプレイをエコー軌跡に、CAグリッドを不安定拡散に置き換えたオートシューター/発電所案の再解釈（score 32.15）",
     "score": 32.15,
     "status": "Racing prototype complete",
     "href": "020_echo_drift.html"
@@ -162,7 +162,7 @@
   {
     "id": "021_thrust_chain",
     "title": "THRUST CHAIN",
-    "idea": "Lunar lander with color-matched combo chains: land on same-color pads consecutively for COMBO multipliers while managing fuel, HP, and gravity. Reinterpreted from deckbuilder/logistics idea (score 32.15) with circuit/pipe flow → color chain, split/converge → combo jackpot hooks.",
+    "idea": "色合わせコンボ連鎖の月面着陸ゲーム。燃料、HP、重力を管理しながら同色パッドへ連続着地してCOMBO倍率を稼ぐ。回路/パイプ流を色連鎖に、分岐/合流をコンボ大当たりに置き換えたデッキ構築/物流案の再解釈（score 32.15）",
     "score": 32.15,
     "status": "Lunar lander prototype complete",
     "href": "021_thrust_chain.html"
@@ -170,7 +170,7 @@
   {
     "id": "022_calamity_siege",
     "title": "CALAMITY SIEGE",
-    "idea": "Space-invaders style gallery shooter: contain enemies before they breach. Same-color combo unlocks piercing laser. Reinterpreted from calamity sealing deckbuilder idea (score 32.05).",
+    "idea": "スペースインベーダー風ギャラリーシューター。敵が突破する前に封じ込める。同色コンボで貫通レーザーが解放される。災厄封印デッキ構築案の再解釈（score 32.05）",
     "score": 32.05,
     "status": "Shooter prototype complete",
     "href": "022_calamity_siege.html"
@@ -178,7 +178,7 @@
   {
     "id": "023_cell_surge",
     "title": "CELL SURGE",
-    "idea": "Grid territory control: place colored seeds that spread via cellular automaton. Contiguous same-color regions synthesize into fortress NODES. Compete against enemy spread from edges. Reinterpreted from dice/bag roguelite idea (score 32.35) with CA grid spread + synthesis compression hooks.",
+    "idea": "グリッド陣取り。セルオートマトンで広がる色付きの種を配置する。連続した同色領域は要塞NODEへ合成される。端から広がる敵勢力と競う。CAグリッド拡散と合成圧縮を取り入れたダイス/バッグ型ローグライト案の再解釈（score 32.35）",
     "score": 32.35,
     "status": "Territory control prototype complete",
     "href": "023_cell_surge.html"
@@ -186,7 +186,7 @@
   {
     "id": "024_chroma_bounce",
     "title": "CHROMA BOUNCE",
-    "idea": "Color-match pinball: bounce the ball off same-color bumpers to build COMBO. COMBO >= 4 triggers SYNTHESIS super-mode (rainbow bumpers, 3x score). Reinterpreted from dice/bag roguelite idea (score 31.65) with synthesis compression + one-color-per-turn hooks.",
+    "idea": "色合わせピンボール。同色バンパーにボールを当ててCOMBOを伸ばす。COMBOが4以上でSYNTHESIS超モード（虹色バンパー、スコア3倍）が発動する。合成圧縮と1ターン1色制約を取り入れたダイス/バッグ型ローグライト案の再解釈（score 31.65）",
     "score": 31.65,
     "status": "Pinball prototype complete",
     "href": "024_chroma_bounce.html"
@@ -194,7 +194,7 @@
   {
     "id": "025_combo_burst",
     "title": "COMBO BURST",
-    "idea": "Color-match target shooting gallery: same-color consecutive hits build COMBO. COMBO >= 3 triggers CHAIN BURST cascading through nearby same-color targets. Reinterpreted from space-mining deckbuilder idea (score 31.8) with floor rule changes + chain collapse hooks.",
+    "idea": "色合わせ射的ゲーム。同色の的を連続ヒットするとCOMBOが伸びる。COMBOが3以上で近くの同色ターゲットへ連鎖するCHAIN BURSTが発動する。フロアルール変化と連鎖崩壊を取り入れた宇宙採掘デッキ構築案の再解釈（score 31.8）",
     "score": 31.8,
     "status": "Reaction shooter prototype complete",
     "href": "025_combo_burst.html"
@@ -202,7 +202,7 @@
   {
     "id": "026_color_flux",
     "title": "COLOR FLUX",
-    "idea": "One-button color-matching flyer: flap through colored gates, match your bird's color to build COMBO. COMBO >= 5 triggers SYNTHESIS super-mode (3x score, rainbow gates). Reinterpreted from dice/bag roguelite idea (score 31.65) with synthesis compression + one-color-per-turn hooks.",
+    "idea": "ワンボタン色合わせフライヤー。色付きゲートを羽ばたいて通過し、鳥の色と一致させてCOMBOを伸ばす。COMBOが5以上でSYNTHESIS超モード（スコア3倍、虹色ゲート）が発動する。合成圧縮と1ターン1色制約を取り入れたダイス/バッグ型ローグライト案の再解釈（score 31.65）",
     "score": 31.65,
     "status": "Flyer prototype complete",
     "href": "026_color_flux.html"
@@ -210,7 +210,7 @@
   {
     "id": "027_gem_chain",
     "title": "GEM CHAIN",
-    "idea": "Color-match swap puzzle with chain-reaction spread: swap adjacent gems to create 3+ same-color lines, BFS spread clears adjacent same-color gems, cascading combos multiply score while building HEAT (board quakes at threshold). Reinterpreted from alchemy synthesis deckbuilder idea #1 (score 32.75) with synthesis compression → chain cascade, CA spread → BFS color propagation hooks.",
+    "idea": "連鎖拡散する色合わせスワップパズル。隣接ジェムを入れ替えて同色3個以上のラインを作り、BFS拡散で隣接同色ジェムを消す。連続コンボでスコアが増え、HEATも蓄積する（しきい値で盤面が揺れる）。合成圧縮を連鎖カスケードに、CA拡散をBFS色伝播に置き換えた錬金合成デッキ構築案#1の再解釈（score 32.75）",
     "score": 32.75,
     "status": "Match-3 swap puzzle prototype complete",
     "href": "027_gem_chain.html"
@@ -218,7 +218,7 @@
   {
     "id": "028_flux_cannon",
     "title": "FLUX CANNON",
-    "idea": "Artillery chain-combo: aim and fire colored cannonballs at drifting targets, chain same-color hits for COMBO multipliers, COMBO >= 3 unlocks SUPER SHOT (AOE burst). Manage FOCUS (accuracy resource) and HEAT (overheat risk). Reinterpreted from deckbuilder idea #1 (score 32.05) with synthesis compression -> color-match COMBO chain, cost is future hand -> FOCUS accuracy mechanic.",
+    "idea": "砲撃連鎖コンボ。漂う的を狙って色付き砲弾を撃ち、同色ヒットを連鎖させてCOMBO倍率を稼ぐ。COMBOが3以上でSUPER SHOT（範囲バースト）が解放される。FOCUS（命中精度リソース）とHEAT（オーバーヒートリスク）を管理する。合成圧縮を色合わせCOMBO連鎖に、未来の手札コストをFOCUS命中精度メカニクスに置き換えたデッキ構築案#1の再解釈（score 32.05）",
     "score": 32.05,
     "status": "Artillery prototype complete",
     "href": "028_flux_cannon.html"
@@ -226,7 +226,7 @@
   {
     "id": "029_pipe_surge",
     "title": "PIPE SURGE",
-    "idea": "Pipe connection puzzle: place colored pipe tiles to connect Source to Drain, same-color adjacent pipes in the path chain-propagate for COMBO multipliers. COMBO >= 4 triggers SURGE — all connected pipes burst with particles and clear for a massive bonus. Reinterpreted from dice/bag roguelite idea #1 (score 32.2) with log/replay as asset -> persistent pipe infrastructure, chain collapse -> color-match chain propagation.",
+    "idea": "パイプ接続パズル。色付きパイプタイルを置いてSourceとDrainをつなぎ、経路上の同色隣接パイプが連鎖伝播してCOMBO倍率を生む。COMBOが4以上でSURGEが発動し、接続済みパイプが粒子とともに破裂して消え、大ボーナスになる。ログ/リプレイを永続パイプ基盤に、連鎖崩壊を色合わせ連鎖伝播に置き換えたダイス/バッグ型ローグライト案#1の再解釈（score 32.2）",
     "score": 32.2,
     "status": "Pipe puzzle prototype complete",
     "href": "029_pipe_surge.html"
@@ -234,7 +234,7 @@
   {
     "id": "030_chroma_drive",
     "title": "CHROMA DRIVE",
-    "idea": "Top-down color-match putting game: sink colored balls into matching holes for COMBO multipliers. Ball color updates to the last hole sunk, creating constraint-driven risk/reward. Reinterpreted from deckbuilder idea #1 (score 31.85) with log/replay as assets -> ball color determined by last sink, one-color-per-turn -> color-match constraint.",
+    "idea": "トップダウン色合わせパッティングゲーム。色付きボールを一致するホールに沈めてCOMBO倍率を稼ぐ。ボール色は最後に入れたホールで更新され、制約によるリスクとリターンが生まれる。ログ/リプレイを資産化してボール色を最後のカップインで決め、1ターン1色制約を色合わせ制約に置き換えたデッキ構築案#1の再解釈（score 31.85）",
     "score": 31.85,
     "status": "Golf/putting prototype complete",
     "href": "030_chroma_drive.html"
@@ -242,7 +242,7 @@
   {
     "id": "031_overkill_chain",
     "title": "OVERKILL CHAIN",
-    "idea": "Timing/precision overkill chain game: click enemies to attack, excess damage ripples left through the enemy line, building combos. Closer enemies = higher multiplier but more danger. Reinterpreted from auto-shooter idea #9 (score 30.8) with overkill carryover + combo meter hooks.",
+    "idea": "タイミングと精密さのオーバーキル連鎖ゲーム。敵をクリックして攻撃し、余剰ダメージが敵列の左へ波及してコンボを作る。近い敵ほど倍率が高いが危険も増す。オーバーキル持ち越しとコンボメーターを取り入れたオートシューター案#9の再解釈（score 30.8）",
     "score": 30.8,
     "status": "Timing/precision prototype complete",
     "href": "031_overkill_chain.html"
@@ -250,7 +250,7 @@
   {
     "id": "032_chroma_dash",
     "title": "CHROMA DASH",
-    "idea": "Side-scrolling endless runner: collect same-color gems consecutively to build COMBO multipliers. COMBO >= 5 triggers FLUX super-mode (rainbow aura, 3x gem value, 5 seconds). Jump over spikes and pits, duck under bars. Speed increases with distance. Reinterpreted from deckbuilder idea #1 (score 32.0) with synthesis compression -> COMBO chain, chain collapse -> FLUX activation explosion.",
+    "idea": "横スクロールエンドレスランナー。同色ジェムを連続回収してCOMBO倍率を伸ばす。COMBOが5以上でFLUX超モード（虹色オーラ、ジェム価値3倍、5秒）が発動する。トゲや穴を跳び越え、バーをくぐり、距離に応じて速度が上がる。合成圧縮をCOMBO連鎖に、連鎖崩壊をFLUX発動爆発に置き換えたデッキ構築案#1の再解釈（score 32.0）",
     "score": 32.0,
     "status": "Endless runner prototype complete",
     "href": "032_chroma_dash.html"
@@ -258,7 +258,7 @@
   {
     "id": "033_resonance_chain",
     "title": "RESONANCE CHAIN",
-    "idea": "Rhythm-action: hit falling colored notes at timing zone, consecutive same-color hits build RESONANCE chain for score multipliers and chain-clear effects. Reinterpreted from dice/bag roguelite idea #1 (score 32.2) with UI chain collapse + hit/combo visualization hooks.",
+    "idea": "リズムアクション。落ちてくる色付きノーツを判定ゾーンで叩き、同色ヒットを連続させるとRESONANCE連鎖が伸びてスコア倍率と連鎖消去効果が発生する。UI連鎖崩壊とヒット/コンボ可視化を取り入れたダイス/バッグ型ローグライト案#1の再解釈（score 32.2）",
     "score": 32.2,
     "status": "Rhythm prototype complete",
     "href": "033_resonance_chain.html"
@@ -266,7 +266,7 @@
   {
     "id": "034_hook_chain",
     "title": "HOOK CHAIN",
-    "idea": "Color-match fishing: time your strikes to catch same-colored fish consecutively for COMBO multipliers. COMBO >= 3 triggers SUPER mode (rainbow hook, auto-catch all same-color fish). Reinterpreted from deckbuilder/logistics idea #1 (score 32.0) with synthesis compression -> same-color COMBO chain, flow optimization -> color target selection + heat/cooldown timing.",
+    "idea": "色合わせ釣りゲーム。タイミングよく合わせて同色の魚を連続で釣り、COMBO倍率を稼ぐ。COMBOが3以上でSUPERモード（虹色フック、同色魚の自動捕獲）が発動する。合成圧縮を同色COMBO連鎖に、フロー最適化を色ターゲット選択と熱/クールダウンタイミングに置き換えたデッキ構築/物流案#1の再解釈（score 32.0）",
     "score": 32.0,
     "status": "Fishing prototype complete",
     "href": "034_hook_chain.html"
@@ -274,7 +274,7 @@
   {
     "id": "035_split_chain",
     "title": "SPLIT CHAIN",
-    "idea": "Asteroids-like shooter with color-match chain splitting. Same-color asteroid kills build COMBO for extra fragments and score multipliers. Reinterpreted from alchemy deckbuilder idea #1 (score 31.85) with log/replay as asset + one-color-per-turn hooks.",
+    "idea": "小惑星破壊風シューターに色合わせ連鎖分裂を加えたゲーム。同色小惑星を倒すとCOMBOが伸び、追加破片とスコア倍率が得られる。ログ/リプレイの資産化と1ターン1色制約を取り入れた錬金デッキ構築案#1の再解釈（score 31.85）",
     "score": 31.85,
     "status": "Asteroids shooter prototype complete",
     "href": "035_split_chain.html"
@@ -282,7 +282,7 @@
   {
     "id": "036_chroma_chase",
     "title": "CHROMA CHASE",
-    "idea": "Color-match maze chase (Pac-Man-like): eat same-colored gems consecutively for COMBO multipliers. Player movement trail damages ghosts. Ghosts multiply over time. Reinterpreted from dice/bag roguelite idea #1 (score 32.15) with log/replay as asset (trail defense) + CA grid spread (ghost multiplication) hooks.",
+    "idea": "パックマン風の色合わせ迷路チェイス。同色ジェムを連続で食べてCOMBO倍率を稼ぐ。プレイヤーの移動軌跡がゴーストにダメージを与え、ゴーストは時間経過で増殖する。ログ/リプレイを軌跡防衛に、CAグリッド拡散をゴースト増殖に置き換えたダイス/バッグ型ローグライト案#1の再解釈（score 32.15）",
     "score": 32.15,
     "status": "Maze chase prototype complete",
     "href": "036_chroma_chase.html"
@@ -290,7 +290,7 @@
   {
     "id": "037_echo_arc",
     "title": "ECHO ARC",
-    "idea": "Color-match trajectory launcher (slingshot): aim and launch colored projectiles at targets, same-color hits build COMBO for SUPER SHOT. Each hit creates an echo ring (log/replay as asset) that amplifies subsequent shots.",
+    "idea": "色合わせ軌道ランチャー（スリングショット）。狙いをつけて色付き弾をターゲットへ発射し、同色ヒットでCOMBOを伸ばしてSUPER SHOTを狙う。各ヒットがエコーリング（ログ/リプレイの資産化）を作り、後続ショットを増幅する",
     "score": 31.85,
     "status": "Trajectory launcher prototype complete",
     "href": "037_echo_arc.html"
@@ -298,7 +298,7 @@
   {
     "id": "038_burst_chain",
     "title": "BURST CHAIN",
-    "idea": "Bubble shooter with chain-propagation popping: shoot colored bubbles at a hex-grid ceiling, match 3+ same-color to pop. Floating bubbles cascade down for bonus. COMBO multiplier rewards consecutive pops, HEAT accelerates ceiling drops. Reinterpreted from dice/bag roguelite idea (score 31.55) with chain propagation + one-color-per-turn hooks.",
+    "idea": "連鎖伝播で割れるバブルシューター。六角グリッドの天井へ色付きバブルを撃ち、同色3個以上で破裂させる。浮いたバブルは落下してボーナスになる。連続破裂はCOMBO倍率で報われ、HEATが天井落下を加速する。連鎖伝播と1ターン1色制約を取り入れたダイス/バッグ型ローグライト案の再解釈（score 31.55）",
     "score": 31.55,
     "status": "Bubble shooter prototype complete",
     "href": "038_burst_chain.html"
@@ -306,7 +306,7 @@
   {
     "id": "039_pong_surge",
     "title": "PONG SURGE",
-    "idea": "Color-match Pong rally: rally the ball with matching paddle colors to build COMBO, trigger SURGE mode for double points and screen-shaking chain effects. Reinterpreted from deckbuilder idea #1 (score 32.6) with log/replay → rally history and chain collapse → SURGE mode hooks.",
+    "idea": "色合わせPongラリー。一致するパドル色でボールを打ち返してCOMBOを伸ばし、SURGEモードで得点2倍と画面揺れの連鎖演出を発動する。ログ/リプレイをラリー履歴に、連鎖崩壊をSURGEモードに置き換えたデッキ構築案#1の再解釈（score 32.6）",
     "score": 32.6,
     "status": "Pong rally prototype complete",
     "href": "039_pong_surge.html"
@@ -314,7 +314,7 @@
   {
     "id": "040_chain_cross",
     "title": "CHAIN CROSS",
-    "idea": "Color-match traffic intersection manager: match signal colors to car colors for safe passage. Same-color consecutive passes build COMBO → SUPER CLEAR. Crashes spread congestion (CA reimagined). Reinterpreted from dice/bag roguelite idea #1 (score 32.35) with synthesis compression + CA grid spread hooks.",
+    "idea": "色合わせ交差点管理ゲーム。信号色を車の色に合わせて安全に通過させる。同色の連続通過でCOMBOが伸び、SUPER CLEARにつながる。事故は渋滞として広がる（CAの再解釈）。合成圧縮とCAグリッド拡散を取り入れたダイス/バッグ型ローグライト案#1の再解釈（score 32.35）",
     "score": 32.35,
     "status": "Traffic control prototype complete",
     "href": "040_chain_cross.html"
@@ -322,7 +322,7 @@
   {
     "id": "041_tower_collapse",
     "title": "Tower Collapse",
-    "idea": "Tower stack/collapse puzzle: drop blocks, match 3+ same-color adjacent, chain reactions cascade for score. Reinterpreted from game_idea_factory #1 (score 32.0, hacking/deckbuilder with synthesis+chain hooks).",
+    "idea": "塔の積み上げ/崩壊パズル。ブロックを落とし、同色隣接3個以上をそろえると連鎖反応が広がってスコアになる。合成と連鎖要素を持つハッキング/デッキ構築のgame_idea_factory #1からの再解釈（score 32.0）",
     "score": 32.0,
     "status": "Tower collapse puzzle prototype complete",
     "href": "041_tower_collapse.html"
@@ -330,7 +330,7 @@
   {
     "id": "042_echo_stealth",
     "title": "ECHO STEALTH",
-    "idea": "Top-down grid stealth: only one color of guard can see you at a time (cycling frequency). When caught, leave an echo behind that distracts same-color guards. Reinterpreted from alchemy deckbuilder idea #1 (score 31.85) with log/replay as asset + one-color-per-turn hooks.",
+    "idea": "トップダウンのグリッドステルス。同時にプレイヤーを発見できる警備兵の色は1色だけ（周波数が循環する）。見つかるとエコーを残し、同色警備兵の注意をそらす。ログ/リプレイの資産化と1ターン1色制約を取り入れた錬金デッキ構築案#1の再解釈（score 31.85）",
     "score": 31.85,
     "status": "Stealth prototype complete",
     "href": "042_echo_stealth.html"
@@ -338,7 +338,7 @@
   {
     "id": "043_starfall",
     "title": "STARFALL",
-    "idea": "Color-match Missile Command defense: click to launch interceptors from cities, same-color consecutive intercepts build COMBO for surging score multipliers. Reinterpreted from calamity sealing deckbuilder idea (score 32.0) with synthesis compression + chain visualization hooks.",
+    "idea": "色合わせMissile Command防衛。クリックで都市から迎撃弾を発射し、同色の連続迎撃でCOMBOを伸ばしてスコア倍率を跳ね上げる。合成圧縮と連鎖可視化を取り入れた災厄封印デッキ構築案の再解釈（score 32.0）",
     "score": 32.0,
     "status": "Defense prototype complete",
     "href": "043_starfall.html"
@@ -346,7 +346,7 @@
   {
     "id": "044_cue_chain",
     "title": "CUE CHAIN",
-    "idea": "Color-match billiards: sink same-color balls consecutively for COMBO multipliers. COMBO >= 3 triggers CHAIN BREAK super-mode (rainbow cue, 3x score). Reinterpreted from deckbuilder roguelite idea #1 (score 31.8) with consecutive same-card -> same-color-COMBO, chain collapse UI -> CHAIN BREAK hooks.",
+    "idea": "色合わせビリヤード。同色ボールを連続で落としてCOMBO倍率を稼ぐ。COMBOが3以上でCHAIN BREAK超モード（虹色キュー、スコア3倍）が発動する。同種カード連続を同色COMBOに、連鎖崩壊UIをCHAIN BREAKに置き換えたデッキ構築ローグライト案#1の再解釈（score 31.8）",
     "score": 31.8,
     "status": "Billiards prototype complete",
     "href": "044_cue_chain.html"
@@ -354,7 +354,7 @@
   {
     "id": "045_merge_tower",
     "title": "MERGE TOWER",
-    "idea": "Tower stacking merge puzzle: drop colored blocks, 3+ same-color blocks merge into higher tier, chain reactions cascade through tower. Reinterpreted from alchemy deckbuilder idea (score 31.85) with synthesis compression + split/converge hooks.",
+    "idea": "塔積みマージパズル。色付きブロックを落とし、同色3個以上が上位段階へ合成され、塔の中で連鎖反応が広がる。合成圧縮と分岐/合流を取り入れた錬金デッキ構築案の再解釈（score 31.85）",
     "score": 31.85,
     "status": "Merge puzzle prototype complete",
     "href": "045_merge_tower.html"
@@ -362,7 +362,7 @@
   {
     "id": "046_chain_juggle",
     "title": "CHAIN JUGGLE",
-    "idea": "Color-match juggling: keep colored balls in the air, chain same-color hits for COMBO, compress into SUPER BALLS, avoid rising hazard zone. Reinterpreted from alchemy deckbuilder idea #1 (Score 31.25) with synthesis compression + damage strengthens enemies hooks.",
+    "idea": "色合わせジャグリング。色付きボールを空中に保ち、同色ヒットを連鎖させてCOMBOを作り、SUPER BALLへ圧縮する。上昇する危険地帯を避ける。合成圧縮とダメージで敵が強化される要素を取り入れた錬金デッキ構築案#1の再解釈（Score 31.25）",
     "score": 31.25,
     "status": "Juggling prototype complete",
     "href": "046_chain_juggle.html"
@@ -370,7 +370,7 @@
   {
     "id": "047_echo_tron",
     "title": "ECHO TRON",
-    "idea": "Light cycle arena survival: movement trail becomes permanent walls, same-color gem COMBO chain multipliers, trap enemies against walls. Reinterpreted from deckbuilder idea #1 (score 32.55) with log/replay as asset (trail walls) + CA grid fill (arena closure) hooks.",
+    "idea": "ライトサイクル型アリーナ生存ゲーム。移動軌跡が永続壁になり、同色ジェムのCOMBO連鎖で倍率を稼ぎ、壁で敵を閉じ込める。ログ/リプレイを軌跡壁に、CAグリッド充填をアリーナ閉鎖に置き換えたデッキ構築案#1の再解釈（score 32.55）",
     "score": 32.55,
     "status": "Tron/light cycle prototype complete",
     "href": "047_echo_tron.html"
@@ -378,7 +378,7 @@
   {
     "id": "048_bullseye_chain",
     "title": "BULLSEYE CHAIN",
-    "idea": "Color-match dart throwing with gravity arcs and chain combos. Reinterpreted from game_idea_factory #1 (Score 31.8) with log/replay as asset (ghost trails) + gravity/collapse chain (COMBO burst) hooks.",
+    "idea": "重力弧と連鎖コンボを使う色合わせダーツ投げ。ログ/リプレイをゴースト軌跡に、重力/崩壊連鎖をCOMBOバーストに置き換えたgame_idea_factory #1の再解釈（Score 31.8）",
     "score": 31.8,
     "status": "Darts/target shooting prototype complete",
     "href": "048_bullseye_chain.html"
@@ -386,7 +386,7 @@
   {
     "id": "049_split_surge",
     "title": "SPLIT SURGE",
-    "idea": "Zuma-style marble chain shooter: shoot colored marbles to match 3+ and split the chain; same-color segment reconvergence triggers COMBO SURGE. Reinterpreted from alchemy deckbuilder idea #1 (Score 32.0) with split/converge + synthesis compression hooks.",
+    "idea": "マーブル列崩し風の連鎖シューター。色付きマーブルを撃って3個以上そろえ、列を分断する。同色セグメントが再合流するとCOMBO SURGEが発動する。分岐/合流と合成圧縮を取り入れた錬金デッキ構築案#1の再解釈（Score 32.0）",
     "score": 32.0,
     "status": "Marble shooter prototype complete",
     "href": "049_split_surge.html"
@@ -394,7 +394,7 @@
   {
     "id": "050_blast_chain",
     "title": "BLAST CHAIN",
-    "idea": "Bomberman-style grid action: place colored bombs, same-color explosions chain-react for combo multipliers, clear waves of enemies. Reinterpreted from dice/bag roguelite idea #1 (Score 31.95) with synthesis compression → same-color chain + circuit/pipe visualization → blast propagation hooks.",
+    "idea": "ボンバーマン風グリッドアクション。色付き爆弾を置き、同色爆発を連鎖反応させてコンボ倍率を稼ぎ、敵の波を一掃する。合成圧縮を同色連鎖に、回路/パイプ可視化を爆風伝播に置き換えたダイス/バッグ型ローグライト案#1の再解釈（Score 31.95）",
     "score": 31.95,
     "status": "Grid action prototype complete",
     "href": "050_blast_chain.html"
@@ -402,7 +402,7 @@
   {
     "id": "051_chain_push",
     "title": "CHAIN PUSH",
-    "idea": "Sokoban-style block pushing puzzle with synthesis merge and CA chain spread. Push same-color blocks to merge and trigger cascading color-spread chain reactions.",
+    "idea": "合成マージとCA連鎖拡散を持つ倉庫番風ブロック押しパズル。同色ブロックを押して合成し、色拡散の連鎖反応を発生させる",
     "score": 32.75,
     "status": "Sokoban puzzle prototype complete",
     "href": "051_chain_push.html"
@@ -410,7 +410,7 @@
   {
     "id": "052_crawl_surge",
     "title": "CRAWL SURGE",
-    "idea": "Centipede-like color-match arena shooter: shoot matching-color segments for COMBO, COMBO>=3 triggers SURGE BFS chain-destroy. Reinterpreted from deckbuilder idea #1 (Score 32.0) with split/converge + synthesis compression hooks.",
+    "idea": "ムカデ撃ち風の色合わせアリーナシューター。一致色の節を撃ってCOMBOを伸ばし、COMBOが3以上でSURGE BFS連鎖破壊が発動する。分岐/合流と合成圧縮を取り入れたデッキ構築案#1の再解釈（Score 32.0）",
     "score": 32.0,
     "status": "Centipede arena shooter prototype complete",
     "href": "052_crawl_surge.html"
@@ -418,7 +418,7 @@
   {
     "id": "053_vein_break",
     "title": "VEIN BREAK",
-    "idea": "Color-chain drilling game: drill through same-color blocks for COMBO, trigger BFS CHAIN BREAK at COMBO>=3. Reinterpreted from deckbuilder idea #1 (Score 32.35) with circuit/pipe flow + synthesis compression hooks.",
+    "idea": "色連鎖ドリルゲーム。同色ブロックを掘り進んでCOMBOを作り、COMBOが3以上でBFS CHAIN BREAKを発動する。回路/パイプ流と合成圧縮を取り入れたデッキ構築案#1の再解釈（Score 32.35）",
     "score": 32.35,
     "status": "Drilling prototype complete",
     "href": "053_vein_break.html"
@@ -426,7 +426,7 @@
   {
     "id": "054_mole_chain",
     "title": "MOLE CHAIN",
-    "idea": "Color-match whack-a-mole: click same-colored moles consecutively for COMBO chains. COMBO>=4 triggers SUPER mode (auto-whack all visible moles). Reinterpreted from game_idea_factory #1 (Score 31.45) with log/replay as asset + one-color-per-turn hooks.",
+    "idea": "色合わせモグラ叩き。同色のモグラを連続クリックしてCOMBO連鎖を作る。COMBOが4以上でSUPERモード（見えているモグラをすべて自動で叩く）が発動する。ログ/リプレイの資産化と1ターン1色制約を取り入れたgame_idea_factory #1の再解釈（Score 31.45）",
     "score": 31.45,
     "status": "4:3 whack-a-mole prototype complete",
     "href": "054_mole_chain.html"
@@ -434,7 +434,7 @@
   {
     "id": "055_echo_wing",
     "title": "ECHO WING",
-    "idea": "Side-scrolling shoot-em-up with color-match COMBO chains and BFS chain burst propagation. First shmup prototype — reinterpreted from dice/bag roguelite idea #1 (Score 32.15) with log/replay as asset (echo orbital) + CA grid spread (chain burst) hooks.",
+    "idea": "横スクロールシューティング。色合わせCOMBO連鎖とBFS連鎖バースト伝播を使う。初のシューティングプロトタイプ。ログ/リプレイをエコー軌道に、CAグリッド拡散を連鎖バーストに置き換えたダイス/バッグ型ローグライト案#1の再解釈（Score 32.15）",
     "score": 32.15,
     "status": "Shmup prototype complete",
     "href": "055_echo_wing.html"
@@ -442,7 +442,7 @@
   {
     "id": "056_split_overload",
     "title": "SPLIT OVERLOAD",
-    "idea": "Power-core arena survival: build charge with auto-fire, then spend it on split lightning paths that converge into a stronger blast when enemies are clustered tightly. Reinterpreted from power plant auto-shooter idea #3 (Score 31.6) with split/converge + overload risk hooks.",
+    "idea": "パワーコアのアリーナ生存ゲーム。オート射撃でチャージを貯め、分岐する雷撃経路に消費する。敵が密集していると雷撃が合流してより強い爆発になる。分岐/合流とオーバーロードリスクを取り入れた発電所オートシューター案#3の再解釈（Score 31.6）",
     "score": 31.6,
     "status": "Arena survival prototype complete",
     "href": "056_split_overload.html"
