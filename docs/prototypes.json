@@ -486,5 +486,13 @@
     "score": 31.35,
     "status": "Column-drop chain puzzle prototype complete",
     "href": "061_chain_drop.html"
+  },
+  {
+    "id": "062_network_surge",
+    "title": "NETWORK SURGE",
+    "idea": "Hacking network intrusion grid game. Click same-color DATA nodes consecutively to build COMBO. COMBO >= 4 triggers SURGE: BFS chain reaction auto-hacks all reachable same-color nodes for massive score. Wrong-color click resets COMBO and increases TRACE. ICE nodes constantly raise TRACE. FIREWALL nodes block SURGE propagation. Risk/reward: chain same colors for big combos vs. safe diverse clicking. Reinterpreted from magic academy deckbuilder idea #1 (Score 32.0): 'effect synthesis/compression' → COMBO→SURGE chain reaction.",
+    "score": 32.0,
+    "status": "Network intrusion grid prototype complete",
+    "href": "062_network_surge.html"
   }
 ]
