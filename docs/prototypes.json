@@ -478,5 +478,13 @@
     "score": 32.6,
     "status": "Memory sequence prototype complete",
     "href": "060_echo_memory.html"
+  },
+  {
+    "id": "061_chain_drop",
+    "title": "CHAIN DROP",
+    "idea": "Color-match column-drop chain reaction (Connect Four-style). Drop colored discs, match 4+ same-color in any direction to clear. Same-color consecutive drops build COMBO → SUPER DISC (rainbow wildcard). Grid pressure rises from bottom every 5 turns. Chain reactions cascade through gravity compaction. Reinterpreted from alchemy auto-shooter idea #1 (Score 31.35): 'same cards mutate' → COMBO→SUPER, 'CA grid fills up' → grid pressure.",
+    "score": 31.35,
+    "status": "Column-drop chain puzzle prototype complete",
+    "href": "061_chain_drop.html"
   }
 ]
