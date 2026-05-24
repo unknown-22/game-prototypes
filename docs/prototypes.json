@@ -492,7 +492,15 @@
     "title": "NETWORK SURGE",
     "idea": "Hacking network intrusion grid game. Click same-color DATA nodes consecutively to build COMBO. COMBO >= 4 triggers SURGE: BFS chain reaction auto-hacks all reachable same-color nodes for massive score. Wrong-color click resets COMBO and increases TRACE. ICE nodes constantly raise TRACE. FIREWALL nodes block SURGE propagation. Risk/reward: chain same colors for big combos vs. safe diverse clicking. Reinterpreted from magic academy deckbuilder idea #1 (Score 32.0): 'effect synthesis/compression' → COMBO→SURGE chain reaction.",
     "score": 32.0,
-    "status": "Network intrusion grid prototype complete",
+    "status":     "Network intrusion grid prototype complete",
     "href": "062_network_surge.html"
+  },
+  {
+    "id": "063_slash_surge",
+    "title": "SLASH SURGE",
+    "idea": "マウスドラッグで斬る色合わせアクション。オーブを斬ると2つの破片に分裂し、同色を連続で斬るとCOMBOが伸びる。COMBOが5以上に達するとSURGEが発動し、同じ色の破片がすべて連鎖破壊されて大量ボーナスになる。面白い瞬間は「分裂した破片があふれる中で同色を狙い続け、SURGE一掃で画面が一気にクリアになるカタルシス」。リスクとリターン：破片が増えすぎるとOVERLOADでHPが減るため、同色COMBOを狙う危険な選択と、散らばった別色を安全に処理する選択のせめぎ合い",
+    "score": 32.0,
+    "status": "Slashing action prototype complete",
+    "href": "063_slash_surge.html"
   }
 ]
