@@ -502,5 +502,13 @@
     "score": 32.0,
     "status": "Slashing action prototype complete",
     "href": "063_slash_surge.html"
+  },
+  {
+    "id": "064_chroma_dig",
+    "title": "CHROMA DIG",
+    "idea": "Dig Dug / Mr.Driller風の色合わせ採掘ゲーム。同色の土を連続で掘ってCOMBOを伸ばし、別々のトンネルを再接続すると同色の土がBFS連鎖崩壊で一網打尽になる。面白い瞬間は「分岐したトンネルが再結合した瞬間、同色の土が連鎖崩壊して敵も巻き込み一掃するカタルシス」。リスクとリターン：同色を狙って掘り進むか（COMBO倍率UP）、安全に別色を掘ってトンネルを拡げるか（連鎖崩壊の機会損失）、落石を利用して敵を倒すか（落下経路の危険）の判断を迫る",
+    "score": 32.0,
+    "status": "Digging arcade prototype complete",
+    "href": "064_chroma_dig.html"
   }
 ]
