@@ -526,5 +526,13 @@
     "score": 32.0,
     "status": "Sliding tile chain puzzle prototype complete",
     "href": "066_chain_shift.html"
+  },
+  {
+    "id": "067_minesweep_chain",
+    "title": "MINESWEEP CHAIN",
+    "idea": "マインスイーパ風の色合わせ推理パズル。同色鉱石を推理で連続発見し、COMBOが3に達するとSYNTHESISで隣接する同色鉱石がBFS連鎖的に自動解放される。面白い瞬間は「推理で同色鉱石を連続発見し、SYNTHESISで画面上の同色鉱石が次々と連鎖解放されるカタルシス」。リスクとリターン：同色COMBOを狙うか（高得点だがミスでリセット）、安全に別色を開けるか（低得点）。デッキ構築案#1（合成圧縮＋連鎖崩壊UI＋宇宙採掘）の再解釈。初の推理パズル",
+    "score": 32.0,
+    "status": "Minesweeper deduction puzzle prototype complete",
+    "href": "067_minesweep_chain.html"
   }
 ]
