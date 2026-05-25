@@ -534,5 +534,13 @@
     "score": 32.0,
     "status": "Minesweeper deduction puzzle prototype complete",
     "href": "067_minesweep_chain.html"
+  },
+  {
+    "id": "068_color_catch",
+    "title": "COLOR CATCH",
+    "idea": "色合わせ落ち物キャッチャーゲーム。同色の落下オブジェクトを連続でキャッチするとCOMBOが増加し、COMBOが5に達するとSUPER CATCHモードが発動（5秒間キャッチャー幅2倍＋全キャッチ自動成立＋スコア3倍）。面白い瞬間は「同色を狙い続けてCOMBOを積み、SUPER CATCHで一気に大量得点する爆発力」。リスクとリターン：同色COMBOを追うと得点効率は高いが、欲張って取り逃すとCOMBOリセット＋ミスカウント（5回でゲームオーバー）。game_idea_factory案#1（スコア32.55）の再解釈：ログが資産→前回のキャッチ軌跡を残すエコー表現、CAグリッド→時間経過でオブジェクトが増殖・画面飽和",
+    "score": 32.55,
+    "status": "Color-match catcher prototype complete",
+    "href": "068_color_catch.html"
   }
 ]
