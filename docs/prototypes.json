@@ -518,5 +518,13 @@
     "score": 31.15,
     "status": "Bowling prototype complete",
     "href": "065_strike_chain.html"
+  },
+  {
+    "id": "066_chain_shift",
+    "title": "CHAIN SHIFT",
+    "idea": "色合わせ15パズル風スライド連鎖。空きマスに隣接タイルをスライドさせ、同色3個以上がBFS連鎖消去でカスケードコンボを起こす。面白い瞬間は「1回のスライドで連鎖反応が連続し、盤面の60%が一気に消えコンボが跳ね上がるカタルシス」。リスクとリターン：連鎖を狙ってタイルを並べると手数がかかり、連鎖不発だと手数損になる。5個以上の大連鎖でボーナス手数獲得。40手でスコア2000を目指す",
+    "score": 32.0,
+    "status": "Sliding tile chain puzzle prototype complete",
+    "href": "066_chain_shift.html"
   }
 ]
