@@ -510,5 +510,13 @@
     "score": 32.0,
     "status": "Digging arcade prototype complete",
     "href": "064_chroma_dig.html"
+  },
+  {
+    "id": "065_strike_chain",
+    "title": "STRIKE CHAIN",
+    "idea": "Color-match bowling game. Roll colored balls to knock down same-color pins for COMBO multiplier. COMBO x5 triggers STRIKE SURGE (rainbow ball: all colors match, 3x score). Risk/reward: miss/gutter builds HEAT, degrading lane oil and adding random drift; HEAT x5 = game over. Most fun moment: 「ピンの色を見極め、同色ストライクを連続させて COMBO を伸ばし、STRIKE SURGE で残りピンが一掃される瞬間」",
+    "score": 31.15,
+    "status": "Bowling prototype complete",
+    "href": "065_strike_chain.html"
   }
 ]
