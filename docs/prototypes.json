@@ -492,7 +492,7 @@
     "title": "NETWORK SURGE",
     "idea": "Hacking network intrusion grid game. Click same-color DATA nodes consecutively to build COMBO. COMBO >= 4 triggers SURGE: BFS chain reaction auto-hacks all reachable same-color nodes for massive score. Wrong-color click resets COMBO and increases TRACE. ICE nodes constantly raise TRACE. FIREWALL nodes block SURGE propagation. Risk/reward: chain same colors for big combos vs. safe diverse clicking. Reinterpreted from magic academy deckbuilder idea #1 (Score 32.0): 'effect synthesis/compression' → COMBO→SURGE chain reaction.",
     "score": 32.0,
-    "status":     "Network intrusion grid prototype complete",
+    "status": "Network intrusion grid prototype complete",
     "href": "062_network_surge.html"
   },
   {
@@ -550,5 +550,13 @@
     "score": 32.0,
     "status": "Artillery chain prototype complete",
     "href": "069_split_barrage.html"
+  },
+  {
+    "id": "070_scorch_chain",
+    "title": "SCORCH CHAIN",
+    "idea": "Worms/Scorched Earth型のターン制砲撃戦。角度と威力を見極め、同じ色の地形を連続破壊してコンボを築く。コンボx3でSUPER SHELL発動（2倍ダメージ＋広範囲破壊）。連鎖する地形崩壊で敵を落下させ一撃必殺する瞬間が面白い。リスクとリターン：同じ色を狙い続けてコンボ倍率を維持するか、敵戦車を直接狙って確実にダメージを与えるかの判断",
+    "score": 30.75,
+    "status": "Turn-based artillery prototype complete",
+    "href": "070_scorch_chain.html"
   }
 ]
