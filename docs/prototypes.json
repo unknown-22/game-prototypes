@@ -558,5 +558,13 @@
     "score": 30.75,
     "status": "Turn-based artillery prototype complete",
     "href": "070_scorch_chain.html"
+  },
+  {
+    "id": "071_dungeon_chain",
+    "title": "DUNGEON CHAIN",
+    "idea": "グリッドダンジョン探索型チェインコンバット。同色の敵を連続撃破することでCOMBOを構築し、COMBOが4になるとROOM SURGEが発動して部屋内の同色敵をBFSで一掃する。同色連続キルにコミットすることで高倍率スコアを得られるが、色を切り替えるとダメージ＋COMBOリセットのリスクを負う。部屋中の敵を一瞬で消し去る爆発的カタルシスが面白い瞬間",
+    "score": 32.0,
+    "status": "Dungeon chain prototype complete",
+    "href": "071_dungeon_chain.html"
   }
 ]
