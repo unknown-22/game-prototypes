@@ -542,5 +542,13 @@
     "score": 32.55,
     "status": "Color-match catcher prototype complete",
     "href": "068_color_catch.html"
+  },
+  {
+    "id": "069_split_barrage",
+    "title": "SPLIT BARRAGE",
+    "idea": "色合わせ砲撃ゲーム。砲弾を狙って発射し、空中で分裂させて色付き破片をグリッドに着弾させる。同色の破片が3個以上隣接するとBFS連鎖爆発し、重力で詰まった破片がさらに連鎖反応を起こす。面白い瞬間は「ベストなタイミングで分裂させ、色付き破片が降り注いで同色同士の連鎖爆発が連続するカタルシス」。リスクとリターン：高威力で射撃すると破片が多く広範囲に散らばるが、カラム満杯で破片ロスのリスク。分裂タイミングが早すぎると散らばりすぎ、遅すぎると着弾前に分裂できない",
+    "score": 32.0,
+    "status": "Artillery chain prototype complete",
+    "href": "069_split_barrage.html"
   }
 ]
