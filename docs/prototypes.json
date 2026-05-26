@@ -566,5 +566,13 @@
     "score": 32.0,
     "status": "Dungeon chain prototype complete",
     "href": "071_dungeon_chain.html"
+  },
+  {
+    "id": "072_pair_chain",
+    "title": "PAIR CHAIN",
+    "idea": "6x6グリッドの神経衰弱カードゲーム。同じ色のペアを揃えるとCOMBOが構築され、COMBOが3になるとCHAIN REVEALが発動し、BFSで隣接する伏せカードが次々と自動オープンされる。同じ色を狙い続けて高倍率スコアを得るか、安全に記憶したカードで確実に揃えるかの判断が面白い。ワイルドカードでどの色ともマッチし、連鎖爆発で盤面を一気に開く瞬間が面白い",
+    "score": 32.35,
+    "status": "Memory match chain prototype complete",
+    "href": "072_pair_chain.html"
   }
 ]
