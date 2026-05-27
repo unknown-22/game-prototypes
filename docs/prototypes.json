@@ -590,5 +590,13 @@
     "score": 32.0,
     "status": "Vertical climbing prototype complete",
     "href": "074_chain_climb.html"
+  },
+  {
+    "id": "075_chroma_prism",
+    "title": "CHROMA PRISM",
+    "idea": "4色レーザー反射パズル。画面中央のプリズムを回転させて色付きレーザーを狙い、同色ターゲットを連続破壊してCOMBOを構築する。COMBOが3に達するとECHO BEAMが発動し、過去のビーム経路が一斉に再発動（全色一致・半減ダメージ）して画面上のターゲットが一掃される瞬間が面白い。リスクとリターン：同色COMBO継続で高倍率スコア（+COMBOx50）が得られるが、間違った色のターゲットに当たるとHEATが溜まり（+1）、HEATが10でゲームオーバー。HEATは3秒ごとに1ずつ自然減衰するため、安全に色を切り替えるかリスクを冒してCOMBOを維持するかの判断を迫る",
+    "score": 31.85,
+    "status": "Reflection puzzle prototype complete",
+    "href": "075_chroma_prism.html"
   }
 ]
