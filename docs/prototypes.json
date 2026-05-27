@@ -598,5 +598,13 @@
     "score": 31.85,
     "status": "Reflection puzzle prototype complete",
     "href": "075_chroma_prism.html"
+  },
+  {
+    "id": "076_chroma_route",
+    "title": "CHROMA ROUTE",
+    "idea": "Flight Control風の航路描画ゲーム。画面端に出現する色付き艦船をクリック＆ドラッグで航路を描いて同色の滑走路へ誘導する。同色連続着陸でCOMBOが構築され、COMBOが5に達するとSURGEが発動（3秒間全着陸が正解扱い＆スコア2倍）する瞬間が面白い。複数の船の航路を同時に描き分け、同色連続着陸のコンボが爆発的にスコアを伸ばす。リスクとリターン：同色COMBO継続で高倍率スコア（+COMBOx100）が得られるが、間違った色に着陸するとCOMBOリセット＆-50点。船同士の衝突でCOMBOリセット＆-100点のリスクを犯しながら、どの順番で着陸させるかの判断を迫る。90秒の時間制限内でスコア最大化を目指す",
+    "score": 32.0,
+    "status": "Flight routing prototype complete",
+    "href": "076_chroma_route.html"
   }
 ]
