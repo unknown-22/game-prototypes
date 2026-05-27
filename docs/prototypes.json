@@ -582,5 +582,13 @@
     "score": 32.0,
     "status": "Domino chain reaction prototype complete",
     "href": "073_domino_chain.html"
+  },
+  {
+    "id": "074_chain_climb",
+    "title": "CHAIN CLIMB",
+    "idea": "ドゥードゥルジャンプ風の色合わせ垂直クライミングゲーム。同色プラットフォームに連続着地してCOMBOを構築し、COMBOが3に達するとSYNTHESISでスーパージャンプ（通常の3倍の高さ）＋スコア3倍が発動する。面白い瞬間は「上昇速度が上がる中で同色プラットフォームを連続で選び抜き、COMBOが3に達してSYNTHESISのスーパージャンプで一気に高得点を稼ぐ瞬間」。リスクとリターン：同色プラットフォームを狙うと高COMBOが得られるが遠くて落下リスクがあり、近くの異色プラットフォームは安全だがCOMBOがリセットされる",
+    "score": 32.0,
+    "status": "Vertical climbing prototype complete",
+    "href": "074_chain_climb.html"
   }
 ]
