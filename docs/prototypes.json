@@ -574,5 +574,13 @@
     "score": 32.35,
     "status": "Memory match chain prototype complete",
     "href": "072_pair_chain.html"
+  },
+  {
+    "id": "073_domino_chain",
+    "title": "DOMINO CHAIN",
+    "idea": "16x12グリッドに色付きドミノを自由配置し、SPACEで連鎖反応を起動するチェインリアクションシミュレーター。同色の連続倒壊でCOMBOが構築され、分岐点で経路が分かれ、合流点でSUPER BURST(+1000点)が炸裂する。どこに置き、どの色で繋ぎ、どう分岐合流を作るかの配置設計と、連鎖の爆発的カタルシスが面白い瞬間。リスクは少なく、創造性とパズル的思考で高得点を狙うサンドボックス型プロトタイプ",
+    "score": 32.0,
+    "status": "Domino chain reaction prototype complete",
+    "href": "073_domino_chain.html"
   }
 ]
