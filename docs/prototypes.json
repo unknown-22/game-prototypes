@@ -622,5 +622,13 @@
     "score": 31.85,
     "status": "Parry fencing prototype complete",
     "href": "078_parry_chain.html"
+  },
+  {
+    "id": "079_puck_surge",
+    "title": "PUCK SURGE",
+    "idea": "マウス操作のエアホッケーアリーナ。4色のパックをパドルで打ち返し、同色の連続ヒットでCOMBOを構築する。COMBOが4に達するとSURGEが発動（3秒間全パックが虹色に輝きスコア3倍＋AIパドル弱体化）。面白い瞬間は「同色パックを狙って連続ヒットし、COMBOが4に到達してSURGEが炸裂、全パックが虹色になってAIゴールへ雪崩れ込む瞬間」。リスクとリターン：同色COMBOを追うと高得点だが、別色ヒットでCOMBOリセット。SURGE発動後は5秒のクールダウンでCOMBO再構築ができず、その間に失点するリスクを犯しながら次のSURGEを狙う。60秒の時間制限、HP=5、マウスのみで操作",
+    "score": 32.0,
+    "status": "Air hockey prototype complete",
+    "href": "079_puck_surge.html"
   }
 ]
