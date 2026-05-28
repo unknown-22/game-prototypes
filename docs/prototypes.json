@@ -606,5 +606,13 @@
     "score": 32.0,
     "status": "Flight routing prototype complete",
     "href": "076_chroma_route.html"
+  },
+  {
+    "id": "077_echo_slide",
+    "title": "ECHO SLIDE",
+    "idea": "色合わせカーリング/シャッフルボード。色付きパックをクリック＆ドラッグで標的ゾーンへ滑らせ、同色の連続命中でCOMBO倍率を稼ぐ。前回のゴースト軌跡をなぞるとECHO/TRAILボーナスが発動し、COMBOが3以上でSUPER SLIDE（スコア2倍）が解放される。面白い瞬間は「ゴースト軌跡をなぞってECHOボーナスを決め、COMBOを積み重ねてSUPER SLIDEで大量得点する瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア（最大x10）が得られるが、別色を投げるとCOMBOが1にリセット。ミス（標的外れ）でCOMBO完全リセットのリスクを犯しながら、ゴースト軌跡を正確になぞる腕前が試される。10パック/ラウンド、ラウンドごとに敷居点上昇＆標的リング縮小",
+    "score": 32.0,
+    "status": "Curling/shuffleboard prototype complete",
+    "href": "077_echo_slide.html"
   }
 ]
