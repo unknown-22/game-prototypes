@@ -630,5 +630,13 @@
     "score": 32.0,
     "status": "Air hockey prototype complete",
     "href": "079_puck_surge.html"
+  },
+  {
+    "id": "080_stack_surge",
+    "title": "STACK SURGE",
+    "idea": "ジェンガ風タワー引き抜きゲーム。4色のブロックで構成されたタワーからブロックをクリックで引き抜き、同色を連続で引くとCOMBOが積み上がる。COMBOが3に達するとSYNTHESIS発動（全不安定ブロックが一気に安定化し、COMBOx100のボーナススコア）。面白い瞬間は「連続で同色ブロックを引き抜き、COMBOが3に達してSYNTHESISが発動、不安定化した周囲のブロックが一斉に安定化して大量スコアになる瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア（最大x3+）が得られるが、別色を引くとCOMBOリセット＋隣接ブロックが不安定化（CA伝播）。不安定ブロックを引くとHEAT上昇。タワーの50%以上が不安定化すると崩壊（ゲームオーバー）。安定ブロックだけ狙っていてはCOMBOが上がらず、COMBOのために不安定ブロックに手を出すかどうかの判断を迫る",
+    "score": 32.0,
+    "status": "Tower pull prototype complete",
+    "href": "080_stack_surge.html"
   }
 ]
