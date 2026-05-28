@@ -614,5 +614,13 @@
     "score": 32.0,
     "status": "Curling/shuffleboard prototype complete",
     "href": "077_echo_slide.html"
+  },
+  {
+    "id": "078_parry_chain",
+    "title": "PARRY CHAIN",
+    "idea": "色合わせパリィ・フェンシングゲーム。4方向から色付きリングの敵が画面中央へ突進し、プレイヤーは敵の色に合った矢印キーでパリィする。同色連続パリィでCOMBOが積み上がり、COMBOが5に達するとSUPER RIPOSTEが発動（全敵を自動破壊+敵1体あたり500点ボーナス+画面振動）して盤面を一掃する瞬間が面白い。ゴーストエコーが次に出現する敵の方向を予告する。リスクとリターン：同色COMBOを継続するとスコア倍率が上がるが、一歩間違えればCOMBOリセット。間違ったキーまたはタイミングを外すとCOMBOが0に戻るリスクを犯しながら、色を見極めて正確に矢印キーを押す判断が試される。90秒の時間制限、HP=5",
+    "score": 31.85,
+    "status": "Parry fencing prototype complete",
+    "href": "078_parry_chain.html"
   }
 ]
