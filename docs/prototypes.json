@@ -639,12 +639,20 @@
     "status": "Tower pull prototype complete",
     "href": "080_stack_surge.html"
   },
-  {
+    {
     "id": "081_chroma_rally",
     "title": "CHROMA RALLY",
     "idea": "色合わせテニスラリー。ラケット色をボール色に合わせて連続リターンしCOMBOを構築。COMBO≥4でSUPER SHOT（超高速弾・AI反応不可）が炸裂する。面白い瞬間は「ラケット色をボールに連続で合わせてCOMBO4→SUPER SHOTが相手コートに突き刺さる瞬間」。game_idea_factory #1（魔法学院/ルール改変）の合成/圧縮＋CA感染フックを未開拓スポーツジャンル（テニス）に再解釈。リスクとリターン：同色COMBO継続で高倍率だが、色不一致でCOMBOリセット、位置取りミスで失点",
     "score": 32.75,
     "status": "Tennis rally prototype complete",
     "href": "081_chroma_rally.html"
+  },
+  {
+    "id": "082_chain_fleet",
+    "title": "CHAIN FLEET",
+    "idea": "戦艦ゲーム風のグリッド推理＋色合わせコンボ連鎖。10×8グリッドの隠れた艦隊セルをクリックで発見し、同色連続命中でCOMBOを構築。COMBO≥3でSURGEが発動し、BFS連鎖で同色隣接セルが一気に自動解放される。面白い瞬間は「同色セルを3連続ヒットしてSURGEが炸裂、艦隊の半分が連鎖的に明らかになるカタルシス」。リスクとリターン：同色COMBO継続で高倍率スコア（+10×COMBO）とSURGE連鎖解放が得られるが、ミスでHEATが蓄積し、HEAT満タンで敵反撃（-1HP）。色違いヒットはCOMBOリセットでSURGE機会を失う。HP=3、初の戦艦/グリッド推理ジャンル",
+    "score": 32.75,
+    "status": "Battleship grid deduction prototype complete",
+    "href": "082_chain_fleet.html"
   }
 ]
