@@ -662,5 +662,13 @@
     "score": 31.15,
     "status": "Conway Life + synthesis prototype complete",
     "href": "083_cell_forge.html"
+  },
+  {
+    "id": "084_bar_chain",
+    "title": "BAR CHAIN",
+    "idea": "バーテンダーゲーム。4色の酒ボトルをクリックしてグラスに注ぎ、客のオーダー（色の順序）に合わせてドリンクを作る。同色連続注ぎでCOMBO倍率が上昇し、スコアが大きく伸びる。オーダーと異なる色の酒を注ぐとHEATが蓄積し、HEATが最大（10）に達するとオーバーヒートでゲームオーバー。面白い瞬間は「同色ボトルを連打してCOMBO x5を達成し、オーダーを満たしてSERVEボタンを押し、大量スコアが表示される瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア（最大x5+）が得られるが、色違い注ぎでHEAT蓄積。SERVEでHEATが2回復するが、間違った色を注ぎすぎると即ゲームオーバーのリスクを犯しながらCOMBOをどこまで伸ばすかの判断を迫る。ラウンドごとにオーダー長が増加しタイマーが短縮することで難度が上昇する",
+    "score": 31.5,
+    "status": "Bartending combo chain prototype complete",
+    "href": "084_bar_chain.html"
   }
 ]
