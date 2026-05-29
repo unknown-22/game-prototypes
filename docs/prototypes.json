@@ -638,5 +638,13 @@
     "score": 32.0,
     "status": "Tower pull prototype complete",
     "href": "080_stack_surge.html"
+  },
+  {
+    "id": "081_chroma_rally",
+    "title": "CHROMA RALLY",
+    "idea": "色合わせテニスラリー。ラケット色をボール色に合わせて連続リターンしCOMBOを構築。COMBO≥4でSUPER SHOT（超高速弾・AI反応不可）が炸裂する。面白い瞬間は「ラケット色をボールに連続で合わせてCOMBO4→SUPER SHOTが相手コートに突き刺さる瞬間」。game_idea_factory #1（魔法学院/ルール改変）の合成/圧縮＋CA感染フックを未開拓スポーツジャンル（テニス）に再解釈。リスクとリターン：同色COMBO継続で高倍率だが、色不一致でCOMBOリセット、位置取りミスで失点",
+    "score": 32.75,
+    "status": "Tennis rally prototype complete",
+    "href": "081_chroma_rally.html"
   }
 ]
