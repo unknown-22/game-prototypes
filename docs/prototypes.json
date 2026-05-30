@@ -678,5 +678,13 @@
     "score": 31.95,
     "status": "Baseball batting combo chain prototype complete",
     "href": "085_batter_chain.html"
+  },
+  {
+    "id": "086_spike_chain",
+    "title": "SPIKE CHAIN",
+    "idea": "サイドビュー2Dバレーボール。プレイヤー（左側）vs AI（右側）でラリーを行う。マウス移動でポジショニング、クリックでボールにタッチ。各サイド最大3タッチで返球（バンプ→セット→スパイク）。同色連続タッチでCOMBOが上昇し、COMBO x3以上のスパイクがSUPER SPIKEとなり、AIのブロックを貫通して確実に得点できる。画面揺れとパーティクルでSUPER SPIKEの爽快感を演出。面白い瞬間は「同色を狙ってCOMBOを積み重ね、満を持してSUPER SPIKEで決める瞬間」。リスクとリターン：同色を狙うとCOMBOが伸びるが、色が変わるとリセットされるため、無理に同色を待つとミスにつながる。安全に違う色でも返球できるが、COMBOチャンスを逃す。5点先取で勝利。初のバレーボールプロトタイプ。",
+    "score": 31.95,
+    "status": "Volleyball color-match combo prototype complete",
+    "href": "086_spike_chain.html"
   }
 ]
