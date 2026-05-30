@@ -670,5 +670,13 @@
     "score": 31.5,
     "status": "Bartending combo chain prototype complete",
     "href": "084_bar_chain.html"
+  },
+  {
+    "id": "085_batter_chain",
+    "title": "BATTER CHAIN",
+    "idea": "野球バッティングゲーム。ピッチャーが投げる4色のボールをマウスクリックで打ち返す。同色連続ヒットでCOMBOが上昇し、COMBO x3でSUPER HIT（ホームラン）が発動して大量スコアと画面揺れ。異なる色はFOULでコンボリセット、空振り・見逃しはSTRIKE。3ストライクまたは10球でゲームオーバー。面白い瞬間は「ピッチャーの投げる色を見極め、ギリギリまで引きつけて同色COMBOを決め、SUPER HITでホームランをかっ飛ばす瞬間」。リスクとリターン：同色を待てば高COMBO倍率だがSTRIKEリスク、どんな球でも振れば安全だが低スコア。投球速度が徐々に上昇し難度が上がる。初の野球バッティングジャンル。",
+    "score": 31.95,
+    "status": "Baseball batting combo chain prototype complete",
+    "href": "085_batter_chain.html"
   }
 ]
