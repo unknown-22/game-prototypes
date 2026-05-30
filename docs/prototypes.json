@@ -686,5 +686,13 @@
     "score": 31.95,
     "status": "Volleyball color-match combo prototype complete",
     "href": "086_spike_chain.html"
+  },
+  {
+    "id": "087_chain_kick",
+    "title": "CHAIN KICK",
+    "idea": "サッカーPK戦。4色（赤・緑・青・黄）のボールをマウス照準でシュート。同色連続ゴールでCOMBOが上昇し、COMBO x3以上でSUPER KICK（GK無力化、+50点ボーナス、画面揺れ）が発動する。GKはシュートパターンを学習し、直近のシュート方向・色を予測してセーブを狙う。HEATが0-10で蓄積し、セーブや枠外で上昇、ゴールで低下。HEAT=10でゲームオーバー。面白い瞬間は「同じ色のシュートを連続で決めてCOMBOを積み重ね、SUPER KICKでGKを完全に無力化する瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアが得られるが、セーブされるとHEATが溜まりGKが強化される。異なる色に切り替えればCOMBOリセットだが安全策になる。10ラウンド制。初のサッカーPKプロトタイプ。",
+    "score": 32.0,
+    "status": "Soccer penalty kick color-match combo prototype complete",
+    "href": "087_chain_kick.html"
   }
 ]
