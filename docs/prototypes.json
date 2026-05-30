@@ -694,5 +694,13 @@
     "score": 32.0,
     "status": "Soccer penalty kick color-match combo prototype complete",
     "href": "087_chain_kick.html"
+  },
+  {
+    "id": "088_hoop_chain",
+    "title": "HOOP CHAIN",
+    "idea": "バスケットボールのシューティングアーケードに色合わせCOMBOチェインを組み合わせたプロトタイプ。サイドビューコートで、4色（赤・緑・青・黄）のボールをドラッグ＆リリースでシュート（スリングショット方式）。放物線で飛ぶボールがゴールに入ると同色連続ゴールでCOMBOが上昇し、COMBO x3以上でSUPER SHOT（虹色ボール、スコア3倍、画面揺れ、パーティクル爆発）が発動する。色違いゴールはCOMBOリセット、ミスはHEAT+2。HEAT=10または全15球でゲームオーバー。面白い瞬間は「同じ色のシュートを連続で決めてCOMBOを積み重ね、SUPER SHOTで爆発的なスコアを得る瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアが得られるが、ミスでHEATが溜まりゲームオーバーに近づく。安全に違う色を狙うこともできるがCOMBOチャンスを逃す。初のバスケットボールプロトタイプ。",
+    "score": 32.0,
+    "status": "Basketball color-match slingshot combo prototype complete",
+    "href": "088_hoop_chain.html"
   }
 ]
