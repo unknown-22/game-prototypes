@@ -710,5 +710,13 @@
     "score": 32.0,
     "status": "Grid firefighting CA chain prototype complete",
     "href": "089_fire_break.html"
+  },
+  {
+    "id": "090_chroma_jab",
+    "title": "CHROMA JAB",
+    "idea": "サイドビュー1v1カラーマッチボクシング。4色（赤・緑・青・黄）のパンチを選び、同色を連続で相手に叩き込むことでCOMBOを積み重ねる。COMBOが4以上に達するとSUPER COMBOが発動し、虹色パンチで2倍ダメージ＋画面揺れ＋パーティクル爆発。色違いパンチでCOMBOリセット。AIはプレイヤーの色を学習しカウンターピックしてくるため、COMBO継続との駆け引きが生まれる。時間経過でAIの攻撃間隔が短くなり（60f→30f）、プレッシャーが増す。面白い瞬間は「同色パンチを連続で叩き込みCOMBOを積み、SUPER COMBOで相手を吹き飛ばす瞬間」。リスクとリターン：COMBOを狙って同じ色に固執するとAIに読まれて被弾リスクが上がる。色を変えるとCOMBOが途切れるがAIの予測を外せる。60秒の制限時間内で倒し切るか、安全にスコアを稼ぐかの判断を迫る",
+    "score": 32.5,
+    "status": "Color-match boxing combo chain prototype complete",
+    "href": "090_chroma_jab.html"
   }
 ]
