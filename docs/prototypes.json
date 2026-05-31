@@ -718,5 +718,13 @@
     "score": 32.5,
     "status": "Color-match boxing combo chain prototype complete",
     "href": "090_chroma_jab.html"
+  },
+  {
+    "id": "091_blade_chain",
+    "title": "BLADE CHAIN",
+    "idea": "トップダウン1v1カラーマッチフェンシングデュエル。マウス照準＋クリックで色付きブレードを突き出し、同色の連続命中でCOMBOを積み重ねる。COMBOが4以上でSUPER LUNGE（虹色ブレード、2倍ダメージ、画面揺れ、パーティクル爆発）が炸裂。色違いヒットでCOMBOリセット。AIはプレイヤーの色パターンを学習し、カウンター攻撃を仕掛けてくる。敵の攻撃でHEATが蓄積し、HEAT=10でゲームオーバー。面白い瞬間は「同色の刺突を連続で決めてCOMBOを積み重ね、SUPER LUNGEで相手を貫き画面が揺れる瞬間」。リスクとリターン：COMBO継続のために同色に固執するとAIに読まれて被弾リスクが上がりHEATが蓄積する。色を切り替えるとCOMBOが途切れるがAIの予測を外せる。90秒の生存時間でスコア最大化を目指す。初のフェンシングプロトタイプ。",
+    "score": 32.5,
+    "status": "Color-match fencing duel prototype complete",
+    "href": "091_blade_chain.html"
   }
 ]
