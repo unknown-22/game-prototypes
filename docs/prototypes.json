@@ -702,5 +702,13 @@
     "score": 32.0,
     "status": "Basketball color-match slingshot combo prototype complete",
     "href": "088_hoop_chain.html"
+  },
+  {
+    "id": "089_fire_break",
+    "title": "FIRE BREAK",
+    "idea": "グリッド消火ゲーム。12×16のグリッドに4色（赤・緑・青・黄）の炎がセルオートマトンで拡散する。プレイヤーは消火器の色を切り替えながら炎セルをクリックし、同色連続消火でCOMBOを積み重ねる。COMBOが4以上に達するとSURGEが発動し、BFS連鎖で接続する同色の炎すべてが一気に消え去り、大量スコアボーナス（クラスターサイズ×50×COMBO）が加算される。面白い瞬間は「火の手が広がる中で同色消火を連続クリックしてCOMBOを積み、SURGEが発動して盤面の同色炎がBFSで一気に消え去り、大量スコアが跳ね上がる爽快感」。リスクとリターン：炎を大きく育ててSURGEで大回収するか、早期消火でHEATを抑えて安全に進めるか。色違いクリックはCOMBOリセット＋HEAT+5のペナルティ。HEATが100に達するとゲームオーバー。90秒の時間制限を生き延びるか、HEAT限界までスコアを伸ばすかの判断を迫る",
+    "score": 32.0,
+    "status": "Grid firefighting CA chain prototype complete",
+    "href": "089_fire_break.html"
   }
 ]
