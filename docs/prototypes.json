@@ -726,5 +726,13 @@
     "score": 32.5,
     "status": "Color-match fencing duel prototype complete",
     "href": "091_blade_chain.html"
+  },
+  {
+    "id": "092_gravity_flip",
+    "title": "GRAVITY FLUX",
+    "idea": "4方向重力フリップによるフリームーブアクション。矢印キーで重力方向を切り替え、部屋を飛び回りながら色付き宝石を回収する。同色連続回収でCOMBO倍率が上昇し、COMBOが3以上に達するとSYNTHESIS超モード（無敵＋スコア3倍＋8秒間）が発動する。重力フリップのたびにHEATが蓄積し、100に達するとダメージ。壁面のトゲに接触するとダメージ。面白い瞬間は「危険なトゲのそばにある宝石をギリギリで回収し、同色連鎖COMBOを決めてSYNTHESIS超モードに突入する瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアとSYNTHESISが得られるが、色が変わるとCOMBOリセット。欲張って連続フリップするとHEATが溜まりダメージリスク。60秒の制限時間内でスコア最大化を目指す。初の重力フリップフリームーブプロトタイプ。",
+    "score": 32.0,
+    "status": "Gravity-flip free-move prototype complete",
+    "href": "092_gravity_flip.html"
   }
 ]
