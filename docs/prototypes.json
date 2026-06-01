@@ -742,5 +742,21 @@
     "score": 32.0,
     "status": "Slot machine color-match combo prototype complete",
     "href": "093_spin_chain.html"
+  },
+  {
+    "id": "094_chroma_ice",
+    "title": "CHROMA ICE",
+    "idea": "トップダウンアイスホッケーアーケード。氷上をスケーティングし、色付きパックを拾ってゴールにシュートする。同色連続ゴールでCOMBO倍率が×2→×4→×8と爆発的に増加する。面白い瞬間は「同じ色のパックを連続でゴールに叩き込み、コンボ倍率が爆発的に増える中でHEATゲージが危険域に近づくギリギリの判断」。リスクとリターン：同色COMBO継続で高倍率スコアが狙えるが、シュートのたびにHEATが蓄積し、80を超えるとゴーリーが一時的に無敵になるOVERHEATが発動。異なる色を撃つとCOMBOがリセットされるがHEATが下がる。60秒の制限時間内でスコア最大化を目指す。初のアイスホッケーCOMBOプロトタイプ。",
+    "score": 32.05,
+    "status": "Ice hockey color-match combo prototype complete",
+    "href": "094_chroma_ice.html"
+  },
+  {
+    "id": "095_pole_chain",
+    "title": "POLE CHAIN",
+    "idea": "サイドビュー棒高跳びアーケード。4色（赤・緑・青・黄）のゾーンが並ぶ滑走路を自動疾走し、SPACEキーでゾーンと色を一致させてCOMBOを積み重ねる。COMBOが4以上でSUPER VAULTが発動し、虹色軌跡＋バー確実越え＋スコア3倍＋画面揺れの爽快演出。面白い瞬間は「疾走する速度が上がる中で色を合わせ続け、COMBOが爆発的に伸びて超高跳躍でバーを軽々と越える瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER VAULTが得られるが、色違いでCOMBOが0にリセット。HEATが5または10ラウンド終了でゲームオーバー。初の棒高跳びプロトタイプ。",
+    "score": 32.0,
+    "status": "Pole vault color-match combo prototype complete",
+    "href": "095_pole_chain.html"
   }
 ]
