@@ -734,5 +734,13 @@
     "score": 32.0,
     "status": "Gravity-flip free-move prototype complete",
     "href": "092_gravity_flip.html"
+  },
+  {
+    "id": "093_spin_chain",
+    "title": "SPIN CHAIN",
+    "idea": "色合わせスロットマシン。3つのリールを回し、同色を揃えるとCOMBO倍率でスコアが跳ね上がる。COMBOが4以上でSUPER SPIN（スコア3倍＋2マッチ保証）が発動する。リールをHOLDして戦略的に再スピンでき、連続同色マッチでCOMBOが積み上がる大爆発の瞬間が面白い。リスクとリターン：HOLDで戦略的に色を固定できるがHEATが溜まる。0マッチでCOMBOリセット＋HEAT+2。HEATが10に達するか全20スピンでゲームオーバー。固定スピン数内でどこまでCOMBOとスコアを伸ばせるかの腕前が試される。初のスロットマシンプロトタイプ。",
+    "score": 32.0,
+    "status": "Slot machine color-match combo prototype complete",
+    "href": "093_spin_chain.html"
   }
 ]
