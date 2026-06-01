@@ -758,5 +758,13 @@
     "score": 32.0,
     "status": "Pole vault color-match combo prototype complete",
     "href": "095_pole_chain.html"
+  },
+  {
+    "id": "096_wave_chain",
+    "title": "WAVE CHAIN",
+    "idea": "サイドスクロールの波乗りアクションゲーム。正弦波に沿ってボードを上下に操作し、同色の宝石を連続回収することでCOMBO連鎖倍率を稼ぐ。COMBOが5に達するとSUPER SURF（5秒間の無敵＋スコア3倍）が発動し、すべての宝石が一致扱いで岩も破壊可能になる。60秒の制限時間内にスコア最大化を目指す。面白い瞬間は「リズムよく波に乗りながら同色宝石を連続で拾い、COMBOが5に到達してSUPER SURFが発動、虹色に輝きながら画面上の宝石と岩を一網打尽にする爽快感」。リスクとリターン：同色宝石でCOMBO継続すると高倍率スコア（+10+COMBOx5）が得られるが、異なる色を拾うとCOMBOが0にリセット。岩に衝突するとHEAT+1＋COMBOリセット。HEATが5に達するかタイマーが0になるとゲームオーバー。岩の出現間隔が長い序盤にCOMBO基盤をどれだけ積めるか、SUPER SURF後のCOMBO再構築をどう計画するか、という判断を迫る。初のサーフィン／波乗りプロトタイプ。",
+    "score": 32.0,
+    "status": "Surfing color-match combo prototype complete",
+    "href": "096_wave_chain.html"
   }
 ]
