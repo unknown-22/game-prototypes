@@ -774,5 +774,13 @@
     "score": 31.45,
     "status": "Cooking color-match grid prototype complete",
     "href": "097_flame_chain.html"
+  },
+  {
+    "id": "098_arrow_chain",
+    "title": "ARROW CHAIN",
+    "idea": "一人称視点の色合わせアーチェリー。マウスのクリック＆ドラッグで照準とパワーを決め、離して矢を放つ。画面奥行き方向に異なる距離（深度）に配置された色付きの的を射抜き、同じ色の的を連続で当てるとCOMBOが積み上がる。COMBOが4に達するとSUPER（5秒間レインボーモード＋スコア3倍）が発動し、すべての的の色が一致扱いになる。面白い瞬間は「同じ色の的を連続射抜いてCOMBOを積み重ね、SUPER ARROWで遠くの高得点的を一撃で射抜く瞬間」。リスクとリターン：同色COMBOを継続するとCOMBOボーナス（+combo*50）とSUPER発動のチャンスが得られるが、違う色を当てるとCOMBOリセット＋HEAT+1。矢を外してもHEAT+1＋COMBOリセット。HEATが5に達するとゲームオーバー。60秒の制限時間内でスコア最大化を目指す。初のFPS風アーチェリープロトタイプ。",
+    "score": 32.05,
+    "status": "First-person archery color-match prototype complete",
+    "href": "098_arrow_chain.html"
   }
 ]
