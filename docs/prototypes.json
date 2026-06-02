@@ -782,5 +782,18 @@
     "score": 32.05,
     "status": "First-person archery color-match prototype complete",
     "href": "098_arrow_chain.html"
+  },
+  {
+    "id": "099_harvest_chain",
+    "title": "HARVEST CHAIN",
+    "idea": "8×6グリッドのピクセル農園ゲーム。同色の作物をクリックで連鎖収穫し（BFS flood-fill）、連結が大きいほど高スコア。同じ色を連続収穫するとCOMBOが積み上がり、COMBOが4以上でSUPER MODE発動（その色の全作物を一括収穫）。毎ターンCA（セルオートマトン）で作物が隣接マスに拡散し、新たな種もランダムに出現。グリッド占有率が85%を超えると過密（Overgrowth）でゲームオーバー。面白い瞬間は「作物をギリギリまで増やして、一気に巨大チェーンで収穫するのが気持ちいい」。リスクとリターン：待てば待つほど連結が大きくなり高得点だが、グリッド占有率も上昇しゲームオーバーのリスクが高まる。色違い収穫はCOMBOがリセットされ、SUPER MODE構築の機会を失う。初の農業収穫チェーンプロトタイプ。",
+    "score": 32.35,
+    "status": "Farming color-match chain harvest prototype complete",
+    "href": "099_harvest_chain.html"
+  },
+  {
+    "id": "100_conveyor_chain",
+    "name": "Conveyor Chain",
+    "path": "100_conveyor_chain.html"
   }
 ]
