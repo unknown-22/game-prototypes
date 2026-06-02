@@ -766,5 +766,13 @@
     "score": 32.0,
     "status": "Surfing color-match combo prototype complete",
     "href": "096_wave_chain.html"
+  },
+  {
+    "id": "097_flame_chain",
+    "title": "FLAME CHAIN",
+    "idea": "色合わせクッキングゲーム。4x3のキッチングリッドに食材が次々と出現し、現在のFLAME色と一致する食材をクリックして調理する。同色連続調理でCOMBOが積み上がり、COMBO x5でSUPER DISH（5秒間レインボーモード、全色受付＋スコア3倍）が発動。面白い瞬間は「FLAME色と同じ食材を探して連続クリックし、COMBOが5に達してSUPER DISHが炸裂、画面上の食材を制限なく調理しまくる爆発的爽快感」。リスクとリターン：同色COMBOを継続すると高倍率スコア（base x COMBO）が得られSUPER DISHも狙えるが、間違った色をクリックするとCOMBOリセット＋HP-1。食材のタイマーが切れるとHP-1。HPが0になるとゲームオーバー。安全に異なる色の食材を処理するか、COMBOのために同色を狙うリスクを取るかの判断を迫る。初のクッキング／食材パズルプロトタイプ。",
+    "score": 31.45,
+    "status": "Cooking color-match grid prototype complete",
+    "href": "097_flame_chain.html"
   }
 ]
