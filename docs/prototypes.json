@@ -811,5 +811,13 @@
     "score": 31.4,
     "status": "Sumo wrestling color-match prototype complete — COMBO chain, SUPER PUSH force multiplier, HEAT/overheat risk system, ring-out scoring",
     "href": "102_ring_surge.html"
+  },
+  {
+    "id": "103_switch_surge",
+    "title": "SWITCH SURGE",
+    "idea": "列車配車パズル。色付き列車が線路の端点から出現し、プレイヤーはジャンクションをクリックして線路を切り替え、同じ色の駅に列車を誘導する。同色連続到着でCOMBOチェイン→COMBO 4以上でSURGE発動（5秒間全列車が自動マッチ、スコア3倍）。間違った色の駅に到着するとスコア-10、HEAT+15。HEATが100に達すると線路封鎖（ランダムなジャンクションが3秒間ロック）。面白い瞬間は「同色列車を連続で正しい駅に流し込み、COMBOが溜まってSURGEで一気に全列車が3倍スコアで到着する瞬間」。リスクとリターン：COMBO継続で高倍率スコア＋SURGE発動を狙うか、安全に別色分散でHEATを抑えるかの判断。列車が増えるほど切り替え操作のプレッシャーが上がる。初の列車配車パズルプロトタイプ。",
+    "score": 31.4,
+    "status": "Train dispatching puzzle prototype complete — junction switching, COMBO chain/SURGE super mode, HEAT risk with track blockage, ghost train trails",
+    "href": "103_switch_surge.html"
   }
 ]
