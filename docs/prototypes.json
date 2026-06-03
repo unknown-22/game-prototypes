@@ -803,5 +803,13 @@
     "score": 32.0,
     "status": "Karate board-breaking combo chain prototype complete",
     "href": "101_chop_chain.html"
+  },
+  {
+    "id": "102_ring_surge",
+    "title": "Ring Surge",
+    "idea": "色付き土俵で相手を同色ゾーンに連続で押し込む相撲プロトタイプ。コンボチェイン→SUPER PUSHで一気に吹き飛ばす。HEAT管理とリスク/リターンの押し合いが面白い。「相手を狙った色のゾーンに連続で押し込み、SUPER PUSHで土俵外に吹き飛ばす瞬間が面白い」。リスクとリターン：同色ゾーン連続押し込みでCOMBO蓄積→SUPER PUSH発動（3倍押し力）の高報酬。色違いはCOMBOリセット＋HEAT増加。HEAT満タンでOVERHEAT硬直（1.5秒無防備）。初の相撲プロトタイプ。",
+    "score": 31.4,
+    "status": "Sumo wrestling color-match prototype complete — COMBO chain, SUPER PUSH force multiplier, HEAT/overheat risk system, ring-out scoring",
+    "href": "102_ring_surge.html"
   }
 ]
