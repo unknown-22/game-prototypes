@@ -795,5 +795,13 @@
     "id": "100_conveyor_chain",
     "name": "Conveyor Chain",
     "path": "100_conveyor_chain.html"
+  },
+  {
+    "id": "101_chop_chain",
+    "title": "CHOP CHAIN",
+    "idea": "空手の板割りアーケードゲーム。4列に色付きの板が積み上がり、同じ色の板を連続で割るとCOMBOが積み上がる。COMBOが5に達するとSUPER CHOP（5秒間レインボーモード、全色受付＋スコア3倍＋HEAT無効）が発動。面白い瞬間は「同じ色の板を連続で割ってCOMBOを積み上げ、SUPER CHOPで全色の板を一気に粉砕する爆発的爽快感」。リスクとリターン：同色COMBOを継続すると高倍率スコア（base x COMBO）が得られSUPER CHOPも狙えるが、間違った色を割るとHEAT+2＋COMBOリセット。空列を叩くとHEAT+3。HEATが10に達するか板が画面外に溢れるとゲームオーバー。HEATは2秒に1ずつ自然回復。安全にリセットするか、COMBOのために同色を狙い続けるリスクを取るかの判断を迫る。初の空手板割りプロトタイプ。",
+    "score": 32.0,
+    "status": "Karate board-breaking combo chain prototype complete",
+    "href": "101_chop_chain.html"
   }
 ]
