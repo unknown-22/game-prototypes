@@ -819,5 +819,13 @@
     "score": 31.4,
     "status": "Train dispatching puzzle prototype complete — junction switching, COMBO chain/SURGE super mode, HEAT risk with track blockage, ghost train trails",
     "href": "103_switch_surge.html"
+  },
+  {
+    "id": "104_tug_chain",
+    "title": "TUG CHAIN",
+    "idea": "綱引きプロトタイプ。色付きの綱の節をリズムよく引き、同色連続でCOMBOを積み上げる。COMBO 4以上でSUPER PULL（3倍の力＋虹色エフェクト＋画面揺れ）が発動。ゴースト軌跡が過去の引く力を増幅する（ログ/リプレイの資産化フックの再解釈）。HEATが10に達するとオーバーヒートでゲームオーバー。60秒の制限時間内に相手を引きずり込めば勝利。面白い瞬間は「同じ色の節を連続でリズムよく引き、COMBOが溜まってSUPER PULLで相手を一気に引きずり込む瞬間」。リスクとリターン：COMBO継続で高倍率スコア＋SUPER発動の高報酬。色違いはCOMBOリセット＋HEATペナルティ。AIが定期的に引き返す中での判断が鍵。初の綱引き（Tug of War）プロトタイプ。game_idea_factory #1 (Score 32.6) の「ログ/リプレイが資産」「UI連鎖崩壊/圧縮」フックを再解釈。",
+    "score": 32.6,
+    "status": "Tug of war prototype complete — COMBO chain, SUPER PULL force multiplier, ghost trail amplification, HEAT risk system, AI opponent",
+    "href": "104_tug_chain.html"
   }
 ]
