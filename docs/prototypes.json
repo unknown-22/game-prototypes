@@ -827,5 +827,13 @@
     "score": 32.6,
     "status": "Tug of war prototype complete — COMBO chain, SUPER PULL force multiplier, ghost trail amplification, HEAT risk system, AI opponent",
     "href": "104_tug_chain.html"
+  },
+  {
+    "id": "105_tightrope_surge",
+    "title": "TIGHTROPE SURGE",
+    "idea": "色合わせ綱渡りゲーム。プレイヤーは綱の上でバランスを取りながら自動前進し、同じ色の宝石を連続で踏むとCOMBOが溜まる。COMBOが4以上でSUPER BALANCEが発動（5秒間風無効＋スコア3倍＋虹色軌跡）。間違った色の宝石を踏むとCOMBOリセット＋HEAT+15。HEATが100%に達するとバランスを崩して落下（ゲームオーバー）。風が定期的に吹き、プレイヤーを左右に押すためカウンターバランス操作が必要。面白い瞬間は「同じ色の宝石を連続で踏んでCOMBOを溜め、SUPER BALANCEで風もブレも無効化して高速で突き進む瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER発動の高報酬を得るが、欲張って綱の端にある宝石を狙うと落下リスクが高まる。安全に中央をキープすれば安定だがスコア倍率は1倍のまま。初の綱渡りプロトタイプ。",
+    "score": 32.0,
+    "status": "Tightrope walking prototype complete — COMBO chain, SUPER BALANCE wind immunity, HEAT risk system, wind gust counter-balance, circuit/pipe energy flow visualization",
+    "href": "105_tightrope_surge.html"
   }
 ]
