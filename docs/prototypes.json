@@ -843,5 +843,13 @@
     "score": 30.0,
     "status": "Kart Surge prototype complete — same-color consecutive pad combo building, SURGE super mode (5s, 3x score, rainbow glow, 1.5x speed), ghost replay system for best lap comparison, 3-lap circuit racing with infield obstacle, pad respawn system, particle effects, scoring with combo and surge multipliers",
     "href": "106_kart_surge.html"
+  },
+  {
+    "id": "107_lock_surge",
+    "title": "LOCKPICK SURGE",
+    "idea": "4色のタンブラーをクリックでセットするピッキングパズル。同色を連続セットするとCOMBOが伸び、COMBOが4以上でSYNTHESISが発動しBFS連鎖で隣接する同色タンブラーを自動解放する。テンションが高まるとセキュリティグリッドが作動し、セルオートマトンでジャム（使用不可ピン）が拡散する。面白い瞬間は「COMBOを4以上に積み上げてSYNTHESISを発動させ、同色タンブラーが次々と連鎖解放される瞬間。ただしテンションゲージが危険域で、欲張って続けるかSPACEでリセットするか迷うジレンマ」。リスクとリターン：同色COMBO継続で高倍率スコアとSYNTHESIS連鎖が得られるが、クリックごとにテンションが上昇し、70%超でジャムがCA感染拡散する。SPACEでテンションを0にリセットできるがCOMBOも0になるため、どこまでリスクを取るかの判断を迫る。90秒の時間制限、5x4グリッド、4色。",
+    "score": 32.0,
+    "status": "Lockpick puzzle prototype complete — color-match COMBO chain, SYNTHESIS BFS flood-fill at COMBO>=4, tension/security CA jam spread, release tension mechanic, 90s timer per lock",
+    "href": "107_lock_surge.html"
   }
 ]
