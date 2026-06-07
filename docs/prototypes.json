@@ -851,5 +851,13 @@
     "score": 32.0,
     "status": "Lockpick puzzle prototype complete — color-match COMBO chain, SYNTHESIS BFS flood-fill at COMBO>=4, tension/security CA jam spread, release tension mechanic, 90s timer per lock",
     "href": "107_lock_surge.html"
+  },
+  {
+    "id": "108_hand_read",
+    "title": "HAND READ",
+    "idea": "AIがプレイヤーの出した手の履歴から次の手を予測する、じゃんけん予測バトル。プレイヤーは次の3手をあらかじめ予約（キュー）し、AIはプレイヤーの履歴から頻度分析で次の手を予測する。AIの予測を裏切って勝つとCOMBOが伸び、同じ手での連勝でCOMBOが加速。COMBOが4以上になるとSUPER MODEが発動し、5ターンの間すべての手に勝てる3倍ダメージ状態になる。面白い瞬間は「AIが学習したパターンをあえて崩し、COMBOを積み上げてSUPER MODEに突入し、一気にAIを追い詰める瞬間。ただしエネルギーには限りがあるため、どのタイミングで手札を入れ替えるかのジレンマが常にある」。リスクとリターン：AIの予測を読んで違う手を出すとCOMBOとスコアが伸びるが、読まれるとダメージを受ける。エネルギー（最大3）を使ってキュー内の手を入れ替えられるが、入れ替えすぎると次のチャンスで手が足りなくなる。",
+    "score": 32.0,
+    "status": "RPS prediction battle prototype complete — pre-commit 3-hand queue, AI frequency-analysis prediction, COMBO chain with SUPER MODE, energy-based hand swapping",
+    "href": "108_hand_read.html"
   }
 ]
