@@ -859,5 +859,13 @@
     "score": 32.0,
     "status": "RPS prediction battle prototype complete — pre-commit 3-hand queue, AI frequency-analysis prediction, COMBO chain with SUPER MODE, energy-based hand swapping",
     "href": "108_hand_read.html"
+  },
+  {
+    "id": "109_roulette_surge",
+    "title": "ROULETTE SURGE",
+    "idea": "4色8セグメントのルーレットに色を賭け、的中でCOMBOを伸ばすカラーマッチ運ゲー。COMBOが5以上でSUPER MODEが発動し、5ターンの間すべての賭けが自動勝利＋スコア3倍になる。先読み（FORESIGHT）トークン（最大3個）で次の結果2つを覗けるが、トークンは限られているため使うタイミングにジレンマがある。的中しなかった場合はHEATが蓄積し、100でゲームオーバー。60秒の制限時間でスコア最大化を目指す。面白い瞬間は「ホイールが減速し、賭けた色に止まるかどうかの緊張 — そして的中してCOMBOが伸び、SUPER MODEに突入して一気に大量得点が入る瞬間」。リスクとリターン：先読みトークンを使えば安全に的中できるがトークンは有限。トークンなしで賭けるとCOMBO継続のチャンスだがミスのリスクがある。SUPER MODE突入後も欲張って続けるか安全に立ち回るかの判断が生まれる。",
+    "score": 32.0,
+    "status": "Roulette color-match prototype complete — 8-segment wheel, 4 colors, COMBO chain with SUPER MODE (3x score, 5 turns), FORESIGHT token preview system, HEAT-based game over, 60-second timer, particle effects",
+    "href": "109_roulette_surge.html"
   }
 ]
