@@ -835,5 +835,13 @@
     "score": 32.0,
     "status": "Tightrope walking prototype complete — COMBO chain, SUPER BALANCE wind immunity, HEAT risk system, wind gust counter-balance, circuit/pipe energy flow visualization",
     "href": "105_tightrope_surge.html"
+  },
+  {
+    "id": "106_kart_surge",
+    "title": "KART SURGE",
+    "idea": "トップダウンのカラーマッチカートレース。トラック上で同じ色のブーストパッドを連続して集めるとCOMBOが繋がる。COMBOが5以上でSURGEスーパーモードが発動（5秒間、スコア3倍、虹色グロー、速度1.5倍）。ベストラップのゴーストが一緒に走り、自己ベスト更新のモチベーションを生む。3周レースでスコアとCOMBOベースの得点競技。面白い瞬間は「異なる色のパッドに手を出さず、同じ色のパッドだけを連続ヒットしてSURGEを発動させ、超加速＋得点3倍で一気に突き抜ける瞬間」。リスクとリターン：異なる色のパッドを取るとCOMBOリセットだが、効率的なルート選択には不可欠。安全に低COMBOで周回するか、リスクを取って同じ色パッドを狙い高COMBO＋SURGEを狙うかの判断が常に発生する。",
+    "score": 30.0,
+    "status": "Kart Surge prototype complete — same-color consecutive pad combo building, SURGE super mode (5s, 3x score, rainbow glow, 1.5x speed), ghost replay system for best lap comparison, 3-lap circuit racing with infield obstacle, pad respawn system, particle effects, scoring with combo and surge multipliers",
+    "href": "106_kart_surge.html"
   }
 ]
