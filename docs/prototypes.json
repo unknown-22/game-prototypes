@@ -891,5 +891,13 @@
     "score": 31.9,
     "status": "Grid-based climbing game complete — 8x20 grid with 4-color holds, COMBO chain from same-color consecutive grabs, SUPER REACH at COMBO>=4 (5s, 3x score, half stamina, any color counts), auto-scroll climbing wall, stamina risk/reward system, particle effects on grab and SUPER REACH activation",
     "href": "112_crag_chain.html"
+  },
+  {
+    "id": "113_chain_disc",
+    "title": "CHAIN DISC",
+    "idea": "トップダウンディスクゴルフに色合わせCOMBO連鎖を組み合わせたゲーム。マウスのドラッグ＆リリースで狙いとパワーを決めてディスクを投げ、同色バスケットへの連続命中でCOMBOが爆発的に伸びる。COMBOが4以上でSUPER DISC（虹色、スコア3倍、障害物貫通）が発動しコースを一掃する瞬間が面白い。セルオートマトンで障害物（木）が拡散し、フィールドが徐々に狭くなる緊張感。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER DISC発動の高報酬を得るが、間違った色を狙うかミスでHEATが蓄積しゲームオーバーに近づく。安全に別の色を狙うこともできるがCOMBOが途切れる。90秒の制限時間内でスコア最大化を目指す。",
+    "score": 32.0,
+    "status": "Disc golf prototype complete — color-match COMBO chain, SUPER DISC (pierce obstacles + 3x score) at COMBO>=4, CA-style obstacle spread, HEAT risk system, 90-second timer, particle effects",
+    "href": "113_chain_disc.html"
   }
 ]
