@@ -867,5 +867,13 @@
     "score": 32.0,
     "status": "Roulette color-match prototype complete — 8-segment wheel, 4 colors, COMBO chain with SUPER MODE (3x score, 5 turns), FORESIGHT token preview system, HEAT-based game over, 60-second timer, particle effects",
     "href": "109_roulette_surge.html"
+  },
+  {
+    "id": "110_slope_surge",
+    "title": "Slope Surge",
+    "idea": "スキー下山 × 色合わせスラロームゲート。同じ色のゲートを連続通過でコンボ、SUPER MODEで無敵滑走。ゴーストがベストランを再現。",
+    "score": 31.75,
+    "status": "Skiing color-match prototype complete — side-scrolling downhill skiing with 4-color slalom gates, same-color COMBO chain, SUPER MODE (5s rainbow, 3x score, invincible), HEAT risk system, ghost replay trail, particle effects, scroll speed escalation",
+    "href": "110_slope_surge.html"
   }
 ]
