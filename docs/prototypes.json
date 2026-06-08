@@ -875,5 +875,13 @@
     "score": 31.75,
     "status": "Skiing color-match prototype complete — side-scrolling downhill skiing with 4-color slalom gates, same-color COMBO chain, SUPER MODE (5s rainbow, 3x score, invincible), HEAT risk system, ghost replay trail, particle effects, scroll speed escalation",
     "href": "110_slope_surge.html"
+  },
+  {
+    "id": "111_javelin_surge",
+    "title": "JAVELIN SURGE",
+    "idea": "走りながら同じ色のゾーンでタイミングよく踏み切り、COMBOを積み重ねてSUPER THROWが発動し、槍が通常の2倍の距離を飛んでいく瞬間が面白い。リスクとリターン：同じ色を続けて踏むとコンボが伸びSUPER THROW（2倍距離・3倍スコア）が狙えるが、違う色を踏むとCOMBOが0にリセットされHEATが蓄積。HEATが5でファール（ゲームオーバー）。5回の投擲でベスト距離を競う。",
+    "score": 32.05,
+    "status": "Javelin throw prototype complete — runway color-match COMBO chain, mouse drag throw mechanic with angle/power, SUPER THROW at COMBO>=4, HEAT risk system, 5-attempt scoring, particle effects",
+    "href": "111_javelin_surge.html"
   }
 ]
