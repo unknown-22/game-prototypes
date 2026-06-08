@@ -883,5 +883,13 @@
     "score": 32.05,
     "status": "Javelin throw prototype complete — runway color-match COMBO chain, mouse drag throw mechanic with angle/power, SUPER THROW at COMBO>=4, HEAT risk system, 5-attempt scoring, particle effects",
     "href": "111_javelin_surge.html"
+  },
+  {
+    "id": "112_crag_chain",
+    "title": "CRAG CHAIN",
+    "idea": "グリッド上のクライミングゲーム。同色ホールドを連続グラブしてCOMBOを構築し、COMBOx4でSUPER REACH（5秒間、3倍スコア、全色コンボ持続、スタミナ半減）が発動。壁を一気に駆け上がる瞬間が面白い。リスクとリターン：遠いホールドほどスタミナ消費が大きい（距離1=5、距離2=12）。同色を狙うとコンボが伸びSUPER REACHが狙えるが、色が変わるとコンボが1にリセット。スタミナ0または落下でゲームオーバー。",
+    "score": 31.9,
+    "status": "Grid-based climbing game complete — 8x20 grid with 4-color holds, COMBO chain from same-color consecutive grabs, SUPER REACH at COMBO>=4 (5s, 3x score, half stamina, any color counts), auto-scroll climbing wall, stamina risk/reward system, particle effects on grab and SUPER REACH activation",
+    "href": "112_crag_chain.html"
   }
 ]
