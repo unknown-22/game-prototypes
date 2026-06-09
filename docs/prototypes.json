@@ -915,5 +915,13 @@
     "score": 32.0,
     "status": "Sumo wrestling prototype complete — top-down color-match sumo, circular dohyo ring, same-color push COMBO chain, SUPER SUMO at COMBO>=4 (rainbow, 3x push power, all-color match), HEAT stun risk system, particle effects, 90-second timer, 43 headless tests",
     "href": "115_sumo_surge.html"
+  },
+  {
+    "id": "116_dodge_surge",
+    "title": "DODGE SURGE",
+    "idea": "色合わせドッジボールアリーナ。同じ色のボールを連続で敵に命中させてCOMBOを積み、COMBOが4以上でSUPER THROW（虹色、3倍スコア、貫通）が発動する。敵の色を見極めて素早く自分の色を切り替え、同色COMBO継続で高倍率スコアを狙うか、安全に別色を投げるかの判断を迫る。HEATシステムでリスク管理（違う色命中で+2、被弾で+1、最大10でゲームオーバー、3秒で1減衰）。60秒の制限時間内でスコア最大化を目指す。初のドッジボールプロトタイプ。面白い瞬間は「同じ色を連続ヒットさせてCOMBOを積み重ね、SUPER THROWで複数の敵をまとめて吹き飛ばす爆発的爽快感」",
+    "score": 32.0,
+    "status": "Dodgeball color-match combo prototype complete — 6 opponents in 3x2 grid, COMBO chain with SUPER THROW at combo>=4 (rainbow, 3x score, pierce), HEAT risk system, ball pickup/throwing, floating text and particle effects, 60-second timer, 32 headless tests",
+    "href": "116_dodge_surge.html"
   }
 ]
