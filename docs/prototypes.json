@@ -899,5 +899,13 @@
     "score": 32.0,
     "status": "Disc golf prototype complete — color-match COMBO chain, SUPER DISC (pierce obstacles + 3x score) at COMBO>=4, CA-style obstacle spread, HEAT risk system, 90-second timer, particle effects",
     "href": "113_chain_disc.html"
+  },
+  {
+    "id": "114_trampoline_surge",
+    "title": "TRAMPOLINE SURGE",
+    "idea": "サイドビュートランポリンに色合わせCOMBO連鎖を組み合わせたゲーム。左右キーで空中移動し、同色ゾーンへの連続着地でCOMBOが伸び、COMBOx4でSUPER BOUNCE（虹色、3倍スコア、全色一致）が発動。空中でSPACEを押してフリップ回転し、ボーナススコアを獲得。リスクとリターン：同じ色に着地し続けるとCOMBOで高倍率だが、違う色に着地するとCOMBOリセット＋HEAT蓄積。HEATがMAXでゲームオーバー。60秒の制限時間内でスコア最大化を目指す。",
+    "score": 30.75,
+    "status": "Trampoline acrobatics prototype complete — side-view trampoline with 4-color zone COMBO chain, SUPER BOUNCE at COMBO>=4 (rainbow, 3x score, all-color match), SPACE flip rotation bonus, HEAT risk system, particle/particle effects, 60-second timer, 76 headless tests",
+    "href": "114_trampoline_surge.html"
   }
 ]
