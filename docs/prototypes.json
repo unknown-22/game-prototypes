@@ -923,5 +923,13 @@
     "score": 32.0,
     "status": "Dodgeball color-match combo prototype complete — 6 opponents in 3x2 grid, COMBO chain with SUPER THROW at combo>=4 (rainbow, 3x score, pierce), HEAT risk system, ball pickup/throwing, floating text and particle effects, 60-second timer, 32 headless tests",
     "href": "116_dodge_surge.html"
+  },
+  {
+    "id": "117_skip_surge",
+    "title": "SKIP SURGE",
+    "idea": "色合わせ水切り石遊び。マウスのクリック＆ホールドでパワーを溜めてリリースで石を投げ、水面の同色の波紋に連続で跳ねさせてCOMBOを伸ばす。COMBOが4以上でSUPER SKIP（虹色、3倍スコア、跳ね返り強化）が発動し、一気に大量得点を稼ぐ瞬間が面白い。リスクとリターン：同色波紋を狙い続けるとCOMBOで高倍率だが、違う色に当たるとCOMBOリセット＋HEAT+2。全ミスでHEAT+1。HEATが100でゲームオーバー。90秒の制限時間内でスコア最大化を目指す。",
+    "score": 32.0,
+    "status": "Stone skipping prototype complete — mouse click-hold-release aim+power, 4-color ripple COMBO chain, SUPER SKIP at COMBO>=4 (rainbow, 3x score, extra bounces), HEAT risk system, ripple splash particles, floating score text, power bar, 90-second timer",
+    "href": "117_skip_surge.html"
   }
 ]
