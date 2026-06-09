@@ -907,5 +907,13 @@
     "score": 30.75,
     "status": "Trampoline acrobatics prototype complete — side-view trampoline with 4-color zone COMBO chain, SUPER BOUNCE at COMBO>=4 (rainbow, 3x score, all-color match), SPACE flip rotation bonus, HEAT risk system, particle/particle effects, 60-second timer, 76 headless tests",
     "href": "114_trampoline_surge.html"
+  },
+  {
+    "id": "115_sumo_surge",
+    "title": "SUMO SURGE",
+    "idea": "色合わせ相撲。土俵の中で同色の押しを連続させてCOMBOを伸ばし、COMBOx4でSUPER SUMO（虹色、3倍押しパワー、全色一致）が発動。相手を土俵の外に押し出して勝利。違う色で押すとCOMBOリセット＋HEAT蓄積。HEATがMAXでスタン。リスクとリターン：同色押し継続でSUPERを狙うが、外すとスタンの危険。game_idea_factory #1（Score 32.0）の合成/圧縮×分裂/合流/爆発フックを相撲に再解釈（初の相撲プロトタイプ）",
+    "score": 32.0,
+    "status": "Sumo wrestling prototype complete — top-down color-match sumo, circular dohyo ring, same-color push COMBO chain, SUPER SUMO at COMBO>=4 (rainbow, 3x push power, all-color match), HEAT stun risk system, particle effects, 90-second timer, 43 headless tests",
+    "href": "115_sumo_surge.html"
   }
 ]
