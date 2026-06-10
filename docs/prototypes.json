@@ -931,5 +931,13 @@
     "score": 32.0,
     "status": "Stone skipping prototype complete — mouse click-hold-release aim+power, 4-color ripple COMBO chain, SUPER SKIP at COMBO>=4 (rainbow, 3x score, extra bounces), HEAT risk system, ripple splash particles, floating score text, power bar, 90-second timer",
     "href": "117_skip_surge.html"
+  },
+  {
+    "id": "118_type_surge",
+    "title": "TYPE SURGE",
+    "idea": "色合わせタイピング防衛ゲーム。上空から降ってくる色付きアルファベットを、キーボードで同じ文字をタイプして破壊する。同じ色の文字を連続で破壊するとCOMBOが上昇し、COMBOが4以上でSUPER TYPER（虹色オート破壊、3倍スコア）が発動して画面上の全文字が一斉に消し飛ぶ瞬間が面白い。リスクとリターン：同色を狙い続けるとCOMBOで高倍率だが、違う色を打つとCOMBOリセット＋HEAT上昇。ミスタイプでHEAT+15、文字逃しでHP-1+HEAT+5。HEATが100でキーボードロックのスタン。90秒間生き残ってハイスコアを目指す。初のタイピングプロトタイプ。",
+    "score": 32.0,
+    "status": "Typing defense color-match COMBO prototype complete — falling colored A-Z letters, same-color chain COMBO, SUPER TYPER at COMBO>=4 (rainbow auto-destroy, 3x score), HEAT risk system with keyboard stun, HP system, particle/floating text effects, 90-second timer with difficulty scaling (spawn speed/rate, +5th color at 60s, pairs at 30s)",
+    "href": "118_type_surge.html"
   }
 ]
