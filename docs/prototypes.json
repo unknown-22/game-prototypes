@@ -939,5 +939,13 @@
     "score": 32.0,
     "status": "Typing defense color-match COMBO prototype complete — falling colored A-Z letters, same-color chain COMBO, SUPER TYPER at COMBO>=4 (rainbow auto-destroy, 3x score), HEAT risk system with keyboard stun, HP system, particle/floating text effects, 90-second timer with difficulty scaling (spawn speed/rate, +5th color at 60s, pairs at 30s)",
     "href": "118_type_surge.html"
+  },
+  {
+    "id": "119_spray_chain",
+    "title": "SPRAY CHAIN",
+    "idea": "グラフィティ・スプレーペイントゲーム。マウスを壁（20x15グリッド）に向けてスプレー缶で色を吹き付け、同色のセルを連続で塗るとCOMBOが伸びる。COMBOが4以上でSUPER SPRAY（虹色、5x5パターン、3倍スコア、5秒間）が発動し、画面が一気に染まる瞬間が面白い。違う色を吹くとCOMBOリセット＋HEAT上昇（+15）。塗ったペンキはセルオートマトンで下に滴り伝播する。HEATが100でゲームオーバー（キャンバス破損）。60秒間でできるだけ多くのセルを塗ってハイスコアを目指す。リスクとリターン：同色COMBO継続でSUPER SPRAYの高倍率スコアが得られるが、色を切り替えるとCOMBOリセット＋HEAT蓄積のリスク。HEAT減衰（12Fごとに-1）があるため、危険な状況でCOMBOを継続するか安全に色を変えるかの駆け引きが生まれる。初のグラフィティ/スプレーアートプロトタイプ。",
+    "score": 32.0,
+    "status": "Graffiti spray-paint prototype complete — 20x15 grid, 4-color spray pattern (3x3 normal, 5x5 SUPER), COMBO chain with SUPER SPRAY at COMBO>=4 (rainbow, 5x5 pattern, 3x score, 5s), CA drip propagation (10% chance, 0.5s interval), HEAT risk system (mismatch +15, decay -1/12f, game over at 100), 60-second timer, particle effects, screen shake on SUPER activation, 41 headless tests",
+    "href": "119_spray_chain.html"
   }
 ]
