@@ -947,5 +947,13 @@
     "score": 32.0,
     "status": "Graffiti spray-paint prototype complete — 20x15 grid, 4-color spray pattern (3x3 normal, 5x5 SUPER), COMBO chain with SUPER SPRAY at COMBO>=4 (rainbow, 5x5 pattern, 3x score, 5s), CA drip propagation (10% chance, 0.5s interval), HEAT risk system (mismatch +15, decay -1/12f, game over at 100), 60-second timer, particle effects, screen shake on SUPER activation, 41 headless tests",
     "href": "119_spray_chain.html"
+  },
+  {
+    "id": "120_skee_chain",
+    "title": "SKEE CHAIN",
+    "idea": "アーケードのスキーボール（Skee-Ball）をベースにした色合わせゲーム。マウスで照準を合わせ、クリックホールドでパワーを溜めてボールを転がす。同じ色のリングに連続着地でCOMBOが伸び、COMBOが5以上でSUPER BALL（虹色、全リング一斉スコア＋3x倍率）が発動する。面白い瞬間は「4連続で同じ色のリングにボールを通し、5投目のSUPER BALLで全リングが光り出して一気に高得点が爆発する瞬間」。リスクとリターン：COMBO継続のために同色リングを狙うパワー調整のリスク、ミスでHEATが溜まりゲームオーバーに近づく。HEATは自然減衰するため、安全にプレイしながらCOMBOを狙う駆け引きがある。30ボール制限内でハイスコアを目指す。",
+    "score": 32.0,
+    "status": "Skee-Ball color-match prototype complete — mouse aim + click-hold-release power mechanic, 5 concentric target rings with 4 rotating colors, COMBO chain with SUPER BALL at COMBO>=5 (rainbow, all-ring score + 3x multiplier), HEAT risk system (miss +20, natural decay -0.05/f), 30-ball limit, particle effects, screen shake on SUPER BALL, power gauge",
+    "href": "120_skee_chain.html"
   }
 ]
