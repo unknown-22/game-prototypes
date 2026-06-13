@@ -955,5 +955,13 @@
     "score": 32.0,
     "status": "Skee-Ball color-match prototype complete — mouse aim + click-hold-release power mechanic, 5 concentric target rings with 4 rotating colors, COMBO chain with SUPER BALL at COMBO>=5 (rainbow, all-ring score + 3x multiplier), HEAT risk system (miss +20, natural decay -0.05/f), 30-ball limit, particle effects, screen shake on SUPER BALL, power gauge",
     "href": "120_skee_chain.html"
+  },
+  {
+    "id": "121_lift_chain",
+    "title": "LIFT CHAIN",
+    "idea": "色合わせ重量挙げ。SPACE長押しでパワーを溜め、タイミング良く離してリフト成功。同色連続でCOMBO→SUPER LIFT（虹色、自動完美、3倍スコア）。heatリスク管理。",
+    "score": 32.75,
+    "status": "Complete — color-match weightlifting with COMBO chain + SUPER LIFT mechanic. 49 headless tests.",
+    "href": "121_lift_chain.html"
   }
 ]
