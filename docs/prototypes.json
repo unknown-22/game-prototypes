@@ -971,5 +971,13 @@
     "score": 32.0,
     "status": "Croquet prototype complete — click-and-drag aim/strike mechanic, 4-color gate-passing COMBO chain, SUPER SHOT at COMBO>=4 (rainbow ball, 3x score, all-color match, 5s), HEAT risk system (per-stroke +3, miss +10, idle decay -0.5/f), 8-gate S-curve course with lap reset, particle/floating text effects, screen shake",
     "href": "122_gate_mallet.html"
+  },
+  {
+    "id": "123_forge_surge",
+    "title": "FORGE SURGE",
+    "idea": "鍛冶グリッドに色付きインゴットを配置し、同色隣接のBFS連鎖合成で高Tier合金を作る鍛冶クラフトゲーム。連続合成でCOMBO倍率が跳ね上がり、一気に高Tier合金へ合成される瞬間が面白い。リスクとリターン：配置ごとにHEATが蓄積し、合成不発で追加HEAT。HEATが90以上でランダムにインゴットが焼失。熱を管理しながら同色COMBOを追うか、安全に色を切り替えるかの判断を迫る。グリッドが埋まるとゲームオーバー。",
+    "score": 32.0,
+    "status": "Forge grid synthesis prototype complete — 6x5 grid, 4-color 3-tier ingot system, BFS cluster detection for same-color same-tier synthesis, COMBO chain, HEAT risk/burn system, particle/floating text effects, screen shake, active color cycling, game over on full grid or critical heat",
+    "href": "123_forge_surge.html"
   }
 ]
