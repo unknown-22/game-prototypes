@@ -963,5 +963,13 @@
     "score": 32.75,
     "status": "Complete — color-match weightlifting with COMBO chain + SUPER LIFT mechanic. 49 headless tests.",
     "href": "121_lift_chain.html"
+  },
+  {
+    "id": "122_gate_mallet",
+    "title": "GATE MALLET",
+    "idea": "トップダウン色合わせクロッケー。クリック＆ドラッグで狙いと威力を決めてボールを打ち、同色のフープを連続通過してCOMBO連鎖を伸ばすのが面白い。COMBOが4以上でSUPER SHOT（虹色、スコア3倍、全色通過可、5秒間）が発動し、一気に大量得点する爆発的爽快感。リスクとリターン：打撃ごとにHEATが蓄積（+3）し、フープ未通過で追加HEAT（+10）。同色COMBO継続で高倍率スコア（+10×COMBO×SUPER倍率）を得るか、HEATを抑えて安全に色を切り替えるかの判断を迫る。HEATが100でゲームオーバー。全フープ通過でコースリセット＋ラップボーナス。初のクロッケー（ゲートボール）プロトタイプ。",
+    "score": 32.0,
+    "status": "Croquet prototype complete — click-and-drag aim/strike mechanic, 4-color gate-passing COMBO chain, SUPER SHOT at COMBO>=4 (rainbow ball, 3x score, all-color match, 5s), HEAT risk system (per-stroke +3, miss +10, idle decay -0.5/f), 8-gate S-curve course with lap reset, particle/floating text effects, screen shake",
+    "href": "122_gate_mallet.html"
   }
 ]
