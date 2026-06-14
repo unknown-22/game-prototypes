@@ -987,5 +987,13 @@
     "score": 32.0,
     "status": "Complete — side-scrolling parkour runner, 4-color platform COMBO chain, echo trail system (trail recrossing grants ECHO BONUS multiplier), SUPER FLOW at COMBO>=4 (rainbow, 3x score, 5s, walk on air), stamina management, particle effects, screen shake",
     "href": "124_parkour_chain.html"
+  },
+  {
+    "id": "125_snowboard_chain",
+    "title": "SNOWBOARD CHAIN",
+    "idea": "横スクロールスノーボードゲーム。同色ゲートを連続ヒットしてCOMBOを構築し、分岐ゾーン（SPLIT）でレーンを選び、ゴーストエコーが別レーンを自動走行。両方ヒットでSURGEボーナス（+200点、HEAT減少）が発動する瞬間が面白い。リスクとリターン：同色COMBO継続でコンボ倍率スコアとSUPERモード（3倍スコア）が発動するが、別色ゲートヒットでCOMBOリセット＆HEAT蓄積。HEATが最大値またはHPが尽きるとゲームオーバー。HEAT管理とCOMBO追及のバランス判断、分岐ゾーンでのレーン選択が鍵。",
+    "score": 31.8,
+    "status": "Complete — side-scrolling snowboard runner, 4-color gate COMBO chain, SPLIT/CONVERGE lane mechanic with ghost echo (risk/reward SURGE bonus), SUPER mode at COMBO>=5 (3x score), HEAT risk system, HP/obstacle damage, particle/floating text effects, scroll speed ramp",
+    "href": "125_snowboard_chain.html"
   }
 ]
