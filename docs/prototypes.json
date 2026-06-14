@@ -995,5 +995,13 @@
     "score": 31.8,
     "status": "Complete — side-scrolling snowboard runner, 4-color gate COMBO chain, SPLIT/CONVERGE lane mechanic with ghost echo (risk/reward SURGE bonus), SUPER mode at COMBO>=5 (3x score), HEAT risk system, HP/obstacle damage, particle/floating text effects, scroll speed ramp",
     "href": "125_snowboard_chain.html"
+  },
+  {
+    "id": "126_axe_chain",
+    "name": "Axe Chain",
+    "generated_from_idea": "#1 (Score 32.0) — reinterpreted synthesis compression + gravity/collapse hooks into axe throwing with color-match COMBO chain",
+    "score": 32.0,
+    "status": "Axe throwing with color-match COMBO chain — click-drag-release aim, parabolic arc physics, 4-color ring target, same-color consecutive hits build COMBO→SUPER AXE (COMBO≥5, rainbow 3x), HEAT risk system (misses +15, hits -5), 15 axes per game, particle/floating text effects, screen shake on super hit",
+    "href": "126_axe_chain.html"
   }
 ]
