@@ -979,5 +979,13 @@
     "score": 32.0,
     "status": "Forge grid synthesis prototype complete — 6x5 grid, 4-color 3-tier ingot system, BFS cluster detection for same-color same-tier synthesis, COMBO chain, HEAT risk/burn system, particle/floating text effects, screen shake, active color cycling, game over on full grid or critical heat",
     "href": "123_forge_surge.html"
+  },
+  {
+    "id": "124_parkour_chain",
+    "title": "PARKOUR CHAIN",
+    "idea": "横スクロールパルクールゲーム。色付きプラットフォームに同色連続着地してCOMBOを構築し、自分の移動軌跡（エコートレイル）を再通過してECHO BONUS倍率を稼ぐ。COMBOが4以上でSUPER FLOW（虹色無敵・全プラットフォーム自動一致・スコア3倍・5秒間）が発動し、一気に大量スコアを稼ぐ瞬間が面白い。リスクとリターン：同色COMBO継続で高倍率スコアだが、別色着地でCOMBOリセット。スタミナ管理とジャンプの判断、エコートレイル再通過を狙ったルート選択の駆け引き。",
+    "score": 32.0,
+    "status": "Complete — side-scrolling parkour runner, 4-color platform COMBO chain, echo trail system (trail recrossing grants ECHO BONUS multiplier), SUPER FLOW at COMBO>=4 (rainbow, 3x score, 5s, walk on air), stamina management, particle effects, screen shake",
+    "href": "124_parkour_chain.html"
   }
 ]
