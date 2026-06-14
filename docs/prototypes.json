@@ -998,10 +998,18 @@
   },
   {
     "id": "126_axe_chain",
-    "name": "Axe Chain",
-    "generated_from_idea": "#1 (Score 32.0) — reinterpreted synthesis compression + gravity/collapse hooks into axe throwing with color-match COMBO chain",
+    "title": "AXE CHAIN",
+    "idea": "斧投げ×色合わせCOMBOチェイン。同色リングを連続ヒットでCOMBO構築→SUPER AXE発動（COMBO>=5、虹色3倍スコア）、HEATリスクシステムで失敗ペナルティ。リスクを取るほど高スコアを狙えるが、ミスが積み重なるとゲームオーバー",
     "score": 32.0,
     "status": "Axe throwing with color-match COMBO chain — click-drag-release aim, parabolic arc physics, 4-color ring target, same-color consecutive hits build COMBO→SUPER AXE (COMBO≥5, rainbow 3x), HEAT risk system (misses +15, hits -5), 15 axes per game, particle/floating text effects, screen shake on super hit",
     "href": "126_axe_chain.html"
+  },
+  {
+    "id": "127_skate_chain",
+    "title": "SKATE CHAIN",
+    "idea": "スケートボード垂直ハーフパイプ×色合わせCOMBOチェイン。スケーターが半円弧上を往復し、頂点でトリックカラーが出現。一致キー入力でCOMBOを構築し、COMBO>=5でSUPER COMBO発動（5秒間虹色、3倍スコア、全トリック自動成功）。早めのプリコミットで成功すれば2倍ボーナスだが、失敗で+30熱ダメージのハイリスク判断が面白い。連続トリックのCOMBO加速とSUPER発動時のスコア爆発が爽快感を生む。",
+    "score": 31.8,
+    "status": "Complete — skateboarding vert ramp color-match COMBO chain, auto-oscillation halfpipe physics, 4-color trick matching (Z/X/C/V), pre-commit risk/reward (2x bonus or +30 heat), SUPER COMBO at 5+ (5s rainbow auto-match 3x score), HEAT risk system (heat>=100 game over), 60s timer, particle/floating text effects, screen shake",
+    "href": "127_skate_chain.html"
   }
 ]
