@@ -1011,5 +1011,13 @@
     "score": 31.8,
     "status": "Complete — skateboarding vert ramp color-match COMBO chain, auto-oscillation halfpipe physics, 4-color trick matching (Z/X/C/V), pre-commit risk/reward (2x bonus or +30 heat), SUPER COMBO at 5+ (5s rainbow auto-match 3x score), HEAT risk system (heat>=100 game over), 60s timer, particle/floating text effects, screen shake",
     "href": "127_skate_chain.html"
+  },
+  {
+    "id": "128_swim_chain",
+    "title": "SWIM CHAIN",
+    "idea": "横スクロール競泳×色合わせCOMBOチェイン。同色のレーンブイを連続タッチでCOMBOを構築し、COMBO>=4でSUPER SWIM（5秒間2倍速+虹色無敵+自動COMBO）が発動する。酸素が減る緊張の中、同色ブイを狙い分けてCOMBOを繋ぎ、SUPER SWIMで一気にサメの群れを突破する瞬間が面白い。合成圧縮とCAグリッド増殖のフックを競泳に再解釈：同色連続ヒット→COMBO倍増（合成圧縮）、サメの増殖と酸素減少→盤面危機の拡大（CA増殖）。リスクとリターン：同色COMBO継続で高スコアとSUPERモードを得るが、別色ブイヒットでCOMBOリセット+HEAT蓄積。HEAT満タンまたは酸素切れでゲームオーバー。",
+    "score": 32.35,
+    "status": "Complete — side-scrolling swimming with 4-color lane buoy COMBO chain, SUPER SWIM at COMBO>=4 (5s rainbow auto-match 3x score), predator CA spread system, oxygen/heat dual risk mechanics, bubble oxygen replenishment, particle/floating text effects, auto-scroll with speed ramp, screen shake on game over",
+    "href": "128_swim_chain.html"
   }
 ]
