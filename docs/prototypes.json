@@ -1019,5 +1019,13 @@
     "score": 32.35,
     "status": "Complete — side-scrolling swimming with 4-color lane buoy COMBO chain, SUPER SWIM at COMBO>=4 (5s rainbow auto-match 3x score), predator CA spread system, oxygen/heat dual risk mechanics, bubble oxygen replenishment, particle/floating text effects, auto-scroll with speed ramp, screen shake on game over",
     "href": "128_swim_chain.html"
+  },
+  {
+    "id": "129_hoop_chain",
+    "title": "HOOP CHAIN",
+    "idea": "トップダウンバスケットボール・フリースローに色合わせCOMBOチェインを組み合わせたプロトタイプ。マウス照準＋チャージ＆リリースで色付きボールをシュートし、連続で同じ色のゴールを決めるとCOMBOが伸びる。COMBOが4以上でSUPER SHOT（5秒間虹色オートスコア、スコア3倍）が発動し、一気に大量得点する瞬間が面白い。CA風にディフェンダーがコート上に増殖・拡散し、弾を妨害する。HEATシステムでミスは+15、成功は-5のリスク管理。90秒の制限時間内でスコア最大化を目指す。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER発動の高報酬を得るが、色を変えるとCOMBOリセット＋HEAT蓄積。ディフェンダーの増加でシュート難度が時間とともに上昇するため、COMBOを追うか安全に別色で確実に得点するかの判断を迫る",
+    "score": 32.0,
+    "status": "Top-down basketball free-throw prototype complete — click-hold-release charge mechanic, 4-color matching COMBO chain, SUPER SHOT at COMBO>=4 (rainbow, 3x score), CA-inspired defender spread, HEAT risk system, particle/floating text effects, screen shake, 27 headless tests",
+    "href": "129_hoop_chain.html"
   }
 ]
