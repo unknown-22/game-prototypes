@@ -1035,5 +1035,13 @@
     "score": 32.0,
     "status": "Complete — side-view badminton rally game with 4-color COMBO chain, SUPER SMASH at COMBO>=4 (5s all-match 3x score), ghost trail bonus system, HEAT risk mechanic (miss +15, wrong color +10), AI that always returns with random color, auto-cycling + mouse wheel racket color control, particle/floating text effects, screen shake, 56 headless tests",
     "href": "130_badminton_surge.html"
+  },
+  {
+    "id": "131_tile_chain",
+    "title": "TILE CHAIN",
+    "idea": "麻雀ソリティア風の色合わせタイルマッチングゲーム。8×6グリッドに配置された4色48枚のタイルから同色ペアをクリックで消し、同色連続マッチでCOMBO倍率を構築する。COMBOが4以上でSUPER MATCH（5秒間虹色モード、スコア3倍、全色ペア自動成立）が発動し、残りのタイルを一気に消し去って大量スコアが爆発する瞬間が面白い。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER MATCHを狙えるが、色違いクリックでHEAT+15＆COMBOリセット。HEATが100に達するか90秒の制限時間でゲームオーバー。同色ペアがなくなったらRキーで再シャッフル（HEAT+10）。SUPERモード中は異なる色のペアもマッチ可能になりCOMBOを維持しやすくなるが、モード終了後に次のSUPER構築のために同色マッチを続けられるかの駆け引きが生まれる。初の麻雀ソリティア風タイルマッチングプロトタイプ。",
+    "score": 32.0,
+    "status": "Tile-matching COLOR COMBO prototype complete — 8x6 grid (48 tiles, 4 colors, 12 each = 24 pairs), same-color consecutive match COMBO chain, SUPER MATCH at COMBO>=4 (5s rainbow mode, 3x score, any-color pair matches), HEAT risk system (wrong +15, reshuffle +10, decay 0.05/f), 90s timer, particle burst + floating score text effects, screen shake on SUPER activation",
+    "href": "131_tile_chain.html"
   }
 ]
