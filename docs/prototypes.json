@@ -1043,5 +1043,13 @@
     "score": 32.0,
     "status": "Tile-matching COLOR COMBO prototype complete — 8x6 grid (48 tiles, 4 colors, 12 each = 24 pairs), same-color consecutive match COMBO chain, SUPER MATCH at COMBO>=4 (5s rainbow mode, 3x score, any-color pair matches), HEAT risk system (wrong +15, reshuffle +10, decay 0.05/f), 90s timer, particle burst + floating score text effects, screen shake on SUPER activation",
     "href": "131_tile_chain.html"
+  },
+  {
+    "id": "132_ping_pong_surge",
+    "title": "PING PONG SURGE",
+    "idea": "トップダウン卓球×色合わせCOMBOチェイン。プレイヤーはマウスでパドル位置を操作し、ボール色にパドル色を合わせて打ち返す。同色連続リターンでCOMBOが上昇し、COMBOが5に達するとSUPER RALLY（5秒間全色一致扱い、スコア3倍、虹色パーティクル）が発動する。SMASH（パドル中央付近で高速打球）は高得点だがHEATが大きく蓄積する。HEATが100に達するとOVERHEAT（5秒間パドル揺れ、ランダム色変化、操作困難）が発生。60秒の制限時間、ボールがプレイヤー側を通過するとゲームオーバー。面白い瞬間は「連続でボールを打ち返してコンボが5に達し、SUPER RALLYが発動して全てのボールが虹色のエフェクトと共に自動で打ち返される瞬間」。リスクとリターン：SMASHを狙うと高得点だがHEAT蓄積でOVERHEATリスク、安全にプレイすると低HEATだがスコア伸び悩み。COMBO継続でSUPER RALLYの高報酬を得られるが、色ミスマッチでCOMBOリセット。",
+    "score": 32.35,
+    "status": "Top-down ping pong color-match prototype complete — 4-color ball/paddle COMBO chain, SUPER RALLY at COMBO>=5 (5s rainbow auto-match 3x score), SMASH shot risk/reward (+20 HEAT, +15 base score), OVERHEAT mechanic (shake + random color at HEAT>=100), AI opponent with color cycling, heat bar + combo HUD, particle effects, 60s game timer, 49 headless tests",
+    "href": "132_ping_pong_surge.html"
   }
 ]
