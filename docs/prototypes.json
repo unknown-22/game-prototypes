@@ -1027,5 +1027,13 @@
     "score": 32.0,
     "status": "Top-down basketball free-throw prototype complete — click-hold-release charge mechanic, 4-color matching COMBO chain, SUPER SHOT at COMBO>=4 (rainbow, 3x score), CA-inspired defender spread, HEAT risk system, particle/floating text effects, screen shake, 27 headless tests",
     "href": "129_hoop_chain.html"
+  },
+  {
+    "id": "130_badminton_surge",
+    "title": "Badminton Surge",
+    "idea": "横視点バドミントンラリー×色合わせCOMBOチェイン。プレイヤーはマウスでラケット位置と色を操作し、AIがランダムに色を変えて返すシャトルを打ち返す。ラケット色とシャトル色が一致すればCOMBO継続、一致しなければCOMBOリセット+HEAT蓄積。COMBO>=4でSUPER SMASH（5秒間全色一致扱い、スコア3倍）が発動し、相手を圧倒する瞬間が面白い。前ラリーの軌跡がゴーストトレイルとして残り、通過するとボーナススコア獲得。HEATが100に達するか、90秒の制限時間切れでゲームオーバー。リスクとリターン：ラケット色をシャトル色に合わせる色選択の判断ミスでHEAT蓄積するが、正しい色を選んでCOMBOを継続すれば高倍率スコア+SUPER SMASH発動の高報酬を得られる。ラケット色は自動サイクルとマウスホイールの手動切替の両方で操作可能。",
+    "score": 32.0,
+    "status": "Complete — side-view badminton rally game with 4-color COMBO chain, SUPER SMASH at COMBO>=4 (5s all-match 3x score), ghost trail bonus system, HEAT risk mechanic (miss +15, wrong color +10), AI that always returns with random color, auto-cycling + mouse wheel racket color control, particle/floating text effects, screen shake, 56 headless tests",
+    "href": "130_badminton_surge.html"
   }
 ]
