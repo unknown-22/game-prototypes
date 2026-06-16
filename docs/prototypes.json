@@ -1051,5 +1051,13 @@
     "score": 32.35,
     "status": "Top-down ping pong color-match prototype complete — 4-color ball/paddle COMBO chain, SUPER RALLY at COMBO>=5 (5s rainbow auto-match 3x score), SMASH shot risk/reward (+20 HEAT, +15 base score), OVERHEAT mechanic (shake + random color at HEAT>=100), AI opponent with color cycling, heat bar + combo HUD, particle effects, 60s game timer, 49 headless tests",
     "href": "132_ping_pong_surge.html"
+  },
+  {
+    "id": "133_sumo_surge",
+    "title": "SUMO SURGE",
+    "idea": "トップダウンの色合わせ相撲。4色キー（Z=赤/右, X=緑/上, C=青/左, V=黄/下）で方向性の押しを繰り出し、円形の土俵からAI力士を押し出す。同色連続押しでCOMBOが上昇し、COMBOが4に達するとSUPER SUMO（5秒間虹色、3倍押し力、全キー自動マッチ）が発動し、一気に相手を吹き飛ばせる瞬間が面白い。押しのエコー軌跡が土俵上に残り、プレイヤーが上を通過するとHEAT冷却される。色違い押しでCOMBOリセット+HEAT蓄積、HEATが100でSTUMBLE（2秒間スタン、操作不能）。リスクとリターン：同色COMBO継続でSUPER SUMOの超高報酬（3倍力+全マッチ）が得られるが、色選択ミスでCOMBOリセット+HEAT蓄積でSTUMBLEリスク。エコー回収でHEAT冷却のリスク軽減が可能だが、相手に近づく必要がある。",
+    "score": 32.05,
+    "status": "Top-down sumo wrestling color-match prototype complete — 4-color directional push (Z/X/C/V), COMBO chain mechanic (same-color consecutive), SUPER SUMO at COMBO>=4 (5s rainbow 3x force auto-match), HEAT risk system (wrong color +15, decay 1/s, 100 = STUMBLE 2s stun), AI opponent with push toward player, echo trail system (push spawns trail, step on for HEAT -5), ring-out detection, particle burst + floating text feedback, 3 screens (Title/Game/GameOver)",
+    "href": "133_sumo_surge.html"
   }
 ]
