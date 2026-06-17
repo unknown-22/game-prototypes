@@ -1067,5 +1067,13 @@
     "score": 32.2,
     "status": "Top-down dodgeball arena with color-match COMBO chain — 4-color throwing (mouse aim+click), WASD movement, same-color consecutive hits build COMBO → SUPER THROW (COMBO>=5, 5s rainbow auto-aim 3x score), echo trail system (near-miss dodges spawn collectible trails for stamina+2x damage), HEAT risk system (hit +15), 90s timer, opponent AI with difficulty scaling, particle/floating text/screen shake feedback, first dodgeball genre",
     "href": "134_dodge_chain.html"
+  },
+  {
+    "id": "135_seesaw_chain",
+    "title": "SEESAW CHAIN",
+    "idea": "シーソーのバランスパズルに色合わせCOMBOチェインを組み合わせた初の物理パズルプロトタイプ。4色の重りをマウスで左右に配置し、同色連続でCOMBO構築→SUPER BALANCE（COMBO>=4、5秒間全色一致・3倍スコア・自動安定化）。次色プレビューへのコミット（右クリック）で1.5倍ボーナス、色が違うとHEATペナルティ。HEAT管理、90秒タイマー、傾きすぎでゲームオーバー。リスクとリターン：COMBOを狙って高スコアを取る vs バランスを崩さないよう安全に色を変える駆け引き",
+    "score": 31.65,
+    "status": "Seesaw balance puzzle with color-match COMBO chain — 4-color weight placement (mouse click LEFT/RIGHT, wheel/buttons to select color), same-color consecutive builds COMBO → SUPER BALANCE (COMBO>=4, 5s rainbow all-match 3x score auto-stabilize), commitment mechanic (right-click commit to next color for 1.5x bonus, penalty for mismatch), HEAT risk system (wrong color +15, idle +2, combo -5, decay per frame, 100 = overheat), 90s timer, beam angle detection (30° tilt = game over), particle/floating text feedback, balance/physics puzzle genre",
+    "href": "135_seesaw_chain.html"
   }
 ]
