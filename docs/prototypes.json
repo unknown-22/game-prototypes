@@ -1075,5 +1075,13 @@
     "score": 31.65,
     "status": "Seesaw balance puzzle with color-match COMBO chain — 4-color weight placement (mouse click LEFT/RIGHT, wheel/buttons to select color), same-color consecutive builds COMBO → SUPER BALANCE (COMBO>=4, 5s rainbow all-match 3x score auto-stabilize), commitment mechanic (right-click commit to next color for 1.5x bonus, penalty for mismatch), HEAT risk system (wrong color +15, idle +2, combo -5, decay per frame, 100 = overheat), 90s timer, beam angle detection (30° tilt = game over), particle/floating text feedback, balance/physics puzzle genre",
     "href": "135_seesaw_chain.html"
+  },
+  {
+    "id": "136_ski_surge",
+    "title": "SKI SURGE",
+    "idea": "ダウンヒルスラロームスキーに色合わせCOMBOチェインを組み合わせた初のスキープロトタイプ。同色ゲート連続通過でCOMBO構築→SUPER SURGE（COMBO>=5、5秒間虹色オートパス・3倍スコア）。色違いゲートはCOMBOリセット+HEAT蓄積、HEAT最大で雪崩ゲームオーバー。上下キーで滑走操作",
+    "score": 31.75,
+    "status": "Downhill slalom skiing with color-match COMBO chain — steer skier (UP/DOWN), pass same-color gates consecutively to build COMBO → SUPER SURGE (COMBO>=5, 5s rainbow auto-pass 3x score), wrong-color gates reset combo + add HEAT, HEAT max (100) = avalanche game over, particle burst feedback, HUD with score/combo/heat bar, first skiing genre in collection",
+    "href": "136_ski_surge.html"
   }
 ]
