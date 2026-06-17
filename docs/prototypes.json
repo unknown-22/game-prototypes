@@ -1083,5 +1083,13 @@
     "score": 31.75,
     "status": "Downhill slalom skiing with color-match COMBO chain — steer skier (UP/DOWN), pass same-color gates consecutively to build COMBO → SUPER SURGE (COMBO>=5, 5s rainbow auto-pass 3x score), wrong-color gates reset combo + add HEAT, HEAT max (100) = avalanche game over, particle burst feedback, HUD with score/combo/heat bar, first skiing genre in collection",
     "href": "136_ski_surge.html"
+  },
+  {
+    "id": "137_paper_plane",
+    "title": "PAPER PLANE TOSS",
+    "idea": "サイドビューの紙飛行機投げゲーム。マウスクリック＆ドラッグで角度とパワーを決め、リリースで投擲。空中に浮かぶ4色リングを同じ色で連続通過するとCOMBOが上昇し、COMBOが5に達するとSUPER FLIGHT（5秒間全色一致扱い、スコア3倍、虹色飛行）が発動する。色違いリングはCOMBOリセット＋HEAT蓄積。HEATが100に達するか90秒タイマー切れでゲームオーバー。面白い瞬間は「1回のフライトで同じ色のリングを3つ以上連続通過させ、COMBOチェインと共にスコア倍率が跳ね上がる瞬間」。リスクとリターン：同じ色のリングを狙って高COMBO・高スコアを目指すが、色違いに当たるとCOMBOがリセットされHEATが蓄積。安全に色を問わず通る手もあるがCOMBO倍率が伸びずスコア効率が悪い。",
+    "score": 31.5,
+    "status": "Side-view paper airplane toss prototype complete — mouse drag aim & launch, 4-color ring COMBO chain (same-color consecutive = combo +1), wrong color = reset +15 HEAT, SUPER FLIGHT at COMBO>=5 (5s rainbow all-match 3x score), flight physics (gravity + drag), heat bar (max 100 = game over), 90s timer, particle burst + floating score text feedback, trajectory preview, 3 screens (Title/Game/GameOver), 60 headless tests",
+    "href": "137_paper_plane.html"
   }
 ]
