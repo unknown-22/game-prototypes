@@ -1059,5 +1059,13 @@
     "score": 32.05,
     "status": "Top-down sumo wrestling color-match prototype complete — 4-color directional push (Z/X/C/V), COMBO chain mechanic (same-color consecutive), SUPER SUMO at COMBO>=4 (5s rainbow 3x force auto-match), HEAT risk system (wrong color +15, decay 1/s, 100 = STUMBLE 2s stun), AI opponent with push toward player, echo trail system (push spawns trail, step on for HEAT -5), ring-out detection, particle burst + floating text feedback, 3 screens (Title/Game/GameOver)",
     "href": "133_sumo_surge.html"
+  },
+  {
+    "id": "134_dodge_chain",
+    "title": "DODGE CHAIN",
+    "idea": "トップダウンドッジボールアリーナに色合わせCOMBOチェインを組み合わせた初のドッジボールプロトタイプ。WASDで移動＋マウス照準＆クリックで4色ボールを投げ、同色の相手に連続命中でCOMBO構築→SUPER THROW（COMBO>=5、虹色3倍スコア）。回避した敵の投球がエコー軌跡を残し、回収でスタミナ回復＋次の投球ダメージ2倍のECHOボーナス。HEATリスク（被弾+15）で管理。リスクとリターン：近づいてCOMBOを狙う高得点ルート vs 安全距離からの確実なヒット。ログ/リプレイを資産化（回避位置→エコー軌跡→強化投球）とUI連鎖演出のフックをドッジボールに再解釈",
+    "score": 32.2,
+    "status": "Top-down dodgeball arena with color-match COMBO chain — 4-color throwing (mouse aim+click), WASD movement, same-color consecutive hits build COMBO → SUPER THROW (COMBO>=5, 5s rainbow auto-aim 3x score), echo trail system (near-miss dodges spawn collectible trails for stamina+2x damage), HEAT risk system (hit +15), 90s timer, opponent AI with difficulty scaling, particle/floating text/screen shake feedback, first dodgeball genre",
+    "href": "134_dodge_chain.html"
   }
 ]
