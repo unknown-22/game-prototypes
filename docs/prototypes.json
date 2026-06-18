@@ -1091,5 +1091,13 @@
     "score": 31.5,
     "status": "Side-view paper airplane toss prototype complete — mouse drag aim & launch, 4-color ring COMBO chain (same-color consecutive = combo +1), wrong color = reset +15 HEAT, SUPER FLIGHT at COMBO>=5 (5s rainbow all-match 3x score), flight physics (gravity + drag), heat bar (max 100 = game over), 90s timer, particle burst + floating score text feedback, trajectory preview, 3 screens (Title/Game/GameOver), 60 headless tests",
     "href": "137_paper_plane.html"
+  },
+  {
+    "id": "138_coin_surge",
+    "title": "COIN SURGE",
+    "idea": "4色のコインをテーブルに落とすコインプッシャー。同色コインを隣接させてCOMBOを繋ぎ、COMBO>=4でSUPER DROP（虹色・3倍スコア）が発動。色違い隣接はHEATが溜まりOVERHEATで落下位置が乱れるリスク",
+    "score": 0,
+    "status": "Prototype complete",
+    "href": "138_coin_surge.html"
   }
 ]
