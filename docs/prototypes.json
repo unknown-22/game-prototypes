@@ -1099,5 +1099,13 @@
     "score": 0,
     "status": "Prototype complete",
     "href": "138_coin_surge.html"
+  },
+  {
+    "id": "139_signal_surge",
+    "title": "SIGNAL SURGE",
+    "idea": "信号解読ゲーム。画面を流れる4色の信号をZ/X/C/Vキーで一致する色を打ち返す。同色連続命中でCOMBOチェイン構築、COMBO>=5でSUPER DECODE（5秒間虹色オート解読、スコア3倍）が発動。色違いキーでHEAT蓄積、HEAT100でシグナルオーバーロード（ゲームオーバー）。速度が徐々に上昇。ダイス構築ローグライト「合成圧縮＋1色だけ」フックの信号解読ジャンルへの再解釈。初の信号解読/モールス信号プロトタイプ",
+    "score": 31.65,
+    "status": "Side-scrolling signal decoding prototype complete — 4-color lane-based key matching (Z/X/C/V), same-color consecutive COMBO chain, SUPER DECODE at COMBO>=5 (5s rainbow auto-decode 3x score), HEAT risk system (wrong +15, miss +5, >=100 game over), speed ramping difficulty, particle/floating text/screen shake feedback, 3 screens (Title/Game/GameOver), 70 headless tests, first signal-decoding/morse-code genre",
+    "href": "139_signal_surge.html"
   }
 ]
