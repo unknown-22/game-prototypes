@@ -1107,5 +1107,13 @@
     "score": 31.65,
     "status": "Side-scrolling signal decoding prototype complete — 4-color lane-based key matching (Z/X/C/V), same-color consecutive COMBO chain, SUPER DECODE at COMBO>=5 (5s rainbow auto-decode 3x score), HEAT risk system (wrong +15, miss +5, >=100 game over), speed ramping difficulty, particle/floating text/screen shake feedback, 3 screens (Title/Game/GameOver), 70 headless tests, first signal-decoding/morse-code genre",
     "href": "139_signal_surge.html"
+  },
+  {
+    "id": "140_belt_surge",
+    "title": "BELT SURGE",
+    "idea": "コンベアベルト色合わせチェインリアクションゲーム。4色のアイテムがベルト上を左から右へ流れる。プレイヤーはスキャナーゲートを配置し、ゲートと同色のアイテムが通過するとタグ付け。同色連続タグでCOMBOチェイン構築、COMBO>=5でSURGE発動（全タグ付きアイテムが爆発して大スコア）。得点計算はtag位置が右端に近いほど高得点（リスク×リターン）。未タグアイテムが右端到達でHEAT蓄積、HEAT>=100でゲームオーバー。面白い瞬間は「ゲートを右端ギリギリに置いて最大リスクを取り、5以上の同色タグチェインを決めてSURGEで全アイテムを一斉爆発させる瞬間」。",
+    "score": 0,
+    "status": "Prototype complete — conveyor belt color-match chain reaction, scanner gate positioning (LEFT/RIGHT), color select (1-4), same-color consecutive tag COMBO, SURGE at COMBO>=5 (all tagged items burst with massive score bonus, screen shake), risk/reward score formula (tag position closer to right edge = higher points), HEAT from untagged items reaching right edge, auto color cycle at score threshold, difficulty ramping (belt speed increases), 3 screens (Title/Game/GameOver), particle burst + floating popup feedback",
+    "href": "140_belt_surge.html"
   }
 ]
