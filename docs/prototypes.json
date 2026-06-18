@@ -1115,5 +1115,13 @@
     "score": 0,
     "status": "Prototype complete — conveyor belt color-match chain reaction, scanner gate positioning (LEFT/RIGHT), color select (1-4), same-color consecutive tag COMBO, SURGE at COMBO>=5 (all tagged items burst with massive score bonus, screen shake), risk/reward score formula (tag position closer to right edge = higher points), HEAT from untagged items reaching right edge, auto color cycle at score threshold, difficulty ramping (belt speed increases), 3 screens (Title/Game/GameOver), particle burst + floating popup feedback",
     "href": "140_belt_surge.html"
+  },
+  {
+    "id": "141_sled_surge",
+    "title": "SLED SURGE",
+    "idea": "サイドスクロールボブスレーゲーム。4色のゲートを上下キーで操舵して通過し、同色ゲートを連続通過してCOMBOを構築する。COMBOが5に達するとSUPER BOOST（5秒間虹色そり、全ゲート自動回収、スコア3倍、壁無敵）が発動。ゲート取り逃しでHEAT蓄積（+20/回）、HEATが100に達するか壁衝突でゲームオーバー。ゴーストそりが過去ベストランの経路を表示。面白い瞬間は「同じ色のゲートを連続でくぐり抜けてCOMBOを積み上げ、SUPER BOOSTが発動して無敵レインボー状態で一気に大量スコアを稼ぐ瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア（+COMBO×10）が得られるが、色違いでCOMBOが1にリセット。壁に近いゲートほど高得点だが衝突リスクがある。安全に色違いゲートを通る手もあるがCOMBO倍率が伸びずスコア効率が悪い。",
+    "score": 31.85,
+    "status": "Side-scrolling bobsled with color-match COMBO chain — steer sled (UP/DOWN), pass same-color gates consecutively to build COMBO → SUPER BOOST (COMBO>=5, 5s rainbow auto-collect 3x score, wall immunity), missed gates add HEAT (+20, >=100 = game over), wall collision = instant game over, ghost sled records best run path, HUD with score/combo/heat bar/distance/SUPER timer, particle burst feedback, screen shake, 3 screens (Title/Game/GameOver), speed ramping difficulty, 85 headless tests, first bobsled/racing genre",
+    "href": "141_sled_surge.html"
   }
 ]
