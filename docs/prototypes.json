@@ -1130,6 +1130,14 @@
     "idea": "クレーンゲーム（UFOキャッチャー）風の色合わせチェインゲーム。クリックで景品をキャッチし、同色連続キャッチでCOMBOを構築する。COMBOが4以上でSUPER CLAWが発動し、BFSで隣接する全同色景品を一気に回収して大スコアを獲得する。色違いキャッチでCOMBOリセット+HEAT蓄積、HEAT>=100でゲームオーバー。コラム重力で景品が沈み、新しい景品が補充される。面白い瞬間は「4連続同色キャッチ後にSUPER CLAWが発動し、隣接5個の同色景品が連鎖爆発的に回収される瞬間」。リスクとリターン：同色COMBO継続でスコア倍率上昇+SUPER CLAWへの道、色違いでHEAT増加+COMBOリセット。初のクレーンゲームプロトタイプ（全141件中未踏ジャンル）。game_idea_factory #1「ログ/リプレイが資産＋分裂→合流→爆発」フックの再解釈（score 31.8）。",
     "score": 31.8,
     "status": "Crane game prototype complete — click to grab colored prizes from 8x6 grid, same-color consecutive grabs build COMBO chain, COMBO>=4 activates SUPER CLAW (BFS flood-fill grabs all adjacent same-color prizes), column gravity after each grab with refill, HEAT risk system (wrong color +10, decay -2/turn, >=100 game over), particle burst + floating text feedback, 3 screens (Title/Game/GameOver), 45 headless tests, first crane/claw machine genre",
-    "href": "142_claw_surge.html"
+     "href": "142_claw_surge.html"
+  },
+  {
+    "id": "143_balloon_surge",
+    "title": "BALLOON SURGE",
+    "idea": "熱気球が色付きリングを通過しながら上昇するゲーム。同色リングを連続通過してCOMBOを構築し、COMBOが5に達するとSUPER LIFT（5秒間虹色バルーン、全リング自動同色判定、スコア3倍、燃料消費なし）が発動。燃料(SPACE)と熱を管理し、燃料を燃やすと高速上昇するが熱が蓄積、熱が100に達するとゲームオーバー。風が気球を左右に押す。面白い瞬間は「熱が限界近くの中、4連続同色リングをくぐり抜けてSUPER LIFTが発動し、虹色バルーンが大量のリングを自動回収してスコアが爆発する瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア（+COMBO×5）とSUPER LIFTへの道、色違い通過でCOMBOリセット+熱15増加。燃料を燃やして高速上昇（スコア効率UP）するか、燃料温存して安全飛行するかの判断。",
+    "score": 31.85,
+    "status": "Balloon flight prototype complete — fixed balloon at screen center with scrolling altitude, steer LEFT/RIGHT through 4-color rings, same-color consecutive passes build COMBO chain → SUPER LIFT (COMBO>=5, 5s rainbow auto-match 3x score free fuel), fuel/heat resource management (SPACE to burn fuel for faster ascent, accumulates heat, heat>=100 = game over), wind drift system, ring spawn rate/speed/match probability scaling with altitude, particle bursts + floating text + screen shake feedback, scrolling clouds parallax bg, 3 screens (Title/Game/GameOver), 74 headless tests",
+    "href": "143_balloon_surge.html"
   }
 ]
