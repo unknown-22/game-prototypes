@@ -1130,7 +1130,7 @@
     "idea": "クレーンゲーム（UFOキャッチャー）風の色合わせチェインゲーム。クリックで景品をキャッチし、同色連続キャッチでCOMBOを構築する。COMBOが4以上でSUPER CLAWが発動し、BFSで隣接する全同色景品を一気に回収して大スコアを獲得する。色違いキャッチでCOMBOリセット+HEAT蓄積、HEAT>=100でゲームオーバー。コラム重力で景品が沈み、新しい景品が補充される。面白い瞬間は「4連続同色キャッチ後にSUPER CLAWが発動し、隣接5個の同色景品が連鎖爆発的に回収される瞬間」。リスクとリターン：同色COMBO継続でスコア倍率上昇+SUPER CLAWへの道、色違いでHEAT増加+COMBOリセット。初のクレーンゲームプロトタイプ（全141件中未踏ジャンル）。game_idea_factory #1「ログ/リプレイが資産＋分裂→合流→爆発」フックの再解釈（score 31.8）。",
     "score": 31.8,
     "status": "Crane game prototype complete — click to grab colored prizes from 8x6 grid, same-color consecutive grabs build COMBO chain, COMBO>=4 activates SUPER CLAW (BFS flood-fill grabs all adjacent same-color prizes), column gravity after each grab with refill, HEAT risk system (wrong color +10, decay -2/turn, >=100 game over), particle burst + floating text feedback, 3 screens (Title/Game/GameOver), 45 headless tests, first crane/claw machine genre",
-     "href": "142_claw_surge.html"
+    "href": "142_claw_surge.html"
   },
   {
     "id": "143_balloon_surge",
@@ -1139,5 +1139,13 @@
     "score": 31.85,
     "status": "Balloon flight prototype complete — fixed balloon at screen center with scrolling altitude, steer LEFT/RIGHT through 4-color rings, same-color consecutive passes build COMBO chain → SUPER LIFT (COMBO>=5, 5s rainbow auto-match 3x score free fuel), fuel/heat resource management (SPACE to burn fuel for faster ascent, accumulates heat, heat>=100 = game over), wind drift system, ring spawn rate/speed/match probability scaling with altitude, particle bursts + floating text + screen shake feedback, scrolling clouds parallax bg, 3 screens (Title/Game/GameOver), 74 headless tests",
     "href": "143_balloon_surge.html"
+  },
+  {
+    "id": "144_zip_surge",
+    "title": "ZIP SURGE",
+    "idea": "ジップラインカラーマッチCOMBOチェインゲーム。同色ジップラインを連続で乗り継いでCOMBOを構築し、COMBO>=4でSUPER ZIP（虹色ライン、自動接続、スコア3倍、5秒間）が発動。色違いでCOMBOリセット+HEAT蓄積（>=100でゲームオーバー）。落下でもゲームオーバー。速度が徐々に上昇。Idea #1「ログ/リプレイが資産＋コストは未来の手札」フックのジップラインジャンルへの再解釈（Score 31.85）。初のジップラインプロトタイプ。",
+    "score": 31.85,
+    "status": "Zipline chain prototype complete — side-view zipline action with 4-color match COMBO chain, SUPER ZIP at COMBO>=4 (5s rainbow auto-connect 3x score), HEAT risk system (wrong-color +15, >=100 game over), falling off screen = game over, ghost trail best-run replay, particle burst + floating text + screen shake feedback, speed ramping difficulty, 3 screens (Title/Game/GameOver), 64 headless tests, first zipline genre",
+    "href": "144_zip_surge.html"
   }
 ]
