@@ -1147,5 +1147,13 @@
     "score": 31.85,
     "status": "Zipline chain prototype complete — side-view zipline action with 4-color match COMBO chain, SUPER ZIP at COMBO>=4 (5s rainbow auto-connect 3x score), HEAT risk system (wrong-color +15, >=100 game over), falling off screen = game over, ghost trail best-run replay, particle burst + floating text + screen shake feedback, speed ramping difficulty, 3 screens (Title/Game/GameOver), 64 headless tests, first zipline genre",
     "href": "144_zip_surge.html"
+  },
+  {
+    "id": "145_inch_chain",
+    "title": "INCH CHAIN",
+    "idea": "イモムシが画面を這い、色付きのエサ（ドット）を食べてCOMBOチェインを構築するゲーム。同色ドットを連続で食べてCOMBOを構築し、COMBO>=4でSUPER INCH（5秒間虹色イモムシ、範囲内の全ドットを自動回収、スコア3倍）が発動。色違いを食べるとCOMBOリセット+HEAT蓄積（>=100でゲームオーバー）。SPACE長押しで収縮・減速、離すとランジ（前方加速）で移動を制御。面白い瞬間は「3連続同色ドットをジリジリ狙って4つ目を食べ、COMBO>=4に達してSUPER INCHが発動し、虹色の巨大イモムシが画面のドットを一気に回収してスコアが爆発する瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア（10+COMBO×5）とSUPER INCHへの道、色違いでCOMBOリセット+HEAT増加。収縮（安全に選択）かランジ（素早く到達）かの操作判断。初のイモムシ/インクワームプロトタイプ。",
+    "score": 31.85,
+    "status": "Inchworm prototype complete — side-scrolling inchworm action with 4-color match COMBO chain (same-color consecutive eating builds combo), SUPER INCH at COMBO>=4 (5s rainbow worm auto-collects all dots within radius, 3x score multiplier), HEAT risk system (wrong-color +15, decays -1/frame, >=100 game over), contract/lunge movement (hold SPACE to contract & slow, release to lunge forward), ghost trail best-run replay, particle burst + floating text + screen shake feedback, speed ramping difficulty scaling with score, 3 screens (Title/Game/GameOver), 59 headless tests, first inchworm/caterpillar genre in collection (all 10 generated ideas clustered in deckbuilder/dice/auto-shooter; reinterpreted #1 'log/replay as asset + circuit/pipe visualization' hooks into segmented inchworm physics)",
+    "href": "145_inch_chain.html"
   }
 ]
