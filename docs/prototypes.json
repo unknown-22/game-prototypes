@@ -1155,5 +1155,13 @@
     "score": 31.85,
     "status": "Inchworm prototype complete — side-scrolling inchworm action with 4-color match COMBO chain (same-color consecutive eating builds combo), SUPER INCH at COMBO>=4 (5s rainbow worm auto-collects all dots within radius, 3x score multiplier), HEAT risk system (wrong-color +15, decays -1/frame, >=100 game over), contract/lunge movement (hold SPACE to contract & slow, release to lunge forward), ghost trail best-run replay, particle burst + floating text + screen shake feedback, speed ramping difficulty scaling with score, 3 screens (Title/Game/GameOver), 59 headless tests, first inchworm/caterpillar genre in collection (all 10 generated ideas clustered in deckbuilder/dice/auto-shooter; reinterpreted #1 'log/replay as asset + circuit/pipe visualization' hooks into segmented inchworm physics)",
     "href": "145_inch_chain.html"
+  },
+  {
+    "id": "146_depth_chain",
+    "title": "DEPTH CHAIN",
+    "idea": "サイドビュー素潜り（アプネアダイビング）。深海へ潜降し、4色の真珠を回収する。同色真珠を連続回収するとCOMBOチェインが構築され、COMBO>=4でSUPER BREATH（5秒間レインボーモード：全真珠自動回収、スコア3倍、酸素補充）が発動。色違い真珠でCOMBOリセット+HEAT蓄積。酸素は時間経過で減少し、ゼロでゲームオーバー。HEATが100に達してもゲームオーバー。海底から闇（水圧）が上昇し、プレイエリアを制限する。面白い瞬間は「色を見極めながら同色真珠を連続回収し、COMBO4でSUPER BREATHが発動、虹色ダイバーが周囲の真珠を一気に回収してスコアが爆発するカタルシス」。リスクとリターン：深く潜るほど深度倍率で高得点だが酸素消費が早く闇が迫る。同色COMBO継続で高倍率スコアとSUPER BREATHへの道、色違いでHEAT増加。SPACEで浮上（酸素消費増加）するか自然降下するかの判断。",
+    "score": 31.85,
+    "status": "Free-diving prototype complete — side-view apnea diving with 4-color pearl collection COMBO chain (same-color consecutive = combo +1), SUPER BREATH at COMBO>=4 (5s rainbow diver auto-collects all pearls within radius, 3x score, oxygen refill), HEAT risk system (wrong-color +15, decays -0.02/frame, >=100 game over), oxygen resource system (decay + ascend cost, zero = drown), darkness/pressure rises from bottom constraining play area, depth multiplier for deeper scoring, ocean gradient background, particle burst + floating text + ambient bubble feedback, 3 screens (Title/Game/GameOver), 65 headless tests, first free-diving genre",
+    "href": "146_depth_chain.html"
   }
 ]
