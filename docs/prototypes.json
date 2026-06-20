@@ -1163,5 +1163,13 @@
     "score": 31.85,
     "status": "Free-diving prototype complete — side-view apnea diving with 4-color pearl collection COMBO chain (same-color consecutive = combo +1), SUPER BREATH at COMBO>=4 (5s rainbow diver auto-collects all pearls within radius, 3x score, oxygen refill), HEAT risk system (wrong-color +15, decays -0.02/frame, >=100 game over), oxygen resource system (decay + ascend cost, zero = drown), darkness/pressure rises from bottom constraining play area, depth multiplier for deeper scoring, ocean gradient background, particle burst + floating text + ambient bubble feedback, 3 screens (Title/Game/GameOver), 65 headless tests, first free-diving genre",
     "href": "146_depth_chain.html"
+  },
+  {
+    "id": "147_wreck_chain",
+    "title": "WRECK CHAIN",
+    "idea": "サイドビュー解体破壊ゲーム。クレーンの鉄球（振り子物理）で色付きブロックのビルを破壊する。マウスでクレーンアンカーを左右に動かし、クリックで振り子鉄球を解放。同色ブロックを連続破壊してCOMBOチェインを構築し、COMBO>=4でSUPER BALL発動（5秒間レインボーモード、全色マッチ＋スコア3倍）。色違い破壊でHEATが蓄積（>=100でゲームオーバー）。破壊されたブロックの上にあったブロックは重力で崩落し、CHAIN連鎖落下でボーナススコア。60秒の制限時間。面白い瞬間は「同色ブロックを連続で破壊してCOMBOが繋がり、SUPER BALLが発動してビルが一気に崩れ、飛び散った破片が空中で衝突し、重力崩落のCHAINが重なってスコアが爆発的に増える瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア（最大x3）とSUPER BALLへの道、色違い破壊でHEAT上昇＋COMBOリセット。初の鉄球/解体ジャンル。Game Idea Factory #1（32.0）の「split into multiple paths → converge → explode」フックを構造物連鎖崩壊＋破片収束に再解釈。",
+    "score": 32.0,
+    "status": "Wrecking ball demolition prototype complete — side-view wrecking ball pendulum physics with 4-color COMBO chain (same-color consecutive destroys build combo), SUPER BALL at COMBO>=4 (5s rainbow ball, all colors match, 3x score), HEAT risk system (wrong-color +20, decays -0.05/frame, >=100 game over), gravity collapse chain bonus (unsupported blocks fall for +50 each), ball trail ghost effect, debris/particle/floating text feedback, screen shake, 60s timer, 3 screens (Title/Game/GameOver/Victory), first wrecking ball/demolition genre in collection",
+    "href": "147_wreck_chain.html"
   }
 ]
