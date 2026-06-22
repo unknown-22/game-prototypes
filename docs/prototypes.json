@@ -1179,5 +1179,13 @@
     "score": 32.15,
     "status": "Paintball arena shooter prototype complete — top-down WASD + mouse aim shooter with 4-color COMBO chain (same-color consecutive hits build combo), SUPER SHOT at COMBO>=5 (5s rainbow mode: all targets match, 3x score, auto-aim to nearest target), HEAT risk system (wrong-color +15, target escape +5, decays -0.5/s, >=100 game over), paint grid cellular automaton spread (painted cells propagate to adjacent empty cells every 0.5s), terrain movement speed modifier (faster on own-color paint, slower on others), 90s survival timer → VICTORY, 3 screens (Title/Game/GameOver), ghost grid persistence between rounds, particle effects + sound feedback, speed ramping difficulty, first paintball/laser-tag genre in collection",
     "href": "148_paint_surge.html"
+  },
+  {
+    "id": "149_bingo_surge",
+    "title": "BINGO SURGE",
+    "idea": "色合わせビンゴゲーム。5x5グリッドのビンゴカードに4色の数字が配置され、1.5秒ごとに呼ばれる数字をクリックでマーク。同色を連続でマークするとCOMBOが構築され、COMBOが4に達するとSUPER DAUBが発動（5秒間レインボーモード：呼ばれた色に一致する全セルを自動マーク、スコア3倍）。誤クリックでHEATが蓄積（MAXでカードが揺れて2秒間クリック不可）。列・行・対角線を完成させるとBINGOボーナス（500×BINGO回数）。50コール終了でゲームオーバー。面白い瞬間は「同色を連続でマークしてCOMBOが4に達し、SUPER DAUBが発動して一気に大量の数字が自動マークされBINGOラインが連続完成しスコアが爆発する瞬間」。リスクとリターン：同色COMBOを追うとSUPER DAUBで大爆発だが、色間違いでHEAT上昇＋COMBOリセット。安全に確実な数字だけをマークするか、同色を狙って危険を冒すかの判断。初のビンゴジャンル",
+    "score": 32.0,
+    "status": "Bingo prototype complete",
+    "href": "149_bingo_surge.html"
   }
 ]
