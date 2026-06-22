@@ -1171,5 +1171,13 @@
     "score": 32.0,
     "status": "Wrecking ball demolition prototype complete — side-view wrecking ball pendulum physics with 4-color COMBO chain (same-color consecutive destroys build combo), SUPER BALL at COMBO>=4 (5s rainbow ball, all colors match, 3x score), HEAT risk system (wrong-color +20, decays -0.05/frame, >=100 game over), gravity collapse chain bonus (unsupported blocks fall for +50 each), ball trail ghost effect, debris/particle/floating text feedback, screen shake, 60s timer, 3 screens (Title/Game/GameOver/Victory), first wrecking ball/demolition genre in collection",
     "href": "147_wreck_chain.html"
+  },
+  {
+    "id": "148_paint_surge",
+    "title": "PAINT SURGE",
+    "idea": "トップダウンペイントボールアリーナシューター。WASDで移動、マウスで照準、クリックで色付きペイント弾を発射。エッジから出現する色付き的を同色のペイント弾で連続撃破してCOMBOチェインを構築。COMBOが5に達するとSUPER SHOTが発動（5秒間レインボーモード：全的がマッチ、スコア3倍、最寄りの的に自動照準）。色違いの的を撃つとCOMBOリセット＋HEATが15上昇（HEAT>=100でゲームオーバー）。的が画面外に逃げてもHEAT+5。ペイント弾が命中するとグリッドに色付きペイントが飛び散り、セルオートマトンで隣接空きマスに拡散。自分の色のペイント上では移動速度1.3倍、違う色では0.7倍。90秒生存でビクトリー。面白い瞬間は「同じ色の的を連続で撃ち抜いてCOMBOが5に達し、SUPER SHOTが発動して虹色のペイント弾が自動照準で全方向に飛び交い、画面中の敵的が一掃される瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER SHOTへの道だが、色違いでCOMBOリセット＋HEAT上昇。ペイント地形が拡散し移動速度に影響を与えるため、自分の色のペイント上に留まるか新しい色でエリアを塗り替えるかの判断を迫る。Game Idea Factory #1（Score 32.15）フック「ログ/リプレイが資産→ペイント地形がラウンド間で永続」「CAグリッド充填→ペイント飛沫のセルオートマトン拡散」を再解釈。初のペイントボール/レーザータグジャンル。",
+    "score": 32.15,
+    "status": "Paintball arena shooter prototype complete — top-down WASD + mouse aim shooter with 4-color COMBO chain (same-color consecutive hits build combo), SUPER SHOT at COMBO>=5 (5s rainbow mode: all targets match, 3x score, auto-aim to nearest target), HEAT risk system (wrong-color +15, target escape +5, decays -0.5/s, >=100 game over), paint grid cellular automaton spread (painted cells propagate to adjacent empty cells every 0.5s), terrain movement speed modifier (faster on own-color paint, slower on others), 90s survival timer → VICTORY, 3 screens (Title/Game/GameOver), ghost grid persistence between rounds, particle effects + sound feedback, speed ramping difficulty, first paintball/laser-tag genre in collection",
+    "href": "148_paint_surge.html"
   }
 ]
