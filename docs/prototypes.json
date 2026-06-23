@@ -1211,5 +1211,21 @@
     "score": 32.0,
     "status": "Wakeboarding chain-combo prototype complete",
     "href": "152_wake_chain.html"
+  },
+  {
+    "id": "153_row_surge",
+    "title": "ROW SURGE",
+    "idea": "サイドスクロールボート漕ぎゲーム。SPACEで漕ぎ、同じ色のストロークを連続で決めてCOMBOを構築。COMBOが4に達するとSUPER STROKEが発動（5秒間虹色、スコア3倍、速度1.5倍、全ストローク自動マッチ）。色違いストロークでCOMBOリセット＋HEATが8上昇。ウェイクトレイルを横切るとECHO（+50%ボーナス）が発動。水上の障害物（CA伝播で増殖）に衝突するとHEATが10上昇。HEATが100に達するか60秒のタイマーが切れるとゲームオーバー。面白い瞬間は「同じ色のストロークをリズムよく連続で決め、COMBOが4に達してSUPER STROKEが発動、虹色に輝きながら川を一気に駆け抜け、ウェイクトレイルのエコーが増幅して高スコアが爆発する瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER STROKEへの道だが、色を待つとタイムロス。色違いでCOMBOリセット＋HEAT上昇。安全に色を問わず漕ぐか、同色COMBOを狙って色を待つかの判断を迫る。初のローイング（ボート競技）ジャンル。",
+    "score": 32.0,
+    "status": "Rowing chain-combo prototype complete",
+    "href": "153_row_surge.html"
+  },
+  {
+    "id": "154_dive_surge",
+    "title": "DIVE SURGE",
+    "idea": "崖飛び込みゲーム。高くなる台から飛び降り、空中で回転をコントロールして色付き着水ゾーンを狙う。同じ色のゾーンに連続着地するとCOMBOが加速し、COMBOが5以上でSUPER DIVE（虹色、スコア3倍、全ゾーン自動一致）が発動して大量得点する瞬間が面白い。前回のダイブ軌跡がゴーストトレイルとして表示され参考になる。リスクとリターン：同色ゾーンを狙い続けるとCOMBO高倍率だが、ゾーン外に着水するとHEATが+25蓄積。HEATが100でゲームオーバー。安全に色を問わず狙うか、COMBOを追ってリスクを取るかの判断を迫る。台はダイブごとに8px上昇し、落下距離が伸びて難度が上がる。",
+    "score": 32.0,
+    "status": "Cliff diving color-match combo prototype complete",
+    "href": "154_dive_surge.html"
   }
 ]
