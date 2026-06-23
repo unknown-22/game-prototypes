@@ -1203,5 +1203,13 @@
     "score": 31.45,
     "status": "Yo-yo skill toy prototype complete",
     "href": "151_yo_surge.html"
+  },
+  {
+    "id": "152_wake_chain",
+    "title": "WAKE CHAIN",
+    "idea": "サイドスクロールウェイクボードゲーム。矢印キーでプレイヤーを上下に動かし、右から流れてくる4色のブイをかわしながら通り抜ける。同色ブイを連続で通り抜けるとCOMBOが構築され、COMBOが4に達するとSUPER WAKEが発動（5秒間レインボーモード：全色自動回収＋スコア3倍）。色違いブイでCOMBOリセット＋HEATが1上昇。HEATが5に達するか60秒のタイマーが切れるとゲームオーバー。面白い瞬間は「同じ色のブイを連続でかわしながら通り抜けてコンボを積み上げ、SUPER WAKEで一気に大量のブイを自動回収してスコアが爆発的に伸びる瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER WAKEへの道だが、色違いでCOMBOリセット＋HEAT上昇。安全に確実なブイだけを取るか、同色COMBOを狙って危険を冒すかの判断。初のウェイクボード/水上スポーツジャンル。",
+    "score": 32.0,
+    "status": "Wakeboarding chain-combo prototype complete",
+    "href": "152_wake_chain.html"
   }
 ]
