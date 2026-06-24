@@ -1235,5 +1235,13 @@
     "score": 31.95,
     "status": "Hang glider prototype complete",
     "href": "155_glide_surge.html"
+  },
+  {
+    "id": "156_tug_chain",
+    "title": "TUG CHAIN",
+    "idea": "綱引き色合わせゲーム。ロープの中央セグメントの色と現在のアクティブカラーが一致したらクリックで綱を引き、COMBOを積む。COMBOが4以上でSUPER PULL（5秒間虹色モード、スコア3倍）が発動。色を間違えるとロープ破断（CA伝播で隣接セグメントにダメージが広がる）が進行し、全セグメント破断でゲームオーバー。面白い瞬間は「同色でリズムよく引き続けてCOMBOとSUPER PULLが炸裂し、一気に綱を引き寄せる気持ちよさ」。リスクとリターン：欲張って同色COMBOを維持するか、ミスによる連鎖破断の恐怖に怯えながら安全に色が合うのを待つか",
+    "score": 31.85,
+    "status": "Tug of war color-match prototype complete",
+    "href": "156_tug_chain.html"
   }
 ]
