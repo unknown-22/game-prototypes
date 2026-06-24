@@ -1243,5 +1243,13 @@
     "score": 31.85,
     "status": "Tug of war color-match prototype complete",
     "href": "156_tug_chain.html"
+  },
+  {
+    "id": "157_sail_chain",
+    "title": "SAIL CHAIN",
+    "idea": "トップダウンセーリングレース。同じ色のブイを連続で回航してCOMBOチェインを繋ぐ。COMBOが4以上でSUPER SAIL（虹色、スコア3倍、風無効、全ブイ自動回収）が発動し爆速で大量得点する瞬間が面白い。舵取り（左右キー）と帆角度調整（上下キー）で風向きに対応しながら航行。色を間違えるとCOMBOリセット＋HEAT上昇、HEAT満タンかタイムアップでゲームオーバー。前回のベスト航跡がゴーストトレイルとして表示される。リスクとリターン：同色COMBOを継続するために風上への航行を強いられるか、HEAT覚悟で色違いを取りにいくか",
+    "score": 31.85,
+    "status": "Sailing color-match combo prototype complete",
+    "href": "157_sail_chain.html"
   }
 ]
