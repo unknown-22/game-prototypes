@@ -1227,5 +1227,13 @@
     "score": 32.0,
     "status": "Cliff diving color-match combo prototype complete",
     "href": "154_dive_surge.html"
+  },
+  {
+    "id": "155_glide_surge",
+    "title": "GLIDE SURGE",
+    "idea": "色合わせハンググライダー。同色の上昇気流を連続で掴んでCOMBOを伸ばし、SUPER GLIDEを発動する。熱管理と高度維持のリスク/リターン。ダイス/バッグ構築ローグライト案#1の再解釈（score 31.95）",
+    "score": 31.95,
+    "status": "Hang glider prototype complete",
+    "href": "155_glide_surge.html"
   }
 ]
