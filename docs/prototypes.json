@@ -1251,5 +1251,13 @@
     "score": 31.85,
     "status": "Sailing color-match combo prototype complete",
     "href": "157_sail_chain.html"
+  },
+  {
+    "id": "158_chute_chain",
+    "title": "CHUTE CHAIN",
+    "idea": "パラシュートスカイダイビングの色合わせCOMBOゲーム。落下しながら上昇してくる色付きリングを通過し、同色を連続でくぐり抜けてCOMBOを構築する。COMBOが4以上でSUPER CHUTE（5秒間虹色モード、全色一致扱い、スコア3倍、自動回収）が発動し虹色に輝きながら全リングを回収する瞬間が面白い。間違った色はHEATとして蓄積し、100でパラシュート故障（ゲームオーバー）。SPACEでパラシュートを展開すると落下速度が遅くなり操作性が向上、地上到達までに展開しないと墜落。風向きがランダムに変化しリングの横移動に影響する。60秒/高度5000ftの制限時間内でスコア最大化を目指す。リスクとリターン：同色COMBO継続で高倍率スコア（最大x5+）を得られるが、別色リングを取るとCOMBOリセット＋HEAT増加。SUPER CHUTE発動後もHEAT溜めすぎないように管理が必要",
+    "score": 31.95,
+    "status": "Skydiving color-match combo prototype complete",
+    "href": "158_chute_chain.html"
   }
 ]
