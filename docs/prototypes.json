@@ -1275,5 +1275,13 @@
     "score": 32.0,
     "status": "BINGO prototype complete — 5x5 color-match bingo, 4-color numbers 1-25, right-side ball call area with timer ring, click matching color to build COMBO chains, SUPER BINGO at COMBO>=5 (5s rainbow, auto-match, CA spread to adjacent same-number cells, 3x score), HEAT from mismatches (+15) and missed balls (+20), HEAT >=100 game over, bingo line clears and refills new numbers, 90s game timer, particle effects (success/fail/bingo burst), 3 screens (Title/Game/GameOver)",
     "href": "160_bingo_surge.html"
+  },
+  {
+    "id": "161_hanoi_surge",
+    "title": "HANOI SURGE",
+    "idea": "ハノイの塔パズルを色マッチCOMBOチェインで再解釈。3本のペグ間で色付きディスクを移動し、同色のディスクを連続で動かしてCOMBOチェインを構築する。COMBOが4以上でSUPER MOVE（サイズルール無視の自由移動）が発動。無効なサイズ移動はHEATが蓄積し、HEAT 100または120秒の制限時間でゲームオーバー。全てのディスクを右端のペグに積み上げるとクリア。面白い瞬間は「同色ディスクを連続で動かしてCOMBOを構築し、SUPER MOVEでサイズ制限を無視した大胆な一手で形勢逆転する気持ちよさ」。リスクとリターン：COMBOを狙って同色移動を計画するか、効率的な最短手順を優先するか。SUPER MOVEは強力だがチャージを消費するため、温存するか即使用するかの判断を迫る。最適解（31手）のゴースト軌跡がエコーとして表示され、上達の指針となる。",
+    "score": 32.2,
+    "status": "Tower of Hanoi color-match COMBO prototype complete — 5 disks with random colors from 5-color palette, 3 pegs, same-color consecutive moves build COMBO chain, COMBO>=4 triggers SUPER MOVE (one free move ignoring size rules), HEAT from invalid size moves (+15, decay 0.02/frame, cap 100), 120s game timer, optimal path ghost trail (31 moves), particle burst + floating text feedback (COMBO, SUPER MOVE!), screen shake on super move, ANIM phase for super move impact, 4 screens (Title/Playing/Anim/GameOver)",
+    "href": "161_hanoi_surge.html"
   }
 ]
