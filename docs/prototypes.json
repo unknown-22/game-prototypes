@@ -1259,5 +1259,13 @@
     "score": 31.95,
     "status": "Skydiving color-match combo prototype complete",
     "href": "158_chute_chain.html"
+  },
+  {
+    "id": "159_kite_surge",
+    "title": "KITE SURGE",
+    "idea": "サイドビューの凧揚げゲーム。凧を操作して色付きの風のガストをくぐり抜け、凧の現在の色と一致するガストを連続で通過してCOMBOチェインを構築する。COMBOが4以上でSUPER KITE（5秒間レインボーモード、全色自動マッチ、スコア3倍）が発動。色違いガストはHEAT（ライン張力）として蓄積し、HEATが100でライン切断（ゲームオーバー）。凧の色は3秒ごとに自動サイクルし、タイミングのプレッシャーを生む。前回ベストフライトの経路がゴーストエコー軌跡として表示される。面白い瞬間は「同色の風をリズムよく連続でくぐり抜けてCOMBOチェインとSUPER KITEが炸裂し、一気にスコアを稼ぐ気持ちよさ」。リスクとリターン：高高度のガストは密度が高くCOMBOチャンスが多いが速度が速く回避が難しい。低高度は安全だがガストが少ない。HEATプレッシャーの中で同色COMBOを狙うか安全に色を待つかの判断を迫る。90秒の制限時間でスコア最大化を目指す。初の凧揚げジャンル。ゲームアイデアファクトリーの「ログ/リプレイが資産」「チェイン連鎖」「熱/リスク二重管理」フックを再解釈",
+    "score": 32.0,
+    "status": "Kite flying prototype complete — side-view kite steering (UP/DOWN), 4-color kite auto-cycle every 3s, same-color wind gust COMBO chain, SUPER KITE at COMBO>=4 (5s rainbow, auto-match, 3x score), HEAT risk system (wrong-color +20, decay 0.02/frame, >=100 line snap game over), ghost echo trail of best run, altitude-based gust density/speed variation, 90s timer, particle burst + floating text feedback, 3 screens (Title/Game/GameOver)",
+    "href": "159_kite_surge.html"
   }
 ]
