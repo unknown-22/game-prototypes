@@ -1267,5 +1267,13 @@
     "score": 32.0,
     "status": "Kite flying prototype complete — side-view kite steering (UP/DOWN), 4-color kite auto-cycle every 3s, same-color wind gust COMBO chain, SUPER KITE at COMBO>=4 (5s rainbow, auto-match, 3x score), HEAT risk system (wrong-color +20, decay 0.02/frame, >=100 line snap game over), ghost echo trail of best run, altitude-based gust density/speed variation, 90s timer, particle burst + floating text feedback, 3 screens (Title/Game/GameOver)",
     "href": "159_kite_surge.html"
+  },
+  {
+    "id": "160_bingo_surge",
+    "title": "BINGO SURGE",
+    "idea": "5x5のカラーBINGOゲーム。右側に表示されるボールの数字と同じ色のマスをクリックしてCOMBOチェインを構築。COMBOが5以上でSUPER BINGO（5秒間レインボーモード、色自動マッチ、隣接マスへのCA拡散、スコア3倍）。色違いのマスをクリックするとHEATが溜まり、HEAT100でゲームオーバー。ビンゴラインが揃うとクリアされ新しい数字が補充される。面白い瞬間は「同色COMBOが5に達してSUPER BINGOが爆発的に発動し、CA拡散で盤面の同数字が一気にマークされる気持ちよさ」。リスクとリターン：色を意識してCOMBOを伸ばすか、安全に数字だけ合わせるか。HEAT蓄積で緊張が高まる中でのSUPER BINGO狙いが中核。90秒制限時間でスコア最大化を目指す。初のBINGOジャンル（159プロトタイプ中0件）",
+    "score": 32.0,
+    "status": "BINGO prototype complete — 5x5 color-match bingo, 4-color numbers 1-25, right-side ball call area with timer ring, click matching color to build COMBO chains, SUPER BINGO at COMBO>=5 (5s rainbow, auto-match, CA spread to adjacent same-number cells, 3x score), HEAT from mismatches (+15) and missed balls (+20), HEAT >=100 game over, bingo line clears and refills new numbers, 90s game timer, particle effects (success/fail/bingo burst), 3 screens (Title/Game/GameOver)",
+    "href": "160_bingo_surge.html"
   }
 ]
