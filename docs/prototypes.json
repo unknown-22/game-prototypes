@@ -1315,5 +1315,13 @@
     "score": 31.75,
     "status": "Idle/incremental reactor prototype complete — 4×4 grid, 4 colors (RED/GREEN/BLUE/YELLOW), auto-production per tick, same-color adjacent COMBO chain (1.0+0.5×(neighbors-1) multiplier), SUPER MODE at combo≥5 (5s, 3x production), heat/overheat risk, emergency cooling, tier upgrade system (1→2→3), particle + floating text systems, 3 screens (Title/Playing/GameOver), 61 headless tests, OpenCode CLI first-try success, first idle/incremental clicker genre in collection",
     "href": "165_reactor_idle.html"
+  },
+  {
+    "id": "166_spin_surge",
+    "title": "SPIN SURGE",
+    "idea": "フィギュアスケート色合わせCOMBOチェイン。プレイヤーは自動で4色に変化するスケーターを操作し、氷上に出現する色付きスピンゾーンに入ってスピンする。同色連続マッチでCOMBOが伸び、COMBO>=4でSUPER SPIN（5秒間レインボー、全色自動マッチ＋3倍スコア）が発動。色ミスマッチでHEATが蓄積し、HEAT>=50で氷にクラックがCA感染的に広がり、HEAT=100で氷が割れてゲームオーバー。90秒制限時間。面白い瞬間は「COMBOを4まで積み上げてSUPER SPINが炸裂し、レインボースケーターで次々とゾーンを自動マッチしながら一気にスコアが跳ね上がる瞬間」。リスクとリターン：自動変化する自分の色を待って同色ゾーンを狙うか、色違いでも飛び込んでCOMBOを切る代わりに得点を取るか。HEATが溜まるとクラックが広がりプレッシャーが高まる中、SUPER狙いでCOMBOを維持するリスクを取る判断が中核。",
+    "score": 31.70,
+    "status": "Figure skating color-match COMBO chain prototype complete — top-down ice rink (312x232), auto-cycling 4-color skater (5s cycle), 5 max spin zones (3-5s lifetime, pulsating), COMBO>=4 SUPER SPIN (5s rainbow auto-match 3x score), HEAT system (mismatch +20, off-rink +5, decay 0.05/frame, cap 100), CA ice crack spreading at HEAT>=50, ghost trail (best run path), 90s timer, particle + floating text systems, 3 screens (Title/Playing/GameOver), 28 headless tests",
+    "href": "166_spin_surge.html"
   }
 ]
