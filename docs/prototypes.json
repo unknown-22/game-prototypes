@@ -1299,5 +1299,13 @@
     "score": 31.5,
     "status": "Conveyor belt color-match sorter prototype complete — 5 conveyor lanes, 5 colored packages (RED/GREEN/BLUE/YELLOW/PINK), click-bin-to-select + click-package-to-sort mechanics, COMBO chain on same-color consecutive sorts, SURGE mode at COMBO>=5 (5s, auto-sort 1pkg/sec, 3x score), OVERFLOW bar (wrong sort +20, miss +30, decay 0.01/frame, game over at 100), difficulty scaling (spawn interval 2.0s→0.5s, speed 0.5→2.0px/fr over time), max 10 packages, particle effects + floating text feedback, bin selection with WHITE highlight, HUD (score/combo/overflow bar/SURGE timer), 3 screens (Title/Playing/GameOver)",
     "href": "163_sort_surge.html"
+  },
+  {
+    "id": "164_nonogram_surge",
+    "title": "NONOGRAM SURGE",
+    "idea": "色付きノノグラム（ピクロス）パズルをCOMBOチェインで再解釈。プレイヤーは行・列の色付き数字ヒントをもとに8×8グリッドのセルを塗りつぶす。同じ色のセルを連続で正しく塗るとCOMBOが伸び、COMBOが5以上でSUPER REVEAL（未解決の行1つを完全自動公開＋スコア3倍）が発動。間違ったセルを塗るとHEATが蓄積し、HEAT 100または120秒の制限時間でゲームオーバー。3種類のパズル（DIAMOND/HEART/CROSS）を巡回クリア。面白い瞬間は「COMBOを5まで積み上げてSUPER REVEALが炸裂し、未解決の行が一瞬で埋まってパターンが判明する瞬間」。リスクとリターン：COMBO継続のために同じ色のセルだけを狙うか、効率的に解くために色を切り替えるか。HEAT蓄積のプレッシャーの中で、SUPER狙いでリスクを取る判断が中核。",
+    "score": 31.65,
+    "status": "Color nonogram COMBO chain prototype complete — 8x8 grid with 4 colors (RED/GREEN/BLUE/YELLOW), row/column color-coded number hints, same-color consecutive fills build COMBO, COMBO>=5 triggers SUPER REVEAL (auto-solve one unsolved row, 3x score), HEAT from wrong fills (+10 wrong color, +15 empty cell, decay 0.02/frame, cap 100), 120s timer, 3 puzzles (DIAMOND/HEART/CROSS), right-click to clear cells, color palette with keyboard 1-4 shortcuts, particle burst + floating text feedback, screen shake on wrong fill, flash effect on SUPER, 3 screens (Title/Playing/GameOver)",
+    "href": "164_nonogram_surge.html"
   }
 ]
