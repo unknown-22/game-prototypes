@@ -1307,5 +1307,13 @@
     "score": 31.65,
     "status": "Color nonogram COMBO chain prototype complete — 8x8 grid with 4 colors (RED/GREEN/BLUE/YELLOW), row/column color-coded number hints, same-color consecutive fills build COMBO, COMBO>=5 triggers SUPER REVEAL (auto-solve one unsolved row, 3x score), HEAT from wrong fills (+10 wrong color, +15 empty cell, decay 0.02/frame, cap 100), 120s timer, 3 puzzles (DIAMOND/HEART/CROSS), right-click to clear cells, color palette with keyboard 1-4 shortcuts, particle burst + floating text feedback, screen shake on wrong fill, flash effect on SUPER, 3 screens (Title/Playing/GameOver)",
     "href": "164_nonogram_surge.html"
+  },
+  {
+    "id": "165_reactor_idle",
+    "title": "CHAIN REACTOR",
+    "idea": "色合わせインクリメンタル・リアクターグリッド。プレイヤーは4×4グリッドにリアクターを設置し、同じ色の隣接リアクターがCOMBOチェインを形成して生産量が倍増する。エネルギーは自動生産（アイドル機構）。エネルギーを使って新規設置・アップグレード・冷却を行う。COMBO≥5でSUPER MODE（5秒間3倍生産）が発動。熱が100に達するとゲームオーバー。累計エネルギー1000到達で勝利。面白い瞬間は「5チェイン目を完成させてSUPER MODEが炸裂し、全リアクターからパーティクルが噴出してエネルギーが一気に跳ね上がる瞬間」。リスクとリターン：生産を増やすほど熱も上昇。冷却にエネルギーを使うか、SUPER狙いでリスクを取り一気に目標に近づくか。ハッキング/回路ログのアイデア（Idea #1, Score 31.75）をアイドル/インクリメンタルクリッカーに再解釈。「ログ/リプレイが資産」→過去生産のパッシブボーナス、「回路/パイプの可視化」→接続されたリアクターチェインを通るエネルギーフロー。",
+    "score": 31.75,
+    "status": "Idle/incremental reactor prototype complete — 4×4 grid, 4 colors (RED/GREEN/BLUE/YELLOW), auto-production per tick, same-color adjacent COMBO chain (1.0+0.5×(neighbors-1) multiplier), SUPER MODE at combo≥5 (5s, 3x production), heat/overheat risk, emergency cooling, tier upgrade system (1→2→3), particle + floating text systems, 3 screens (Title/Playing/GameOver), 61 headless tests, OpenCode CLI first-try success, first idle/incremental clicker genre in collection",
+    "href": "165_reactor_idle.html"
   }
 ]
