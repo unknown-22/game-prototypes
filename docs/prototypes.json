@@ -1291,5 +1291,13 @@
     "score": 32.0,
     "status": "Hammer throw prototype complete — thrower at center (160, 120), 4 colored landing zones on right (60x50), arrow keys adjust aim angle, SPACE hold builds power (0.02/frame, 0.0-1.0), release throws hammer (speed 5-9 px/fr based on power), same-color zone COMBO chain, SUPER THROW at COMBO>=4 (5s rainbow, auto-match, 3x score), HEAT from mismatches (+15, decay 0.02/frame, cap 100), HEAT>=100 FOUL game over, 15 throws max, ghost echo trails (last 3 throws), particle burst + floating text feedback, screen shake on SUPER activation, 5 phases (Title/Powering/Flying/Result/GameOver)",
     "href": "162_hammer_surge.html"
+  },
+  {
+    "id": "163_sort_surge",
+    "title": "SORT SURGE",
+    "idea": "コンベアベルトで流れる色付き荷物をクリックで仕分けるリアルタイムソーター。同じ色の荷物を連続で仕分けるとCOMBOが伸び、COMBOが5以上でSURGEモード（5秒間、全色自動マッチ＋自動仕分け＋スコア3倍）が発動。間違った色を仕分けるか、荷物がコンベア終端に到達するとOVERFLOWゲージが上昇し、100でゲームオーバー。時間経過で荷物の出現間隔が短くなり速度も上昇。面白い瞬間は「COMBOを維持するために同色の荷物を遠くから狙い、コンベア上で荷物が溜まる緊張の中、SURGEが発動して一気に大量仕分けする爽快感」。リスクとリターン：COMBO維持のために最初に選択した色と異なる色の荷物をスルーしてOVERFLOWダメージを受けるか、COMBOを諦めて色を切り替えて仕分けるかの判断が常に迫られる。",
+    "score": 31.5,
+    "status": "Conveyor belt color-match sorter prototype complete — 5 conveyor lanes, 5 colored packages (RED/GREEN/BLUE/YELLOW/PINK), click-bin-to-select + click-package-to-sort mechanics, COMBO chain on same-color consecutive sorts, SURGE mode at COMBO>=5 (5s, auto-sort 1pkg/sec, 3x score), OVERFLOW bar (wrong sort +20, miss +30, decay 0.01/frame, game over at 100), difficulty scaling (spawn interval 2.0s→0.5s, speed 0.5→2.0px/fr over time), max 10 packages, particle effects + floating text feedback, bin selection with WHITE highlight, HUD (score/combo/overflow bar/SURGE timer), 3 screens (Title/Playing/GameOver)",
+    "href": "163_sort_surge.html"
   }
 ]
