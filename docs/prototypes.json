@@ -1339,5 +1339,13 @@
     "score": 31.75,
     "status": "Color-match magnet grid puzzle prototype complete — 8×6 grid (cell=30px), 4 magnet colors (RED/GREEN/BLUE/YELLOW), N/S polarity system (alternating per placement, repulsion/attraction), COMBO chain (same-color consecutive +50×combo bonus), SUPER FIELD at COMBO>=4 (5s rainbow, 3x score, every-frame field propagation), CA field propagation (4-directional spread, 15-tick interval, 2-spread during SUPER), HEAT system (mismatch +10, decay 0.02/frame, unstable at 100 with polarity flips, cap 200 game over), magnetic force calculation between adjacent same-color magnets, particle system (4-25 particles per event, rainbow for SUPER), floating text system, screen shake on SUPER activation, 3 screens (Title/Placing/GameOver), 60s timer",
     "href": "168_magnet_chain.html"
+  },
+  {
+    "id": "169_ski_jump",
+    "title": "SKI JUMP",
+    "idea": "スキージャンプ×色合わせCOMBOチェイン。プレイヤーはアプローチ斜面を滑降し、同色ゲートを連続通過してCOMBOを構築する。COMBO>=4でSUPER JUMP（レインボートレイル＋3倍飛距離）が発動。色ミスマッチでHEATが蓄積し、HEAT>=100で空中でウォブルが発生。踏切後はピッチ角を制御し、着地角度がスコアに反映。面白い瞬間は「同色ゲート4連続でCOMBOを積み上げ、SUPER JUMPが炸裂して虹色の軌跡で3倍飛距離を稼ぐ瞬間」。リスクとリターン：COMBO維持のため速度調整で同色ゲートを狙うか、HEATリスクを取って高速で飛び出すか。",
+    "score": 32.05,
+    "status": "Ski jump color-match COMBO chain prototype complete — side-view, approach ramp (60,180)→(260,60), 4-color gates (RED/GREEN/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive ×50 multiplier), SUPER JUMP at COMBO>=4 (5s rainbow trail, 3x flight distance), HEAT system (mismatch +15, cap 100, wobble oscillation in flight), speed control (UP=tuck faster, DOWN=stand slower), flight physics with pitch angle control, landing quality scoring (angle match to slope), 90s timer, particle + floating text systems, 3 screens (Title/Game/GameOver), 43 headless tests",
+    "href": "169_ski_jump.html"
   }
 ]
