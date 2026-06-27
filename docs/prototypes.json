@@ -1347,5 +1347,13 @@
     "score": 32.05,
     "status": "Ski jump color-match COMBO chain prototype complete — side-view, approach ramp (60,180)→(260,60), 4-color gates (RED/GREEN/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive ×50 multiplier), SUPER JUMP at COMBO>=4 (5s rainbow trail, 3x flight distance), HEAT system (mismatch +15, cap 100, wobble oscillation in flight), speed control (UP=tuck faster, DOWN=stand slower), flight physics with pitch angle control, landing quality scoring (angle match to slope), 90s timer, particle + floating text systems, 3 screens (Title/Game/GameOver), 43 headless tests",
     "href": "169_ski_jump.html"
+  },
+  {
+    "id": "170_wicket_surge",
+    "title": "WICKET SURGE",
+    "idea": "クリケットバッティング×色合わせCOMBOチェイン。プレイヤーは自動で色が切り替わるバットを操作し、投球されたボールと色を合わせてクリックで打ち返す。同色連続ヒットでCOMBOが伸び、COMBO>=4でSUPER SHOT（レインボーバット、全色自動ヒット＋スコア3倍）が発動。色ミスマッチや空振りでウィケットが増え、3ウィケットでゲームオーバー。HEAT>=100でもゲームオーバー。面白い瞬間は「同色ボールを4連続で打ち返してSUPER SHOTが炸裂し、虹色のバットで全てのボールを自動ヒットしながらスコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO維持のためバットの色変化を待って同色ボールを狙うか、タイミングを逃さず打つか。ダイス/バッグ構築ローグライトIdea #1（Score 31.35）の再解釈：「同種カード連続で変質」→同色COMBO連鎖、「CA感染/増殖」→SUPER SHOT後のボール速度上昇・間隔短縮。初のクリケットジャンル。",
+    "score": 31.35,
+    "status": "Cricket batting color-match COMBO chain prototype complete — top-down view, 4-color balls (RED/GREEN/DARK_BLUE/YELLOW), auto-cycling bat color (90 frames), COMBO chain (same-color consecutive, 1.0+0.5×combo multiplier), SUPER SHOT at COMBO>=4 (300 frames rainbow auto-hit, 3x score), HEAT system (wrong hit +20, decay 0.05/frame, cap 100), 3 wickets game over, ball speed escalates with score (1.5→4.0), spawn interval decreases (120→60 frames), particle system (hit/wicket/super), screen shake on wicket, 3 screens (Title/Playing/GameOver), 65 headless tests, OpenCode CLI first-try success, first cricket genre in collection",
+    "href": "170_wicket_surge.html"
   }
 ]
