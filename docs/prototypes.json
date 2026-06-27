@@ -1323,5 +1323,13 @@
     "score": 31.70,
     "status": "Figure skating color-match COMBO chain prototype complete — top-down ice rink (312x232), auto-cycling 4-color skater (5s cycle), 5 max spin zones (3-5s lifetime, pulsating), COMBO>=4 SUPER SPIN (5s rainbow auto-match 3x score), HEAT system (mismatch +20, off-rink +5, decay 0.05/frame, cap 100), CA ice crack spreading at HEAT>=50, ghost trail (best run path), 90s timer, particle + floating text systems, 3 screens (Title/Playing/GameOver), 28 headless tests",
     "href": "166_spin_surge.html"
+  },
+  {
+    "id": "167_marble_surge",
+    "title": "MARBLE SURGE",
+    "idea": "Plinko×色合わせマーブルドロップ。プレイヤーはマウスで狙いをつけ、4色のマーブルをペグ密集地帯へ落とす。同色ペグに連続ヒットでCOMBOが伸び、COMBO>=4でSUPER MARBLE（5秒間レインボー、全ペグが色一致扱い＋スコア3倍）が発動。色違いに当たるとCOMBOリセット＋HEAT蓄積。HEAT>=100で即ゲームオーバー。全10ラウンド。面白い瞬間は「同じ色のペグが密集したエリアにマーブルを正確に落とし、跳ね返るたびにCOMBOがx1→x2→x3→x4と加速してSUPER MARBLEが発動、スコアが一気に3倍に跳ね上がる瞬間」。リスクとリターン：高COMBOを狙って同色密集エリアに落とすか、安全に散らばった同色ペグだけを狙うか。前回ベストラウンドのゴースト軌跡を表示し、自分の腕前の成長が可視化される。",
+    "score": 31.65,
+    "status": "Plinko marble-drop COMBO chain prototype complete — 8x5 peg field (alternating rows), 4-color pegs/marbles (RED/GREEN/BLUE/YELLOW), physics-based drop (gravity 0.15, bounce restitution 0.6, random jitter), COMBO chain with multiplier (1.0+0.5×combo), SUPER MARBLE at COMBO>=4 (300 frames rainbow, 3x score), HEAT per miss (+15, cap 100, early game over), 10 rounds with peg reshuffle each round, ghost path from best round, particle effects (8-12 normal, 20-30 super), floating text (+score/SUPER/MISS), screen shake on SUPER activation, 3 screens (Title/Aiming/GameOver), 43 headless tests",
+    "href": "167_marble_surge.html"
   }
 ]
