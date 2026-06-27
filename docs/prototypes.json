@@ -1331,5 +1331,13 @@
     "score": 31.65,
     "status": "Plinko marble-drop COMBO chain prototype complete — 8x5 peg field (alternating rows), 4-color pegs/marbles (RED/GREEN/BLUE/YELLOW), physics-based drop (gravity 0.15, bounce restitution 0.6, random jitter), COMBO chain with multiplier (1.0+0.5×combo), SUPER MARBLE at COMBO>=4 (300 frames rainbow, 3x score), HEAT per miss (+15, cap 100, early game over), 10 rounds with peg reshuffle each round, ghost path from best round, particle effects (8-12 normal, 20-30 super), floating text (+score/SUPER/MISS), screen shake on SUPER activation, 3 screens (Title/Aiming/GameOver), 43 headless tests",
     "href": "167_marble_surge.html"
+  },
+  {
+    "id": "168_magnet_chain",
+    "title": "MAGNET CHAIN",
+    "idea": "色合わせマグネットグリッドパズル。プレイヤーは8×6グリッドに色付きマグネットを配置し、同色連続配置でCOMBOチェインを構築する。マグネットにはN/S極性があり、同極隣接で反発、異極隣接で引き合う。COMBO>=4でSUPER FIELD（5秒間レインボー、全色自動マッチ＋スコア3倍、磁場伝播が毎フレーム化）が発動。色ミスマッチでHEATが蓄積し、HEAT>=100で磁場が不安定化（極性ランダム反転）、HEAT>=200で磁気過負荷によりゲームオーバー。CAセルオートマトンによる磁場伝播で空セルに磁場が広がる。60秒制限時間。面白い瞬間は「同色マグネットを4つ連続配置してSUPER FIELDが炸裂し、レインボーパルスで全マグネットが光り輝き、スコアが3倍に跳ね上がって大量のパーティクルが画面を埋め尽くす瞬間」。リスクとリターン：COMBOを維持するために同色配置を強行するか、盤面の空隙を活かして色を切り替えるか。HEATが溜まると極性がランダム反転して盤面がカオス化する中、SUPER FIELDを狙う緊張感が中核。N/S極性管理による磁場の力学が盤面戦略に影響を与える。",
+    "score": 31.75,
+    "status": "Color-match magnet grid puzzle prototype complete — 8×6 grid (cell=30px), 4 magnet colors (RED/GREEN/BLUE/YELLOW), N/S polarity system (alternating per placement, repulsion/attraction), COMBO chain (same-color consecutive +50×combo bonus), SUPER FIELD at COMBO>=4 (5s rainbow, 3x score, every-frame field propagation), CA field propagation (4-directional spread, 15-tick interval, 2-spread during SUPER), HEAT system (mismatch +10, decay 0.02/frame, unstable at 100 with polarity flips, cap 200 game over), magnetic force calculation between adjacent same-color magnets, particle system (4-25 particles per event, rainbow for SUPER), floating text system, screen shake on SUPER activation, 3 screens (Title/Placing/GameOver), 60s timer",
+    "href": "168_magnet_chain.html"
   }
 ]
