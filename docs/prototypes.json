@@ -1355,5 +1355,13 @@
     "score": 31.35,
     "status": "Cricket batting color-match COMBO chain prototype complete — top-down view, 4-color balls (RED/GREEN/DARK_BLUE/YELLOW), auto-cycling bat color (90 frames), COMBO chain (same-color consecutive, 1.0+0.5×combo multiplier), SUPER SHOT at COMBO>=4 (300 frames rainbow auto-hit, 3x score), HEAT system (wrong hit +20, decay 0.05/frame, cap 100), 3 wickets game over, ball speed escalates with score (1.5→4.0), spawn interval decreases (120→60 frames), particle system (hit/wicket/super), screen shake on wicket, 3 screens (Title/Playing/GameOver), 65 headless tests, OpenCode CLI first-try success, first cricket genre in collection",
     "href": "170_wicket_surge.html"
+  },
+  {
+    "id": "171_word_surge",
+    "title": "WORD SURGE",
+    "idea": "英字グリッドワードビルド×同色COMBOチェイン。プレイヤーは6×6グリッドのアルファベットタイルを4方向に隣接クリックでつなぎ、3文字以上のワード（パス）を作る。同色タイルを連続で選ぶとCOMBOが伸び、COMBO>=4でSUPER WORD（5秒間レインボー、全タイル同色扱い＋スコア3倍）が発動。低倍率ワードでHEAT上昇、高倍率ワードでHEAT低下。HEAT>=100または60秒制限時間でゲームオーバー。面白い瞬間は「同色タイル4連続でCOMBOを積み上げ、SUPER WORDが炸裂して全タイルが虹色に輝き、選ぶタイルすべてがCOMBOに加算されてスコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO維持のため同色タイルだけを選ぶ安全ルートか、色を切り替えても長いパスを狙う高得点ルートか。HEATが溜まるプレッシャーの中、SUPER WORDを狙うリスクを取る判断が中核。Deckbuilder Idea #1（Score 32.75）の再解釈：「合成圧縮」→同色COMBOチェインでスコア倍増、「CAグリッド充填」→ワード提出後に新タイルが重力落下＋新規スポーン。",
+    "score": 32.75,
+    "status": "Word-building COMBO chain prototype complete — 6x6 letter grid (A-Z, 4 colors: RED/GREEN/DARK_BLUE/YELLOW), 4-directional adjacent tile selection with backtrack, min 3-tile word, COMBO chain (same-color consecutive streak), SUPER WORD at COMBO>=4 (150 frames rainbow, 3x score multiplier), HEAT system (multiplier<2.0 +10, multiplier>=3.0 -5, cap 100, game over), 60s timer (1800 frames), gravity + tile respawn after word submission, particle burst + floating score text systems, 3 screens (Title/Playing/GameOver), 50 headless tests",
+    "href": "171_word_surge.html"
   }
 ]
