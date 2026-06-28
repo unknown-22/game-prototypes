@@ -1320,7 +1320,7 @@
     "id": "166_spin_surge",
     "title": "SPIN SURGE",
     "idea": "フィギュアスケート色合わせCOMBOチェイン。プレイヤーは自動で4色に変化するスケーターを操作し、氷上に出現する色付きスピンゾーンに入ってスピンする。同色連続マッチでCOMBOが伸び、COMBO>=4でSUPER SPIN（5秒間レインボー、全色自動マッチ＋3倍スコア）が発動。色ミスマッチでHEATが蓄積し、HEAT>=50で氷にクラックがCA感染的に広がり、HEAT=100で氷が割れてゲームオーバー。90秒制限時間。面白い瞬間は「COMBOを4まで積み上げてSUPER SPINが炸裂し、レインボースケーターで次々とゾーンを自動マッチしながら一気にスコアが跳ね上がる瞬間」。リスクとリターン：自動変化する自分の色を待って同色ゾーンを狙うか、色違いでも飛び込んでCOMBOを切る代わりに得点を取るか。HEATが溜まるとクラックが広がりプレッシャーが高まる中、SUPER狙いでCOMBOを維持するリスクを取る判断が中核。",
-    "score": 31.70,
+    "score": 31.7,
     "status": "Figure skating color-match COMBO chain prototype complete — top-down ice rink (312x232), auto-cycling 4-color skater (5s cycle), 5 max spin zones (3-5s lifetime, pulsating), COMBO>=4 SUPER SPIN (5s rainbow auto-match 3x score), HEAT system (mismatch +20, off-rink +5, decay 0.05/frame, cap 100), CA ice crack spreading at HEAT>=50, ghost trail (best run path), 90s timer, particle + floating text systems, 3 screens (Title/Playing/GameOver), 28 headless tests",
     "href": "166_spin_surge.html"
   },
@@ -1371,5 +1371,13 @@
     "score": 31.95,
     "status": "Color-match Reversi COMBO chain prototype complete — 8×8 board (cell=28px), 4 disc colors (RED/GREEN/DARK_BLUE/YELLOW) + AI (GRAY), standard Reversi sandwich flip mechanics (8 directions), COMBO chain (same-color consecutive placements, SUPER FLIP at COMBO>=4: 300 frames rainbow, 3x score multiplier), HEAT system (wrong-color placement +15, decay 0.02/frame, cap 100 game over), greedy AI opponent (max-flip heuristic), color palette selection (4 buttons), valid move hints, particle system (15-25 per flip, 40-60 SUPER burst), floating score text, screen shake on SUPER activation, board-full or overheat game over, 3 screens (Title/Playing/GameOver), 41 headless tests, OpenCode CLI first-try success, first Reversi/Othello board game genre in collection",
     "href": "172_reversi_surge.html"
+  },
+  {
+    "id": "173_gomoku_surge",
+    "title": "GOMOKU SURGE",
+    "idea": "色合わせ五目並べ（Gomoku）×COMBOチェイン。8×8盤面に同色の石を連続配置してCOMBOを積み上げ、COMBO>=5でSUPER STONE（虹色モード、任意配置＋スコア3倍）が発動する。5連を作って勝利する瞬間が面白い。AI対戦相手は4連をブロックし3連にも反応する。色ミスマッチでHEATが蓄積し、100でゲームオーバー。ゲームアイデアファクトリー Idea #1（Score 32.2 — ダイス/バッグ構築ローグライト/発電所）の再解釈：「ログ/リプレイが資産」→前回の移動のゴーストハイライト、「連鎖崩壊/増加/圧縮」→COMBOチェイン＋SUPER STONE。初の五目並べ/5-in-a-rowジャンル。",
+    "score": 32.2,
+    "status": "Gomoku color-match COMBO chain prototype complete — 8×8 grid (cell=28px), 4 player colors (RED/GREEN/DARK_BLUE/YELLOW), AI opponent (GRAY), same-color consecutive placement COMBO chain, SUPER STONE at COMBO>=5 (300 frames rainbow, 3x score multiplier, +200 per stone, free placement), HEAT system (wrong-color +15, decay 0.005/frame, cap 100 game over), AI with 4-priority logic (win > block-4 > block-3 > strategic), win detection (4-direction count), particle + floating text systems, screen shake, 3 screens (Title/Playing/Victory+GameOver), 32 headless tests, OpenCode CLI first-try success, first Gomoku/5-in-a-row board game genre in collection",
+    "href": "173_gomoku_surge.html"
   }
 ]
