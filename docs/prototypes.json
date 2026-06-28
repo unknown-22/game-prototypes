@@ -1379,5 +1379,13 @@
     "score": 32.2,
     "status": "Gomoku color-match COMBO chain prototype complete — 8×8 grid (cell=28px), 4 player colors (RED/GREEN/DARK_BLUE/YELLOW), AI opponent (GRAY), same-color consecutive placement COMBO chain, SUPER STONE at COMBO>=5 (300 frames rainbow, 3x score multiplier, +200 per stone, free placement), HEAT system (wrong-color +15, decay 0.005/frame, cap 100 game over), AI with 4-priority logic (win > block-4 > block-3 > strategic), win detection (4-direction count), particle + floating text systems, screen shake, 3 screens (Title/Playing/Victory+GameOver), 32 headless tests, OpenCode CLI first-try success, first Gomoku/5-in-a-row board game genre in collection",
     "href": "173_gomoku_surge.html"
+  },
+  {
+    "id": "174_judo_surge",
+    "title": "JUDO SURGE",
+    "idea": "柔道投げ技×色合わせCOMBOチェイン。プレイヤーは自動で色が切り替わる帯を操作し、相手の弱点色に合わせてクリックで投げを仕掛ける。同色連続成功でCOMBOが伸び、COMBO>=4でIPPON（一本）：5秒間レインボー、全色自動成功＋スコア3倍。色ミスマッチやAIの反撃でHEATが蓄積し、HEAT>=100でゲームオーバー。面白い瞬間は「COMBOを4まで積み上げてIPPONが炸裂し、レインボー状態で連続投げを決めながらスコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO維持のため帯の色変化を待って同色を狙うか、タイミングを逃さず仕掛けるか。HEATプレッシャーの中でIPPONを狙うリスク判断が中核。ハッキング/回路ログのデッキ構築案Idea #1（Score 31.75）の再解釈：「同じカード連続で変質」→同色COMBO連鎖、「CA感染/増殖」→HEAT蓄積とIPPONバースト。初の柔道/格闘技ジャンル。",
+    "score": 31.75,
+    "status": "Judo throwing color-match COMBO chain prototype complete — top-down circular dojo mat (radius=100px), 4 belt colors (RED/GREEN/DARK_BLUE/YELLOW), auto-cycling player color (90f), AI vulnerable color cycling (120-180f), click-to-throw mechanic, COMBO chain (same-color consecutive), IPPON SUPER MODE at COMBO>=4 (150f rainbow, 3x score multiplier, auto-success any color), HEAT system (mismatch +20, AI hit +10, decay 0.02/frame, cap 100 game over), 60s timer, particle system (8-50 per event, rainbow on IPPON), floating text system, screen shake on IPPON, 3 screens (Title/Playing/GameOver), 58 headless tests, OpenCode CLI first-try success, first Judo/martial arts genre in collection",
+    "href": "174_judo_surge.html"
   }
 ]
