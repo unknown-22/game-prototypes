@@ -1363,5 +1363,13 @@
     "score": 32.75,
     "status": "Word-building COMBO chain prototype complete — 6x6 letter grid (A-Z, 4 colors: RED/GREEN/DARK_BLUE/YELLOW), 4-directional adjacent tile selection with backtrack, min 3-tile word, COMBO chain (same-color consecutive streak), SUPER WORD at COMBO>=4 (150 frames rainbow, 3x score multiplier), HEAT system (multiplier<2.0 +10, multiplier>=3.0 -5, cap 100, game over), 60s timer (1800 frames), gravity + tile respawn after word submission, particle burst + floating score text systems, 3 screens (Title/Playing/GameOver), 50 headless tests",
     "href": "171_word_surge.html"
+  },
+  {
+    "id": "172_reversi_surge",
+    "title": "REVERSI SURGE",
+    "idea": "色合わせリバーシ（オセロ）×COMBOチェイン。8×8盤面に4色のディスクを配置し、AIのディスクを挟んでひっくり返す。同色連続配置でCOMBOが伸び、COMBO>=4でSUPER FLIP（5秒間レインボー、全色自動マッチ＋スコア3倍）が発動。色違い配置でCOMBOリセット＋HEAT+15。HEAT>=100でゲームオーバー。盤面が埋まるとスコア比較で勝敗判定。面白い瞬間は「同色ディスクを4連続でひっくり返してSUPER FLIPが発動し、レインボーモードで盤面全体のディスクが次々と連鎖フリップしてスコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO維持のため同色を連続配置するか、盤面の有利な位置に色を切り替えて配置するか。ハッキング/回路ログのデッキ構築案Idea #1（Score 31.95）の再解釈：「連鎖伝播が盤面全体に広がる」→同色COMBOフリップチェイン、「コストはHPではなく未来の手札」→各配置がAIの反撃機会を生む。初のリバーシ/オセロジャンル。",
+    "score": 31.95,
+    "status": "Color-match Reversi COMBO chain prototype complete — 8×8 board (cell=28px), 4 disc colors (RED/GREEN/DARK_BLUE/YELLOW) + AI (GRAY), standard Reversi sandwich flip mechanics (8 directions), COMBO chain (same-color consecutive placements, SUPER FLIP at COMBO>=4: 300 frames rainbow, 3x score multiplier), HEAT system (wrong-color placement +15, decay 0.02/frame, cap 100 game over), greedy AI opponent (max-flip heuristic), color palette selection (4 buttons), valid move hints, particle system (15-25 per flip, 40-60 SUPER burst), floating score text, screen shake on SUPER activation, board-full or overheat game over, 3 screens (Title/Playing/GameOver), 41 headless tests, OpenCode CLI first-try success, first Reversi/Othello board game genre in collection",
+    "href": "172_reversi_surge.html"
   }
 ]
