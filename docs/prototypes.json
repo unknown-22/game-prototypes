@@ -1401,5 +1401,12 @@
     "idea": "7×7クロス型ペグ・ソリティア盤×色合わせCOMBOチェイン。32のペグが4色（赤/緑/紺/黄）にランダム割り当て。同色のペグを連続で飛び越えるとCOMBOが伸び、COMBO>=4でSUPER JUMPが発動：150フレームのレインボーモード、スコア3倍、全色捕獲可能。色ミスマッチ捕獲でCOMBOリセット＋HEAT増加（+15）、HEAT>=100でゲームオーバー。面白い瞬間は「同色のペグを4連続で飛び越えてSUPER JUMPが炸裂し、選んだペグが虹色に輝き、全色のペグを自動マッチで飛び越えられるようになり、スコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色を狙うか、安全に異色で進めてHEATを溜めるか。HEATプレッシャーの中でSUPER JUMPを狙うリスク判断が中核。",
     "score": null,
     "status": "PEG SURGE prototype complete — 7×7 English peg solitaire cross board (CELL=30, 320×240 display), 32 colored pegs (RED/GREEN/DARK_BLUE/YELLOW equal 8 each), COMBO chain (same-color consecutive captures, multiplier x1.0+0.5 per level), SUPER JUMP at COMBO>=4 (150f rainbow, 3x score, any-color captures), HEAT system (mismatch +15, decay 0.05/frame, cap 100 game over), particle system, floating text system, multi-jump mechanic, screen shake on SUPER activation, 3 screens (Title/Playing/GameOver), English-only text"
+  },
+  {
+    "id": "177_go_surge",
+    "title": "Liberty Chain",
+    "idea": "囲碁風陣取り×色合わせCOMBOチェイン。7×7の碁盤グリッド上に4色（赤/緑/紺/黄）の石を配置。同色の石を連続で置くとCOMBOが伸び、COMBO>=3でBFS陣取り（呼吸点0の敵グループをFlood-fill除去）。COMBO>=5でSUPER STONEが発動：150フレームのレインボーモード、呼吸点無視で敵グループを全除去＋スコア3倍。色切り替え（ミスマッチ配置）でCOMBOリセット＋HEAT増加（+20）、HEAT>=100でゲームオーバー。面白い瞬間は「同色の石を連続配置してCOMBOを積み上げ、BFSが走って敵グループが一網打尽に捕獲され、スコアの数字が爆発的に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色で攻めるか、COMBOをリセットしてでも敵陣の急所に異色を置くか。HEATプレッシャーの中でSUPERを狙うリスク判断が中核。",
+    "score": null,
+    "status": "Liberty Chain prototype complete — 7×7 Go-like grid (CELL=28, 320×240 display), 4 stone colors (RED/GREEN/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive placements), BFS liberty-based capture at COMBO>=3 (Flood-fill + liberty count), SUPER STONE at COMBO>=5 (150f rainbow, ignore liberties auto-capture all enemy groups, 3x score), HEAT system (mismatch +20, decay 0.05/frame, cap 100 game over), neutral stone auto-spawn (every 180f, up to 30 on board), keyboard color select (1/2/3/4) + mouse grid click + palette click, particle system, floating text system, 3 screens (Title/Playing/GameOver), English-only text"
   }
 ]
