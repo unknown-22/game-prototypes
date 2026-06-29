@@ -1408,5 +1408,13 @@
     "idea": "囲碁風陣取り×色合わせCOMBOチェイン。7×7の碁盤グリッド上に4色（赤/緑/紺/黄）の石を配置。同色の石を連続で置くとCOMBOが伸び、COMBO>=3でBFS陣取り（呼吸点0の敵グループをFlood-fill除去）。COMBO>=5でSUPER STONEが発動：150フレームのレインボーモード、呼吸点無視で敵グループを全除去＋スコア3倍。色切り替え（ミスマッチ配置）でCOMBOリセット＋HEAT増加（+20）、HEAT>=100でゲームオーバー。面白い瞬間は「同色の石を連続配置してCOMBOを積み上げ、BFSが走って敵グループが一網打尽に捕獲され、スコアの数字が爆発的に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色で攻めるか、COMBOをリセットしてでも敵陣の急所に異色を置くか。HEATプレッシャーの中でSUPERを狙うリスク判断が中核。",
     "score": null,
     "status": "Liberty Chain prototype complete — 7×7 Go-like grid (CELL=28, 320×240 display), 4 stone colors (RED/GREEN/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive placements), BFS liberty-based capture at COMBO>=3 (Flood-fill + liberty count), SUPER STONE at COMBO>=5 (150f rainbow, ignore liberties auto-capture all enemy groups, 3x score), HEAT system (mismatch +20, decay 0.05/frame, cap 100 game over), neutral stone auto-spawn (every 180f, up to 30 on board), keyboard color select (1/2/3/4) + mouse grid click + palette click, particle system, floating text system, 3 screens (Title/Playing/GameOver), English-only text"
+  },
+  {
+    "id": "178_bungee_surge",
+    "title": "BUNGEE SURGE",
+    "idea": "バンジージャンプ色合わせCOMBOチェイン。プレイヤーは空中で4色に自動変化するジャンパーを操作し、落下しながら色付き着地ゾーンを狙う。同色連続着地でCOMBOが伸び、COMBO>=4でSUPER BUNGEE（5秒間レインボー、スコア3倍、全色自動マッチ）が発動。色ミスマッチでHEAT+15、HEAT>=100でコード切断ゲームオーバー。着地成功ごとにプラットフォームが上昇し難易度が上がる。60秒制限時間。面白い瞬間は「COMBOを4まで積み上げてSUPER BUNGEEが炸裂し、虹色のジャンパーで全ゾーンを次々と自動マッチしながらスコアが3倍に跳ね上がる瞬間」。ゲームアイデアファクトリーIdea #1（Score 32.55）の再解釈：「ログ/リプレイが資産」→ベストジャンプのゴースト軌跡、「盤面がCAで埋まる」→コードの熱蓄積。初のバンジージャンプジャンル。",
+    "score": 32.55,
+    "status": "Bungee jumping color-match COMBO prototype complete — top-down platform jumping, 4-color auto-cycling jumper (every 3s), arrow key steer during fall, same-color zone landing COMBO chain, SUPER BUNGEE at COMBO>=4 (300f rainbow, 3x score, any-color auto-match), HEAT system (wrong-color +15, miss +25, decay 0.02/frame, cap 100 game over), platform rises 8px per landing (max 5), bungee cord physics with gravity bounce, ghost echo trail of best run, particle + floating text + screen shake systems, 60s timer, 3 screens (Title/Game/GameOver), 49 headless tests, OpenCode CLI first-try success with self-correction",
+    "href": "178_bungee_surge.html"
   }
 ]
