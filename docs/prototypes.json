@@ -1394,5 +1394,12 @@
     "idea": "8×8チェッカー盤面×色合わせCOMBOチェイン。プレイヤー駒は4色（赤/緑/紺/黄）、連続で同色のAI駒を飛び越えるとCOMBOが伸び、COMBO>=4でSUPER KINGが発動：300フレームのレインボーモード、スコア3倍、全色捕獲可能。色ミスマッチ捕獲でCOMBOリセット＋HEAT増加（+15）、HEAT>=100でゲームオーバー。捕獲されたマスには「エコーストーン」が出現しCA的に拡散、飛び越えるとボーナス得点。面白い瞬間は「同色の駒を4連続で飛び越え、SUPER KINGが炸裂し虹色のキングが全色の駒を連鎖捕獲しながらスコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色を狙うか、安全に異色で進めてHEATを溜めるか。HEATプレッシャーの中でSUPER KINGを狙うリスク判断が中核。",
     "score": null,
     "status": "Draughts Chain prototype complete — 8x8 checkers board (CELL=28, 320x240 display), 4 player colors (RED/GREEN/DARK_BLUE/YELLOW) with 3 pieces each, 12 AI colored pieces, COMBO chain (same-color consecutive captures, multiplier x1.0+0.5 per level), SUPER KING at COMBO>=4 (300f rainbow, 3x score, ignores color), HEAT system (mismatch +15, decay 0.02/frame, cap 100 game over), echo stones with CA spread (every 30f, 1-2 random diagonal neighbors), particle system, floating text system, mandatory capture checkers rules, chain captures (multi-jump), king promotion on last row, 3 screens (Title/Playing/GameOver), 38 headless tests, English-only text"
+  },
+  {
+    "id": "176_peg_surge",
+    "title": "PEG SURGE",
+    "idea": "7×7クロス型ペグ・ソリティア盤×色合わせCOMBOチェイン。32のペグが4色（赤/緑/紺/黄）にランダム割り当て。同色のペグを連続で飛び越えるとCOMBOが伸び、COMBO>=4でSUPER JUMPが発動：150フレームのレインボーモード、スコア3倍、全色捕獲可能。色ミスマッチ捕獲でCOMBOリセット＋HEAT増加（+15）、HEAT>=100でゲームオーバー。面白い瞬間は「同色のペグを4連続で飛び越えてSUPER JUMPが炸裂し、選んだペグが虹色に輝き、全色のペグを自動マッチで飛び越えられるようになり、スコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色を狙うか、安全に異色で進めてHEATを溜めるか。HEATプレッシャーの中でSUPER JUMPを狙うリスク判断が中核。",
+    "score": null,
+    "status": "PEG SURGE prototype complete — 7×7 English peg solitaire cross board (CELL=30, 320×240 display), 32 colored pegs (RED/GREEN/DARK_BLUE/YELLOW equal 8 each), COMBO chain (same-color consecutive captures, multiplier x1.0+0.5 per level), SUPER JUMP at COMBO>=4 (150f rainbow, 3x score, any-color captures), HEAT system (mismatch +15, decay 0.05/frame, cap 100 game over), particle system, floating text system, multi-jump mechanic, screen shake on SUPER activation, 3 screens (Title/Playing/GameOver), English-only text"
   }
 ]
