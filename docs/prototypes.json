@@ -1423,5 +1423,13 @@
     "idea": "カラー・マッチ・ブラックジャックでCOMBOチェイン。プレイヤーは4色（赤/緑/紺/黄）からベットカラーを選び、21を目指してカードを引く。同色の連続勝利でCOMBOが伸び、COMBO>=4でSUPER BLACKJACK（5ハンドのレインボーモード、全色マッチ、スコア3倍）が発動。バストでHEAT+20、負けでHEAT+10。HEAT>=100またはチップ切れでゲームオーバー。面白い瞬間は「同色のハンドを4連続で勝ち抜いてSUPER BLACKJACKが炸裂し、5ハンド連続でレインボーカードが自動配られ、全色自動マッチでスコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色を選び続けるか、相手の強さに応じて色を変えるか。HEATプレッシャーの中でSUPERを狙うリスク判断が中核。初のカジノ/ブラックジャックジャンル。",
     "score": null,
     "status": "Blackjack color-match COMBO prototype complete — 4-suit color betting (RED/GREEN/DARK_BLUE/YELLOW), HIT(SPACE)/STAND(ENTER) mechanics, same-color consecutive win COMBO chain, SUPER BLACKJACK at COMBO>=4 (5 hands rainbow, 3x score, any-color auto-match), soft ace handling, Blackjack 1.5x payout, HEAT system (bust +20, lose +10, decay 0.02/frame, cap 100 game over), chip system (start 100, bet 10 per hand), 6-phase machine (TITLE/BETTING/PLAYING/STAND/RESOLVE/GAME_OVER), particle system + floating text system, dealer stands on all 17s, 67 headless tests"
+  },
+  {
+    "id": "180_poker_surge",
+    "title": "POKER SURGE",
+    "idea": "5-card draw poker with color-match COMBO chain. Same-suit consecutive wins build COMBO; COMBO>=4 triggers SUPER HAND (5 hands of rainbow mode: any suit auto-wins, 3x score). HEAT from folding or losing. 100 chips, bet 10 per hand, maximize score before chips or heat run out.",
+    "score": 32.2,
+    "status": "Poker prototype complete — 5-card draw with 4-suit color-match COMBO chain, SUPER HAND at COMBO>=4 (5 hands rainbow, auto-win, 3x score), HEAT risk system (fold +10, lose +15, decay 0.02/frame, cap 100 game over), chip betting economy (100 chips, 10 bet), full poker hand evaluation (high card through royal flush), HOLD/redraw mechanic (2 redraws max), particle system, screen shake, rainbow SUPER border effect, 3 screens (Title/Betting+Deal+Result/GameOver), 58 headless tests",
+    "href": "180_poker_surge.html"
   }
 ]
