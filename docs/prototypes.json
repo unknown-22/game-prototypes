@@ -1431,5 +1431,13 @@
     "score": 32.2,
     "status": "Poker prototype complete — 5-card draw with 4-suit color-match COMBO chain, SUPER HAND at COMBO>=4 (5 hands rainbow, auto-win, 3x score), HEAT risk system (fold +10, lose +15, decay 0.02/frame, cap 100 game over), chip betting economy (100 chips, 10 bet), full poker hand evaluation (high card through royal flush), HOLD/redraw mechanic (2 redraws max), particle system, screen shake, rainbow SUPER border effect, 3 screens (Title/Betting+Deal+Result/GameOver), 58 headless tests",
     "href": "180_poker_surge.html"
+  },
+  {
+    "id": "181_foosball_surge",
+    "title": "FOOSBALL SURGE",
+    "idea": "トップダウンテーブルフットボール（foosball）×色合わせCOMBOチェイン。W/Sで自陣守備ロッド、↑/↓で自陣FWロッドを上下に操作し、AIと4ロッド（各ロッドに3体のフィギュア）で対戦する。ボールがフィギュアに当たるとフィギュアの色を帯び、同じ色のフィギュアに連続ヒットさせるとCOMBOが伸びる。COMBO>=4でSUPER SHOTが発動：虹色の超高速ボール（速度2倍、スコア3倍、180フレーム持続）。色違いヒットでCOMBOリセット＋HEAT+15、HEAT>=100でゲームオーバー。先に5ゴールした方が勝利。面白い瞬間は「同色のフィギュアで連続ヒットを決めてCOMBOを4まで積み上げ、SUPER SHOTが炸裂して虹色のボールが超高速で相手ゴールに突き刺さり、スコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色ロッドを狙うか、COMBOが切れてHEATが溜まる中で安全に別色で対応するか。HEATプレッシャーの中でSUPER SHOTを狙うリスク判断が中核。初のフットボール/スポーツプロトタイプ。",
+    "score": 32.75,
+    "status": "Foosball sports prototype complete — 320x240 top-down table football, 4 rods (2 player W/S + ↑/↓, 2 AI with jitter tracking), 3 figures per rod (offset -22/0/+22), 4 rod colors (RED/GREEN/DARK_BLUE/YELLOW cycling on goal), ball physics (bounce off top/bottom walls, figure collision reflection), COMBO chain (same-color consecutive hits), SUPER SHOT at COMBO>=4 (180f rainbow ball, 2x speed, 3x score), HEAT system (mismatch +15, cap 100 game over, decaying 0/frame), first to 5 goals wins, particle system (hit/goal/super), floating text system, screen shake on goals, 3 screens (Title/Playing/GameOver), English-only text",
+    "href": "181_foosball_surge.html"
   }
 ]
