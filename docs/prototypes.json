@@ -1439,5 +1439,13 @@
     "score": 32.75,
     "status": "Foosball sports prototype complete — 320x240 top-down table football, 4 rods (2 player W/S + ↑/↓, 2 AI with jitter tracking), 3 figures per rod (offset -22/0/+22), 4 rod colors (RED/GREEN/DARK_BLUE/YELLOW cycling on goal), ball physics (bounce off top/bottom walls, figure collision reflection), COMBO chain (same-color consecutive hits), SUPER SHOT at COMBO>=4 (180f rainbow ball, 2x speed, 3x score), HEAT system (mismatch +15, cap 100 game over, decaying 0/frame), first to 5 goals wins, particle system (hit/goal/super), floating text system, screen shake on goals, 3 screens (Title/Playing/GameOver), English-only text",
     "href": "181_foosball_surge.html"
+  },
+  {
+    "id": "182_raft_surge",
+    "title": "RAFT SURGE",
+    "idea": "急流下りのラフティングに色合わせCOMBOチェインを組み合わせたゲーム。下方向に流れる川でラフトを左右に操作し、同色のブイを連続通過させてCOMBOを構築する。COMBOが4以上でSUPER PADDLEが発動（180フレームの虹色モード、スコア3倍、岩自動回避、全色ブイ自動マッチ）。岩に衝突するとHEAT+20＋スタン。HEATが100に達すると転覆してゲームオーバー。60秒の制限時間でスコア最大化を目指す。面白い瞬間は「同色のブイを4連続で通過してSUPER PADDLEが炸裂し、虹色のラフトが岩を自動回避しながら全てのブイを吸い込み、スコアが3倍に跳ね上がる瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER PADDLEの高報酬を得るが、色違いブイでCOMBOリセット＋HEAT増加。岩を避けつつ同色ブイを狙う位置取りの判断が中核。前回ベストランのゴースト軌跡が表示され自己ベスト更新のモチベーションを生む。初のラフティングジャンル。ゲームアイデアファクトリーIdea #1（Score 31.8）の再解釈：「チェイン崩壊」→岩の乱流カスケード、「重力」→川の流れ、「ログ/リプレイが資産」→ゴーストラフト軌跡",
+    "score": 31.8,
+    "status": "Rafting color-match COMBO prototype complete — top-down river scrolling, LEFT/RIGHT raft steering, 4-color buoy same-color consecutive COMBO chain, SUPER PADDLE at COMBO>=4 (180f rainbow, 3x score, auto-avoid rocks, any-color auto-match), HEAT risk system (rock +20, wrong buoy +10, decay 0.03/frame, cap 100 game over), ghost trail best-run replay, particle system (splash/crash/SUPER aura/water trail), floating text system, stun mechanic (10f), difficulty scaling (scroll speed +0.1 every 600f, spawn rates increase), 60s timer, 3 screens (Title/Playing/GameOver)",
+    "href": "182_raft_surge.html"
   }
 ]
