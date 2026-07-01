@@ -1455,5 +1455,11 @@
     "score": 30.85,
     "status": "Mancala color-match COMBO prototype complete — 2-row×6-pit Mancala board, 4 seed colors (RED/GREEN/BLUE/YELLOW), click-to-sow counter-clockwise, same-color landing CAPTURE (landing + opposite pit), COMBO chain (same-color consecutive), SUPER SOW at COMBO>=4 (auto-captures adjacent same-color pits, 60f duration), HEAT risk system (mismatch +15, decay 0.5/turn, cap 100 game over), AI opponent (counter-color prefer, else most-seeds), particle system (capture/SUPER/mismatch), floating text system, 3 screens (Title/Playing/GameOver), BDF font support, 68 headless tests",
     "href": "183_seed_surge.html"
+  },
+  {
+    "id": "184_diner_surge",
+    "title": "DINER SURGE",
+    "idea": "グリッド型レストラン提供ゲーム。色が一致するテーブルをクリックして顧客に提供する。同色連続提供でCOMBOチェインを構築。COMBO>=4でSUPER SERVE（虹色オート提供、スコア3倍）が発動。面白い瞬間は「同色のテーブルを4連続でクリックしてSUPER SERVEが炸裂し、虹色のボーダーが輝く中で隣接テーブルが自動的に提供され、パーティクルとスコアが一気に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色テーブルを狙い続けるか、タイムアウトを防ぐために安全に好きな色を提供するか。色違い提供でCOMBOリセット＋HEAT+15。HEAT満タン（100）または時間切れ（60秒）でゲームオーバー。初のレストラン/注文マッチングジャンル。",
+    "status": "Restaurant order-matching color-match COMBO prototype complete — 4x3 table grid, 4-color order matching (RED/GREEN/DARK_BLUE/YELLOW), click-to-serve, same-color consecutive COMBO chain, SUPER SERVE at COMBO>=4 (rainbow auto-match, 3x score), HEAT risk system (mismatch +15, timeout +10, decay 0.03/frame, cap 100 game over), patience bar per order (green→yellow→red), regular customer spawning (streak positions reused), particle system (serve/SUPER/miss), floating text system (+score/COMBO/SUPER!/MISS!), 60s timer, 3 screens (Title/Playing/GameOver), BDF font support, 18 headless tests"
   }
 ]
