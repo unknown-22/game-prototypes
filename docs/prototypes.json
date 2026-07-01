@@ -1447,5 +1447,13 @@
     "score": 31.8,
     "status": "Rafting color-match COMBO prototype complete — top-down river scrolling, LEFT/RIGHT raft steering, 4-color buoy same-color consecutive COMBO chain, SUPER PADDLE at COMBO>=4 (180f rainbow, 3x score, auto-avoid rocks, any-color auto-match), HEAT risk system (rock +20, wrong buoy +10, decay 0.03/frame, cap 100 game over), ghost trail best-run replay, particle system (splash/crash/SUPER aura/water trail), floating text system, stun mechanic (10f), difficulty scaling (scroll speed +0.1 every 600f, spawn rates increase), 60s timer, 3 screens (Title/Playing/GameOver)",
     "href": "182_raft_surge.html"
+  },
+  {
+    "id": "183_seed_surge",
+    "title": "SEED SURGE",
+    "idea": "マンカラ（種まきゲーム）に色合わせCOMBOチェインを組み合わせたゲーム。プレイヤーは自分のピットをクリックして種を反時計回りに播き、最後の種が着地したピットの色が開始ピットと一致すればCAPTURE（着地ピット＋対面ピットの種を獲得）。同色連続キャプチャでCOMBOが伸び、COMBOが4以上でSUPER SOWが発動（隣接する同色ピットを自動キャプチャ）。色違い着地はCOMBOリセット＋HEAT増加（100でゲームオーバー）。AIとの対戦で、COMBO連鎖による盤面一掃のカスケードが爽快。面白い瞬間は「同色のピットを連続でキャプチャしてCOMBOがx4に達し、SUPER SOWで隣接ピットが一気に消え去りスコアが爆発する瞬間」。リスクとリターン：同色連続で高倍率スコアとSUPER SOWの大報酬を得るが、色違いでCOMBOリセット＋HEAT増加。ゲームアイデアファクトリーIdea #6（Score 30.85）の再解釈：「合成圧縮」→COMBO連鎖キャプチャがSUPER SOWへ圧縮、「敵HPが塊として表示され崩れる」→キャプチャされたピットが視覚的に崩壊",
+    "score": 30.85,
+    "status": "Mancala color-match COMBO prototype complete — 2-row×6-pit Mancala board, 4 seed colors (RED/GREEN/BLUE/YELLOW), click-to-sow counter-clockwise, same-color landing CAPTURE (landing + opposite pit), COMBO chain (same-color consecutive), SUPER SOW at COMBO>=4 (auto-captures adjacent same-color pits, 60f duration), HEAT risk system (mismatch +15, decay 0.5/turn, cap 100 game over), AI opponent (counter-color prefer, else most-seeds), particle system (capture/SUPER/mismatch), floating text system, 3 screens (Title/Playing/GameOver), BDF font support, 68 headless tests",
+    "href": "183_seed_surge.html"
   }
 ]
