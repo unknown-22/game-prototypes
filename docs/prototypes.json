@@ -1461,5 +1461,11 @@
     "title": "DINER SURGE",
     "idea": "グリッド型レストラン提供ゲーム。色が一致するテーブルをクリックして顧客に提供する。同色連続提供でCOMBOチェインを構築。COMBO>=4でSUPER SERVE（虹色オート提供、スコア3倍）が発動。面白い瞬間は「同色のテーブルを4連続でクリックしてSUPER SERVEが炸裂し、虹色のボーダーが輝く中で隣接テーブルが自動的に提供され、パーティクルとスコアが一気に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色テーブルを狙い続けるか、タイムアウトを防ぐために安全に好きな色を提供するか。色違い提供でCOMBOリセット＋HEAT+15。HEAT満タン（100）または時間切れ（60秒）でゲームオーバー。初のレストラン/注文マッチングジャンル。",
     "status": "Restaurant order-matching color-match COMBO prototype complete — 4x3 table grid, 4-color order matching (RED/GREEN/DARK_BLUE/YELLOW), click-to-serve, same-color consecutive COMBO chain, SUPER SERVE at COMBO>=4 (rainbow auto-match, 3x score), HEAT risk system (mismatch +15, timeout +10, decay 0.03/frame, cap 100 game over), patience bar per order (green→yellow→red), regular customer spawning (streak positions reused), particle system (serve/SUPER/miss), floating text system (+score/COMBO/SUPER!/MISS!), 60s timer, 3 screens (Title/Playing/GameOver), BDF font support, 18 headless tests"
+  },
+  {
+    "id": "185_paddle_surge",
+    "title": "PADDLE SURGE",
+    "idea": "トップダウン視点のカヤックスラロームゲーム。カヤックを操作して色分けされたゲートを通過する。同色のゲートを連続通過してCOMBOチェインを構築。COMBO>=4でSUPER SURGE（300フレームの虹色モード、スコア3倍、全色ゲート自動マッチ）が発動。面白い瞬間は「同色のゲートを4連続で通過してSUPER SURGEが炸裂し、虹色に輝くカヤックが全ゲートを吸い込んでスコアが3倍に跳ね上がる瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER SURGEの高報酬を得るが、色違いゲートでCOMBOリセット＋HEAT+15。岩への衝突でHEAT+20＋スタン（15フレーム）。川岸に近づきすぎるとHEAT+5。HEATが100に達すると転覆（ゲームオーバー）。距離に応じてスクロール速度とゲート出現頻度が上昇。初のカヤックスラロームジャンル。",
+    "status": "Kayak slalom color-match COMBO prototype complete — top-down river scrolling, 4-color gate matching (RED/GREEN/DARK_BLUE/YELLOW), same-color consecutive COMBO chain, SUPER SURGE at COMBO>=4 (300f rainbow, 3x score, any-color auto-match), HEAT risk system (mismatch +15, rock +20, bank +5, decay 0.05/frame, cap 100 game over), rock collision (stun 15f), particle system (match/SUPER/mismatch/crash), floating text system (+score/MISS!/SUPER!/OUCH!), difficulty scaling (scroll speed +distance/5000, spawn interval -distance/50), 3 screens (Title/Playing/GameOver), 93 headless tests"
   }
 ]
