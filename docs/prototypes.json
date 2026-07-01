@@ -1467,5 +1467,12 @@
     "title": "PADDLE SURGE",
     "idea": "トップダウン視点のカヤックスラロームゲーム。カヤックを操作して色分けされたゲートを通過する。同色のゲートを連続通過してCOMBOチェインを構築。COMBO>=4でSUPER SURGE（300フレームの虹色モード、スコア3倍、全色ゲート自動マッチ）が発動。面白い瞬間は「同色のゲートを4連続で通過してSUPER SURGEが炸裂し、虹色に輝くカヤックが全ゲートを吸い込んでスコアが3倍に跳ね上がる瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER SURGEの高報酬を得るが、色違いゲートでCOMBOリセット＋HEAT+15。岩への衝突でHEAT+20＋スタン（15フレーム）。川岸に近づきすぎるとHEAT+5。HEATが100に達すると転覆（ゲームオーバー）。距離に応じてスクロール速度とゲート出現頻度が上昇。初のカヤックスラロームジャンル。",
     "status": "Kayak slalom color-match COMBO prototype complete — top-down river scrolling, 4-color gate matching (RED/GREEN/DARK_BLUE/YELLOW), same-color consecutive COMBO chain, SUPER SURGE at COMBO>=4 (300f rainbow, 3x score, any-color auto-match), HEAT risk system (mismatch +15, rock +20, bank +5, decay 0.05/frame, cap 100 game over), rock collision (stun 15f), particle system (match/SUPER/mismatch/crash), floating text system (+score/MISS!/SUPER!/OUCH!), difficulty scaling (scroll speed +distance/5000, spawn interval -distance/50), 3 screens (Title/Playing/GameOver), 93 headless tests"
+  },
+  {
+    "id": "186_uno_surge",
+    "title": "UNO SURGE",
+    "idea": "Uno風カード排出ゲームに色合わせCOMBOチェインを組み合わせたゲーム。プレイヤーは手持ちのカードから、捨て札と同じ色または同じ数字のカードを選んでプレイする。同色のカードを連続プレイするとCOMBOが伸び、COMBO>=4でSUPER UNO（180フレームの虹色ワイルドモード、スコア30点/枚、全カード自動マッチ）が発動。色違いプレイでCOMBOリセット＋HEAT+15。プレイ可能なカードがない場合は山札からドロー（HEAT+10）。HEATが100に達するか30秒の制限時間でゲームオーバー。AI対戦相手が5枚の手札で対戦。面白い瞬間は「同色のカードを4連続でプレイしてSUPER UNOが炸裂し、虹色に輝く中で全カードが自動マッチし、スコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色を選び続けるか、色違いでCOMBOをリセットしてHEATを溜めるリスクを取るか。HEATプレッシャーの中でSUPER UNOを狙うリスク判断が中核。初のカード排出/Unoジャンル。ゲームアイデアファクトリーIdea #1（Score 32.0）の再解釈：「効果が合成されて1枚に圧縮」→COMBO連鎖がSUPER UNOへ圧縮、「チェイン数が画面全体で可視化され加速」→COMBOカウンターとフローティングスコア。",
+    "status": "Uno-style card shedding prototype complete — 40 cards (4 colors × 0-9), player 7-card hand vs AI 5-card hand, match-by-color-or-number, same-color consecutive COMBO chain, SUPER UNO at COMBO>=4 (180f rainbow wild, auto-play any card, 30 points/card), HEAT risk system (mismatch +15, draw +10, decay 0.02/frame, cap 100 game over), 30s timer, draw pile + reshuffle mechanics, particle system (card play/SUPER/mismatch), floating text system (+score/COMBO/SUPER!/MISS!/DRAW), BDF font support, 3 screens (Title/Playing/GameOver), 69 headless tests, OpenCode CLI first-try success",
+    "href": "186_uno_surge.html"
   }
 ]
