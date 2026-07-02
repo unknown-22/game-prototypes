@@ -1474,5 +1474,20 @@
     "idea": "Uno風カード排出ゲームに色合わせCOMBOチェインを組み合わせたゲーム。プレイヤーは手持ちのカードから、捨て札と同じ色または同じ数字のカードを選んでプレイする。同色のカードを連続プレイするとCOMBOが伸び、COMBO>=4でSUPER UNO（180フレームの虹色ワイルドモード、スコア30点/枚、全カード自動マッチ）が発動。色違いプレイでCOMBOリセット＋HEAT+15。プレイ可能なカードがない場合は山札からドロー（HEAT+10）。HEATが100に達するか30秒の制限時間でゲームオーバー。AI対戦相手が5枚の手札で対戦。面白い瞬間は「同色のカードを4連続でプレイしてSUPER UNOが炸裂し、虹色に輝く中で全カードが自動マッチし、スコアが3倍に跳ね上がる瞬間」。リスクとリターン：COMBO継続のために同色を選び続けるか、色違いでCOMBOをリセットしてHEATを溜めるリスクを取るか。HEATプレッシャーの中でSUPER UNOを狙うリスク判断が中核。初のカード排出/Unoジャンル。ゲームアイデアファクトリーIdea #1（Score 32.0）の再解釈：「効果が合成されて1枚に圧縮」→COMBO連鎖がSUPER UNOへ圧縮、「チェイン数が画面全体で可視化され加速」→COMBOカウンターとフローティングスコア。",
     "status": "Uno-style card shedding prototype complete — 40 cards (4 colors × 0-9), player 7-card hand vs AI 5-card hand, match-by-color-or-number, same-color consecutive COMBO chain, SUPER UNO at COMBO>=4 (180f rainbow wild, auto-play any card, 30 points/card), HEAT risk system (mismatch +15, draw +10, decay 0.02/frame, cap 100 game over), 30s timer, draw pile + reshuffle mechanics, particle system (card play/SUPER/mismatch), floating text system (+score/COMBO/SUPER!/MISS!/DRAW), BDF font support, 3 screens (Title/Playing/GameOver), 69 headless tests, OpenCode CLI first-try success",
     "href": "186_uno_surge.html"
+  },
+  {
+    "id": "187_claw_surge",
+    "title": "CLAW SURGE",
+    "idea": "トップダウン型クレーンゲーム。4×5グリッドの色付き景品を同色で連続掴みするとCOMBOが構築され、COMBO>=4でSUPER CLAW（虹色モード、全色自動掴み、スコア3倍、300フレーム）が発動する。異色掴みでCOMBOリセット＋HEAT+15、HEAT>=100でゲームオーバー。60秒の時間制限。ゴーストトレイルが前回ベストランの軌跡を表示。面白い瞬間は「同色の景品を4連続で掴んでSUPER CLAWが炸裂し、虹色のアームが全ての景品を吸い寄せて掴みまくり、スコアが3倍に跳ね上がる瞬間」。リスクとリターン：同色COMBO継続で高倍率スコアが得られるが、異色掴みでHEATが蓄積しゲームオーバーのリスク。クレーンゲーム/アーケードジャンルはコレクション初",
+    "status": "Crane game arcade prototype complete — 4 color prizes (RED/GREEN/DARK_BLUE/YELLOW), NORMAL(10pts) / RARE(30pts, glowing), COMBO chain with multiplier table [1.0..5.0], SUPER CLAW at COMBO>=4 (300f rainbow, 3x score), HEAT risk (mismatch +15, decay 0.05/frame, cap 100 game over), 60s timer, ghost trail replay of best run, particle system (grab/mismatch/SUPER), floating text system (+score/COMBO/SUPER!/MISS), 3 screens (Title/Playing/GameOver), testable core logic",
+    "href": "187_claw_surge.html"
+  },
+  {
+    "id": "188_skip_surge",
+    "title": "SKIP SURGE",
+    "idea": "サイドビューの色合わせ縄跳びゲーム。4色に分割された縄がプレイヤーの周りを回転し、SPACEキーでタイミングよくジャンプして縄を飛び越える。同じ色の縄を連続で跳ぶとCOMBOが積み上がり、COMBOが4以上でSUPER JUMP（5秒間虹色モード、スコア3倍、オートジャンプ）が発動し、自動で跳び続けてスコアが3倍で加速する瞬間が面白い。リスクとリターン：ジャンプのタイミングをミスするとHEAT+10でCOMBOリセット、HEATが100に達するとゲームオーバー。縄の速度が時間とともに上昇し難易度が上がる。同色COMBO継続でSUPER JUMPの高報酬を得られるが、色違い跳びでCOMBOがリセットされる（HEATペナルティなし）。HEATは徐々に減衰するため、ミスから立ち直る猶予がある。初の縄跳びプロトタイプ。",
+    "score": 32.00,
+    "status": "Side-view jump rope prototype complete — 4 colored rope segments rotating around player, SPACE jump timing mechanic, same-color consecutive COMBO chain, SUPER JUMP at COMBO>=4 (5s rainbow, 3x score, auto-jump), HEAT risk system (miss +10, decay 0.025/frame, cap 100 game over), rope speed ramping difficulty, particle/floating text/screen shake feedback, 3 screens (Title/Playing/GameOver)",
+    "href": "188_skip_surge.html"
   }
 ]
