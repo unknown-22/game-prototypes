@@ -1497,5 +1497,13 @@
     "score": 32.05,
     "status": "Sumo wrestling ring-out prototype complete — 4 color wrestlers (RED/GREEN/DARK_BLUE/YELLOW), COMBO chain with force multiplier (1+0.25*combo), SUPER CHARGE at COMBO>=4 (300f rainbow, 3x force, 3x score), HEAT risk (mismatch +15, decay 0.05/frame, cap 100 game over), 60s timer, particle system (push/KO), floating text (+COMBO/+score/KO/SUPER/HEAT), screen shake, opponent AI with difficulty scaling, 3 screens (Title/Playing/GameOver), 57 headless tests",
     "href": "189_sumo_surge.html"
+  },
+  {
+    "id": "190_trampoline_surge",
+    "title": "TRAMPOLINE SURGE",
+    "idea": "サイドビューのトランポリン色合わせゲーム。4色の着地ゾーンが並ぶトランポリン上で跳ね、空中で左右操縦して同色のゾーンに連続着地するとCOMBOが積み上がる。COMBO>=4でSUPER BOUNCE（虹色モード、3倍スコア、全ゾーン自動マッチ）が発動し、虹色に輝きながら超高く跳ね上がる瞬間が面白い。着地ミスでHEAT+15＋COMBOリセット、HEAT>=100でゲームオーバー。60秒の時間制限。スコアは跳躍の高さ×COMBO倍率で計算。リスクとリターン：同色着地を狙ってCOMBOを継続すると高倍率スコアとSUPER BOUNCEの高報酬が得られるが、色を見誤って異色ゾーンに着地するとHEATが蓄積しゲームオーバーのリスク。ジャンプごとにゾーンの色が入れ替わり、判断と空中制御の精度が試される。",
+    "score": 32.1,
+    "status": "Side-view trampoline color-matching prototype complete — 4 color zones (RED/GREEN/DARK_BLUE/YELLOW) that shuffle each landing, gravity-based bounce physics with air steering (LEFT/RIGHT or A/D), same-color consecutive COMBO chain, SUPER BOUNCE at COMBO>=4 (5s rainbow mode, 3x score multiplier, all zones auto-match), HEAT risk system (mismatch +15, decay 0.05/frame, cap 100 game over), 60s countdown timer, score based on bounce height * combo multiplier, particle/floating text feedback, 3 screens (Title/Playing/GameOver)",
+    "href": "190_trampoline_surge.html"
   }
 ]
