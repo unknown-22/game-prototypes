@@ -1521,5 +1521,10 @@
     "score": 32.55,
     "status": "Top-down dodgeball color-matching prototype complete — 4 color balls (RED/GREEN/DARK_BLUE/YELLOW), same-color consecutive catch COMBO chain with score scaling, SUPER THROW at COMBO>=4 (5s rainbow auto-aim, 3x score), HEAT risk system (hit +15, decay 0.05/frame, cap 100 game over), 60s countdown timer, difficulty scaling (opponent throw interval decreasing, HP increasing), CA danger grid with 4-dir spread, ghost ball trails, particle/floating text feedback, screen shake, 3 screens (Title/Playing/GameOver)",
     "href": "192_dodge_surge.html"
+  },
+  {
+    "id": "193_kite_surge",
+    "title": "KITE SURGE",
+    "idea": "凧揚げをテーマにしたサイドスクロールフライングゲーム。同じ色のリングを連続でくぐってCOMBOを繋ぎ、SUPER FLIGHTで全リングを虹色回収する瞬間が面白い。風と障害物（鳥）のリスクを避けながら、COMBOチェインの報酬を最大化する。"
   }
 ]
