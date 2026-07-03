@@ -1513,5 +1513,13 @@
     "score": 32.0,
     "status": "Side-view rodeo bull riding color-matching prototype complete — 4 buck colors (RED/GREEN/DARK_BLUE/YELLOW) with key mapping (1/2/3/4, QWER, ZXCV), same-color consecutive COMBO chain with score scaling (10 * (1 + combo * 0.5) * multiplier), SUPER RIDE at COMBO>=4 (5s auto-match with 3x score), HEAT risk system (wrong key/timeout +15, decay 0.02/frame, cap 100 game over), 60s countdown timer, difficulty scaling (buck interval decreasing), particle/floating text feedback, screen shake, 3 screens (Title/Playing/GameOver)",
     "href": "191_bull_surge.html"
+  },
+  {
+    "id": "192_dodge_surge",
+    "title": "DODGE SURGE",
+    "idea": "Top-down dodgeball color-matching game. Catch 4-color balls (RED/GREEN/BLUE/YELLOW) to build same-color COMBO chains. COMBO>=4 triggers SUPER THROW (rainbow auto-aim, 3x score for 5s). Get hit = HEAT+15, HEAT>=100 = game over. 60s timer, CA danger zones and ghost ball trails add visual depth.",
+    "score": 32.55,
+    "status": "Top-down dodgeball color-matching prototype complete — 4 color balls (RED/GREEN/DARK_BLUE/YELLOW), same-color consecutive catch COMBO chain with score scaling, SUPER THROW at COMBO>=4 (5s rainbow auto-aim, 3x score), HEAT risk system (hit +15, decay 0.05/frame, cap 100 game over), 60s countdown timer, difficulty scaling (opponent throw interval decreasing, HP increasing), CA danger grid with 4-dir spread, ghost ball trails, particle/floating text feedback, screen shake, 3 screens (Title/Playing/GameOver)",
+    "href": "192_dodge_surge.html"
   }
 ]
