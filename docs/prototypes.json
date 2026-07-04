@@ -1550,5 +1550,13 @@
     "score": 32.15,
     "status": "Snowboarding downhill prototype complete (first snowboarding/skiing genre in collection)",
     "href": "196_chroma_board.html"
+  },
+  {
+    "id": "197_steady_chain",
+    "title": "STEADY CHAIN",
+    "idea": "オペレーションゲーム風の狭い通路をカーソルで通り抜けながら、同色のチェックポイントを連続タッチしてCOMBOを積み重ねる。COMBO x4でSUPER STEADY発動（自動誘導＋3倍スコア＋全色マッチ）。壁に触れるとHEAT上昇＋COMBOリセット。60秒タイマー。狭い通路の緊張とCOMBO連鎖の気持ちよさを両立。リスク：狭い通路を通る/安全に遠回りするか。回路/パイプが可視化されて流れて増幅する盤面と、効果の合成・圧縮をCOMBOチェーン＋SUPER STEADYに再解釈（Score 32.35のデッキ構築案#1より）。",
+    "score": 32.35,
+    "status": "Operation-style steady hand maze prototype complete (first operation/steady-hand genre in collection)",
+    "href": "197_steady_chain.html"
   }
 ]
