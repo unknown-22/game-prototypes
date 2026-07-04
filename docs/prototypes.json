@@ -1522,9 +1522,17 @@
     "status": "Top-down dodgeball color-matching prototype complete — 4 color balls (RED/GREEN/DARK_BLUE/YELLOW), same-color consecutive catch COMBO chain with score scaling, SUPER THROW at COMBO>=4 (5s rainbow auto-aim, 3x score), HEAT risk system (hit +15, decay 0.05/frame, cap 100 game over), 60s countdown timer, difficulty scaling (opponent throw interval decreasing, HP increasing), CA danger grid with 4-dir spread, ghost ball trails, particle/floating text feedback, screen shake, 3 screens (Title/Playing/GameOver)",
     "href": "192_dodge_surge.html"
   },
-  {
-    "id": "193_kite_surge",
-    "title": "KITE SURGE",
-    "idea": "凧揚げをテーマにしたサイドスクロールフライングゲーム。同じ色のリングを連続でくぐってCOMBOを繋ぎ、SUPER FLIGHTで全リングを虹色回収する瞬間が面白い。風と障害物（鳥）のリスクを避けながら、COMBOチェインの報酬を最大化する。"
-  }
-]
+   {
+     "id": "193_kite_surge",
+     "title": "KITE SURGE",
+     "idea": "凧揚げをテーマにしたサイドスクロールフライングゲーム。同じ色のリングを連続でくぐってCOMBOを繋ぎ、SUPER FLIGHTで全リングを虹色回収する瞬間が面白い。風と障害物（鳥）のリスクを避けながら、COMBOチェインの報酬を最大化する。"
+   },
+   {
+     "id": "194_siege_chain",
+     "title": "SIEGE CHAIN",
+     "idea": "クリック＆ドラッグで投石機を操作し、城壁ブロックを色合わせで破壊する攻城ゲーム。同じ色のブロックに連続で命中させてCOMBOを繋ぎ、COMBO>=4でSUPER BOULDER（虹色モード、スコア3倍、5秒間）が発動。同色隣接ブロックへのCA連鎖クラック伝播で城壁を一気に崩壊させる瞬間が面白い。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER BOULDERの大報酬が得られるが、色違い命中でCOMBOリセット＋HEAT+15が溜まる。HEAT>=100でゲームオーバー。60秒の時間制限内でスコア最大化を狙う。ゴースト軌跡が前回ショットの弧を表示し、狙いの改善を支援する。初の投石攻城ジャンル。",
+     "score": 32.0,
+     "status": "Siege catapult color-match COMBO prototype complete — click-drag-release aiming, 8x6 wall grid (CELL=24, WALL_X=140, WALL_Y=40), 4 block colors (RED/GREEN/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive hits, score = 10*(1+combo*0.5)), SUPER BOULDER at COMBO>=4 (300f rainbow, 3x score, any-color match + CA propagation to any color), CA crack propagation (4-direction same-color neighbor spread with chain continuation), HEAT system (mismatch +15, decay 0.03/frame, cap 100 game over), 60s timer, ghost trajectory from previous shot, particle system (match/super/mismatch), floating text system (+score/COMBO/SUPER!/HEAT), 5-phase machine (TITLE/AIMING/FLYING/IMPACT/GAME_OVER), all-blocks-destroyed 1.5x bonus, 41 headless tests, English-only text",
+     "href": "194_siege_chain.html"
+   }
+ ]
