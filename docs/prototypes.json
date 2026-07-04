@@ -1542,5 +1542,13 @@
     "score": 32.2,
     "status": "Ice skating prototype complete (first skating/figure skating genre in collection)",
     "href": "195_chroma_skate.html"
+  },
+  {
+    "id": "196_chroma_board",
+    "title": "CHROMA BOARD",
+    "idea": "サイドスクロールスノーボード。マウンテンを滑り降りながら、同色のスラロームゲートを連続通過してCOMBOチェーンを伸ばす。COMBO≥4でSUPER BOARD発動（虹色、3倍スコア、障害物粉砕）。熱メーターが溜まりすぎるとワイプアウト。60秒タイマー。ログ/リプレイをゴースト軌跡に、回路/パイプをダウンヒルコースに、heat/riskをスピード熱に再解釈（Score 32.15のデッキ構築案#1より）。",
+    "score": 32.15,
+    "status": "Snowboarding downhill prototype complete (first snowboarding/skiing genre in collection)",
+    "href": "196_chroma_board.html"
   }
 ]
