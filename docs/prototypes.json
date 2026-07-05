@@ -1558,5 +1558,13 @@
     "score": 32.35,
     "status": "Operation-style steady hand maze prototype complete (first operation/steady-hand genre in collection)",
     "href": "197_steady_chain.html"
+  },
+  {
+    "id": "198_magnet_surge",
+    "title": "MAGNET SURGE",
+    "idea": "トップダウン磁石アクション。磁石コアを操作しSPACEで色切替、同色の金属片を引き寄せて3個以上集めるとSYNTHESISでナゲットに合成＋CA色拡散で近くの破片を同色化。同色連続合成でCOMBOが伸び、COMBO x4でSUPER MAGNET（虹色・5秒間全色引力＋スコア3倍）が発動する。HEAT（熱）が一定値を超えるとゲームオーバー、合成でHEAT減少。60秒タイマーでスコア最大化を目指す。面白い瞬間は「ギリギリで磁石色を切り替え、引き寄せた破片のクラスターがSYNTHESIS→CA拡散→連鎖合成→SUPER MAGNETの爆発的コンボ」。リスクとリターン：同色COMBOを狙うと高得点だが色切替タイミングを誤るとCOMBOリセット＋HEAT上昇。",
+    "score": 32.35,
+    "status": "Top-down magnet collector prototype complete",
+    "href": "198_magnet_surge.html"
   }
 ]
