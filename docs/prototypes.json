@@ -1582,5 +1582,13 @@
     "score": 32.2,
     "status": "Side-view paper airplane glider prototype complete",
     "href": "200_paper_glide.html"
+  },
+  {
+    "id": "201_belt_surge",
+    "title": "Belt Surge",
+    "idea": "ベルトコンベアで流れる4色のアイテムをクリックで仕分ける色合わせアーケードゲーム。同色連続仕分けでCOMBOが伸び、COMBO>=5でSUPER SORT（5秒間虹色、スコア3倍）が発動する。ギリギリまで待って同色を連続で仕分け、COMBOが爆発する瞬間が面白い。間違った色の仕分けでCOMBOリセット＋HEAT上昇、アイテムが右端に落ちてもHEAT上昇、HEAT>=100でゲームオーバー。リスクとリターン：待てばCOMBO構築のチャンスが増えるが、アイテムが右端に近づき落下リスクが高まる。難度は時間とともにスピード上昇とスポーン間隔短縮で段階的に上昇。",
+    "score": 32.0,
+    "status": "Conveyor belt color-match sorting prototype complete — 3 belts, 4 colored bins, click-to-sort, COMBO chain→SUPER SORT (rainbow border+3x score), HEAT risk system (wrong +15, miss +8, decay 0.05/frame, cap 100), floating text/particle feedback, difficulty ramp (speed up + spawn faster over time), 3 screens (Title/Playing/GameOver)",
+    "href": "201_belt_surge.html"
   }
 ]
