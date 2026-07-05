@@ -1566,5 +1566,13 @@
     "score": 32.35,
     "status": "Top-down magnet collector prototype complete",
     "href": "198_magnet_surge.html"
+  },
+  {
+    "id": "199_hoop_chain",
+    "title": "HOOP CHAIN",
+    "idea": "サイドビューの色合わせバスケットボール。4色のゴールを狙い、同色シュートを連続で決めてCOMBOを繋ぐ。COMBO>=4でSUPER DUNK（虹色モード、5秒間全色自動得点、3倍スコア）が発動し、虹色に輝くゴールに連続シュートを叩き込む瞬間が面白い。シュートを外すとHEAT+15＋COMBOリセット、HEAT>=100でゲームオーバー。60秒の時間制限でスコア最大化を狙う。リスクとリターン：同色COMBOを継続すると高倍率スコアとSUPER DUNKの大報酬が得られるが、色を見誤るとCOMBOリセット＋HEAT上昇のリスク。15秒ごとにゴールがシフトし戦略の再考を促す。初のバスケットボールジャンル。デッキ構築案#1（Score 31.95）の「連鎖増殖＋1色制約」フックを再解釈。",
+    "score": 31.95,
+    "status": "Side-view basketball color-match COMBO prototype complete — 4 colored hoops (RED/GREEN/DARK_BLUE/YELLOW), click-hold-release charge-and-shoot mechanic with parabolic arc, same-color consecutive COMBO chain with score scaling, SUPER DUNK at COMBO>=4 (5s rainbow mode, 3x score, any-color auto-score), HEAT risk system (miss +15, wrong +8, decay 0.03/frame, cap 100 game over), 60s countdown timer, hoop shift every 15s (sweep-based placement with min gap 50), particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text",
+    "href": "199_hoop_chain.html"
   }
 ]
