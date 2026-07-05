@@ -1574,5 +1574,13 @@
     "score": 31.95,
     "status": "Side-view basketball color-match COMBO prototype complete — 4 colored hoops (RED/GREEN/DARK_BLUE/YELLOW), click-hold-release charge-and-shoot mechanic with parabolic arc, same-color consecutive COMBO chain with score scaling, SUPER DUNK at COMBO>=4 (5s rainbow mode, 3x score, any-color auto-score), HEAT risk system (miss +15, wrong +8, decay 0.03/frame, cap 100 game over), 60s countdown timer, hoop shift every 15s (sweep-based placement with min gap 50), particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text",
     "href": "199_hoop_chain.html"
+  },
+  {
+    "id": "200_paper_glide",
+    "title": "PAPER GLIDE",
+    "idea": "Side-view paper airplane glider. Click-drag to aim and throw, pass through same-color wind rings for COMBO chain. COMBO>=4 = SUPER GLIDE (rainbow, 5s all-color match + 3x score). Wrong color = COMBO reset + HEAT. Miss = HEAT. 60s timer. Ghost trail shows previous flight path. First paper airplane/glider genre. Reinterpreted from dice/bag roguelite idea #1 (Score 32.2) with log/replay + chain collapse hooks.",
+    "score": 32.2,
+    "status": "Side-view paper airplane glider prototype complete",
+    "href": "200_paper_glide.html"
   }
 ]
