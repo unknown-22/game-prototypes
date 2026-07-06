@@ -1590,5 +1590,12 @@
     "score": 32.0,
     "status": "Conveyor belt color-match sorting prototype complete — 3 belts, 4 colored bins, click-to-sort, COMBO chain→SUPER SORT (rainbow border+3x score), HEAT risk system (wrong +15, miss +8, decay 0.05/frame, cap 100), floating text/particle feedback, difficulty ramp (speed up + spawn faster over time), 3 screens (Title/Playing/GameOver)",
     "href": "201_belt_surge.html"
+  },
+  {
+    "id": "203_wreck_chain",
+    "title": "WRECK CHAIN",
+    "idea": "サイドビューの振り子式解体ゲーム。クリックホールドでチャージし、タイミングよく振り子を振って同色ブロックを連続破壊。COMBO>=4でSUPER BALL（虹色、スコア3倍、全色マッチ、5秒間）が発動し、巨大な鉄球がビル全体を崩壊させる瞬間が面白い。色違い破壊でCOMBOリセット＋HEAT+15、HEAT>=100でゲームオーバー。60秒制限時間。ブロック全破壊で新規グリッド再生成。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER BALLの高報酬が得られるが、色違いでCOMBOリセット＋HEAT増加。チャージの強さと振り子のタイミングを完璧に合わせる操作の腕前が試される。初の振り子解体ジャンル。",
+    "score": 32.0,
+    "status": "Pendulum demolition prototype complete — 320x240, 10x8 block grid (CELL=20), 4 block colors (RED/GREEN/DARK_BLUE/YELLOW), click-hold-release charge mechanic, physics-based pendulum swing, COMBO chain (same-color consecutive hits, score=10*(1+combo*0.5)), SUPER BALL at COMBO>=4 (300f rainbow, 3x score, any-color hits), HEAT system (wrong +15, decay 0.03/frame, cap 100 game over), 60s timer, block grid respawn on clear (+500 bonus), particle/floating text/screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text"
   }
 ]
