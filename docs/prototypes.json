@@ -1605,5 +1605,12 @@
     "score": 32.0,
     "status": "Top-down water-gun fight prototype complete — 320x240, 10x10 grid (CELL=20), 4 nozzle colors cycling every 3s (RED/GREEN/BLUE/YELLOW), mouse-hold spray cone (30 deg), droplet physics + CA spread on wet cells (8f interval, 50% chance, 4-direction), bucket HP system (1-2 HP, max 8 on screen), COMBO chain (same-color consecutive drenches, score=10+combo*2), SUPER SOAKER at COMBO>=5 (300f rainbow, 3x score, unlimited water), water tank (100 max, -0.5/frame spray, +0.3/frame recharge), HEAT system (builds 0.4/frame spraying, decays 0.2/frame idle, overheat at 100 = HP-1 + 1.5s cooldown + -50 score), 60s timer, HP=5, particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text",
     "href": "204_splash_chain.html"
+  },
+  {
+    "id": "205_tug_surge",
+    "title": "TUG SURGE",
+    "idea": "サイドビュー綱引きゲーム。SPACEキーでロープを引っ張り、ロープ中央フラッグの色が前回引いた色と一致するとCOMBOが伸びる。COMBO>=4でSUPER TUG（虹色、5秒間スコア3倍、全色一致＋エコーゴースト発動）が爆発する。同色連続引きでCOMBOが一気に伸びてSUPER TUGが発動し、虹色のロープが相手陣地に一気に押し込まれる瞬間が面白い。色違いでCOMBOリセット＋HEAT+15、空振りでもHEAT+2、HEAT>=100で力尽きてゲームオーバー。60秒制限。リスクとリターン：フラッグの色が変わるまで待てばCOMBO継続のチャンスがあるが、相手に引かれて陣地を失うリスクがある。初の綱引きジャンル。",
+    "score": 32.0,
+    "status": "Side-view tug-of-war prototype complete — 320x240, 4-color rope+flag cycle (RED/GREEN/BLUE/YELLOW, 120f→80f speed up), SPACE to pull, COMBO chain (same-color consecutive pulls, score=10*(1+combo*0.5)), SUPER TUG at COMBO>=4 (300f rainbow, any-color counts, 3x score, echo ghosts emit particles), HEAT system (wrong +15, pull +2, decay 0.05/frame idle, 0.1/frame super, cap 100 game over), 60s timer, AI opponent with dynamic force (0.3-1.2 over time), echo ghost log/replay mechanic (ghosts add +0.1 pull force each), particle/floating text/rainbow border feedback, win/lose boundaries (60/260), 3 screens (Title/Playing/GameOver), English-only text, 37 unit tests"
   }
 ]
