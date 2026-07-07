@@ -1628,5 +1628,13 @@
     "score": 30.75,
     "status": "Side-scrolling Red Light Green Light timing game complete — 320x240, 4-color traffic light cycle (120f→40f speeding up), LEFT/RIGHT arrow keys, gem collecting (8 max on screen, 40% matching bias), COMBO chain (score=10+combo*5), SUPER MODE at COMBO>=4 (180f rainbow, 3x score), HEAT system (wrong +15, idle decay 0.1/frame, cap 100 game over), 60s timer, particle burst on collect, floating text feedback, screen shake on miss, 3 screens (Title/Playing/GameOver), English-only text, 51 headless tests — OpenCode first-try success with -f design file + no --thinking; reinterpreted deckbuilder-only idea batch",
     "href": "207_redlight_chain.html"
+  },
+  {
+    "id": "208_tether_chain",
+    "title": "TETHER CHAIN",
+    "idea": "テザーボールをテーマにしたトップダウンアーケードゲーム。中央のポールにロープでつながれたボールが円周上を回転し、プレイヤーはSPACEキーで自分の陣地（下半分）に入ったボールを打つ。ボールは4色（赤/緑/青/黄）が一定間隔で切り替わり、同じ色を連続ヒットするとCOMBOが伸びる。COMBO>=4でSUPER HIT（虹色、5秒間スコア3倍、全色マッチ）が発動。加速するボールを同じ色で連続ヒットしてSUPER HITでスコアが爆発的に伸びる瞬間が面白い。色違いでCOMBOリセット＋HEAT+15、ボールが自陣を通過してもHEAT+5、HEAT>=100か60秒経過でゲームオーバー。リスクとリターン：ボールが来るまで待ってCOMBO継続の同色を狙うか、色が変わったら安全に空振りを選ぶか。初のテザーボールジャンル。",
+    "score": 32.2,
+    "status": "Top-down tetherball prototype complete — 320x240, 4-color rotating ball (RED/GREEN/DARK_BLUE/YELLOW, 90f cycle), SPACE to hit when ball in player half (0 to π radians), COMBO chain (same-color consecutive hits, score=10*(1+combo*0.5), combo increments BEFORE scoring), SUPER HIT at COMBO>=4 (300f rainbow, 3x score, any-color, refreshes duration), HEAT system (wrong +15, miss pass +5, decay 0.05/frame, cap 100 game over), 60s timer, ball speed acceleration (+0.001/60 per frame), particle/floating text feedback, ball glow on super, 3 screens (Title/Playing/GameOver), English-only text, OpenCode first-try success with no --thinking, 61 headless tests",
+    "href": "208_tether_chain.html"
   }
 ]
