@@ -1636,5 +1636,13 @@
     "score": 32.2,
     "status": "Top-down tetherball prototype complete — 320x240, 4-color rotating ball (RED/GREEN/DARK_BLUE/YELLOW, 90f cycle), SPACE to hit when ball in player half (0 to π radians), COMBO chain (same-color consecutive hits, score=10*(1+combo*0.5), combo increments BEFORE scoring), SUPER HIT at COMBO>=4 (300f rainbow, 3x score, any-color, refreshes duration), HEAT system (wrong +15, miss pass +5, decay 0.05/frame, cap 100 game over), 60s timer, ball speed acceleration (+0.001/60 per frame), particle/floating text feedback, ball glow on super, 3 screens (Title/Playing/GameOver), English-only text, OpenCode first-try success with no --thinking, 61 headless tests",
     "href": "208_tether_chain.html"
+  },
+  {
+    "id": "209_hopscotch_surge",
+    "title": "HOPSCOTCH SURGE",
+    "idea": "石蹴り（ホップスコッチ）をテーマにした色合わせタイミングゲーム。4色のマスをSPACEキーで跳び移り、前のマスと同じ色に連続着地するとCOMBOが伸びる。COMBO>=4でSUPER HOP（虹色モード、5秒間スコア3倍、全色マッチ）が発動し、虹色に輝きながら石蹴りコートを駆け抜ける瞬間が面白い。色違いでCOMBOリセット＋HEAT+15、タイムアウト自動着地でもHEAT+5、HEAT>=100か60秒経過でゲームオーバー。リスクとリターン：COMBO維持のために同色のマスを狙うか、色が変わったら安全に空振り（自動着地）を選ぶか。初のホップスコッチ/石蹴りジャンル。デッキ構築案#1（Score 32.05）の「合成圧縮＋1色制約」フックを再解釈。",
+    "score": 32.05,
+    "status": "Side-view hopscotch color-match COMBO prototype complete — 320x240, 4 color squares (RED/GREEN/DARK_BLUE/YELLOW), SPACE to hop, COMBO chain (same-color consecutive landings, score=10*(1+combo*0.5)), SUPER HOP at COMBO>=4 (300f rainbow, 3x score, any-color), HEAT system (mismatch +15, timeout +5, decay 0.05/frame, cap 100 game over), 60s timer, hop interval decreasing (75f→18f), 40% matching-color bias in next square generation, particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text, OpenCode first-try success (1 self-correction for heat decay-before-check ordering), 27 headless tests",
+    "href": "209_hopscotch_surge.html"
   }
 ]
