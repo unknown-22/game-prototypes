@@ -1620,5 +1620,13 @@
     "score": 31.55,
     "status": "Boomerang-throwing prototype complete — 320x240, click-drag aim+power (speed 2.0-4.0 px/frame), boomerang physics with 0.035 rad/frame curve rate (full circle ~180f), 12 targets (4 colors x3 each, 14x14 px), COMBO chain (same-color hits, score=100*(1+combo*0.5)), SUPER MODE at COMBO>=4 (next throw rainbow, 3x score, no heat from wrong hits), HEAT system (wrong +10, decay 0.5/frame, cap 100 game over), 60s timer, particle/floating text/camera shake feedback, catch auto-detect within 16px of player, 3 screens (Title/Aiming+FLYING+RESOLVE/GameOver), English-only text, 62 headless tests — OpenCode fully-autonomous: self-corrected FLOAT_LIFE references",
     "href": "206_boomerang_chain.html"
+  },
+  {
+    "id": "207_redlight_chain",
+    "title": "REDLIGHT CHAIN",
+    "idea": "信号機の色に合わせて宝石を集める「赤信号・青信号」ゲーム。信号機が4色（赤/緑/黄/青）を一定間隔で切り替え、プレイヤーは左右矢印キーで移動しながら信号と同じ色の宝石を集めてCOMBOを伸ばす。COMBO>=4でSUPER MODE（虹色全色一致＋スコア3倍、5秒間）が発動。色違いの宝石を取るとCOMBOリセット＋HEAT+15、HEAT>=100か60秒経過でゲームオーバー。信号の色が変わるまで待って安全に集めるか、リスクを取って今すぐ集めるか——「止まるべきか、進むべきか」の緊張感が面白い。初の赤信号・青信号ジャンル。",
+    "score": 30.75,
+    "status": "Side-scrolling Red Light Green Light timing game complete — 320x240, 4-color traffic light cycle (120f→40f speeding up), LEFT/RIGHT arrow keys, gem collecting (8 max on screen, 40% matching bias), COMBO chain (score=10+combo*5), SUPER MODE at COMBO>=4 (180f rainbow, 3x score), HEAT system (wrong +15, idle decay 0.1/frame, cap 100 game over), 60s timer, particle burst on collect, floating text feedback, screen shake on miss, 3 screens (Title/Playing/GameOver), English-only text, 51 headless tests — OpenCode first-try success with -f design file + no --thinking; reinterpreted deckbuilder-only idea batch",
+    "href": "207_redlight_chain.html"
   }
 ]
