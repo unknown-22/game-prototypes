@@ -1612,5 +1612,13 @@
     "idea": "サイドビュー綱引きゲーム。SPACEキーでロープを引っ張り、ロープ中央フラッグの色が前回引いた色と一致するとCOMBOが伸びる。COMBO>=4でSUPER TUG（虹色、5秒間スコア3倍、全色一致＋エコーゴースト発動）が爆発する。同色連続引きでCOMBOが一気に伸びてSUPER TUGが発動し、虹色のロープが相手陣地に一気に押し込まれる瞬間が面白い。色違いでCOMBOリセット＋HEAT+15、空振りでもHEAT+2、HEAT>=100で力尽きてゲームオーバー。60秒制限。リスクとリターン：フラッグの色が変わるまで待てばCOMBO継続のチャンスがあるが、相手に引かれて陣地を失うリスクがある。初の綱引きジャンル。",
     "score": 32.0,
     "status": "Side-view tug-of-war prototype complete — 320x240, 4-color rope+flag cycle (RED/GREEN/BLUE/YELLOW, 120f→80f speed up), SPACE to pull, COMBO chain (same-color consecutive pulls, score=10*(1+combo*0.5)), SUPER TUG at COMBO>=4 (300f rainbow, any-color counts, 3x score, echo ghosts emit particles), HEAT system (wrong +15, pull +2, decay 0.05/frame idle, 0.1/frame super, cap 100 game over), 60s timer, AI opponent with dynamic force (0.3-1.2 over time), echo ghost log/replay mechanic (ghosts add +0.1 pull force each), particle/floating text/rainbow border feedback, win/lose boundaries (60/260), 3 screens (Title/Playing/GameOver), English-only text, 37 unit tests"
+  },
+  {
+    "id": "206_boomerang_chain",
+    "title": "BOOMERANG CHAIN",
+    "idea": "ブーメラン投げゲーム。マウスで狙ってブーメランを投げると円弧を描いて戻ってくる。同じ色の標的を連続で当てるとCOMBOが伸び、COMBO>=4でSUPER MODE（虹色全色一致＋スコア3倍、次回投擲）が発動する。弧を描くブーメランが同じ色の標的をなぎ倒し、SUPER MODEで虹色ブーメランが全標的を貫く瞬間が面白い。色違いでCOMBOリセット＋HEAT+10、HEAT>=100か60秒経過でゲームオーバー。リスクとリターン：同色の標的を狙ってコンボを伸ばすか、安全に異なる色も撃ち抜くか。初のブーメランジャンル。",
+    "score": 31.55,
+    "status": "Boomerang-throwing prototype complete — 320x240, click-drag aim+power (speed 2.0-4.0 px/frame), boomerang physics with 0.035 rad/frame curve rate (full circle ~180f), 12 targets (4 colors x3 each, 14x14 px), COMBO chain (same-color hits, score=100*(1+combo*0.5)), SUPER MODE at COMBO>=4 (next throw rainbow, 3x score, no heat from wrong hits), HEAT system (wrong +10, decay 0.5/frame, cap 100 game over), 60s timer, particle/floating text/camera shake feedback, catch auto-detect within 16px of player, 3 screens (Title/Aiming+FLYING+RESOLVE/GameOver), English-only text, 62 headless tests — OpenCode fully-autonomous: self-corrected FLOAT_LIFE references",
+    "href": "206_boomerang_chain.html"
   }
 ]
