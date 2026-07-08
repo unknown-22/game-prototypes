@@ -1644,5 +1644,13 @@
     "score": 32.05,
     "status": "Side-view hopscotch color-match COMBO prototype complete — 320x240, 4 color squares (RED/GREEN/DARK_BLUE/YELLOW), SPACE to hop, COMBO chain (same-color consecutive landings, score=10*(1+combo*0.5)), SUPER HOP at COMBO>=4 (300f rainbow, 3x score, any-color), HEAT system (mismatch +15, timeout +5, decay 0.05/frame, cap 100 game over), 60s timer, hop interval decreasing (75f→18f), 40% matching-color bias in next square generation, particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text, OpenCode first-try success (1 self-correction for heat decay-before-check ordering), 27 headless tests",
     "href": "209_hopscotch_surge.html"
+  },
+  {
+    "id": "210_pop_chain",
+    "title": "POP CHAIN",
+    "idea": "バブルラップ（気泡緩衝材）をテーマにした色合わせグリッドゲーム。CA拡散でバブルが増殖し、同色連続ポップでCOMBO連鎖を伸ばす。COMBO>=4でSUPER POP（虹色バブル自動破裂、スコア3倍）が発動する。バブルをわざと拡散させて大クラスターを作り、SUPER POPで一気に破裂させる瞬間が面白い。合成圧縮（1枚に圧縮）をCOMBO→SUPER POPに、CA感染/増殖をバブル膨張に、risk/heat管理を間違え色ポップのフラストレーションHEATに再解釈（Score 32.75のデッキ構築案#1より）。",
+    "score": 32.75,
+    "status": "Top-down bubble wrap popping prototype complete — 320x240, 10x8 grid (CELL=24), 4 bubble colors (RED/GREEN/DARK_BLUE/YELLOW), CA inflation every 120f, click to pop matching-color bubble, COMBO chain (same-color consecutive pops, score=10*(1+combo*0.5)), SUPER POP at COMBO>=4 (300f rainbow, 3x score, any-color auto-pop), HEAT system (wrong +15, decay 0.05/frame, cap 100 game over), 60s timer, bubble spawn cap 32, color cycle every 90f, particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text. OpenCode first-try success with 1 self-correction; 56 headless tests.",
+    "href": "210_pop_chain.html"
   }
 ]
