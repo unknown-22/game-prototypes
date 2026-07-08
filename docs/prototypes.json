@@ -1660,5 +1660,13 @@
     "score": 31.75,
     "status": "Side-view pogo stick bouncing prototype complete — 320x240, auto-bounce (BOUNCE_HEIGHT=80, BOUNCE_SPEED=3.0), arrow keys/A+D movement, 4 color gems (RED/GREEN/DARK_BLUE/YELLOW) with sine wobble, COMBO chain (same-color consecutive collects, score=10*(1+combo*0.5)), SUPER BOUNCE at COMBO>=5 (300f rainbow, 3x score, auto-collect all), HEAT system (wrong +15, decay 0.03/frame, cap 100 game over, shake at heat>60), 60s timer, particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text. OpenCode first-try success with model self-correction (pyxel.pix→pyxel.tri for gem rendering); 55 headless tests.",
     "href": "211_pogo_chain.html"
+  },
+  {
+    "id": "212_tick_surge",
+    "title": "TICK SURGE",
+    "idea": "ホットポテト（爆弾回し）をテーマにした色合わせタイミングゲーム。4色の爆弾が6人のキャラクター間で回され、LEFT/RIGHTキーでパス先を選びSPACEキーで爆弾をパスする。爆弾の色と受け取るキャラクターの色が一致するとCOMBOが伸び、COMBO>=4でSUPER PASS（虹色爆弾、5秒間スコア3倍、全員自動マッチ）が発動し、画面全体に虹色のパーティクルが爆発する瞬間が面白い。色違いでCOMBOリセット＋HEAT+15、HEAT>=100か60秒経過でゲームオーバー。エコーゴースト（通過点に残る軌跡）が追加のヒートを与える。リスクとリターン：コンボ維持のために同色の相手を選ぶか、爆弾が爆発する前に安全にパスするか。初のホットポテト/爆弾回しジャンル。デッキ構築案#1（Score 32.55）の「ログ/リプレイが資産→エコーゴースト」「CAグリッド感染→爆弾圧力上昇」フックを再解釈。",
+    "score": 32.55,
+    "status": "Circle-passing hot potato prototype complete — 320x240, 6 characters in circle (radius 75, CHAR_SIZE=16), 4 bomb colors (RED/GREEN/DARK_BLUE/YELLOW), LEFT/RIGHT to select target (skips holder), SPACE to pass, COMBO chain (same-color consecutive passes, score=10*(1+combo*0.5)*multiplier), SUPER PASS at COMBO>=4 (150f rainbow, 3x score, all matches), HEAT system (wrong +15, natural +0.1/frame, decay 0.05/frame, ghost proximity +2, cap 100 game over), 60s timer, ghost trail system (midpoint circles at 90f life, adds heat when bomb passes near), particle/floating text/screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text. OpenCode first-try success with 1 self-correction (unused import + ghost heat mechanic). 70 headless tests.",
+    "href": "212_tick_surge.html"
   }
 ]
