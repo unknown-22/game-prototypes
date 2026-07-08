@@ -1668,5 +1668,13 @@
     "score": 32.55,
     "status": "Circle-passing hot potato prototype complete — 320x240, 6 characters in circle (radius 75, CHAR_SIZE=16), 4 bomb colors (RED/GREEN/DARK_BLUE/YELLOW), LEFT/RIGHT to select target (skips holder), SPACE to pass, COMBO chain (same-color consecutive passes, score=10*(1+combo*0.5)*multiplier), SUPER PASS at COMBO>=4 (150f rainbow, 3x score, all matches), HEAT system (wrong +15, natural +0.1/frame, decay 0.05/frame, ghost proximity +2, cap 100 game over), 60s timer, ghost trail system (midpoint circles at 90f life, adds heat when bomb passes near), particle/floating text/screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text. OpenCode first-try success with 1 self-correction (unused import + ghost heat mechanic). 70 headless tests.",
     "href": "212_tick_surge.html"
+  },
+  {
+    "id": "213_kendama_chain",
+    "title": "KENDAMA CHAIN",
+    "idea": "けん玉をテーマにした色合わせ物理パズル。マウスで玉を引っ張って放し、振り子の物理で4つのカップに玉を入れる。同じ色のカップに連続キャッチでCOMBOが加速し、COMBO>=4でSUPER MODE（虹色、5秒間スコア3倍、全色マッチ）発動。色違いキャッチでCOMBOリセット＋HEAT+1、完全失敗（どのカップにも入らない）でHEAT+2、HEAT>=10か60秒でゲームオーバー。エコーゴーストが前回成功時の軌跡を表示し、次回の狙いをガイドする。けん玉の物理操作の難しさとコンボの気持ちよさが面白い。リスクとリターン：高いティアの小さいカップ（SPIKE）を狙うか、安全な大きいカップ（BIG/SMALL）を狙うか。デッキ構築案#1（Score 31.25）の「ログ/リプレイが資産→エコーゴースト」「ヒート管理→HEAT（ミス）」フックを再解釈。初のけん玉/物理操作ジャンル。",
+    "score": 31.25,
+    "status": "Kendama ball-and-cup physics prototype complete — 320x240, mouse click-drag-release launching, pendulum+gravity physics (AIR_FRICTION=0.995, GRAVITY=0.15, MAX_STRING_LEN=80), 4 fixed-color cups (BIG/SMALL/HIGH/SPIKE at tiers 0/0/1/2), ball target color cycles on catch, COMBO chain (same-color consecutive catches, score=100*combo*(tier+1)*multiplier), SUPER MODE at COMBO>=4 (150f rainbow, 3x score, any-color match), HEAT system (wrong +1, miss +2, cap 10 game over), 60s timer, trajectory trail, echo ghost (recorded arc from last successful catch, 90f life), particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text.",
+    "href": "213_kendama_chain.html"
   }
 ]
