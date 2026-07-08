@@ -1652,5 +1652,13 @@
     "score": 32.75,
     "status": "Top-down bubble wrap popping prototype complete — 320x240, 10x8 grid (CELL=24), 4 bubble colors (RED/GREEN/DARK_BLUE/YELLOW), CA inflation every 120f, click to pop matching-color bubble, COMBO chain (same-color consecutive pops, score=10*(1+combo*0.5)), SUPER POP at COMBO>=4 (300f rainbow, 3x score, any-color auto-pop), HEAT system (wrong +15, decay 0.05/frame, cap 100 game over), 60s timer, bubble spawn cap 32, color cycle every 90f, particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text. OpenCode first-try success with 1 self-correction; 56 headless tests.",
     "href": "210_pop_chain.html"
+  },
+  {
+    "id": "211_pogo_chain",
+    "title": "POGO CHAIN",
+    "idea": "ポゴスティック（ピョンピョン跳ねる棒）をテーマにした色合わせ縦スクロールゲーム。空中に浮かぶ4色の宝石を、ポゴスティックで跳ねながら連続で同じ色を取ってCOMBOチェインを伸ばす。COMBO>=5でSUPER BOUNCE（虹色モード、5秒間スコア3倍、全宝石自動回収）が発動し、画面全体の宝石が一気に回収される瞬間が面白い。合成圧縮→COMBO→SUPER BOUNCE、CA感染/増殖→宝石の自動回収による連鎖に再解釈（Score 31.75のデッキ構築案#1より）。リスクとリターン：コンボ維持のために同色宝石を狙うか、色が変わった宝石をあえて避けてHEATを回避するか。HEAT>=100でゲームオーバー。初のポゴスティック/ピョンピョコジャンル。",
+    "score": 31.75,
+    "status": "Side-view pogo stick bouncing prototype complete — 320x240, auto-bounce (BOUNCE_HEIGHT=80, BOUNCE_SPEED=3.0), arrow keys/A+D movement, 4 color gems (RED/GREEN/DARK_BLUE/YELLOW) with sine wobble, COMBO chain (same-color consecutive collects, score=10*(1+combo*0.5)), SUPER BOUNCE at COMBO>=5 (300f rainbow, 3x score, auto-collect all), HEAT system (wrong +15, decay 0.03/frame, cap 100 game over, shake at heat>60), 60s timer, particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text. OpenCode first-try success with model self-correction (pyxel.pix→pyxel.tri for gem rendering); 55 headless tests.",
+    "href": "211_pogo_chain.html"
   }
 ]
