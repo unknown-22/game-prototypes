@@ -1700,5 +1700,13 @@
     "score": 30.5,
     "status": "Vine-swinging color-match COMBO chain prototype complete — 320x240, mouse click to grab/release vines, pendulum physics (GRAVITY=0.3, SWING_DAMPING=0.995, RELEASE_SPEED_BOOST=1.05), 4-color vines (RED/ORANGE/YELLOW/LIME), COMBO chain (same-color consecutive grabs, score=10+5*combo*multiplier), SUPER SWING at COMBO>=5 (300f rainbow, 3x score, auto-grab at extended range), HEAT system (grab +3, SUPER frame +0.15, ground decay -0.02/frame, swing cool -0.1/frame, cap 100 game over), vine spawning from right edge, player screen-wrap, particle trail/burst, floating score text, rainbow border during SUPER, 3 screens (Title/Playing/GameOver), English-only text.",
     "href": "216_vine_chain.html"
+  },
+  {
+    "id": "217_mow_chain",
+    "title": "MOW CHAIN",
+    "idea": "芝刈りをテーマにした色合わせCOMBO連鎖ゲーム。プレイヤーは矢印キーで芝刈り機を操作し、芝の下に隠れた色付きの花を刈り取る。同色の花を連続で刈るとCOMBOが加速し、COMBO>=4でSUPER MOWER（虹色、5秒間スコア3倍、全色自動マッチ）が発動する瞬間が面白い。異なる色の花を刈るとCOMBOリセット＋HEAT+15（芝刈り機がジャム）、1マス刈るごとにHEAT+1。HEAT>=100か60秒でゲームオーバー。リスクとリターン：同色の花を狙って高得点COMBOを維持するか、HEATを避けて安全に進むか。デッキ構築案#1（Score 31.65）の「合成圧縮」「1色だけ」「HEAT管理」フックを再解釈。初の芝刈りジャンル。",
+    "score": 31.65,
+    "status": "Lawn mowing color-match COMBO chain prototype complete — 320x240, grid-based (16x12, CELL=20), 4 flower colors (RED/LIME/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive cuts, score=10*combo*multiplier), SUPER MOWER at COMBO>=4 (150f rainbow, 3x score, auto-match all colors), HEAT system (cut +1, mismatch +15, decay 0.05/frame idle, cap 100 game over), 60s timer, particle burst / floating text / JAM feedback, mower trail, screen shake, 3 screens (Title/Playing/GameOver), English-only text.",
+    "href": "217_mow_chain.html"
   }
 ]
