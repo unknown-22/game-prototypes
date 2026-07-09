@@ -1684,5 +1684,13 @@
     "score": 32.6,
     "status": "Side-view hacky sack color-match COMBO prototype complete — 320x240, mouse/arrow-key player movement, gravity-based sack physics (GRAVITY=0.3, AIR_FRICTION=0.995), 4-color sack (RED/GREEN/DARK_BLUE/YELLOW, 45f cycle), COMBO chain (same-color consecutive kicks, score=10*(1+combo*0.5)*multiplier), SUPER KICK at COMBO>=5 (300f rainbow, 3x score, all colors match), HEAT system (miss +20, wall OOB +5, decay 0.03/frame, cap 100 game over), 60s timer, echo ghost playback (90f recorded trajectory), stick-figure player with colored foot paddle, particle burst on kick/SUPER, floating text feedback, screen shake on miss, corner stuck recovery, 3 screens (Title/Playing/GameOver), English-only text, 54 headless tests — OpenCode first-try success with `-f` design file + no `--thinking`",
     "href": "214_hackysack_chain.html"
+  },
+  {
+    "id": "215_yoyo_chain",
+    "title": "YOYO CHAIN",
+    "idea": "ヨーヨーをテーマにした色合わせCOMBO連鎖ゲーム。ハンドから伸びるストリングの先でヨーヨーが落下・バウンド・上昇し、手元に戻るタイミングでSPACEを押してキャッチする。同色連続キャッチでCOMBOが加速し、COMBO>=4でSUPER YOYO（虹色、5秒間スコア3倍、自動キャッチ）が発動する瞬間が面白い。色違いキャッチでCOMBOリセット＋HEAT+15、キャッチミスでHEAT+5、HEAT>=100か60秒でゲームオーバー。リスクとリターン：COMBO維持のために同色を待つか、HEATを避けるために早めにキャッチするか。デッキ構築案#1（Score 32.25）の「同色COMBO→超モード」「HEAT管理」「パーティクルフィードバック」フックを再解釈。初のヨーヨージャンル。",
+    "score": 32.25,
+    "status": "Yoyo color-match COMBO chain prototype complete — 320x240, yoyo physics (GRAVITY=0.3, BOUNCE_FACTOR=-0.6, STRING_LENGTH=140, CATCH_WINDOW=30), 4-color yoyo (RED/LIME/DARK_BLUE/YELLOW, 90f cycle), COMBO chain (same-color consecutive catches, score=10*(1+combo*0.5)*multiplier), SUPER YOYO at COMBO>=4 (300f rainbow, 3x score, auto-catch), HEAT system (wrong +15, miss +5, decay 0.05/frame, cap 100 game over), 60s timer, screen shake at HEAT>60, particle burst / floating text feedback, 3 screens (Title/Playing/GameOver) with title screen decorative bouncing yoyo, English-only text.",
+    "href": "215_yoyo_chain.html"
   }
 ]
