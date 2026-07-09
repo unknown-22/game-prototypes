@@ -1676,5 +1676,13 @@
     "score": 31.25,
     "status": "Kendama ball-and-cup physics prototype complete — 320x240, mouse click-drag-release launching, pendulum+gravity physics (AIR_FRICTION=0.995, GRAVITY=0.15, MAX_STRING_LEN=80), 4 fixed-color cups (BIG/SMALL/HIGH/SPIKE at tiers 0/0/1/2), ball target color cycles on catch, COMBO chain (same-color consecutive catches, score=100*combo*(tier+1)*multiplier), SUPER MODE at COMBO>=4 (150f rainbow, 3x score, any-color match), HEAT system (wrong +1, miss +2, cap 10 game over), 60s timer, trajectory trail, echo ghost (recorded arc from last successful catch, 90f life), particle/floating text feedback, 3 screens (Title/Playing/GameOver), English-only text.",
     "href": "213_kendama_chain.html"
+  },
+  {
+    "id": "214_hackysack_chain",
+    "title": "HACKY SACK CHAIN",
+    "idea": "蹴り玉（ハッキーサック/フットバッグ）をテーマにした色合わせCOMBO連鎖ゲーム。サイドビューで落下するサックを蹴り、同じ色を連続キックでCOMBO加速。COMBO>=5でSUPER KICK（虹色、5秒間スコア3倍、全色マッチ）が発動し、虹色のサックとパーティクルが画面を彩る瞬間が面白い。色違いでCOMBOリセット、地面に落とすとHEAT+20、壁衝突でHEAT+5、HEAT>=100か60秒でゲームオーバー。エコーゴースト（前回の蹴り軌跡）が次回のガイドになる。リスクとリターン：COMBO維持のために同色キックを狙うか、安全に色の切り替わりを待つか。デッキ構築案#1（Score 32.6）の「ログ/リプレイが資産→エコーゴースト軌跡」「UI連鎖崩壊/増加→COMBO→SUPER KICK」フックを再解釈。初のハッキーサック/フットバッグジャンル。",
+    "score": 32.6,
+    "status": "Side-view hacky sack color-match COMBO prototype complete — 320x240, mouse/arrow-key player movement, gravity-based sack physics (GRAVITY=0.3, AIR_FRICTION=0.995), 4-color sack (RED/GREEN/DARK_BLUE/YELLOW, 45f cycle), COMBO chain (same-color consecutive kicks, score=10*(1+combo*0.5)*multiplier), SUPER KICK at COMBO>=5 (300f rainbow, 3x score, all colors match), HEAT system (miss +20, wall OOB +5, decay 0.03/frame, cap 100 game over), 60s timer, echo ghost playback (90f recorded trajectory), stick-figure player with colored foot paddle, particle burst on kick/SUPER, floating text feedback, screen shake on miss, corner stuck recovery, 3 screens (Title/Playing/GameOver), English-only text, 54 headless tests — OpenCode first-try success with `-f` design file + no `--thinking`",
+    "href": "214_hackysack_chain.html"
   }
 ]
