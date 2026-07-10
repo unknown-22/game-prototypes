@@ -1724,5 +1724,13 @@
     "score": 32.35,
     "status": "Prototype complete",
     "href": "219_marble_chain.html"
+  },
+  {
+    "id": "220_chroma_mix",
+    "title": "Chroma Mix",
+    "idea": "絵の具調合所の主人になり、迫り来る注文の色と同じ絵の具タンクをクリックして混色する。同色の注文を連続でマッチさせるとCOMBO連鎖が加速し、COMBO>=4でSUPER MIX発動（虹色、5秒間画面全体の注文を自動消去＋スコア3倍）の瞬間が面白い。色違いマッチでCOMBOリセット＋HEAT+20、取り逃しでHEAT+15。HEAT>=100か60秒でゲームオーバー。リスクとリターン：COMBOを伸ばそうと焦って色違いを押すと一気にHEATが溜まるので、冷静な色選択が鍵。初の絵の具調合×COMBOチェインジャンル。",
+    "score": null,
+    "status": "Prototype complete",
+    "href": "220_chroma_mix.html"
   }
 ]
