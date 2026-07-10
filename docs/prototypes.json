@@ -1708,5 +1708,13 @@
     "score": 31.65,
     "status": "Lawn mowing color-match COMBO chain prototype complete — 320x240, grid-based (16x12, CELL=20), 4 flower colors (RED/LIME/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive cuts, score=10*combo*multiplier), SUPER MOWER at COMBO>=4 (150f rainbow, 3x score, auto-match all colors), HEAT system (cut +1, mismatch +15, decay 0.05/frame idle, cap 100 game over), 60s timer, particle burst / floating text / JAM feedback, mower trail, screen shake, 3 screens (Title/Playing/GameOver), English-only text.",
     "href": "217_mow_chain.html"
+  },
+  {
+    "id": "218_stick_chain",
+    "title": "STICK CHAIN",
+    "idea": "机の上に散らばった4色の棒（マウスでクリックしてつまむ棒拾い/Mikadoゲーム）。同色の棒を連続でつまむとCOMBOが加速し、COMBO>=4でSUPER PICK（5秒間虹色、全色マッチ＋スコア3倍）が発動する瞬間が面白い。交差している棒を取るとHEATが溜まり、色違いでCOMBOリセット＋HEAT+15。HEAT>=100か60秒でゲームオーバー。ラウンドクリアで棒の数が増加し難度上昇。リスクとリターン：高COMBOを狙って危険な交差の多い同色の棒を取るか、安全にHEATの少ない別の棒を選ぶか。前回より上達したかがスコア/最大COMBO/到達ラウンドで比較できる。初の棒拾い（Mikado）ジャンル。",
+    "score": 31.85,
+    "status": "Pick-up sticks (Mikado) color-match COMBO chain prototype complete — 320x240, mouse click to pick colored line-segment sticks, 4 colors (RED/LIME/DARK_BLUE/YELLOW), COMBO chain (same-color consecutive picks, score=10*combo*multiplier), SUPER PICK at COMBO>=4 (300f rainbow, any color matches, 3x score), HEAT system (overlap_count*5 per pick +15 mismatch, decay 0.02/frame, cap 100 game over), line-segment intersection detection, 60s timer, round escalation (+3 sticks/round), particle burst / floating score text / screen shake, 3 screens (Title/Playing/GameOver), 66 headless tests, first Mikado/pick-up-sticks genre in collection.",
+    "href": "218_stick_chain.html"
   }
 ]
