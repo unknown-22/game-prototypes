@@ -1748,5 +1748,13 @@
     "score": 32.15,
     "status": "Rube Goldberg chain-reaction machine builder prototype complete — 320x240, 10×8 grid (CELL=20), 4 node colors (RED/LIME/DARK_BLUE/YELLOW), 3 placements per turn, BFS chain detection (4-directional adjacency, min 2 nodes), COMBO system (increment on same-color turns, reset on switch), SUPER MODE at COMBO>=5 (300f, 3x score), HEAT system (switch +15, untriggered +5/node, decay 0.02/frame, cap 100 game over), escalation (spawn count 2+turns/3), BFS animation step-by-step, particle burst / floating score / screen shake (>=5 nodes), 4-phase state machine (TITLE/BUILD/REACT/RESOLVE/GAME_OVER), 35 headless tests, English-only text.",
     "href": "222_goldberg_chain.html"
+  },
+  {
+    "id": "223_chair_surge",
+    "title": "CHAIR SURGE",
+    "idea": "音楽が止まる前に同色の椅子を目指して円周上を駆け回る椅子取りゲーム。同色連続着席でCOMBOチェインが伸び、色違いでCOMBOリセット＋HEAT+15（羞�心）。着席した椅子は消え、残った椅子が等間隔にスライド圧縮。COMBO>=4でSUPER SIT発動（虹色、5秒間全色マッチ＋スコア3倍）。HEAT>=100か60秒でゲームオーバー。面白い瞬間：音楽が止まる直前に同色の椅子へ滑り込むギリギリの駆け引きと、色違いの妥協かリスクを取るかのジレンマ。",
+    "score": null,
+    "status": "Musical chairs COMBO-chain prototype complete — 320x240, 8 chairs on circle (R=75), 4 colors (RED/LIME/DARK_BLUE/YELLOW), arrow keys to move clockwise/counter-clockwise, timer countdown (90f->30f escalating with score), same-color consecutive sits = COMBO chain (score=10*combo*multiplier), wrong-color = COMBO reset + HEAT+15, sat chairs disappear + gravity compression, SUPER SIT at COMBO>=4 (150f rainbow mode, 3x score), HEAT bar + overall 60s timer, particle burst / floating text feedback, 3 screens (Title/Playing/GameOver), English-only text, headless-testable _resolve_sit() logic.",
+    "href": "223_chair_surge.html"
   }
 ]
