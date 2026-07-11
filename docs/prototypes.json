@@ -1732,5 +1732,21 @@
     "score": null,
     "status": "Prototype complete",
     "href": "220_chroma_mix.html"
+  },
+  {
+    "id": "221_gumball_surge",
+    "title": "Gumball Surge",
+    "idea": "ガムボールディスペンサーに詰まった4色のガムボールを上から眺め、同色を連続クリックで収集するCOMBOチェインゲーム。同色連続クリックでCOMBOが加速し、COMBO>=4でSUPER DISPENSE（虹色、5秒間全色マッチ＋スコア3倍）が発動。さらに、マッチしたガムボールは隣接する空きマスに感染拡散（CAセルオートマトン式）し、連鎖的な盤面クリアの快感を生む。色違いクリックでCOMBOリセット＋HEAT+15（マシンのジャム）。HEAT>=100か60秒でゲームオーバー。リスクとリターン：同色狙いでCOMBOを伸ばすか感染拡散で盤面制御するか、焦って色違いを押してHEATが溜まるかのジレンマ。初のCA感染拡散×ガムボール収集ジャンル。",
+    "score": null,
+    "status": "Top-down gumball dispenser COMBO-chain prototype complete — 320x240, 5-col/12-row grid (CELL=20), 4 gumball colors (RED/LIME/DARK_BLUE/YELLOW), mouse click to collect, COMBO chain (same-color consecutive clicks, score=10*combo*multiplier), SUPER DISPENSE at COMBO>=4 (150f rainbow, any color matches, 3x score), CA infection spread (20%/frame per gumball, spreads to adjacent empty cells, max 2 spreads, infected score halved), HEAT system (mismatch +15, decay based on elapsed time, cap 100 game over), 60s timer with escalating spawn rate (45f -> 15f min), particle burst / floating text / screen shake, 3 screens (Title/Playing/GameOver), English-only text, headless-testable with Game.__new__(Game) pattern.",
+    "href": "221_gumball_surge.html"
+  },
+  {
+    "id": "222_goldberg_chain",
+    "title": "GOLDBERG CHAIN",
+    "idea": "グリッドに色付きノードを配置し、BFS連鎖反応を起こすルーブ・ゴールドバーグマシンビルダー。各ターンに1色を選び最大3つの同色ノードを配置。隣接する同色ノードは連結され、発火ボタン（GO）でBFSアニメーションが連結ノードを連鎖的に消去し高スコアを得る。同色ターン継続でCOMBOが加速し、COMBO>=5でSUPER MODE発動（5秒間3倍スコア）。2つの巨大な同色クラスターを橋渡しする最後のノードを置き、BFS連鎖がグリッド全体に波及して大爆発スコアを得る瞬間が面白い。色切替でCOMBOリセット＋HEAT+15（配管の詰まり）。未発火ノードが残るとHEAT+5/個。HEAT>=100か60秒でゲームオーバー。リスクとリターン：COMBOを維持して高得点を狙うか、HEATを避けて色を切替えるか。初のルーブ・ゴールドバーグ連鎖反応マシンビルダージャンル。",
+    "score": 32.15,
+    "status": "Rube Goldberg chain-reaction machine builder prototype complete — 320x240, 10×8 grid (CELL=20), 4 node colors (RED/LIME/DARK_BLUE/YELLOW), 3 placements per turn, BFS chain detection (4-directional adjacency, min 2 nodes), COMBO system (increment on same-color turns, reset on switch), SUPER MODE at COMBO>=5 (300f, 3x score), HEAT system (switch +15, untriggered +5/node, decay 0.02/frame, cap 100 game over), escalation (spawn count 2+turns/3), BFS animation step-by-step, particle burst / floating score / screen shake (>=5 nodes), 4-phase state machine (TITLE/BUILD/REACT/RESOLVE/GAME_OVER), 35 headless tests, English-only text.",
+    "href": "222_goldberg_chain.html"
   }
 ]
