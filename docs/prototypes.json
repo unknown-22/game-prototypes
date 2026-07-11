@@ -1764,5 +1764,13 @@
     "score": 32.2,
     "status": "Side-view slinky descent prototype complete — 320x240, 4-color steps (RED/GREEN/DARK_BLUE/YELLOW), SPACE to flip slinky to next step, same-color consecutive flips build COMBO chain, SUPER SLINKY at COMBO>=4 (300f rainbow, 3x score, auto-flip every 30f), HEAT risk system (mismatch +15, decay 0.05/frame, cap 100 game over), idle timer → fall game over, 60s countdown timer, ghost trail best-run replay, particle burst/floating text/screen shake/wobble warning feedback, step regeneration with scrolling, color cycle every 90f, 3 screens (Title/Playing/GameOver), 54 headless tests, first slinky/spring-toy genre in collection. OpenCode CLI first-try success with self-corrected ruff/ty issues.",
     "href": "224_slinky_chain.html"
+  },
+  {
+    "id": "225_steed_chain",
+    "title": "STEED CHAIN",
+    "idea": "横スクロール競馬。馬の色とハードルの色が一致するタイミングでSPACEキーを押してジャンプ。同色連続ジャンプでCOMBOが加速し、COMBO>=4でSUPER GALLOP（虹色モード、5秒間スコア3倍、オートジャンプ）が発動する瞬間が面白い。色違いジャンプでCOMBOリセット＋HEAT+15＋スタンブル。衝突（ジャンプ失敗）でHEAT+25＋COMBOリセット。HEAT>=100または60秒でゲームオーバー。前回ベストランのゴースト馬が表示される。デッキ構築案#1（Score 31.85）の「ログ/リプレイが資産→ゴースト馬」「1色だけ→色一致ジャンプ」フックを再解釈。初の競馬ジャンル。",
+    "score": 31.85,
+    "status": "Side-scrolling horse racing prototype complete — 320x240, 4 horse colors (RED/GREEN/DARK_BLUE/YELLOW), color cycle every 90f, SPACE to jump (gravity 0.5, initial vy=-8.0), COMBO chain (same-color consecutive hurdles, score=10*combo*multiplier), SUPER GALLOP at COMBO>=4 (300f rainbow, 3x score, auto-clear any hurdle), HEAT risk (mismatch +15, crash +25, cap 100 → game over), stumble cooldown 30f, ghost horse best-run replay, particle burst / floating text / rainbow border feedback, scroll speed escalation 2.0→5.0, hurdle spawn interval 120f→40f, 60s timer, 3 screens (Title/Playing/GameOver), 51 headless tests, first horse racing genre in collection. OpenCode CLI first-try success (ruff+ty check pass).",
+    "href": "225_steed_chain.html"
   }
 ]
