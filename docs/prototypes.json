@@ -1756,5 +1756,13 @@
     "score": null,
     "status": "Musical chairs COMBO-chain prototype complete — 320x240, 8 chairs on circle (R=75), 4 colors (RED/LIME/DARK_BLUE/YELLOW), arrow keys to move clockwise/counter-clockwise, timer countdown (90f->30f escalating with score), same-color consecutive sits = COMBO chain (score=10*combo*multiplier), wrong-color = COMBO reset + HEAT+15, sat chairs disappear + gravity compression, SUPER SIT at COMBO>=4 (150f rainbow mode, 3x score), HEAT bar + overall 60s timer, particle burst / floating text feedback, 3 screens (Title/Playing/GameOver), English-only text, headless-testable _resolve_sit() logic.",
     "href": "223_chair_surge.html"
+  },
+  {
+    "id": "224_slinky_chain",
+    "title": "SLINKY CHAIN",
+    "idea": "スリンキー（ばね玩具）が階段を降りるタイミング型色合わせCOMBOチェインゲーム。プレイヤーはSPACEキーでスリンキーを次の階段へフリップさせ、スリンキーの色と階段の色が一致するとCOMBOが伸びる。COMBO>=4でSUPER SLINKY（虹色モード、5秒間スコア3倍、オートフリップ）が発動し、虹色に輝くスリンキーが階段を自動で駆け降りる瞬間が面白い。色違いでCOMBOリセット＋HEAT+15、放置しすぎると階段から落下してゲームオーバー。HEAT>=100または60秒経過でゲームオーバー。リスクとリターン：COMBO継続のために同色の階段を待つか、HEATを避けて早めにフリップするか。ゴースト軌跡がベストランの経路を表示。デッキ構築案#1（Score 32.2）の「ログ/リプレイが資産→ゴースト軌跡」「UI連鎖演出→COMBO→SUPER SLINKY」フックを再解釈。初のスリンキー/ばね玩具ジャンル。",
+    "score": 32.2,
+    "status": "Side-view slinky descent prototype complete — 320x240, 4-color steps (RED/GREEN/DARK_BLUE/YELLOW), SPACE to flip slinky to next step, same-color consecutive flips build COMBO chain, SUPER SLINKY at COMBO>=4 (300f rainbow, 3x score, auto-flip every 30f), HEAT risk system (mismatch +15, decay 0.05/frame, cap 100 game over), idle timer → fall game over, 60s countdown timer, ghost trail best-run replay, particle burst/floating text/screen shake/wobble warning feedback, step regeneration with scrolling, color cycle every 90f, 3 screens (Title/Playing/GameOver), 54 headless tests, first slinky/spring-toy genre in collection. OpenCode CLI first-try success with self-corrected ruff/ty issues.",
+    "href": "224_slinky_chain.html"
   }
 ]
