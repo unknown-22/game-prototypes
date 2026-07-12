@@ -1788,5 +1788,13 @@
     "score": 31.85,
     "status": "Cricket batting color-match COMBO chain prototype complete — 320x240, side-view perspective (batter x=60, stumps x=35), 4 ball colors (RED/LIME/DARK_BLUE/YELLOW), LEFT/RIGHT arrows to cycle bat color, COMBO chain (same-color consecutive hits, score=10*combo*multiplier), SUPER INNINGS at COMBO>=4 (300f rainbow, 3x score, auto-match all colors), HEAT risk (mismatch +15, ball-passes-stumps +10, decay 0.02/frame, cap 100 game over), escalation (spawn interval 90f→30f, ball speed 2.0→4.0 px/f over 60s), 60s timer, ball flies to boundary (BOUNDARY_Y=30) on hit, particle burst/floating text/screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text.",
     "href": "227_wicket_chain.html"
+  },
+  {
+    "id": "228_tag_surge",
+    "title": "TAG SURGE",
+    "idea": "トップダウン鬼ごっこCOMBOチェインゲーム。プレイヤーは「IT」となり、4色の逃走者を追いかけてタッチする。同色連続タッチでCOMBOが伸び、COMBO>=4でSUPER TAG（300f虹色モード、全色マッチ＋スコア3倍＋近接自動タグ）が発動する瞬間が面白い。色違いタッチでCOMBOリセット＋HEAT+15＋硬直。HEAT>=100または60秒でゲームオーバー。リスクとリターン：同色の逃走者を狙ってCOMBOを伸ばすか、目の前の逃走者を色違いでもタッチして場を整理するか、色が切り替わるタイミングを計る判断。デッキ構築案#1（Score 32.0）の「合成圧縮→同色COMBOチェイン」「連鎖可視化＋加速→コンボカウンター＋速度上昇」を鬼ごっこに再解釈。",
+    "score": 32.0,
+    "status": "Top-down tag COMBO chain prototype complete — 320x240, 4 runner colors (RED/LIME/DARK_BLUE/YELLOW), player IT color cycles every 90f→60f (escalation), arrow key movement (8-directional with diagonal normalization), COMBO chain (same-color consecutive tags, score=10*(1+combo*0.5)*super_mult), SUPER TAG at COMBO>=4 (300f rainbow, 3x score, auto-tag nearby runners within +20px radius), HEAT risk (mismatch +15, decay 0.02/frame, cap 100 game over), stun 15f on mismatch, runner AI (flee from player with acceleration + damping), difficulty escalation (runner speed +0.15/10s, max runners +1/10s up to 10), periodic spawning every 5s, particle burst/floating text/rainbow pulse/screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text.",
+    "href": "228_tag_surge.html"
   }
 ]
