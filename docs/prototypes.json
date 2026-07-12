@@ -1780,5 +1780,13 @@
     "score": 32.35,
     "status": "Typing COMBO-chain prototype complete — 320x240, 10x8 grid (CELL=24), 4 letters (A/S/D/F), CA spread (50% chance to adjacent every 90f→30f), wrong key HEAT+15, COMBO increment on consecutive same-letter clears, SUPER MODE at COMBO>=4 (300f rainbow, 3x score, clears all letters), grid pressure HEAT+1 at >60% occupancy, HEAT decay 0.02/frame, 60s timer, particle burst/floating text feedback, 3 screens (Title/Playing/GameOver), 30 headless tests, first typing game genre in collection.",
     "href": "226_type_surge.html"
+  },
+  {
+    "id": "227_wicket_chain",
+    "title": "WICKET CHAIN",
+    "idea": "クリケット打撃の色合わせCOMBOチェインゲーム。4色のボールが右から投げ込まれ、バッターは矢印キーでバットの色を切り替え、同色のボールを連続で打ち返す（ヒット）とCOMBOが伸びる。COMBO>=4でSUPER INNINGS発動（300f虹色モード、全色自動マッチ＋スコア3倍）し、虹色に輝くバットが次々と6打を放つ瞬間が面白い。色違いヒットでCOMBOリセット＋HEAT+15、見逃し（ボールがウィケットを通過）でHEAT+10。HEAT>=100または60秒でゲームオーバー。リスクとリターン：COMBOのために同色ボールを待つか、HEATが溜まる前に色を変えてリスク回避するかのジレンマ。初のクリケット打撃×COMBOチェインジャンル。",
+    "score": 31.85,
+    "status": "Cricket batting color-match COMBO chain prototype complete — 320x240, side-view perspective (batter x=60, stumps x=35), 4 ball colors (RED/LIME/DARK_BLUE/YELLOW), LEFT/RIGHT arrows to cycle bat color, COMBO chain (same-color consecutive hits, score=10*combo*multiplier), SUPER INNINGS at COMBO>=4 (300f rainbow, 3x score, auto-match all colors), HEAT risk (mismatch +15, ball-passes-stumps +10, decay 0.02/frame, cap 100 game over), escalation (spawn interval 90f→30f, ball speed 2.0→4.0 px/f over 60s), 60s timer, ball flies to boundary (BOUNDARY_Y=30) on hit, particle burst/floating text/screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text.",
+    "href": "227_wicket_chain.html"
   }
 ]
