@@ -1796,5 +1796,13 @@
     "score": 32.0,
     "status": "Top-down tag COMBO chain prototype complete — 320x240, 4 runner colors (RED/LIME/DARK_BLUE/YELLOW), player IT color cycles every 90f→60f (escalation), arrow key movement (8-directional with diagonal normalization), COMBO chain (same-color consecutive tags, score=10*(1+combo*0.5)*super_mult), SUPER TAG at COMBO>=4 (300f rainbow, 3x score, auto-tag nearby runners within +20px radius), HEAT risk (mismatch +15, decay 0.02/frame, cap 100 game over), stun 15f on mismatch, runner AI (flee from player with acceleration + damping), difficulty escalation (runner speed +0.15/10s, max runners +1/10s up to 10), periodic spawning every 5s, particle burst/floating text/rainbow pulse/screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text.",
     "href": "228_tag_surge.html"
+  },
+  {
+    "id": "229_hide_surge",
+    "title": "HIDE SURGE",
+    "idea": "色合わせかくれんぼ。シーカーから隠れながら同色の隠れ場所に連続で隠れるとCOMBOチェインが加速し、COMBO>=4でSUPER HIDE（虹色、300f、シーカー検出無効＋スコア3倍）が発動する瞬間が面白い。シーカーはCA式に捜索範囲を広げる。色違いの隠れ場所でCOMBOリセット＋HEAT+15、シーカーに見つかるとHEAT+25。HEAT>=100または60秒でゲームオーバー。リスクとリターン：同色の隠れ場所を探して高COMBOを狙うか、見つかる前に安全な場所に隠れるかのジレンマ。デッキ構築案#1（Score 32.75）の「合成→同色COMBOチェイン」「CA感染/増殖→シーカー捜索範囲拡大」「heat/risk→HEATメカニクス」フックをかくれんぼに再解釈。初のかくれんぼ（Hide and Seek）ジャンル。",
+    "score": 32.75,
+    "status": "Top-down hide-and-seek color-match COMBO chain prototype complete — 320x240, 12×9 grid (CELL=20), 4 hiding spot colors (RED/LIME/DARK_BLUE/YELLOW), arrow keys to move, SPACE to hide, same-color consecutive hides = COMBO chain (score=10*combo*super_mult), SUPER HIDE at COMBO>=4 (300f rainbow, seekers can't detect, 3x score), CA awareness expansion (3 seekers, 4-dir spread 50%/60f→30f), HEAT risk (mismatch +15, caught +25, decay 0.02/frame, cap 100 → game over), 60s timer, difficulty escalation (seeker speed 30f→8f, awareness 60f→30f, respawn 240f→120f), particle burst / floating text / screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text, 35 headless tests, first hide-and-seek genre in collection. OpenCode CLI first-try success (self-corrected 1 test).",
+    "href": "229_hide_surge.html"
   }
 ]
