@@ -1772,5 +1772,13 @@
     "score": 31.85,
     "status": "Side-scrolling horse racing prototype complete — 320x240, 4 horse colors (RED/GREEN/DARK_BLUE/YELLOW), color cycle every 90f, SPACE to jump (gravity 0.5, initial vy=-8.0), COMBO chain (same-color consecutive hurdles, score=10*combo*multiplier), SUPER GALLOP at COMBO>=4 (300f rainbow, 3x score, auto-clear any hurdle), HEAT risk (mismatch +15, crash +25, cap 100 → game over), stumble cooldown 30f, ghost horse best-run replay, particle burst / floating text / rainbow border feedback, scroll speed escalation 2.0→5.0, hurdle spawn interval 120f→40f, 60s timer, 3 screens (Title/Playing/GameOver), 51 headless tests, first horse racing genre in collection. OpenCode CLI first-try success (ruff+ty check pass).",
     "href": "225_steed_chain.html"
+  },
+  {
+    "id": "226_type_surge",
+    "title": "TYPE SURGE",
+    "idea": "タイピングゲーム。A/S/D/Fのホーム行キーでグリッド上の文字を消し、同じ文字を連続でタイプするとCOMBOが伸びる。COMBO>=4でSUPER MODE（虹色、5秒間全文字一括消去＋スコア3倍）が発動する瞬間が面白い。違うキーでHEAT+15、グリッド占有率60%超で毎秒HEAT+1。HEAT>=100または60秒でゲームオーバー。文字はセルオートマトンで隣接マスに拡散する。リスクとリターン：同じ文字を連打して高COMBOを狙うか、安全に散らばった文字を処理するかの判断。デッキ構築案#1（Score 32.35）の「CAグリッド充填」「合成圧縮→同色連続タイプ」「COMBO/HEAT」フックをタイピングゲームに再解釈。初のタイピングジャンル。",
+    "score": 32.35,
+    "status": "Typing COMBO-chain prototype complete — 320x240, 10x8 grid (CELL=24), 4 letters (A/S/D/F), CA spread (50% chance to adjacent every 90f→30f), wrong key HEAT+15, COMBO increment on consecutive same-letter clears, SUPER MODE at COMBO>=4 (300f rainbow, 3x score, clears all letters), grid pressure HEAT+1 at >60% occupancy, HEAT decay 0.02/frame, 60s timer, particle burst/floating text feedback, 3 screens (Title/Playing/GameOver), 30 headless tests, first typing game genre in collection.",
+    "href": "226_type_surge.html"
   }
 ]
