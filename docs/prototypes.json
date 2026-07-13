@@ -1812,5 +1812,13 @@
     "score": 0,
     "status": "Side-view jump rope color-match COMBO chain prototype complete — 320x240, pendulum rope physics (oscillating arc, max π/3), SPACE to jump, 4 colors (RED/LIME/DARK_BLUE/YELLOW) cycling every 90f→40f, COMBO chain (same-color consecutive jumps = 10*combo*super_mult), SUPER JUMP at COMBO>=4 (300f rainbow, 3x score, auto-jump + invincible), HEAT risk (mismatch +15, rope hit +25, decay 0.02/f, cap 100 → game over), stun 20f on hit, 60s timer, difficulty escalation (rope speed 0.04→0.10rad/f, color interval 90f→40f), particle burst / floating text feedback, 3 screens (Title/Playing/GameOver), English-only text, 53 headless tests.",
     "href": "230_rope_chain.html"
+  },
+  {
+    "id": "231_limbo_chain",
+    "title": "LIMBO CHAIN",
+    "idea": "色合わせリンボーダンス。「バーがどんどん低くなる中で同色の連続くぐりを成功させ続ける緊張感と、COMBO>=4でSUPER LIMBOが発動してバーが跳ね上がる瞬間の爽快感」が面白い。バーの色に合わせてSPACEでくぐるタイミングゲーム。同色連続成功でCOMBOが伸び、COMBO>=4でSUPER LIMBO（300f虹色、3xスコア、自動くぐり＋バー15px上昇）発動。色違いでCOMBOリセット＋HEAT+15、くぐり失敗でHEAT+25。HEAT>=100または60秒でゲームオーバー。リスクとリターン：同色を待ってCOMBOを伸ばすか、色が変わる前に安全くぐりでHEATを避けるかのジレンマ。バーは成功するたびに下降し難度が上がる。game_idea_factory #1（Score 31.95）の「連鎖伝播」「崩壊/増加/圧縮」フックをリンボーに再解釈。初のリンボー（Limbo）ジャンル。",
+    "score": 31.95,
+    "status": "Side-view limbo color-match COMBO chain prototype complete — 320x240, bar color cycles every 90f→40f, SPACE to duck, 4 colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive ducks = COMBO chain (score=BASE*combo*super_mult), SUPER LIMBO at COMBO>=4 (300f rainbow, 3x score, auto-duck + bar raise 15px), HEAT risk (mismatch +15, bar hit +25, decay 0.02/f, cap 100 → game over), 60s timer, difficulty escalation (attempt interval 120f→45f, color cycle 90f→40f, bar descent rate increases), particle burst / floating text / screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text, 29 headless tests, first limbo genre in collection. OpenCode CLI first-try success (self-corrected 6 test failures).",
+    "href": "231_limbo_chain.html"
   }
 ]
