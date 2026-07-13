@@ -1820,5 +1820,13 @@
     "score": 31.95,
     "status": "Side-view limbo color-match COMBO chain prototype complete — 320x240, bar color cycles every 90f→40f, SPACE to duck, 4 colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive ducks = COMBO chain (score=BASE*combo*super_mult), SUPER LIMBO at COMBO>=4 (300f rainbow, 3x score, auto-duck + bar raise 15px), HEAT risk (mismatch +15, bar hit +25, decay 0.02/f, cap 100 → game over), 60s timer, difficulty escalation (attempt interval 120f→45f, color cycle 90f→40f, bar descent rate increases), particle burst / floating text / screen shake feedback, 3 screens (Title/Playing/GameOver), English-only text, 29 headless tests, first limbo genre in collection. OpenCode CLI first-try success (self-corrected 6 test failures).",
     "href": "231_limbo_chain.html"
+  },
+  {
+    "id": "232_hula_chain",
+    "title": "HULA CHAIN",
+    "idea": "フラフープ色合わせCOMBOチェインゲーム。4色の区画を持つフープがプレイヤーの周りを回転し、画面端から飛来する色付き宝石がフープの同色区画に到達すると回収できCOMBOが伸びる。COMBOが4以上でSUPER HOOP（虹色モード、300フレーム、スコア3倍、全色自動回収）が発動し、次々と宝石が自動回収されてスコアが爆発する瞬間が面白い。色違い回収でCOMBOリセット＋HEAT+15、宝石取り逃しでHEAT+10。HEAT>=100または60秒タイマーでゲームオーバー。ゴーストフープがベストランのフープ角度を表示。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER HOOPの大報酬が得られるが、色違い回収でHEAT蓄積のリスク。時間経過で宝石速度・出現頻度・フープ自動回転速度が上昇。",
+    "score": 32.0,
+    "status": "Hula hoop color-match COMBO chain prototype complete",
+    "href": "232_hula_chain.html"
   }
 ]
