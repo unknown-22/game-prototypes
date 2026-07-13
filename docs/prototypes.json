@@ -1828,5 +1828,13 @@
     "score": 32.0,
     "status": "Hula hoop color-match COMBO chain prototype complete",
     "href": "232_hula_chain.html"
+  },
+  {
+    "id": "233_croquet_chain",
+    "title": "CROQUET CHAIN",
+    "idea": "トップダウンクロッケー色合わせCOMBOチェインゲーム。マウスクリック&ドラッグで手球を打ち出し、4色の的球（RED/LIME/DARK_BLUE/YELLOW）に当てて同色のウィケット（アーチ）を通過させる。同色連続通過でCOMBOが伸び、COMBO>=4でSUPER SHOT（300f虹色モード、全色マッチ＋スコア3倍＋自動発射）が発動し虹色に輝く球が次々とウィケットを抜けてスコアが爆発する瞬間が面白い。色違い通過でCOMBOリセット＋HEAT+15、球が場外にでるとHEAT+5。HEAT>=100または60秒でゲームオーバー。ゴースト軌跡が前回ベストショットの弾道を表示。リスクとリターン：同色COMBOを狙って打ち出すか、確実な球を狙うかの判断。時間経過でウィケット位置が移動し難易度が上昇。game_idea_factory #1（Score 31.8）の「ルール改変→色制約」「UI連鎖演出→COMBOチェイン」フックをクロッケーに再解釈。初のクロッケー（Croquet）ジャンル。",
+    "score": 31.8,
+    "status": "Top-down croquet color-match COMBO chain prototype complete — 320x240, mouse click-drag-release aim+power, 4 target ball colors (RED/LIME/DARK_BLUE/YELLOW) with elastic collision physics, 4 colored wickets (24px wide arches), same-color ball-through-wicket = COMBO chain (score=10*combo*multiplier), SUPER SHOT at COMBO>=4 (300f rainbow, any-color wicket matches, 3x score, auto-launch toward nearest ball), HEAT risk (mismatch +15, boundary hit +5, decay 0.02/f, cap 100 → game over), 60s timer, ghost trail shows previous best shot trajectory, difficulty escalation (wicket positions shift every 15s, ball respawn 180f→90f), friction 0.98, particle burst on wicket pass, floating text feedback, 3 screens (Title/Playing/GameOver), English-only text, 38 headless tests, first croquet genre in collection. OpenCode CLI first-try success (self-corrected 1 ghost-trail reference bug).",
+    "href": "233_croquet_chain.html"
   }
 ]
