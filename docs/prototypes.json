@@ -1836,5 +1836,13 @@
     "score": 31.8,
     "status": "Top-down croquet color-match COMBO chain prototype complete — 320x240, mouse click-drag-release aim+power, 4 target ball colors (RED/LIME/DARK_BLUE/YELLOW) with elastic collision physics, 4 colored wickets (24px wide arches), same-color ball-through-wicket = COMBO chain (score=10*combo*multiplier), SUPER SHOT at COMBO>=4 (300f rainbow, any-color wicket matches, 3x score, auto-launch toward nearest ball), HEAT risk (mismatch +15, boundary hit +5, decay 0.02/f, cap 100 → game over), 60s timer, ghost trail shows previous best shot trajectory, difficulty escalation (wicket positions shift every 15s, ball respawn 180f→90f), friction 0.98, particle burst on wicket pass, floating text feedback, 3 screens (Title/Playing/GameOver), English-only text, 38 headless tests, first croquet genre in collection. OpenCode CLI first-try success (self-corrected 1 ghost-trail reference bug).",
     "href": "233_croquet_chain.html"
+  },
+  {
+    "id": "234_horseshoe_chain",
+    "title": "HORSESHOE CHAIN",
+    "idea": "色合わせホースシュー（蹄鉄）投げCOMBOチェインゲーム。マウスクリック&ドラッグで放物線を描いて蹄鉄を投げ、画面下部の4色杭（RED/LIME/DARK_BLUE/YELLOW）に同色の蹄鉄を連続でリング入れる（リンガー）とCOMBOが伸びる。COMBO>=4でSUPER TOSS（300f虹色モード、全色マッチ＋スコア3倍）が発動し虹色の蹄鉄が次々と杭に命中してスコアが爆発する瞬間が面白い。一投の狙いと色の連鎖：同色リンガーを狙って高COMBO・SUPERを狙うか、安全に外さない投げ方をするかの判断。色違いリンガーでCOMBOリセット＋HEAT+15、全空振りでHEAT+10。HEAT>=100または60秒タイマーでゲームオーバー。ゴースト軌跡が前回ベストスローの弾道を表示。15秒毎に杭の色がシャッフル、残り10秒で杭点滅＋HEAT自然減衰停止の最終局面。",
+    "score": 31.8,
+    "status": "Horseshoe tossing color-match COMBO chain prototype complete — 320x240, mouse click-drag-release parabolic aiming+power, gravity arc physics (vy+=0.3/f, ground bounce), 4 colored stakes at y=190 (x=50/110/170/230), 4 horseshoe colors, ringer detection (within stake radius AND near stake y), same-color consecutive ringers = COMBO chain (score=10*combo*multiplier), SUPER TOSS at COMBO>=4 (300f rainbow, any-color match, 3x score), HEAT risk (mismatch +15, miss +10, decay 0.02/f, cap 100 → game over), 60s timer, desperation mode (last 10s: stakes flash, HEAT decay disabled), difficulty escalation (stake colors shuffle every 15s), ghost trail shows best throw arc, particle burst/spawn, floating text (+{score}/COMBO xN/MISS/SUPER!), screen shake on SUPER activation, rainbow border during SUPER, 3 screens (Title/Playing/GameOver), English-only text, 43 headless tests, first horseshoe genre in collection.",
+    "href": "234_horseshoe_chain.html"
   }
 ]
