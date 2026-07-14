@@ -1852,5 +1852,13 @@
     "score": 31.55,
     "status": "Top-down disc golf color-match COMBO chain prototype complete — 320x240, mouse click-drag-release parabolic aiming+power, gravity arc physics (vy+=0.15/f), basket targets at random field positions with 16px hit radius, 4 disc colors cycling every 90f, same-color consecutive basket hits = COMBO chain (score=100*combo*multiplier), SUPER DISC at COMBO>=4 (300f rainbow mode, any-color match, 3x score), STAMINA system (max 100, -20/throw, recharge +0.05/f, sub-20 weakens throws — 'future hand as cost'), HEAT risk (mismatch +15, miss +10, decay 0.02/f, cap 100 → game over), 60s timer, ghost trail shows best throw arc, screen shake on mismatch/SUPER, rainbow border during SUPER, particle bursts (15 for match, 8 for miss, 25 for SUPER), floating text feedback (+score/COMBO xN/WRONG!/MISS/SUPER DISC!), aim line with dashed projection from disc, power ring indicator, HUD (score/combo/timer/stamina bar/heat bar/disc color preview), basket chain rendering, 3 screens (Title/Aiming+Flying+Scoring/GameOver), English-only text, 44 headless tests, first disc golf genre in collection.",
     "href": "235_frisbee_chain.html"
+  },
+  {
+    "id": "236_kayak_chain",
+    "title": "KAYAK CHAIN",
+    "idea": "トップダウン川下りカヤック色合わせCOMBOチェインゲーム。矢印キーでカヤックを操舵し、自動サイクルするパドル色（RED/LIME/DARK_BLUE/YELLOW、90f周期）と同じ色のゲートを連続で通り抜けるとCOMBOチェイン（スコア=10*combo*倍率）が伸びる。COMBO>=4でSUPER PADDLE（300f虹色モード、全色マッチ＋スコア3倍＋HEAT無効）が発動しどんな色のゲートでも通過できスコアが爆発する瞬間が面白い。リスクとリターン：同色ゲートを狙って高COMBO・SUPERを狙うか、危険なコースを避けて安全に進むかの判断。色違いゲート通過でCOMBOリセット＋HEAT+15＋スタン15f、ゲートを下まで逃すとHEAT+5。HEAT>=100または60秒タイマーでゲームオーバー。HEATは毎フレーム0.02ずつ自然減衰。時間経過でスクロール速度上昇（1.0+経過秒*0.03）、出現間隔短縮（60→最小20）、色サイクル間隔短縮（90→最小40）の難度上昇あり。初のカヤック/カヌー系プロトタイプ。",
+    "score": 31.85,
+    "status": "Top-down river kayak color-match COMBO chain prototype complete — 320x240, arrow keys / A,D for kayak steering, 4 paddle colors auto-cycling (decreasing interval with difficulty), colored gates scrolling downward, same-color consecutive gate passes = COMBO chain (score=10*combo*multiplier), SUPER PADDLE at COMBO>=4 (300f rainbow mode, any-color match, 3x score, HEAT gain disabled), HEAT risk (mismatch +15, miss gate +5, decay 0.02/f, cap 100 → game over), stun 15f on mismatch, 60s timer, difficulty escalation (scroll speed 1.0→, spawn interval 60→20, color cycle 90→40), river banks (brown), water flow lines, paddle indicator with current color, stun visual flash, SUPER rainbow border, particle effects, floating text (+score/COMBO xN/MISS!/SUPER!), HUD (score/combo/timer/heat bar/color name), 3 screens (Title/Playing/GameOver), English-only text, first kayaking/canoeing genre in collection.",
+    "href": "236_kayak_chain.html"
   }
 ]
