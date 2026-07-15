@@ -1876,5 +1876,13 @@
     "score": 32.0,
     "status": "Side-view weightlifting color-match COMBO chain prototype complete — 320x240, SPACE hold=build power, release=execute lift with gravity physics, 4 plate colors auto-cycling, COMBO chain + SUPER LIFT at COMBO>=4, HEAT risk, 60s timer, 46 headless tests, first weightlifting genre in collection.",
     "href": "238_lift_chain.html"
+  },
+  {
+    "id": "239_duck_chain",
+    "title": "DUCK CHAIN",
+    "idea": "トップダウンの Duck Duck Goose（ハンカチ落とし）色合わせCOMBOチェインゲーム。円周上に並んだ12羽のアヒルの外側を歩き、自動サイクルする色（RED/LIME/DARK_BLUE/YELLOW、90f周期）と同色のアヒルをSPACEでタグしてCOMBOを伸ばす。COMBO>=4でGOOSE CHASEが発動！タグしたアヒルが立ち上がってプレイヤーを追いかけ、空いた席に滑り込めればSUPER GOOSE（300f虹色モード、全色マッチ＋スコア3倍）が発動して一気にスコアを稼ぐ瞬間が面白い。追いつかれるとHEAT+25でノーボーナス。リスクとリターン：同色タグを連続させてGOOSE CHASEを狙うか、安全に様子を見るか。HEAT>=100または60秒でゲームオーバー。アヒルの色は10秒毎にシャッフル。初のDuck Duck Goose/円形チェイスジャンル。game_idea_factory #1（Score 31.85）の「合成で1枚に圧縮」「数字とアイコン中心」フックを再解釈。",
+    "score": 31.85,
+    "status": "Top-down Duck Duck Goose color-match COMBO chain prototype complete — 320x240, LEFT/RIGHT arrows walk around outer circle of 12 ducks (radius=80), SPACE tags nearest duck, 4 duck colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10) auto-cycling, same-color tag = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers GOOSE CHASE (duck chases player at 1.5px/f, player runs at 2.0px/f to empty spot), reach spot = SUPER GOOSE (300f rainbow, 3x score, auto-match all), caught = HEAT+25 + no bonus, HEAT risk (mismatch +15/decay 0.02/cap 100), 60s timer, difficulty escalation (color cycle 90→50, shuffle 600f→300f), tag cooldown 15f, screen shake, particle burst, floating text, 3 screens (Title/Playing/GameOver), English-only text. OpenCode CLI first-try success (zero Hermes fixes, self-corrected 3 issues + 3 tests + ruff/ty), 33 headless tests, first Duck Duck Goose / circle-chase genre in collection.",
+    "href": "239_duck_chain.html"
   }
 ]
