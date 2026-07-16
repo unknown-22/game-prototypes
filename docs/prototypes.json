@@ -1916,5 +1916,13 @@
     "score": 32.05,
     "status": "Top-down sumo wrestling color-match COMBO chain prototype complete — 320x240, arrow keys/WASD to move, SPACE to shove (costs STAMINA, regens 0.08/f), circular dohyo (radius 100px), same-color consecutive shoves = COMBO chain (score=100*combo*multiplier), COMBO>=4 triggers SUPER SUMO (300f rainbow mode, any-color match, 3x power 5.0 vs 3.0, stamina cost halved 10 vs 20), HEAT risk (mismatch +15, ring out +25, decay 0.02/f, cap 100 -> game over), 60s timer, AI opponent (moves toward player, shoves every 20-60f, difficulty scales with defeats), color cycle every 90->40f faster with wins, particle bursts (5 shove, 15 match, 20 ring out), floating text, screen shake on ring out + game over, rainbow dohyo border during SUPER, HUD (score/combo/timer/heat bar/color indicator/stamina/SUPER timer/wins), 3 screens (Title/Playing/GameOver), English-only text, 39 headless tests, first sumo wrestling genre in collection.",
     "href": "243_sumo_surge.html"
+  },
+  {
+    "id": "244_claw_surge",
+    "title": "CLAW SURGE",
+    "idea": "アーケードクレーンゲーム風の色合わせCOMBOチェインゲーム。8x6グリッドのプライズピットでクローを矢印キーで動かし、SPACEで掴む。クロー色（RED/LIME/DARK_BLUE/YELLOW、90f周期で自動切替）と同色のプライズを連続で掴むとCOMBOチェイン（スコア=10*combo*倍率）が伸びる。COMBO>=4でSUPER CLAW（300f虹色モード、全色一致＋スコア3倍＋自動掴み取り）が発動する瞬間が最も面白い。リスクとリターン：同色プライズを狙って高COMBO・SUPER CLAWを狙うが、色違いでCOMBOリセット＋HEAT+15、空振りでHEAT+5。HEAT>=100または60秒タイマーでゲームオーバー。HEAT自然減衰0.02/f。時間経過でプライズ補充間隔短縮（60f→30f）。game_idea_factory #1（Score 32.35）の「合成圧縮→同色COMBO」「CA fills up→プライズ補充加速」を再解釈。",
+    "score": 32.35,
+    "status": "Arcade crane game color-match COMBO chain prototype complete — 320x240, 8x6 grid (cell=32px, offset 32,24), arrow keys/WASD to move claw (5f cooldown grid-snap), SPACE to grab, 4 claw colors auto-cycling every 90f, same-color consecutive grabs = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER CLAW (300f rainbow mode, any-color match, 3x score, auto-grab), HEAT risk (mismatch +15, empty grab +5, decay 0.02/f, cap 100 -> game over), 60s timer, prize spawn interval 60f->30f (linear escalation), particle bursts (6-10 grab, 15 super, 3-5 miss), floating text (+score/COMBO xN/MISS!/SUPER!), rainbow grid border + claw cycling during SUPER, claw crosshair indicator with color, HUD (score/color name/combo/SUPER timer/heat bar), 3 screens (Title/Playing/GameOver), English-only text, 52 headless tests.",
+    "href": "244_claw_surge.html"
   }
 ]
