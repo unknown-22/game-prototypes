@@ -1908,5 +1908,13 @@
     "score": 32.6,
     "status": "Side-view skee-ball color-match COMBO chain prototype complete — 320x240, mouse click-hold-release to charge and launch ball up ramp, 4 ball colors (RED/LIME/DARK_BLUE/YELLOW) cycled with LEFT/RIGHT keys, same-color consecutive hole hits = COMBO chain (score=100*combo*multiplier), COMBO>=4 triggers SUPER BALL (300f rainbow mode, any-color match, 3x score, HEAT gain disabled), HEAT risk (mismatch +15, miss +10, decay 0.02/f, cap 100 → game over), 60s timer, ghost trail shows best throw arc (CYAN dots), ramp curvature with arc rendering, 4 target holes with radius 12, ball physics (gravity 0.25, launch power 0-12 based on hold duration), difficulty escalation (hole color shuffle every 15s, color cycle cooldown 10f), particle bursts (8-12 hit, 15-20 SUPER, 4 miss), floating text (+score/COMBO xN/MISS!/SUPER!/GAME OVER), screen shake on SUPER, rainbow border during SUPER, power bar visualization, HUD (score/combo/timer/heat bar/ball color name/SUPER timer), 3 screens (Title/Aiming+Flying+Scoring/GameOver), English-only text, 64 headless tests, fully autonomous OpenCode CLI run with self-correction, first skee-ball/arcade bowling genre in collection.",
     "href": "242_skee_chain.html"
+  },
+  {
+    "id": "243_sumo_surge",
+    "title": "SUMO SURGE",
+    "idea": "サーキュラー土俵で戦うトップダウンの色合わせ相撲。プレイヤーは同色の突きを連続で決めてCOMBOチェインを構築し、COMBO>=4でSUPER SUMO（300f虹色モード、全色一致＋パワー3倍＋スタミナコスト半減）が発動する。相手を土俵の外に押し出してスコアを獲得する。面白い瞬間は「土俵際まで相手を追い詰めて同色連突きでSUPER SUMOを発動し、3倍パワーで相手を吹き飛ばすカタルシス」。リスクとリターン：同色COMBO継続で高倍率スコア（100*combo*multiplier）が狙えるが、色違いでCOMBOリセット＋HEAT+15。HEAT>=100または60秒タイマー切れでゲームオーバー。game_idea_factory #1（合成圧縮→同色COMBO連鎖、未来の手札コスト→スタミナシステム）の再解釈。",
+    "score": 32.05,
+    "status": "Top-down sumo wrestling color-match COMBO chain prototype complete — 320x240, arrow keys/WASD to move, SPACE to shove (costs STAMINA, regens 0.08/f), circular dohyo (radius 100px), same-color consecutive shoves = COMBO chain (score=100*combo*multiplier), COMBO>=4 triggers SUPER SUMO (300f rainbow mode, any-color match, 3x power 5.0 vs 3.0, stamina cost halved 10 vs 20), HEAT risk (mismatch +15, ring out +25, decay 0.02/f, cap 100 -> game over), 60s timer, AI opponent (moves toward player, shoves every 20-60f, difficulty scales with defeats), color cycle every 90->40f faster with wins, particle bursts (5 shove, 15 match, 20 ring out), floating text, screen shake on ring out + game over, rainbow dohyo border during SUPER, HUD (score/combo/timer/heat bar/color indicator/stamina/SUPER timer/wins), 3 screens (Title/Playing/GameOver), English-only text, 39 headless tests, first sumo wrestling genre in collection.",
+    "href": "243_sumo_surge.html"
   }
 ]
