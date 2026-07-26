@@ -1932,5 +1932,13 @@
     "score": 32.15,
     "status": "Side-view rock climbing color-match COMBO chain prototype complete — 320x240, 10x8 grid (cell=24px, offset 36,24), arrow keys/WASD to move to adjacent holds, reach radius 36px (CELL*1.5), 4 grip colors auto-cycling (90f->40f escalating), same-color consecutive holds = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER GRIP (300f rainbow mode, any-color match, 3x score, HEAT gain disabled), HEAT risk (mismatch +15 +stun10f, fall +25 +stun20f, decay 0.02/f, cap 100 -> game over), 60s timer, hold spawn interval 60f->30f, max 30 holds, weighted toward upper wall, particle bursts (8-12 match, 15-20 super, 4 miss, 10 fall), floating text (+score/COMBO xN/MISS!/FALL!/SUPER GRIP!), reach indicator lines (yellow=matchable, gray=not), rainbow triangle player during SUPER, ghost path (cyan dots for best climb), screen shake on game over, HUD (score/time/combo/grip color/SUPER timer/heat bar/stun), 3 screens (Title/Playing/GameOver), English-only text, 72 headless tests.",
     "href": "245_climb_surge.html"
+  },
+  {
+    "id": "246_piece_chain",
+    "title": "PIECE CHAIN",
+    "idea": "ジグソーパズル風の色合わせタイル配置ゲーム。トレイから色付きピースを選び、4x3グリッドの一致する色のスロットに配置する。同色連続配置でCOMBOチェインが伸び（スコア=10*combo*倍率）、COMBO>=3でSUPER SOLVE（300f虹色モード、全色マッチ＋3倍スコア＋60f毎に自動配置＋COMBO継続）が発動し、ピースが次々と連鎖配置されるカタルシスが面白い瞬間。リスクとリターン：同色連続配置で高COMBO・SUPER SOLVEを狙うが、色違い配置でCOMBOリセット＋HEAT+15（HEAT>=100のチェックは減衰前に判定、減衰バグ修正済み）。HEAT>=100または60秒タイマーでゲームオーバー。全12ピース配置で勝利。HEAT自然減衰0.02/f。初のジグソーパズルジャンル。game_idea_factory #1（Score 31.95）の「連鎖伝播＋1ターン1色制約」を同色連続ピース配置＝COMBO連鎖→SUPER SOLVE自動配置に再解釈。",
+    "score": 31.95,
+    "status": "Jigsaw puzzle color-match COMBO chain prototype complete — 320x240, 4x3 grid (CELL=40, GAP=2), 4 colors (RED/LIME/DARK_BLUE/YELLOW) with 3 pieces each (12 total), mouse click to select piece from tray + click grid slot to place, same-color consecutive placements = COMBO chain (score=10*combo*multiplier), COMBO>=3 triggers SUPER SOLVE (300f rainbow mode, any-color match + combo continues, 3x score, auto-place every 60f), HEAT risk (mismatch +15, decay 0.02/f AFTER threshold check, cap 100 -> game over), 60s timer, VICTORY on all 12 pieces placed, particle bursts (8-12 on match), floating text (+score/COMBO xN/WRONG!/SUPER SOLVE!), screen shake on wrong, rainbow grid border during SUPER, mouse wheel tray scrolling, HUD (score/combo/timer/heat bar/pieces count), 4 screens (Title/Playing/GameOver/Victory), English-only text, 45 headless tests, 2 Hermes fixes (field() misuse + decay-before-check ordering + SUPER trigger >=3 + super-mode any-color match), first jigsaw puzzle genre in collection. OpenCode CLI first-try success with self-correction.",
+    "href": "246_piece_chain.html"
   }
 ]
