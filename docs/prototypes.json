@@ -1940,5 +1940,13 @@
     "score": 31.95,
     "status": "Jigsaw puzzle color-match COMBO chain prototype complete — 320x240, 4x3 grid (CELL=40, GAP=2), 4 colors (RED/LIME/DARK_BLUE/YELLOW) with 3 pieces each (12 total), mouse click to select piece from tray + click grid slot to place, same-color consecutive placements = COMBO chain (score=10*combo*multiplier), COMBO>=3 triggers SUPER SOLVE (300f rainbow mode, any-color match + combo continues, 3x score, auto-place every 60f), HEAT risk (mismatch +15, decay 0.02/f AFTER threshold check, cap 100 -> game over), 60s timer, VICTORY on all 12 pieces placed, particle bursts (8-12 on match), floating text (+score/COMBO xN/WRONG!/SUPER SOLVE!), screen shake on wrong, rainbow grid border during SUPER, mouse wheel tray scrolling, HUD (score/combo/timer/heat bar/pieces count), 4 screens (Title/Playing/GameOver/Victory), English-only text, 45 headless tests, 2 Hermes fixes (field() misuse + decay-before-check ordering + SUPER trigger >=3 + super-mode any-color match), first jigsaw puzzle genre in collection. OpenCode CLI first-try success with self-correction.",
     "href": "246_piece_chain.html"
+  },
+  {
+    "id": "247_shuttle_chain",
+    "title": "SHUTTLE CHAIN",
+    "idea": "色合わせバドミントン。同色のシャトルを連続で打ち返してCOMBOチェインを構築。COMBO>=4でSUPER SMASH（300f虹色モード、全色一致＋スコア3倍＋超高速スマッシュ）が発動する瞬間が最も面白い。リスクとリターン：同色連続で高COMBO・SUPER SMASHを狙うが、色違い打ち返しでCOMBOリセット＋HEAT+15。HEAT>=100または60秒タイマーでゲームオーバー。初のバドミントンジャンル。game_idea_factory #1（Score 31.45）の「ログ/リプレイが資産→ゴースト軌跡」「未来の手札を消費→COMBO管理」フックを再解釈。",
+    "score": 31.45,
+    "status": "Side-view badminton color-match COMBO chain prototype complete — 320x240, UP/DOWN to cycle racket color (RED/LIME/DARK_BLUE/YELLOW), shuttlecock physics with air drag (DRAG=0.995) + gravity, same-color consecutive returns = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER SMASH (300f rainbow mode, any-color match, 3x score, shuttle speed 6.0), HEAT risk (mismatch +15, ground hit +10, decay 0.02/f, cap 100 -> game over), 60s timer, AI opponent with reaction delay + difficulty escalation (reaction 45->15f, color cycle 60->30f), ghost trail best rally (cyan dots), particle bursts + floating text feedback, HUD (score/time/combo/racket color/SUPER timer/HEAT bar), 3 screens (Title/Playing/GameOver), English-only text, 41 headless tests, OpenCode CLI first-try success with 3 Hermes fixes (_ai_y→ai_y attribute name, super-mode any-color match logic, test position tweaks), first badminton genre in collection.",
+    "href": "247_shuttle_chain.html"
   }
 ]
