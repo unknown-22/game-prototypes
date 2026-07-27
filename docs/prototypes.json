@@ -1948,5 +1948,13 @@
     "score": 31.45,
     "status": "Side-view badminton color-match COMBO chain prototype complete — 320x240, UP/DOWN to cycle racket color (RED/LIME/DARK_BLUE/YELLOW), shuttlecock physics with air drag (DRAG=0.995) + gravity, same-color consecutive returns = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER SMASH (300f rainbow mode, any-color match, 3x score, shuttle speed 6.0), HEAT risk (mismatch +15, ground hit +10, decay 0.02/f, cap 100 -> game over), 60s timer, AI opponent with reaction delay + difficulty escalation (reaction 45->15f, color cycle 60->30f), ghost trail best rally (cyan dots), particle bursts + floating text feedback, HUD (score/time/combo/racket color/SUPER timer/HEAT bar), 3 screens (Title/Playing/GameOver), English-only text, 41 headless tests, OpenCode CLI first-try success with 3 Hermes fixes (_ai_y→ai_y attribute name, super-mode any-color match logic, test position tweaks), first badminton genre in collection.",
     "href": "247_shuttle_chain.html"
+  },
+  {
+    "id": "248_ping_chain",
+    "title": "PING CHAIN",
+    "idea": "トップダウン卓球で同色パドルヒットを連続させてCOMBOチェインを構築。COMBO>=4でSUPER SPIN（300f虹色モード、全色一致＋スコア3倍＋HEAT増加無効）が発動し、高速ラリーの中で相手を圧倒して決める瞬間が最も面白い。リスクとリターン：同色パドルで打ち返すとCOMBO倍率（10*combo*multiplier）が得られるが、色違いでCOMBOリセット＋HEAT+15、ミスでHEAT+25。HEAT>=100または60秒タイマーでゲームオーバー。HEAT自然減衰0.02/f。LEFT/RIGHTでパドル移動、UP/DOWNで色切替。初の卓球ジャンル。game_idea_factory #1（Score 32.35）の「合成圧縮→同色COMBO」「CA感染増殖→HEAT上昇＋球速上昇」フックを再解釈。",
+    "score": 32.35,
+    "status": "Top-down table tennis color-match COMBO chain prototype complete — 320x240, LEFT/RIGHT to move paddle, UP/DOWN to cycle color (RED/LIME/DARK_BLUE/YELLOW, cooldown=8f), same-color consecutive hits = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER SPIN (300f rainbow mode, any-color match, 3x score, HEAT gain disabled), ball physics with wall bounce (left/right edges), hit angle based on contact position on paddle, ball speed escalation (2.0->5.0 over 60s), HEAT risk (mismatch +15, miss +25, decay 0.02/f, cap 100 -> game over), 60s timer, AI opponent (moves toward ball at 2.5px/f, circles color every 90f->30f, reaction delay 45f->8f, 10% miss chance), ghost trail best rally (cyan dots), rainbow paddle + table border during SUPER, particle bursts (8 match, 15 super, 4 miss) + floating text (+score/COMBO xN/MISS!/SUPER SPIN!), HUD (score/combo/timer/color/SUPER timer/HEAT bar), 3 screens (Title/Playing/GameOver), English-only text, first table tennis/ping pong genre in collection.",
+    "href": "248_ping_chain.html"
   }
 ]
