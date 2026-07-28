@@ -1,0 +1,180 @@
+# LEAP CHAIN — Long Jump Color-Match COMBO Chain Prototype
+
+## Concept
+Side-view long jump (走り幅跳び) with color-matching COMBO chain mechanics.
+Reinterpreted from dice/bag roguelite idea #1 (Score 32.35):
+- "synthesis compression" → same-color consecutive landings = COMBO chain → SUPER LEAP
+- "CA grid fills up" → HEAT risk system
+
+## Core Mechanic
+Player holds SPACE to build run power, releases to jump. Runner color auto-cycles (RED/LIME/DARK_BLUE/YELLOW).
+Same-color consecutive landing zone hits = COMBO chain (score=distance*combo*multiplier).
+COMBO>=4 triggers SUPER LEAP (300f rainbow mode, any-color match, 3x score, always max power, HEAT gain disabled).
+
+## "Most Fun Moment"
+Building a COMBO chain through perfect-color landings, then hitting SUPER LEAP for a massive rainbow jump that clears all zones at 3x score.
+
+## Risk/Reward
+- Same-color landings build COMBO for high scores and SUPER LEAP
+- Wrong-color landing resets COMBO + HEAT+15
+- Foul (land before first zone / overstep) = HEAT+20
+- HEAT>=100 → game over
+- 6 jumps, 60s timer
+
+## Phase Machine
+- TITLE: title screen, show controls, press SPACE to start
+- APPROACH: runner auto-runs rightward, SPACE held=charge power, SPACE released=launch
+- FLIGHT: parabolic arc (gravity, vx, vy from power+angle)
+- SCORING: check landing zone, compute score/combo/HEAT, show particles+floating text
+- GAME_OVER: if HEAT>=100 or timer=0, show score, press SPACE to restart
+- VICTORY: after 6 jumps, show best distance + total score
+
+## Data Classes
+
+```python
+from dataclasses import dataclass, field
+from enum import Enum, auto
+
+class Phase(Enum):
+    TITLE = auto()
+    APPROACH = auto()   # holding SPACE, building power
+    FLIGHT = auto()     # in the air, parabolic
+    SCORING = auto()    # landing + score resolution
+    GAME_OVER = auto()
+    VICTORY = auto()
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+
+@dataclass
+class Zone:
+    x: float          # center x
+    y: float          # ground y
+    width: int        # zone width
+    color: int        # 0-15
+    distance_label: str  # e.g. "5.0m"
+```
+
+## Constants
+```python
+SCREEN_W = 320
+SCREEN_H = 240
+FPS = 30
+GROUND_Y = 200
+FOUL_LINE_X = 260     # must release SPACE before this x
+RUNNER_START_X = 30
+RUN_SPEED_BASE = 0.5
+RUN_SPEED_MAX = 5.0
+POWER_CHARGE_RATE = 100 / 60  # 0→100 over 60f
+GRAVITY = 0.25
+NUM_JUMPS = 6
+GAME_TIME = 60 * FPS  # 1800f
+
+# Colors (raw ints for headless testing)
+COLOR_RED = 8
+COLOR_LIME = 11
+COLOR_DARK_BLUE = 5
+COLOR_YELLOW = 10
+PLAYER_COLORS = (COLOR_RED, COLOR_LIME, COLOR_DARK_BLUE, COLOR_YELLOW)
+COLOR_NAMES = ("RED", "LIME", "DARK_BLUE", "YELLOW")
+
+# Landing zones (x center, width, distance label)
+ZONE_DEFS = [
+    (100, 40, "4.0m"),
+    (140, 40, "5.0m"),
+    (180, 40, "6.0m"),
+    (220, 40, "7.0m"),
+    (260, 40, "8.0m"),
+]
+SUPER_DURATION = 300
+COMBO_THRESHOLD = 4
+HEAT_MAX = 100
+HEAT_DECAY = 0.02
+HEAT_MISMATCH = 15
+HEAT_FOUL = 20
+```
+
+## Game Class (headless-testable methods)
+```python
+class Game:
+    # __init__: pyxel.init, reset(), pyxel.run(update, draw)
+    # reset(): initialize all state
+    
+    # Testable pure-logic methods:
+    def _get_power(self) -> float: ...        # 0.0-100.0 based on hold duration
+    def _get_launch_velocity(self, power: float, angle: float) -> tuple[float, float]: ...
+    def _get_flight_position(self, t: float, vx: float, vy: float) -> tuple[float, float]: ...
+    def _check_landing_zone(self, x: float) -> tuple[int, float]: ...  # (zone_index, distance) or (-1, 0) for foul
+    def _compute_score(self, distance: float, combo: int, is_super: bool) -> int: ...
+    def _update_heat(self) -> None: ...  # decay + check threshold
+    def _spawn_zones(self) -> None: ...  # assign random colors to zones
+    def _cycle_color(self) -> None: ...  # advance to next player color
+```
+
+## Input
+- SPACE: hold to charge power in APPROACH, release to jump
+- Mouse Y at release: affects jump angle (higher Y on screen = steeper angle, more height/shorter distance)
+- No other keys needed
+
+## Rendering
+- TITLE: "LEAP CHAIN" title, "Long Jump Color-Match", "HOLD SPACE to charge", "RELEASE to jump", "Mouse Y = angle", "Press SPACE to start"
+- APPROACH: runner stick figure moving right, power bar (LIME→YELLOW→RED), foul line (WHITE vertical line), runway (BROWN ground), current color indicator
+- FLIGHT: runner in arc (stick figure rotated), trail particles, landing zones visible below
+- SCORING: particles burst on landing (match=many, super=rainbow, mismatch=few), floating text (+score/COMBO xN/WRONG!/FOUL!/SUPER LEAP!), screen shake on SUPER
+- GAME_OVER: "GAME OVER", final score, best distance, "Press SPACE to retry"
+- VICTORY: "VICTORY!", best distance, total score, all 6 jump distances listed
+- HUD during play: score, combo, jump #/6, timer, HEAT bar, color name, SUPER timer
+- Rainbow border + runner glow during SUPER
+- Zones: colored rectangles on ground with distance labels
+
+## Particle System
+- On match: 8-15 particles of landing zone color, velocity spread in arc
+- On SUPER: 20-30 rainbow particles (cycling colors)
+- On mismatch/foul: 4-6 gray particles
+- Particle gravity=0.1, life=15-30
+
+## Edge Cases
+- Release SPACE after foul line: auto-foul, no jump distance
+- All 6 jumps used: VICTORY phase
+- Timer reaches 0 mid-jump: finish current jump, then GAME_OVER
+- HEAT reaches 100 during scoring: GAME_OVER after current jump scores
+- SUPER mode: if active when jump starts, always max power, any-color match
+
+## Headless Testing Pattern
+Use `Game.__new__(Game)` to bypass `__init__`. Pre-init all attributes, then call `g.reset()`.
+Test all pure-logic methods. Never call methods that access `pyxel.btn`, `pyxel.btnp`, `pyxel.mouse_x`, `pyxel.mouse_y`, or `pyxel.play()` in tests.
+
+## Color Constants Reference (Pyxel 16-color palette)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Pyxel API Reference
+- pyxel.tri(x1,y1,x2,y2,x3,y3,col) — filled triangle (NOT pyxel.triangle)
+- pyxel.KEY_RETURN — Enter key (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT — left click
+- pyxel.mouse_wheel — scroll delta
+
+## Requirements for the file
+- Single file: prototypes/254_leap_chain/main.py
+- 320x240, Pyxel 2.x
+- Phase machine pattern
+- Dataclasses with type hints
+- Particle system
+- 3 screens minimum: TITLE, GAME (APPROACH/FLIGHT/SCORING), GAME_OVER (+ VICTORY ok as 4th)
+- English-only text (no CJK)
+- All game logic in testable pure methods
+- HEAT threshold check BEFORE decay (not after)
