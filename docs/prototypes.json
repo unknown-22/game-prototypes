@@ -2028,5 +2028,13 @@
     "score": 32.0,
     "status": "Real-time BINGO color-match COMBO chain prototype complete — 320x240@30fps, 5×5 card, 4 play colors auto-cycle, mouse click to daub matching drifting numbers, same-color consecutive daubs = COMBO chain, COMBO>=4 triggers SUPER DAUB, BINGO (5-in-a-row/col/diag) awards bonus, HEAT risk, 60s timer, 53 headless tests, first BINGO/number-matching genre in collection.",
     "href": "257_bingo_surge.html"
+  },
+  {
+    "id": "258_yacht_chain",
+    "title": "YACHT CHAIN",
+    "idea": "色合わせヤッツィー（ポーカーダイス）COMBOチェイン。プレイヤーが5つの色付きダイスを振り、キープしたいダイスを選び、残りを最大3回まで振り直す。最も多い色が役を決定し、同じ色の手札が連続するとCOMBOチェインが構築される。色が変わるとCOMBOリセット＋HEAT上昇。COMBO>=4でSUPER ROLL（300f虹色モード、全色一致、スコア3倍、HEAT凍結）が発動し、虹色のダイスで高得点を連鎖させるのが最も面白い。リスクとリターン：キープするダイスを選ぶ選択、同じ色を狙ってCOMBOを伸ばすか安全に別の色で役を作るかの判断、YAHTZEE（全5つ同色）をCOMBO中に引く大量得点。60秒タイマー、HEAT>=100でゲームオーバー。初のヤッツィー／ポーカーダイスジャンル。",
+    "score": 31.95,
+    "status": "Color-match Yahtzee/Poker Dice COMBO chain prototype complete — 320x240@30fps, 5 colored dice (RED/LIME/DARK_BLUE/YELLOW), click dice to toggle HOLD, max 3 rolls per hand, evaluate_hand() supports 6 hand types (YAHTZEE!/FOUR KIND/FULL HOUSE/THREE KIND/TWO PAIR/ONE PAIR), same-color consecutive hands = COMBO chain (score = base * (1 + combo * 0.5) * super_multiplier), mismatch = COMBO reset + HEAT+15, COMBO>=4 triggers SUPER ROLL (300f, any-color match, 3x score, HEAT frozen, rainbow dice+border), HEAT risk (mismatch+15, decay 0.02/f, cap 100 → game over), 60s timer (1800f), particle bursts, floating text, 70 headless tests, 3 screens (Title/Rolling+Scoring/GameOver), first Yahtzee/poker-dice genre in collection.",
+    "href": "258_yacht_chain.html"
   }
 ]
