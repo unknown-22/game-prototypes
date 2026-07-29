@@ -2020,5 +2020,13 @@
     "score": 31.95,
     "status": "Side-scrolling BMX cycling color-match COMBO chain prototype complete — 320x240@30fps, auto-scroll rightward (speed 2.0→5.0 over 60s), SPACE to jump (vy=-8.0, gravity=0.45, stamina cost 20), bike color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), gates spawn from right with random colors + gap (every 90→30f), same-color consecutive gate passes = COMBO chain (score=10*combo*multiplier), mismatch = COMBO reset + HEAT+15+stun15f, gate ignored while jumping = HEAT+5, COMBO>=4 triggers SUPER RIDE (300f rainbow mode, any-color match, 3x score, HEAT frozen, bike glow), HEAT risk (mismatch+15, ignore+5, decay 0.02/f, cap 100 → game over), STAMINA system (max 100, jump cost -20, recharge +0.05/f, below 25 → half jump), 60s timer (1800f), ghost trail best-run path (CYAN dots recorded every 5f), particle bursts, floating text (+score/COMBO xN/WRONG!/MISS!/SUPER RIDE!), screen shake on mismatch, rainbow border + bike glow during SUPER, HUD (score/combo/max combo/best score/timer/bike color/STAMINA bar/HEAT bar/SUPER timer), 3 screens (Title/Playing/GameOver), English-only text, first BMX/cycling genre in collection.",
     "href": "256_bike_chain.html"
+  },
+  {
+    "id": "257_bingo_surge",
+    "title": "BINGO SURGE",
+    "idea": "リアルタイムBINGO×色合わせCOMBOチェイン。右から流れてくる数字をクリックし、5×5のBINGOカード上で同色の数字を連続でマッチしてCOMBOを積む。COMBO>=4でSUPER DAUB（300f虹色モード、全色自動一致、スコア3倍、HEAT無効）が発動し、虹色ですべての数字を自動マッチする瞬間が最も面白い。列・行・対角線の5マスがすべて揃うとBINGOボーナス（500点×ライン数）、ラインがリセットされる。HEAT>=100でゲームオーバー、60秒タイマー。リスクとリターン：同色連続マッチで高倍率スコア＋SUPER DAUBを狙うか、色不一致でCOMBOリセット＋HEAT上昇。数字が左端まで流れるとHEAT増加＋COMBOリセット。初のBINGO／数字マッチングジャンル。game_idea_factory #1（Score 32.0）の「数値が分裂して多経路に流れ、合流点で巨大ダメージ→数字がカード上に分裂→ラインに収束→BINGO爆発」「合成圧縮→同色連続COMBO→SUPER DAUB」フックを再解釈。",
+    "score": 32.0,
+    "status": "Real-time BINGO color-match COMBO chain prototype complete — 320x240@30fps, 5×5 card, 4 play colors auto-cycle, mouse click to daub matching drifting numbers, same-color consecutive daubs = COMBO chain, COMBO>=4 triggers SUPER DAUB, BINGO (5-in-a-row/col/diag) awards bonus, HEAT risk, 60s timer, 53 headless tests, first BINGO/number-matching genre in collection.",
+    "href": "257_bingo_surge.html"
   }
 ]
