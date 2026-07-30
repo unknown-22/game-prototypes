@@ -2060,5 +2060,13 @@
     "score": 31.4,
     "status": "Top-down ski slalom color-match COMBO prototype complete — 320x240@30fps, auto-scroll downward (1.5→4.0 over 60s), arrow-key movement (3.0px/f), skier color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), colored gates, same-color consecutive passes = COMBO chain, COMBO>=4 triggers SUPER SKI (300f rainbow, 3x score, HEAT frozen), HEAT risk (mismatch+15, miss+5, decay 0.03/f, cap 100 → game over), 60s timer, ghost trail, particle bursts, floating text, three screens, 14 headless tests.",
     "href": "261_alpine_chain.html"
+  },
+  {
+    "id": "262_sky_chain",
+    "title": "SKY CHAIN",
+    "idea": "トップダウンスカイダイビング色合わせCOMBOゲーム。プレイヤーは上空から落下するスカイダイバーとなり、下方から迫るカラーリングをくぐって同じ色を連続でマッチしてCOMBOチェインを構築する。COMBO>=4でSUPER SKYDIVE（300f虹色モード、全色一致、スコア3倍、HEAT凍結、自動追尾）が発動し、虹色のスカイダイバーがすべてのリングを自動くぐり抜けながらクラウドを無効化し、スコア3倍で一気に駆け抜ける瞬間が最も面白い。セルオートマトンで上空と両脇から雲が広がり障害物として機能。雲衝突でHEAT+25+スタン+COMBOリセット。HEAT>=100または60秒タイマー満了（パラシュート自動開傘）でゲームオーバー。リスクとリターン：同じ色のリングを狙ってCOMBOを伸ばすか、色不一致でCOMBOリセット＋HEAT+15＋スタン。SUPERモード発動のためには少なくとも4連続同色マッチが必要で、雲の広がる中でCOMBOを維持する緊張感とSUPER発動時の爽快感のコントラストが魅力。ゴーストトレイルでベストランの軌跡をCYANドットで表示。",
+    "score": 32.15,
+    "status": "Top-down skydiving color-match COMBO prototype complete — 320x240@30fps, player fixed at y=60 (world scrolls), LEFT/RIGHT movement (3.0px/f), player color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), rings spawn from bottom scroll upward (1.5px/f, 60→25f interval escalating), same-color consecutive passes = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER SKYDIVE (300f rainbow mode, any-color match, 3x score, HEAT frozen, auto-steer toward nearest ring), clouds spread via cellular automaton (10x7 grid, 32px cells, spawn at top+sides, 30% spread chance, 60→30f interval escalating), HEAT risk (mismatch+15, cloud hit+25, decay 0.02/f, cap 100→game over), 60s timer (1800f→game over), ghost trail, particle bursts, floating text, screen shake, three screens (Title/Playing/GameOver), 40 headless tests.",
+    "href": "262_sky_chain.html"
   }
 ]
