@@ -2044,5 +2044,13 @@
     "score": 32.2,
     "status": "Side-scrolling motocross dirt bike color-match COMBO chain prototype complete — 320x240@30fps, auto-scroll rightward (2.0→5.0 over 60s), UP/SPACE to jump, bike color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), sine-wave terrain, colored rings, same-color consecutive passes = COMBO chain, COMBO>=4 triggers SUPER MOTO (300f rainbow, 3x score, auto-throttle), HEAT risk (mismatch+15, crash+25, decay 0.05/f, cap 100 → game over), 60s timer, ghost trail, particle bursts, floating text, 62 headless tests, first motocross/dirt-bike genre in collection.",
     "href": "259_moto_chain.html"
+  },
+  {
+    "id": "260_flux_factory",
+    "title": "FLUX FACTORY",
+    "idea": "ベルトコンベア工場ルーティングパズル。6x5グリッド上のコンベアに4色のアイテムが流れ、プレイヤーはセルをクリックしてベルトの向きを回転させる。同じ色のアイテムがジャンクションで合流するとSYNTHESIZE（合成）されて高スコア＋COMBOチェインが発生する瞬間が最も面白い。異なる色が衝突するとHEAT（熱暴走）が上昇しCOMBOリセット。HEAT>=100でゲームオーバー。COMBO>=4でSUPER FLUX（10秒間、虹色ボーダー、異種合成可能、スコア3倍、HEAT凍結）が発動。60秒タイマー。リスクとリターン：同じ色をジャンクションに誘導してCOMBOを狙うか、安全に右端へ搬出するだけか。アイテム消滅でもHEAT+5。game_idea_factory #1（Score 31.95）の「合成圧縮（同種アイテムが接合点で結合）」「回路/パイプ可視化→フロー増幅（連鎖反応で合成品を増幅）」フックを再解釈。",
+    "score": 31.95,
+    "status": "Conveyor belt factory routing puzzle prototype complete — 320x240@30fps, 6x5 grid (cell=40px), 4 colors (RED/LIME/DARK_BLUE/YELLOW), left-click to cycle belt direction (EMPTY→N→E→S→W→JUNCTION→EMPTY), items flow from left edge every 60→30f (escalating), tick interval 30→15f over 60s, same-color synthesis = COMBO+1 + 100*combo points, mismatch = HEAT+15 + COMBO reset, item lost on empty cell = HEAT+5, HEAT decay 0.02/f, HEAT>=100 = game over, COMBO>=4 triggers SUPER FLUX (300f, 3x score, any-color synthesis, HEAT frozen, rainbow border), three screens (Title/Playing/GameOver), 45 headless tests.",
+    "href": "260_flux_factory.html"
   }
 ]
