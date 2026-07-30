@@ -2052,5 +2052,13 @@
     "score": 31.95,
     "status": "Conveyor belt factory routing puzzle prototype complete — 320x240@30fps, 6x5 grid (cell=40px), 4 colors (RED/LIME/DARK_BLUE/YELLOW), left-click to cycle belt direction (EMPTY→N→E→S→W→JUNCTION→EMPTY), items flow from left edge every 60→30f (escalating), tick interval 30→15f over 60s, same-color synthesis = COMBO+1 + 100*combo points, mismatch = HEAT+15 + COMBO reset, item lost on empty cell = HEAT+5, HEAT decay 0.02/f, HEAT>=100 = game over, COMBO>=4 triggers SUPER FLUX (300f, 3x score, any-color synthesis, HEAT frozen, rainbow border), three screens (Title/Playing/GameOver), 45 headless tests.",
     "href": "260_flux_factory.html"
+  },
+  {
+    "id": "261_alpine_chain",
+    "title": "ALPINE CHAIN",
+    "idea": "トップダウンスキースラローム色合わせCOMBOゲーム。自動スクロールする雪山斜面をプレイヤーがスキーで滑走し、前方から迫るカラーゲートをくぐって同じ色を連続でマッチしてCOMBOチェインを構築する。COMBO>=4でSUPER SKI（300f虹色モード、全色一致、スコア3倍、HEAT凍結）が発動し、虹色のスキーヤーですべてのゲートを駆け抜ける瞬間が最も面白い。HEAT>=100またはタイマー0でゲームオーバー。60秒タイマー。リスクとリターン：同じ色のゲートを狙ってCOMBOを伸ばすか、色不一致でCOMBOリセット＋HEAT上昇＋画面揺れ。ゲート通過失敗でもHEAT上昇＋COMBOリセット。ゴーストトレイルでベストランの軌跡を表示。",
+    "score": 31.4,
+    "status": "Top-down ski slalom color-match COMBO prototype complete — 320x240@30fps, auto-scroll downward (1.5→4.0 over 60s), arrow-key movement (3.0px/f), skier color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), colored gates, same-color consecutive passes = COMBO chain, COMBO>=4 triggers SUPER SKI (300f rainbow, 3x score, HEAT frozen), HEAT risk (mismatch+15, miss+5, decay 0.03/f, cap 100 → game over), 60s timer, ghost trail, particle bursts, floating text, three screens, 14 headless tests.",
+    "href": "261_alpine_chain.html"
   }
 ]
