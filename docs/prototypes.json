@@ -2036,5 +2036,13 @@
     "score": 31.95,
     "status": "Color-match Yahtzee/Poker Dice COMBO chain prototype complete — 320x240@30fps, 5 colored dice (RED/LIME/DARK_BLUE/YELLOW), click dice to toggle HOLD, max 3 rolls per hand, evaluate_hand() supports 6 hand types (YAHTZEE!/FOUR KIND/FULL HOUSE/THREE KIND/TWO PAIR/ONE PAIR), same-color consecutive hands = COMBO chain (score = base * (1 + combo * 0.5) * super_multiplier), mismatch = COMBO reset + HEAT+15, COMBO>=4 triggers SUPER ROLL (300f, any-color match, 3x score, HEAT frozen, rainbow dice+border), HEAT risk (mismatch+15, decay 0.02/f, cap 100 → game over), 60s timer (1800f), particle bursts, floating text, 70 headless tests, 3 screens (Title/Rolling+Scoring/GameOver), first Yahtzee/poker-dice genre in collection.",
     "href": "258_yacht_chain.html"
+  },
+  {
+    "id": "259_moto_chain",
+    "title": "MOTO CHAIN",
+    "idea": "モトクロス×色合わせCOMBOチェイン。自動スクロールするオフロード地形をバイクで走り、空中のカラーリングをくぐって同じ色を連続でマッチしてCOMBOチェインを構築する。COMBO>=4でSUPER MOTO（300f虹色モード、全色一致、スコア3倍、自動スロットル）が発動し、虹色のバイクですべてのリングを駆け抜ける瞬間が最も面白い。HEAT>=100またはタイマー0でゲームオーバー。60秒タイマー。リスクとリターン：同じ色のリングを狙ってCOMBOを伸ばすか、色不一致でCOMBOリセット＋HEAT上昇＋スタン。crash着地でもHEAT上昇＋COMBOリセット。初のモトクロス／ダートバイクジャンル。game_idea_factory #1（Score 32.2）の「ログ/リプレイが資産（前回の行動が次回のカードになる）」「UIの連鎖演出（崩壊/増加/圧縮）」フックを再解釈。ゴーストトレイルでベストランの軌跡を表示。",
+    "score": 32.2,
+    "status": "Side-scrolling motocross dirt bike color-match COMBO chain prototype complete — 320x240@30fps, auto-scroll rightward (2.0→5.0 over 60s), UP/SPACE to jump, bike color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), sine-wave terrain, colored rings, same-color consecutive passes = COMBO chain, COMBO>=4 triggers SUPER MOTO (300f rainbow, 3x score, auto-throttle), HEAT risk (mismatch+15, crash+25, decay 0.05/f, cap 100 → game over), 60s timer, ghost trail, particle bursts, floating text, 62 headless tests, first motocross/dirt-bike genre in collection.",
+    "href": "259_moto_chain.html"
   }
 ]
