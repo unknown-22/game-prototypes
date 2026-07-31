@@ -2084,5 +2084,13 @@
     "score": 32.2,
     "status": "Magnet crane color-match COMBO prototype complete — 320x240@30fps, LEFT/RIGHT (A/D) to move crane (3.0/1.5px/f during magnet extend), SPACE to extend/retract magnet (4.0/6.0px/f), colored scraps (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10, 12x12px) scroll upward on conveyor (1.0→3.0px/f over 60s, spawn 60→25f interval), same-color consecutive pickups = COMBO chain (score=10+combo*5, SUPER=3x), COMBO>=4 triggers SUPER MAGNET (300f rainbow, any-color, HEAT frozen, rainbow border+magnet glow), HEAT risk (mismatch+15, miss+5, decay 0.02/f, cap=100→game over), 60s timer, magnetic field trail dots, radial particle bursts, floating text, screen shake, three screens (Title/Playing/GameOver), first crane game genre in collection, 78 headless tests.",
     "href": "264_magnet_lift.html"
+  },
+  {
+    "id": "265_sumo_surge",
+    "title": "SUMO SURGE",
+    "idea": "トップダウン相撲×色合わせCOMBOチェイン。円形の土俵で矢印キー操作の力士がカラーパワーゾーンを踏み、同色連続でCOMBOを積んで押し出す力を強化する。COMBO>=4でSUPER SUMO（300f虹色モード、全色自動一致、3倍押し力、HEAT凍結）が発動し、虹色の力士で相手を土俵の外に吹き飛ばす瞬間が最も面白い。先に3回押し出すか60秒タイマーで決着。HEAT>=100でAIがOVERHEATボーナス（1.5倍パワー、120f）。game_idea_factory #1（Score 32.35）の「合成圧縮→同色連続COMBO→SUPER SUMO」「CAグリッド充填→HEATリスク」フックを再解釈。初の相撲／アリーナブロウラージャンル。",
+    "score": 32.35,
+    "status": "Sumo wrestling color-match COMBO arena prototype complete — 320x240@30fps, top-down circular dohyō (R=90, center 160,130), arrow/WASD movement (2.0px/f, diagonal normalized), player color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f), colored power zones spawn in ring (35→20f interval, max 6, 300f life), same-color consecutive zone steps = COMBO chain (push_force=1.0+combo*0.3), COMBO>=4 triggers SUPER SUMO (300f rainbow, any-color auto-match, 3x force, player rainbow glow, ring rainbow border), mismatch = COMBO reset+HEAT+15, push mechanic (circle-circle overlap, force proportional to push_force), AI target selection (zones→player→center/edge-escape), HEAT risk (mismatch+15, ring-out+10, decay 0.02/f, cap 100→OVERHEAT AI bonus 1.5x force 120f), first to 3 ring-outs wins, 60s timer, 3 screens (Title/Playing/GameOver), 61 headless tests, fixed pitfall: decay-before-threshold-check in _update_heat (reordered: check→decay).",
+    "href": "265_sumo_surge.html"
   }
 ]
