@@ -2068,5 +2068,13 @@
     "score": 32.15,
     "status": "Top-down skydiving color-match COMBO prototype complete — 320x240@30fps, player fixed at y=60 (world scrolls), LEFT/RIGHT movement (3.0px/f), player color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), rings spawn from bottom scroll upward (1.5px/f, 60→25f interval escalating), same-color consecutive passes = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER SKYDIVE (300f rainbow mode, any-color match, 3x score, HEAT frozen, auto-steer toward nearest ring), clouds spread via cellular automaton (10x7 grid, 32px cells, spawn at top+sides, 30% spread chance, 60→30f interval escalating), HEAT risk (mismatch+15, cloud hit+25, decay 0.02/f, cap 100→game over), 60s timer (1800f→game over), ghost trail, particle bursts, floating text, screen shake, three screens (Title/Playing/GameOver), 40 headless tests.",
     "href": "262_sky_chain.html"
+  },
+  {
+    "id": "263_wake_chain",
+    "title": "WAKE CHAIN",
+    "idea": "トップダウンジェットスキー×色合わせCOMBOレーサー。プレイヤーは自動上スクロールする水上をジェットスキーで進み、上方から流れてくるカラーブイを同じ色で連続回収してCOMBOチェインを構築する。COMBO>=4でSUPER WAKE（300f虹色モード、全色一致、スコア3倍、HEAT凍結、虹色ボーダー＋ジェットスキーグロー）が発動し、すべてのブイがマッチ判定になり一気にスコアを荒稼ぎする瞬間が最も面白い。HEAT>=100（色不一致+15、ブイ取り逃し+5）または60秒タイマー満了でゲームオーバー。リスクとリターン：同じ色のブイを狙ってCOMBOを伸ばすか、色不一致でCOMBOリセット＋HEAT上昇。ブイの出現間隔60→25f・落下速度1.0→3.0に徐々に難度上昇。ウェイクトレイル（水しぶき軌跡）と水流ラインで演出。game_idea_factory #1（Score 32.15）の「ログ/リプレイが資産」「回路/パイプ可視化」フックを再解釈し、ウェイクトレイルでベストラン軌跡を表示。",
+    "score": 32.15,
+    "status": "Top-down jet ski color-match COMBO racer prototype complete — 320x240@30fps, auto-scroll upward (player y=160 fixed), LEFT/RIGHT (A/D) movement, player jet ski color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), colored buoys drift downward (1.0→3.0 px/f, spawn 60→25f interval escalating), same-color consecutive collections = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER WAKE (300f rainbow mode, any-color match, 3x score, HEAT gain disabled, rainbow border+glow), HEAT risk (mismatch+15, buoy exit+5, decay 0.02/f, cap 100→game over with screen shake), 60s timer (1800f→game over), wake trail (cyan dot trail), water current flow lines, particle bursts, floating text, three screens (Title/Playing/GameOver), 43 headless tests.",
+    "href": "263_wake_chain.html"
   }
 ]
