@@ -1,0 +1,204 @@
+# 264 — MAGNET LIFT Design Spec
+
+## Concept
+Scrapyard magnetic crane arcade action game. The player controls a magnetic crane arm (top-down view) that moves horizontally over a conveyor belt. Colored scrap metal pieces scroll upward from the bottom edge. The crane lowers a magnet to pick up scrap. **Same-color consecutive pickups build a COMBO chain.** COMBO >= 4 triggers SUPER MAGNET (rainbow mode: any-color pickup, 3x score, HEAT frozen for 300 frames). Wrong-color pickup resets COMBO and adds HEAT. Dropping/missing scrap adds HEAT. HEAT >= 100 or 60-second timer = game over. The log/replay hook is reinterpreted as a **magnetic field trail** — the crane leaves ghost dots of past pickup positions that glow for a few seconds, providing spatial context. The chain collapse UI hook becomes the COMBO → SUPER MAGNET chain reaction visual (screen shake, particle burst).
+
+## "Most Fun Moment" (面白い瞬間)
+「同じ色のスクラップを連続で吸い上げてCOMBOが伸び、ついにSUPER MAGNETが発動してベルト上のすべての同色スクラップを一気に吸い寄せ、スコア3倍で大漁になる瞬間」
+
+## Core Mechanic
+1. Conveyor scrolls scrap upward (1.0 → 3.0 px/f over 60s)
+2. Player moves crane LEFT/RIGHT (keyboard) and lowers magnet (SPACE or DOWN)
+3. Magnet extends downward; if it touches same-color scrap → pickup → COMBO+1
+4. If color mismatches → COMBO reset + HEAT+15
+5. If magnet misses belt or hits empty space → HEAT+5
+6. COMBO >= 4 → SUPER MAGNET (300f rainbow, any-color pickup, 3x score, HEAT frozen, rainbow border glow)
+7. Scrap spawns at bottom edge (60→25f interval escalating over 60s)
+8. 60-second timer (1800f). HEAT cap = 100 → game over
+
+## Technical Spec
+- Screen: 320×240, display_scale=2, Pyxel 2.x
+- Conveyor: horizontal belt area from y=40 to y=240 (bottom area)
+- Crane arm: horizontal bar at y=20, moves left/right in [40, 280]
+- Magnet: drops from crane arm position, extends downward at speed 4px/f
+- Scrap: 12×12 px colored squares (4 colors: RED=8, LIME=11, DARK_BLUE=5, YELLOW=10)
+- Phase machine: TITLE, PLAYING, GAME_OVER
+- Colors: BLACK(0) background, WHITE(7) text, GRAY(13) conveyor lines
+
+## Data Classes
+```python
+@dataclass
+class Scrap:
+    x: float
+    y: float
+    color: int
+    collected: bool = False
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class TrailDot:
+    x: float
+    y: float
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, title="Magnet Lift", display_scale=2), pyxel.run(update, draw)
+    # reset(): init all state
+    # update(): phase machine dispatch -> _update_title(), _update_playing(), _update_gameover()
+    # draw(): phase machine dispatch -> _draw_title(), _draw_playing(), _draw_gameover()
+
+    # Key state attributes (all need pre-init for Game.__new__):
+    phase: str = "TITLE"  # TITLE, PLAYING, GAME_OVER
+    score: int = 0
+    combo: int = 0
+    max_combo: int = 0
+    heat: float = 0.0
+    timer: int = 1800  # 60s * 30fps
+    super_timer: int = 0  # remaining SUPER frames
+    crane_x: float = 160.0  # center initially
+    magnet_y: float = 20.0  # crane arm height
+    magnet_extending: bool = False
+    magnet_retracting: bool = False
+    magnet_extended_y: float = 20.0  # current magnet tip y
+    last_color: int = -1  # color of last collected scrap
+    scraps: list[Scrap]
+    particles: list[Particle]
+    trails: list[TrailDot]
+    spawn_timer: int = 0
+    spawn_interval: int = 60
+    scroll_speed: float = 1.0
+    shake_frames: int = 0
+    shake_intensity: float = 0.0
+    frame: int = 0
+```
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Key Methods (Testable — NO pyxel input calls)
+- `_spawn_scrap() -> Scrap` — create a new scrap at bottom edge with random color from [RED, LIME, DARK_BLUE, YELLOW]
+- `_update_magnet() -> None` — extend/retract magnet, check for scrap collision
+- `_check_pickup(scrap: Scrap) -> bool` — return True if magnet overlaps scrap
+- `_handle_pickup(scrap: Scrap) -> None` — update score, combo, heat based on color match
+- `_update_scraps() -> None` — move scraps upward, despawn off screen, add heat for missed
+- `_update_spawn() -> None` — spawn new scrap based on timer + interval
+- `_update_particles() -> None` — move particles, apply gravity, decrement life
+- `_update_trails() -> None` — decrement trail dot life
+- `_spawn_particles(x: float, y: float, color: int, count: int) -> None` — burst particles
+- `_update_difficulty() -> None` — accelerate scroll_speed, shorten spawn_interval over time
+- `_update_heat() -> None` — decay heat, check cap
+- `_update_super() -> None` — decrement super_timer, handle deactivation
+- `_color_for_index(idx: int) -> int` — return color from [RED, LIME, DARK_BLUE, YELLOW]
+- `_score_value(combo: int) -> int` — base 10 + combo*5
+
+## Phase Machine
+TITLE → (SPACE or ENTER/RETURN) → PLAYING → (timer=0 or heat>=100) → GAME_OVER → (SPACE or ENTER/RETURN) → TITLE
+
+## Screens
+1. TITLE: "MAGNET LIFT" title text, "SCRAPYARD CRANE" subtitle, "PRESS SPACE TO START", controls hint
+2. PLAYING: Conveyor lines, crane arm at top, magnet extending down, colored scraps scrolling up, HUD (score/combo/heat bar/timer at top)
+3. GAME_OVER: "GAME OVER" text, final score + max combo, "PRESS SPACE TO RETRY"
+
+## Rendering Notes
+- Crane arm: horizontal gray line y=18-22, 8px thick
+- Magnet: small rectangle at crane_x position, extends from y=22 to magnet_extended_y, DARK_BLUE(5) or rainbow colors(8,11,5,10 cycling) during SUPER
+- Magnetic field trail: small colored dots (3px radius) at past pickup positions, fading over 60f
+- Scrap: 12×12 filled rects with 1px border
+- HUD: top 16px bar, GRAY(13) background
+- Heat bar: horizontal bar, width proportionate to heat/100, color changes GREEN→YELLOW→ORANGE→RED
+- SUPER MAGNET: rainbow cycling border around screen, magnet color cycles, 3x indicator
+
+## Animation / Timing Rules
+- Frame-based: 30fps assumed
+- Magnet extend speed: 4.0 px/f
+- Magnet retract speed: 6.0 px/f
+- Particle lifecycle: spawn 8-15 per pickup, vx=-2..2, vy=-3..-1, life 15-30, gravity=True (0.1)
+- Scrap spawn interval: starts 60f, decreases to 25f over 60s
+- Scroll speed: starts 1.0 px/f, increases to 3.0 px/f over 60s
+- Trail dot life: 60f, no physics
+- SUPER duration: 300f (10s)
+- HEAT decay: 0.02/f
+- Screen shake: 10f on COMBO>=4 trigger, 15f on game over
+
+## Particle System
+- On pickup (same color): 12 particles, burst outward, scrap color, life 15-25
+- On pickup (wrong color): 8 particles, burst outward, GRAY(13), life 10-20
+- On SUPER activation: 30 particles, radial burst, all 4 colors mixed, life 20-40
+- On game over: 50 particles, screen-wide burst, RED(8), life 20-60
+- All particles: gravity=0.08, friction=0.99 per frame
+
+## Input
+- LEFT/RIGHT arrows or A/D: move crane_x (3.0 px/f), clamped [40, 280]
+- SPACE or DOWN or W/S: extend magnet (magnet_extending = True)
+- Release SPACE/DOWN: retract magnet (magnet_retracting = True)
+- SPACE or RETURN: advance from TITLE, restart from GAME_OVER
+- While magnet is extending/retracting, crane_x movement speed halved
+
+## Input Handling Details
+- Use pyxel.btn() for held keys (LEFT, RIGHT, SPACE for extending)
+- Release detection: when pyxel.btn(SPACE) becomes False → start retracting
+- pyxel.btnp(RETURN) or pyxel.btnp(SPACE) for title/gameover advancement
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp()
+- pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.text()
+- pyxel.frame_count
+- pyxel.camera()
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic)
+- Pre-init ALL instance attributes before calling reset()
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods
+- Separate logic from input: core methods take explicit params, wrappers call pyxel
+- Define `_make_game()` factory in test_imports.py for consistent setup (seeded RNG)
+- Use random.Random(42) for deterministic scrap spawn tests
+- For methods that access pyxel.camera() (screen shake), wrap in `except BaseException`
+
+## Edge Cases
+- Empty belt (no scraps spawned yet)
+- All scraps same color (COMBO easy mode)
+- All scraps different colors every time (COMBO impossible)
+- Magnet at edge of screen (clamping)
+- Scrap going off-screen at top (HEAT penalty for miss)
+- Multiple scraps overlapping magnet simultaneously (pick up first match)
+- SUPER timer expiring during pickup (gracefully deactivate)
+- Heat exactly at 100 (triggers game over)
+- Timer exactly at 0 (triggers game over)
+
+## Game Balance Values
+- Score per pickup: 10 + combo * 5 (SUPER: x3)
+- Wrong color HEAT: +15
+- Miss HEAT: +5
+- HEAT decay: 0.02/f
+- HEAT cap: 100
+- COMBO threshold for SUPER: 4
+- Timer: 1800f (60s)
+- Crane speed: 3.0 px/f (1.5 during magnet extend)
+- Magnet extend speed: 4.0 px/f
+- Magnet retract speed: 6.0 px/f
+
+## Implementation Constraints
+- Single file: prototypes/264_magnet_lift/main.py
+- ~500-700 lines
+- Type hints on all methods
+- Use @dataclass for data, str for phase (simpler than Enum for headless)
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
+- 3 screens: title, playing, game over

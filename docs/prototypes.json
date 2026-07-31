@@ -2076,5 +2076,13 @@
     "score": 32.15,
     "status": "Top-down jet ski color-match COMBO racer prototype complete — 320x240@30fps, auto-scroll upward (player y=160 fixed), LEFT/RIGHT (A/D) movement, player jet ski color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f cycle), colored buoys drift downward (1.0→3.0 px/f, spawn 60→25f interval escalating), same-color consecutive collections = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER WAKE (300f rainbow mode, any-color match, 3x score, HEAT gain disabled, rainbow border+glow), HEAT risk (mismatch+15, buoy exit+5, decay 0.02/f, cap 100→game over with screen shake), 60s timer (1800f→game over), wake trail (cyan dot trail), water current flow lines, particle bursts, floating text, three screens (Title/Playing/GameOver), 43 headless tests.",
     "href": "263_wake_chain.html"
+  },
+  {
+    "id": "264_magnet_lift",
+    "title": "MAGNET LIFT",
+    "idea": "廃棄場のマグネットクレーン色合わせCOMBOゲーム。プレイヤーはマグネットクレーンを操作し、コンベア上を流れる色付きスクラップ金属を吊り上げる。同じ色のスクラップを連続で吸着してCOMBOチェインを構築するのが最も面白い瞬間。COMBO>=4でSUPER MAGNET（300f虹色モード、全色一致、スコア3倍、HEAT凍結、虹色ボーダー＋マグネットグロー）が発動し、ベルト上のすべてのスクラップが吸着可能になる。色違い吸着でCOMBOリセット＋HEAT上昇、スクラップ取り逃しでHEAT+5。HEAT>=100または60秒タイマー満了でゲームオーバー。game_idea_factory #1（Score 32.2）の「ログ/リプレイが資産（前回の行動が次回のカードになる）」「UIの連鎖演出（崩壊/増加/圧縮）」フックを再解釈し、初のクレーンゲームジャンル。",
+    "score": 32.2,
+    "status": "Magnet crane color-match COMBO prototype complete — 320x240@30fps, LEFT/RIGHT (A/D) to move crane (3.0/1.5px/f during magnet extend), SPACE to extend/retract magnet (4.0/6.0px/f), colored scraps (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10, 12x12px) scroll upward on conveyor (1.0→3.0px/f over 60s, spawn 60→25f interval), same-color consecutive pickups = COMBO chain (score=10+combo*5, SUPER=3x), COMBO>=4 triggers SUPER MAGNET (300f rainbow, any-color, HEAT frozen, rainbow border+magnet glow), HEAT risk (mismatch+15, miss+5, decay 0.02/f, cap=100→game over), 60s timer, magnetic field trail dots, radial particle bursts, floating text, screen shake, three screens (Title/Playing/GameOver), first crane game genre in collection, 78 headless tests.",
+    "href": "264_magnet_lift.html"
   }
 ]
