@@ -2091,7 +2091,7 @@
     "idea": "トップダウン相撲×色合わせCOMBOチェイン。円形の土俵で矢印キー操作の力士がカラーパワーゾーンを踏み、同色連続でCOMBOを積んで押し出す力を強化する。COMBO>=4でSUPER SUMO（300f虹色モード、全色自動一致、3倍押し力、HEAT凍結）が発動し、虹色の力士で相手を土俵の外に吹き飛ばす瞬間が最も面白い。先に3回押し出すか60秒タイマーで決着。HEAT>=100でAIがOVERHEATボーナス（1.5倍パワー、120f）。game_idea_factory #1（Score 32.35）の「合成圧縮→同色連続COMBO→SUPER SUMO」「CAグリッド充填→HEATリスク」フックを再解釈。初の相撲／アリーナブロウラージャンル。",
     "score": 32.35,
     "status": "Sumo wrestling color-match COMBO arena prototype complete — 320x240@30fps, top-down circular dohyō (R=90, center 160,130), arrow/WASD movement (2.0px/f, diagonal normalized), player color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f), colored power zones spawn in ring (35→20f interval, max 6, 300f life), same-color consecutive zone steps = COMBO chain (push_force=1.0+combo*0.3), COMBO>=4 triggers SUPER SUMO (300f rainbow, any-color auto-match, 3x force, player rainbow glow, ring rainbow border), mismatch = COMBO reset+HEAT+15, push mechanic (circle-circle overlap, force proportional to push_force), AI target selection (zones→player→center/edge-escape), HEAT risk (mismatch+15, ring-out+10, decay 0.02/f, cap 100→OVERHEAT AI bonus 1.5x force 120f), first to 3 ring-outs wins, 60s timer, 3 screens (Title/Playing/GameOver), 61 headless tests, fixed pitfall: decay-before-threshold-check in _update_heat (reordered: check→decay).",
-     "href": "265_sumo_surge.html"
+    "href": "265_sumo_surge.html"
   },
   {
     "id": "266_echo_hop",
@@ -2099,7 +2099,7 @@
     "idea": "アイソメトリック（Q*bert風）の色連鎖ホッピング。プレイヤーは7x7ピラミッド格子を矢印キーで跳び回り、立方体に色付き足跡を残す。足跡の色が次のアクティブカラーになる。同色の敵を連続で踏みつけるとCOMBOが積み上がり、COMBO>=4でSUPER HOP（300f、虹色プレイヤー、踏んだ敵とBFS接続している同色敵を連鎖一掃）が発動する。四方から敵が迫る中、4匹の同色敵を連続チェインストンプし、SUPER HOPで連結領域がパーティクル連鎖崩壊する瞬間が最も面白い。色違いの敵を踏むとHP減少＋COMBOリセット、端から落ちてもHP減少＋リスポーンのリスク。同色COMBO継続で高倍率スコア（kill_score=10*combo、SUPER時3倍、BFS連鎖クリア+50/体ボーナス）を得られる。初のアイソメトリック/Q*bertジャンル。",
     "score": 32.35,
     "status": "Isometric color-chain hopping prototype complete — 320x240@30fps, 7x7 pyramid grid, W/A/S/D or arrow keys for 4-dir isometric movement (move_cooldown 8f), 4 colors (RED/LIME/DARK_BLUE/YELLOW), footprint trail (max 5, active_color = footprint color), enemy spawn on edges (moving toward player every 45f), same-color stomp = combo++, wrong color = hp-- + combo reset, fall off edge = hp-- + respawn at (0,0), SUPER HOP (combo>=4, 300f rainbow mode, BFS chain-clear connected same-color enemies), particles on kill (5-10) and super BFS (15-30), difficulty ramp (spawn_interval 120→40 over 3600f), 3 screens, 66 headless tests.",
-     "href": "266_echo_hop.html"
+    "href": "266_echo_hop.html"
   },
   {
     "id": "267_grid_chain",
@@ -2116,5 +2116,13 @@
     "score": 31.75,
     "status": "Dot-connecting chain puzzle prototype complete — 8x7 grid (CELL=28), 4 colors (RED/LIME/DARK_BLUE/YELLOW), mouse click-drag to connect adjacent (8-dir) same-color dots, chain len 3+ scores 10*len*multiplier*super_mult, same-color consecutive COMBO chain, SUPER DOT at COMBO>=4 (300f rainbow, any-color match, 3x score, HEAT frozen), HEAT risk (mismatch +15, short chain +5, decay 0.02/frame, cap 100 game over), 60s timer, gravity compaction + top refill after clear, ghost trail CYAN dots of previous chain paths, particle + floating text effects, 3 screens (Title/Playing/GameOver), 612 lines, 58 headless tests, OpenCode CLI first-try success with self-correction",
     "href": "268_dot_chain.html"
+  },
+  {
+    "id": "269_coin_surge",
+    "title": "COIN SURGE",
+    "idea": "グリッド型コインプッシャーゲーム。プレイヤーは色付きコイン（4色）を10列のグリッド上部から落とし、定期的に作動するプッシャーで全コインを右に押し出す。右端から落下した同色コインが連続するとCOMBOチェインが発生し、COMBOが4以上でSUPER DROP（300fレインボーモード、全色マッチ、3倍スコア）が発動。色違いを収集するとHEAT+15（上限100でゲームオーバー）。60秒タイムアタック。面白い瞬間は「異なる列に同色コインを戦略的に配置し、プッシャーで一気に右端に押し出してCOMBOチェインを炸裂させ、SUPER DROPでレインボー収集の爽快感を得る瞬間」。リスクとリターン：同色を狙った配置で高COMBO＋SUPER DROPの高報酬、色の切り替わりタイミングを見誤るとHEAT急増のリスク。初のコインプッシャー／メダルゲームジャンル。",
+    "score": 30.0,
+    "status": "Grid coin pusher prototype complete — 10x12 grid (CELL=20), 4 coin colors (RED/LIME/DARK_BLUE/YELLOW), gravity every 12f, periodic pusher (init 180f→min 60f) shifts coins right, right-edge collection with same-color COMBO chain, SUPER DROP at COMBO>=4 (300f rainbow, any-color match, 3x score), HEAT risk (mismatch +15, decay 0.02/f, cap 100 game over), color auto-cycle (90f→min 30f), difficulty escalation (pusher interval -4/300f, color cycle -2/300f), 60s timer, mouse click or 0-9 keys to drop, 3 screens (Title/Playing/GameOver), push animation + particles + floating text effects",
+    "href": "269_coin_surge.html"
   }
 ]

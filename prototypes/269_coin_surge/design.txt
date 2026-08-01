@@ -1,0 +1,397 @@
+COIN SURGE — Grid Coin Pusher (Prototype 269)
+================================================
+
+CONCEPT:
+A side-view arcade coin pusher game on a grid. Player drops colored coins 
+from the top of columns. Coins stack up. A periodic "pusher" shifts all 
+coins rightward. Coins falling off the right edge are collected for points.
+Same-color consecutive collections build a COMBO chain → SUPER DROP super mode.
+
+CORE MECHANIC:
+"Split into multiple paths → converge → explode" reinterpreted as:
+  - Coins SPLIT across columns (player chooses where to drop)
+  - Pusher CONVERGES them toward the right edge
+  - Chain of same-color coins falling off = COMBO EXPLOSION
+
+GENRE: First coin pusher / medal game in collection. Untapped.
+
+SCREEN: 320×240, Pyxel 2.x
+CELL = 20
+GRID: 12 cols × 12 rows (cols 0-11, rows 0-11)
+  Grid occupies x=40 to x=280 (12*20=240), y=0 to y=240 (12*20=240)
+  Actually: make it 10 cols × 12 rows to leave room for HUD
+  Grid: x=60 to x=260 (200px center), y=0 to y=240
+  Wait: 320 screen, 12 cols * 20 = 240. Offset x=40 → cols span 40-280.
+  Rows: 12 * 20 = 240. y=0 to 239.
+  HUD on left side (x=0-39) and right side (x=281-319). Actually just use 
+  top bar for HUD.
+
+Let me simplify: 
+  GRID_COLS = 10  (x=60 to x=260, 200px wide)
+  GRID_ROWS = 12  (y=0 to y=240, full height)
+  CELL = 20
+
+PHASE MACHINE:
+  Phase enum: TITLE, PLAYING, PUSHER_ANIM, COLLECT, GAME_OVER
+
+  TITLE: Show title + controls, press SPACE/click to start
+  PLAYING: Main game loop
+    - Player clicks a column to drop a coin OR presses number keys 0-9
+    - Coin spawns at top of column, falls due to gravity
+    - Timer counts down from 60s (1800 frames)
+    - Pusher activates every PUSHER_INTERVAL frames
+    - When pusher fires → transition to PUSHER_ANIM
+  PUSHER_ANIM: Animate coins shifting right (15 frames)
+    - After animation → transition to COLLECT
+  COLLECT: Evaluate coins in rightmost column
+    - Coins at col 9 (last column) get pushed off → collected
+    - Compute COMBO, score, HEAT
+    - Spawn particles, floating text
+    - Transition back to PLAYING
+  GAME_OVER: Show final score, press SPACE to restart
+
+DATA CLASSES:
+  @dataclass
+  class Coin:
+      col: int       # 0-9
+      row: int       # 0-11, top=0, bottom=11
+      color: int     # RED(8), LIME(11), DARK_BLUE(5), YELLOW(10)
+      falling: bool = True  # still in gravity fall
+
+  @dataclass
+  class Particle:
+      x: float
+      y: float
+      vx: float
+      vy: float
+      color: int
+      life: int  # decremented each frame, removed at 0
+      size: int = 3
+
+  @dataclass
+  class FloatingText:
+      x: float
+      y: float
+      text: str
+      color: int
+      life: int  # decremented each frame, removed at 0
+
+GAME STATE (Game class attributes):
+  self.phase: Phase
+  self.coins: list[Coin]
+  self.particles: list[Particle]
+  self.floating_texts: list[FloatingText]
+  self.score: int
+  self.combo: int
+  self.max_combo: int
+  self.best_score: int
+  self.super_timer: int  # remaining frames of SUPER DROP
+  self.super_mode: bool
+  self.heat: float
+  self.timer: int  # frames remaining (1800 → 0)
+  self.frame: int  # total frame counter
+  self.pusher_countdown: int  # frames until next pusher
+  self.drop_color: int  # current player drop color (0-3 index)
+  self.drop_color_timer: int  # frames until color cycles
+  self.color_cycle_interval: int  # decreases over time
+  self.pusher_interval: int  # decreases over time
+  self.last_collected_color: int | None  # for COMBO tracking
+  self._rng: random.Random  # seeded for determinism
+  self._frame_count: int  # internal frame counter (avoids pyxel.frame_count)
+  self._headless: bool = False  # set True in tests to skip pyxel calls
+
+COLOR CONSTANTS (raw ints — never use pyxel.COLOR_* in logic):
+  COLORS = (8, 11, 5, 10)  # RED, LIME, DARK_BLUE, YELLOW
+  COLOR_NAMES = ("RED", "LIME", "DARK_BLUE", "YELLOW")
+  Color index 0=RED, 1=LIME, 2=DARK_BLUE, 3=YELLOW
+
+SCREEN CONSTANTS:
+  SCREEN_W = 320
+  SCREEN_H = 240
+  CELL = 20
+  GRID_COLS = 10
+  GRID_ROWS = 12
+  GRID_X = 60  # left edge of grid
+  GRID_Y = 0   # top edge of grid
+
+GAME CONSTANTS:
+  GAME_DURATION = 1800  # 60s at 30fps
+  INITIAL_PUSHER_INTERVAL = 180  # 6s at 30fps
+  MIN_PUSHER_INTERVAL = 60  # 2s
+  PUSHER_ANIM_FRAMES = 15
+  GRAVITY_INTERVAL = 15  # coins fall 1 cell every 15 frames
+  INITIAL_COLOR_CYCLE = 90  # 3s
+  MIN_COLOR_CYCLE = 30  # 1s
+  SUPER_DURATION = 300  # 10s
+  COMBO_THRESHOLD = 4
+  HEAT_MISMATCH = 15
+  HEAT_DECAY = 0.02  # per frame
+  HEAT_MAX = 100
+  BASE_SCORE = 10
+
+KEY METHODS (testable, never call pyxel input):
+
+  def _drop_coin(self, col: int) -> None:
+      """Drop a coin at the top of the given column. If column is full (coin at row 0), nothing happens."""
+      # Check if there's already a coin at row 0 in this column
+      # If not, create a new Coin(col, 0, color, falling=True)
+      # Decrease drop_color_timer? Actually color cycles on timer.
+
+  def _apply_gravity(self) -> None:
+      """Move all falling coins down 1 cell if cell below is empty.
+      A coin stops falling when it reaches row 11 or there's a non-falling coin below."""
+      # Process coins from bottom to top to handle stacking
+      # For each coin where falling=True:
+      #   if row == 11: falling = False
+      #   elif cell below has a non-falling coin: falling = False
+      #   else: row += 1
+
+  def _activate_pusher(self) -> list[Coin]:
+      """Shift all coins right by 1 column if there's space.
+      Process right to left (col 8→0) to avoid conflicts.
+      Returns list of coins that were pushed off the right edge (col 9→off)."""
+      # collected = []
+      # For col in range(GRID_COLS-2, -1, -1):  # 8 down to 0
+      #   For each coin in this column (top to bottom):
+      #     if cell at (col+1, same_row) is empty:
+      #       move coin to col+1
+      # For coins in col 9: append to collected, remove from self.coins
+      # Return collected
+
+  def _evaluate_collection(self, collected: list[Coin]) -> None:
+      """Process collected coins, update score/combo/heat/super."""
+      # For each coin in collected:
+      #   if super_mode: match = True (any color auto-match)
+      #   else: match = (coin.color == last_collected_color) if last_collected_color is not None else True
+      #   if match:
+      #     self.combo += 1
+      #     self.max_combo = max(self.max_combo, self.combo)
+      #     mult = 3 if super_mode else 1
+      #     self.score += BASE_SCORE * self.combo * mult
+      #     if self.combo >= COMBO_THRESHOLD and not self.super_mode:
+      #       self.super_mode = True
+      #       self.super_timer = SUPER_DURATION
+      #     # spawn particles, floating text
+      #   else:
+      #     self.combo = 1  # reset to 1 (this coin starts new chain)
+      #     self.heat += HEAT_MISMATCH
+      #   self.last_collected_color = coin.color
+
+  def _update_heat(self) -> None:
+      """Decay heat, check game over. CHECK BEFORE decaying."""
+      if self.heat >= HEAT_MAX:
+          self.phase = Phase.GAME_OVER
+          return
+      self.heat = max(0, self.heat - HEAT_DECAY)
+
+  def _update_super(self) -> None:
+      """Decrement super_timer, deactivate when expired."""
+      if self.super_mode:
+          self.super_timer -= 1
+          if self.super_timer <= 0:
+              self.super_mode = False
+              self.super_timer = 0
+
+  def _update_timer(self) -> None:
+      """Decrement timer, game over if 0."""
+      self.timer -= 1
+      if self.timer <= 0:
+          self.phase = Phase.GAME_OVER
+
+  def _update_color_cycle(self) -> None:
+      """Cycle player drop color on timer."""
+      self.drop_color_timer -= 1
+      if self.drop_color_timer <= 0:
+          self.drop_color = (self.drop_color + 1) % 4
+          self.drop_color_timer = self.color_cycle_interval
+      # Escalate color cycle interval over time
+      if self.frame % 300 == 0 and self.color_cycle_interval > MIN_COLOR_CYCLE:
+          self.color_cycle_interval -= 2
+
+  def _update_difficulty(self) -> None:
+      """Escalate pusher interval over time."""
+      if self.frame > 0 and self.frame % 300 == 0 and self.pusher_interval > MIN_PUSHER_INTERVAL:
+          self.pusher_interval -= 4
+
+  def _spawn_particles(self, x: float, y: float, color: int, count: int) -> None:
+      """Spawn count particles at position with random velocities."""
+      import math, random
+      for _ in range(count):
+          angle = self._rng.random() * 2 * math.pi
+          speed = 0.5 + self._rng.random() * 2.0
+          self.particles.append(Particle(
+              x=x, y=y,
+              vx=math.cos(angle) * speed,
+              vy=math.sin(angle) * speed - 1.0,
+              color=color, life=20 + self._rng.randint(0, 10)
+          ))
+
+  def _spawn_floating_text(self, x: float, y: float, text: str, color: int) -> None:
+      """Spawn floating score text."""
+      self.floating_texts.append(FloatingText(x=x, y=y, text=text, color=color, life=30))
+
+  def _update_particles(self) -> None:
+      """Update particle positions and lifetimes."""
+      for p in self.particles:
+          p.x += p.vx
+          p.y += p.vy
+          p.vy += 0.05  # gravity
+          p.life -= 1
+      self.particles = [p for p in self.particles if p.life > 0]
+
+  def _update_floating_texts(self) -> None:
+      """Update floating text positions and lifetimes."""
+      for ft in self.floating_texts:
+          ft.y -= 0.5  # float upward
+          ft.life -= 1
+      self.floating_texts = [ft for ft in self.floating_texts if ft.life > 0]
+
+  def _is_cell_occupied(self, col: int, row: int) -> bool:
+      """Check if a grid cell has a non-falling coin."""
+      # Ignore falling coins (they're in transit)
+      return any(c.col == col and c.row == row and not c.falling for c in self.coins)
+
+  def _get_coin_at(self, col: int, row: int) -> Coin | None:
+      """Get non-falling coin at grid position."""
+      for c in self.coins:
+          if c.col == col and c.row == row and not c.falling:
+              return c
+      return None
+
+  def reset(self) -> None:
+      """Initialize/reset all game state."""
+      # Called by __init__ and on restart
+
+RENDERING NOTES:
+  - Grid background: dark surface (NAVY=1 or DARK_BLUE=5)
+  - Grid lines: GRAY=13 or darker
+  - Coins: filled circles with border, color-coded
+    - RED coins: fill=8(RED), border=8
+    - LIME coins: fill=11(LIME), border=11
+    - DARK_BLUE coins: fill=5(DARK_BLUE), border=5
+    - YELLOW coins: fill=10(YELLOW), border=10
+  - Coin radius: CELL/2 - 2 = 8px
+  - Coin center: GRID_X + col*CELL + CELL/2, row*CELL + CELL/2
+  - Drop preview: show ghost coin at top of column under mouse cursor
+  - HUD: score top-left, combo top-center, timer top-right, heat bar
+  - SUPER DROP mode: rainbow border around entire grid, pulsing
+  - Particles: small colored squares/circles
+  - Floating text: "+SCORE" in WHITE(7), "COMBO xN" in YELLOW(10),
+    "WRONG!" in RED(8), "SUPER DROP!" with rainbow cycling colors
+  - Pusher indicator: bar on left side showing countdown to next push
+
+PHASE-SPECIFIC RENDERING:
+  TITLE:
+    - "COIN SURGE" in large text (center)
+    - "Click or SPACE to start" below
+    - Controls info: "Click column to drop coin"
+    - Best score display
+
+  PLAYING/PUSHER_ANIM/COLLECT:
+    - Grid with coins
+    - HUD overlay
+    - Drop preview (ghost coin at cursor column)
+    - Pusher countdown bar
+    - Particles and floating texts
+
+  GAME_OVER:
+    - "GAME OVER" text
+    - Final score, max combo, best score
+    - "SPACE to retry"
+    - Best score persists across runs
+
+INPUT HANDLING (in update(), calls pyxel — never in testable methods):
+  - TITLE: pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) → reset() + phase=PLAYING
+  - PLAYING: pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) + mouse in grid area → _drop_coin(col)
+  - PLAYING: number keys 0-9 → _drop_coin(key_num)
+  - GAME_OVER: pyxel.btnp(pyxel.KEY_SPACE) or click → reset() + phase=TITLE
+
+UPDATE LOOP (PLAYING phase):
+  self._frame_count += 1
+  self.frame += 1  # total frame counter
+  self._update_timer()  # CHECK BEFORE incrementing frame to avoid off-by-one
+  # Actually: timer decrement after frame increment
+  if self.frame % GRAVITY_INTERVAL == 0:
+      self._apply_gravity()
+  self.pusher_countdown -= 1
+  if self.pusher_countdown <= 0:
+      self.phase = Phase.PUSHER_ANIM
+      self._anim_frame = 0
+      self._pending_collected = self._activate_pusher()
+      self.pusher_countdown = self.pusher_interval
+  self._update_color_cycle()
+  self._update_difficulty()
+  self._update_heat()
+  self._update_super()
+  self._update_particles()
+  self._update_floating_texts()
+  # Timer check: do this last
+  if self.timer <= 0:
+      self.phase = Phase.GAME_OVER
+      self.best_score = max(self.best_score, self.score)
+
+UPDATE LOOP (PUSHER_ANIM):
+  self._anim_frame += 1
+  self._update_particles()
+  self._update_floating_texts()
+  if self._anim_frame >= PUSHER_ANIM_FRAMES:
+      self.phase = Phase.COLLECT
+
+UPDATE LOOP (COLLECT):
+  self._evaluate_collection(self._pending_collected)
+  self._pending_collected = []
+  self.phase = Phase.PLAYING
+
+EDGE CASES TO HANDLE:
+  - Column full (coin at row 0): drop does nothing, don't penalize
+  - All 10 columns full: player can't drop, but pusher will create space
+  - No coins to push: pusher fires but nothing happens (no crash)
+  - Super mode ends mid-collection: active for the entire COLLECT phase
+  - Heat reaches exactly 100: game over
+  - Timer reaches 0 during PUSHER_ANIM: game over after anim completes
+  - First coin collected: always matches (combo=1, no mismatch heat)
+  - Coin color cycling: wraps 0→1→2→3→0
+
+FIXED API NAMES (MUST USE EXACTLY THESE):
+  pyxel.tri (not triangle)
+  pyxel.KEY_RETURN (not KEY_ENTER)
+  pyxel.MOUSE_BUTTON_LEFT
+  pyxel.mouse_wheel (for scroll)
+
+COLOR CONSTANTS REFERENCE:
+  BLACK=0, NAVY=1, PURPLE=2, GREEN=3, BROWN=4, DARK_BLUE=5,
+  LIGHT_BLUE=6, WHITE=7, RED=8, ORANGE=9, YELLOW=10, LIME=11,
+  CYAN=12, GRAY=13, PINK=14, PEACH=15
+
+HEADLESS TESTING PATTERN:
+  Use Game.__new__(Game) to bypass __init__ (avoids pyxel.init/pyxel.run).
+  Pre-init all instance attributes that reset() touches, then call reset().
+  Seed the RNG: g._rng = random.Random(42) AFTER reset().
+  Never call methods that access pyxel input (btn/btnp/mouse_x/mouse_y/frame_count).
+  Test inner logic methods directly with state manipulation.
+
+  _make_game() factory:
+    g = Game.__new__(Game)
+    g._headless = True
+    g.coins = []
+    g.particles = []
+    g.floating_texts = []
+    g.score = 0
+    g.combo = 0
+    g.max_combo = 0
+    g.best_score = 0
+    g.super_timer = 0
+    g.super_mode = False
+    g.heat = 0.0
+    g.timer = GAME_DURATION
+    g.frame = 0
+    g.pusher_countdown = INITIAL_PUSHER_INTERVAL
+    g.drop_color = 0
+    g.drop_color_timer = INITIAL_COLOR_CYCLE
+    g.color_cycle_interval = INITIAL_COLOR_CYCLE
+    g.pusher_interval = INITIAL_PUSHER_INTERVAL
+    g.last_collected_color = None
+    g._rng = random.Random(42)
+    g._frame_count = 0
+    # Don't call reset() — it would overwrite _rng
+    return g
