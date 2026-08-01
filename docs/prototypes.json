@@ -2124,5 +2124,13 @@
     "score": 30.0,
     "status": "Grid coin pusher prototype complete — 10x12 grid (CELL=20), 4 coin colors (RED/LIME/DARK_BLUE/YELLOW), gravity every 12f, periodic pusher (init 180f→min 60f) shifts coins right, right-edge collection with same-color COMBO chain, SUPER DROP at COMBO>=4 (300f rainbow, any-color match, 3x score), HEAT risk (mismatch +15, decay 0.02/f, cap 100 game over), color auto-cycle (90f→min 30f), difficulty escalation (pusher interval -4/300f, color cycle -2/300f), 60s timer, mouse click or 0-9 keys to drop, 3 screens (Title/Playing/GameOver), push animation + particles + floating text effects",
     "href": "269_coin_surge.html"
+  },
+  {
+    "id": "270_plate_spin",
+    "title": "PLATE SURGE",
+    "idea": "サーカスの皿回しパフォーマンスがテーマの色合わせアクションゲーム。4枚の色付き皿を棒の上で回し続ける。皿は時間経過で回転が減衰し、同色の皿を連続スピンするとCOMBOチェインが発生。COMBO>=4でSUPER SPIN（300fレインボーモード、全色マッチ、3倍スコア、全皿自動スピン）が発動。CA不安定性伝播で隣接皿も加速減衰。初の皿回し／サーカスデクスタリティジャンル。game_idea_factory #1 (Score 32.35)「合成圧縮」＋「CAグリッド充填」の再解釈。",
+    "score": 32.35,
+    "status": "Plate spinning circus dexterity prototype complete — 4 plates (RED/LIME/DARK_BLUE/YELLOW), click to spin same-color plates for COMBO chain (score=10*combo*multiplier), SUPER SPIN at COMBO>=4 (300f rainbow, any-color match, 3x score, auto-spin all every 30f), wobble decay (0.04/frame), CA adjacency penalty (x1.5 for neighbors of low-wobble plates), fallen plates (+25 HEAT, 60f respawn), HEAT risk (mismatch +15, decay 0.02/f, cap 100 game over), 60s timer, particle + floating text + wobble animation effects, 3 screens (Title/Playing/GameOver), 425 lines, 57 headless tests, OpenCode CLI first-try success with 1 Hermes fix (decay-before-threshold-check reorder)",
+    "href": "270_plate_spin.html"
   }
 ]

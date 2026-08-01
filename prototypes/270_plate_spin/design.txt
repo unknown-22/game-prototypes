@@ -1,0 +1,248 @@
+# 270 — PLATE SURGE (Color-match Plate Spinning) Design Spec
+
+## Concept
+サーカスの皿回しパフォーマンスがテーマの色合わせアクションゲーム。4枚の色付き皿を棒の上で回し続ける。皿は時間とともに回転が減衰し、ぐらつきが増す。プレイヤーは皿をクリックして回転を回復させる。同色の皿を連続でスピンするとCOMBOチェインが発生し、COMBO>=4でSUPER SPIN（虹色、全皿自動スピン、3倍スコア）が発動する。皿が倒れるとHEATが上昇し、HEATが100に達するとゲームオーバー。CA的要素として、ぐらつきが大きい皿の隣の皿はより速く減衰する（不安定性の伝播）。
+
+## Most Fun Moment (面白い瞬間)
+「どの皿から回すか焦る中、同色連続スピンでコンボがつながり、SUPER SPINで全皿が虹色に輝き自動で回り続ける瞬間」
+
+## Core Mechanic
+1. プレイヤーは画面中央に4枚の色付き皿を見る（左から右に配置）
+2. 各皿の回転力（wobble）は時間とともに減衰（0.04/frame）
+3. プレイヤーはマウスクリックで皿を選びスピン（wobble=100に回復）
+4. 同じ色の皿を連続でスピンするとCOMBOが増加（スコア=10*combo*multiplier）
+5. 異なる色の皿をスピンするとCOMBOリセット + HEAT+15
+6. COMBO>=4でSUPER SPIN発動（300f=5秒、虹色、任意色マッチ、3倍スコア、全皿30fごとに自動スピン）
+7. 皿のwobbleが0以下になると倒れる → HEAT+25、60f後に復活、COMBOリセット
+8. CA不安定性伝播: ある皿のwobble<20の時、隣接する皿の減衰速度が1.5倍
+9. 60秒タイマーが0になるかHEAT>=100でゲームオーバー
+
+## Technical Spec
+- Screen: 320×240 (WIDE=320, HIGH=240), display_scale=2, Pyxel 2.x
+- FPS: 30 (TARGET_FPS=30)
+- 4 plates arranged at specific x positions
+- Phase machine: TITLE, PLAYING, GAME_OVER
+- No grid — continuous screen space
+
+## Plate Layout
+- PLATE_Y = 120 (plate center y)
+- STICK_Y = 150 (stick top y)
+- STICK_BOTTOM = 220 (stick bottom y)
+- PLATE_XS = [60, 120, 200, 260] (4 plates at these x positions)
+- PLATE_RADIUS = 22
+- STICK_WIDTH = 4
+
+## Colors
+- RED(8), LIME(11), DARK_BLUE(5), YELLOW(10) for the 4 plate colors
+- BLACK(0) for background
+- WHITE(7) for text/HUD
+- GRAY(13) for sticks
+- PINK(14) for danger HEAT zone
+- CYAN(12) for ghost trail / effects
+- ORANGE(9) for mismatch flash
+
+## Data Classes
+```python
+from dataclasses import dataclass, field
+from enum import Enum, auto
+
+class Phase(Enum):
+    TITLE = auto()
+    PLAYING = auto()
+    GAME_OVER = auto()
+
+@dataclass
+class Plate:
+    x: int          # center x position
+    color: int      # pyxel color int (5, 8, 10, 11)
+    wobble: float   # 0-100, decreases over time
+    fallen: bool    # True if wobble <= 0
+    respawn_timer: int  # countdown until respawn (0 = active)
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass  
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(WIDE, HIGH, title="PLATE SURGE", fps=TARGET_FPS, display_scale=2)
+    #           pyxel.run(self.update, self.draw)
+    
+    # reset(): init all state, called on game start/restart
+    # update(): phase machine dispatch
+    # draw(): phase machine dispatch
+    
+    # State attributes (ALL need pre-init for Game.__new__):
+    # phase: Phase = Phase.TITLE
+    # score: int = 0
+    # best_score: int = 0
+    # combo: int = 0
+    # max_combo: int = 0
+    # heat: float = 0.0
+    # timer: int = 1800  # 60s * 30fps
+    # super_timer: int = 0  # countdown, 0=inactive
+    # plates: list[Plate] (4 plates)
+    # particles: list[Particle]
+    # floating_texts: list[FloatingText]
+    # last_color: int = -1  # last spun plate color for combo tracking
+    # plate_colors: tuple[int,int,int,int] = (8, 11, 5, 10)  # RED, LIME, DARK_BLUE, YELLOW
+    # _rng: random.Random
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `_spawn_plate(index: int) -> Plate` — create a new plate at given index position
+- `_spin_plate(index: int) -> tuple[int, bool]` — spin plate at index, return (score_gained, was_match)
+- `_update_wobble() -> None` — decrease wobble for all plates, apply CA adjacency penalty
+- `_check_fallen() -> list[int]` — check for fallen plates, return list of fallen indices
+- `_respawn_fallen() -> None` — decrement respawn timers, respawn when ready
+- `_update_super() -> None` — decrement super_timer, auto-spin plates during SUPER
+- `_update_heat() -> None` — apply HEAT decay, check game-over threshold
+- `_update_timer() -> None` — decrement timer, check time-up
+- `_add_spin_particles(index: int, was_match: bool) -> None` — particle burst on spin
+- `_add_floating_text(x: float, y: float, text: str, color: int) -> None` — floating score text
+- `_update_particles() -> None` — move particles, remove dead ones
+- `_update_floating_texts() -> None` — move floating texts, remove dead ones
+
+## Phase Machine
+```
+[TITLE] → (SPACE or click on start area) → reset() → [PLAYING]
+[PLAYING] → (timer<=0 or heat>=100) → phase=GAME_OVER, best_score updated
+[GAME_OVER] → (SPACE or click) → phase=TITLE
+```
+
+## Screens
+1. TITLE:
+   - "PLATE SURGE" centered at (160, 60), large text
+   - "Keep the plates spinning!" at (160, 90)
+   - "Click same-color plates" at (160, 110)
+   - "for COMBO chains!" at (160, 125)
+   - "SUPER SPIN at COMBO>=4" at (160, 145)
+   - Best score displayed at (160, 175)
+   - "CLICK or SPACE to start" at (160, 210)
+
+2. PLAYING:
+   - 4 plates on sticks
+   - Each plate drawn as filled circle with colored border
+   - Wobble visualized by plate vertical oscillation (sin-based jitter proportional to 100-wobble)
+   - Fallen plates: plate on ground, gray color
+   - SUPER mode: rainbow cycling border on all plates + screen border
+   - HUD at top: SCORE | COMBO | TIMER | HEAT bar
+   - Particles on spin events
+   - Floating text: "+score", "COMBO xN", "WRONG!", "SUPER SPIN!", "CRASH!"
+
+3. GAME_OVER:
+   - "GAME OVER" centered
+   - Final score + best score
+   - "CLICK or SPACE to retry"
+
+## Rendering Notes
+- Plate: filled circle (colored interior) + darker outline (2px)
+  - pyxel.circb(x, PLATE_Y + wobble_offset, PLATE_RADIUS, color) for border
+  - pyxel.circ(x, PLATE_Y + wobble_offset, PLATE_RADIUS - 2, darker_color) for fill
+- Stick: thin rectangle from STICK_Y to STICK_BOTTOM, centered on plate x
+  - pyxel.rect(x - STICK_WIDTH//2, STICK_Y, STICK_WIDTH, STICK_BOTTOM - STICK_Y, GRAY)
+- Wobble animation: plate y offset = sin(frame_count * 0.3) * (100 - wobble) * 0.02
+- SUPER mode: plate border cycles through all 4 colors every 10 frames
+- Fallen plate: drawn at STICK_BOTTOM + 10, gray color, wobble=0
+- HEAT bar: horizontal bar at top of screen, color transitions from LIME→YELLOW→ORANGE→RED
+- COMBO display: flashing when COMBO>=4, larger text
+
+## Animation / Timing Rules
+- Wobble decay: 0.04 per frame (base rate)
+- CA adjacent penalty: ×1.5 decay rate for neighbors of plate with wobble<20
+- SUPER duration: 300 frames (5 seconds at 30fps)
+- SUPER auto-spin interval: every 30 frames
+- Respawn timer: 60 frames (2 seconds)
+- Floating text life: 30 frames, floating upward at 0.5 px/frame
+- Particle life: 15-25 frames, velocity random in circle
+
+## Particle System
+- On spin (match): 6 particles, plate color, velocity radial outward (-2 to +2)
+- On spin (mismatch): 3 particles, GRAY, velocity random
+- On SUPER spin: 12 particles, rainbow cycling colors
+- On fall/crash: 10 particles, ORANGE, velocity upward
+- Particle gravity: 0.1
+- Life: 15-25 frames, decremented each frame
+
+## Input
+- PLAYING phase:
+  - pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): check which plate was clicked
+  - Click detection: distance from mouse to plate center < PLATE_RADIUS
+  - Only active (not fallen) plates respond to clicks
+- TITLE / GAME_OVER:
+  - pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_SPACE): advance/restart
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp()
+- pyxel.circ(), pyxel.circb(), pyxel.rect(), pyxel.rectb(), pyxel.text()
+- pyxel.frame_count
+- pyxel.mouse_x, pyxel.mouse_y
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic)
+- Pre-init ALL instance attributes listed above before calling reset()
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods
+- Separate logic from input: core methods take explicit params, wrappers call pyxel
+- Define `_make_game()` factory in test file:
+  ```python
+  def _make_game() -> Game:
+      g = Game.__new__(Game)
+      g.plates = []
+      g.particles = []
+      g.floating_texts = []
+      g._rng = random.Random(42)
+      g.score = 0
+      g.best_score = 0
+      g.combo = 0
+      g.max_combo = 0
+      g.heat = 0.0
+      g.timer = 1800
+      g.super_timer = 0
+      g.last_color = -1
+      g.plate_colors = (8, 11, 5, 10)
+      g.phase = Phase.PLAYING
+      g.reset()
+      return g
+  ```
+
+## Edge Cases
+- All plates same color: combo should chain indefinitely
+- All plates fallen: game should detect all dead state
+- Rapid clicking on same plate: should spin each time (no cooldown)
+- SUPER mode ending while wobble is low: should not crash
+- HEAT exactly 100: should trigger game over
+- Timer exactly 0: should trigger game over
+- Clicking fallen plate: should be ignored
+- Adjacent penalty when both neighbors have low wobble: should NOT double-penalize (check: only apply if neighbor is active)
+
+## Implementation Constraints
+- Single file: prototypes/270_plate_spin/main.py
+- ~500-600 lines
+- Type hints on all methods
+- Use @dataclass for data, Enum for phases
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
