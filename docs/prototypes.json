@@ -2099,6 +2099,14 @@
     "idea": "アイソメトリック（Q*bert風）の色連鎖ホッピング。プレイヤーは7x7ピラミッド格子を矢印キーで跳び回り、立方体に色付き足跡を残す。足跡の色が次のアクティブカラーになる。同色の敵を連続で踏みつけるとCOMBOが積み上がり、COMBO>=4でSUPER HOP（300f、虹色プレイヤー、踏んだ敵とBFS接続している同色敵を連鎖一掃）が発動する。四方から敵が迫る中、4匹の同色敵を連続チェインストンプし、SUPER HOPで連結領域がパーティクル連鎖崩壊する瞬間が最も面白い。色違いの敵を踏むとHP減少＋COMBOリセット、端から落ちてもHP減少＋リスポーンのリスク。同色COMBO継続で高倍率スコア（kill_score=10*combo、SUPER時3倍、BFS連鎖クリア+50/体ボーナス）を得られる。初のアイソメトリック/Q*bertジャンル。",
     "score": 32.35,
     "status": "Isometric color-chain hopping prototype complete — 320x240@30fps, 7x7 pyramid grid, W/A/S/D or arrow keys for 4-dir isometric movement (move_cooldown 8f), 4 colors (RED/LIME/DARK_BLUE/YELLOW), footprint trail (max 5, active_color = footprint color), enemy spawn on edges (moving toward player every 45f), same-color stomp = combo++, wrong color = hp-- + combo reset, fall off edge = hp-- + respawn at (0,0), SUPER HOP (combo>=4, 300f rainbow mode, BFS chain-clear connected same-color enemies), particles on kill (5-10) and super BFS (15-30), difficulty ramp (spawn_interval 120→40 over 3600f), 3 screens, 66 headless tests.",
-    "href": "266_echo_hop.html"
+     "href": "266_echo_hop.html"
+  },
+  {
+    "id": "267_grid_chain",
+    "title": "GRID CHAIN",
+    "idea": "4×4のカラー数独パズルにCOMBOチェインを組み合わせたゲーム。各行・各列に4色（赤・黄緑・紺・黄）が1つずつ入るようセルを埋める。同色を連続で正しく配置するとCOMBOが伸び、COMBOが4以上でSUPER PLACE（虹色モード、全配置自動成立、スコア3倍、HEAT凍結）が発動する。間違った配置でCOMBOリセット＋HEAT+15。HEATが100に達するか60秒の制限時間でゲームオーバー。ラウンドクリアでボーナス（500×ラウンド数）＋新規盤面に進む。面白い瞬間は「同色を連続で正しく配置してCOMBOを4以上に積み上げ、SUPER PLACEで虹色の盤面が一気に埋まってスコアが3倍で跳ね上がる爆発的爽快感」。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER PLACEの高報酬を得られるが、色を見誤るとHEATが急増しゲームオーバーのリスク。初の数独/パズル推論ジャンル。",
+    "score": 31.35,
+    "status": "Color Sudoku puzzle COMBO chain prototype complete — 4x4 grid (cell=36px), 4 colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive valid placement COMBO chain, SUPER PLACE at COMBO>=4 (300f rainbow mode, all placements auto-valid, 3x score, HEAT frozen), HEAT system (mismatch +15, time pressure +0.05/frame, decay -0.02/frame, cap 100 game over), 60s timer (1800f), 5 given cells per grid, round clear bonus (500*round), mouse click grid + keyboard 1-4/palette click color selection, particle + floating text effects, 3 screens (Title/Playing/GameOver), 50 headless tests",
+    "href": "267_grid_chain.html"
   }
 ]
