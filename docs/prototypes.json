@@ -2108,5 +2108,13 @@
     "score": 31.35,
     "status": "Color Sudoku puzzle COMBO chain prototype complete — 4x4 grid (cell=36px), 4 colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive valid placement COMBO chain, SUPER PLACE at COMBO>=4 (300f rainbow mode, all placements auto-valid, 3x score, HEAT frozen), HEAT system (mismatch +15, time pressure +0.05/frame, decay -0.02/frame, cap 100 game over), 60s timer (1800f), 5 given cells per grid, round clear bonus (500*round), mouse click grid + keyboard 1-4/palette click color selection, particle + floating text effects, 3 screens (Title/Playing/GameOver), 50 headless tests",
     "href": "267_grid_chain.html"
+  },
+  {
+    "id": "268_dot_chain",
+    "title": "DOT CHAIN",
+    "idea": "色付きドットをマウスで繋いで連鎖させるパズルゲーム。8×7グリッド上の同色ドットをクリック＆ドラッグで隣接（8方向）に繋ぎ、3個以上のチェインで得点。同色チェインを連続させるとCOMBO倍率（+0.5/コンボ）が上がり、COMBOが4以上でSUPER DOT（300fレインボーモード、全色マッチ、3倍スコア、HEAT凍結）が発動。間違った色のドットを選ぶとHEAT+15、短すぎるチェイン（3未満）でHEAT+5。HEATが100に達するか60秒でゲームオーバー。チェイン消去後は重力でドットが落下し、上部から補充される。面白い瞬間は「同色ドットを連続で長く繋いでCOMBOを積み上げ、SUPER DOTで虹色のグリッド全体がスコア3倍で爆発的に繋がる瞬間」。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER DOTの高報酬、色を間違えるとHEAT急増のリスク。初のドット接続パズル（Two Dots風）ジャンル。game_idea_factory #1 (Score 31.75)「回路/パイプ可視化（流れて増幅）」＋「ログ/リプレイが資産」の再解釈。",
+    "score": 31.75,
+    "status": "Dot-connecting chain puzzle prototype complete — 8x7 grid (CELL=28), 4 colors (RED/LIME/DARK_BLUE/YELLOW), mouse click-drag to connect adjacent (8-dir) same-color dots, chain len 3+ scores 10*len*multiplier*super_mult, same-color consecutive COMBO chain, SUPER DOT at COMBO>=4 (300f rainbow, any-color match, 3x score, HEAT frozen), HEAT risk (mismatch +15, short chain +5, decay 0.02/frame, cap 100 game over), 60s timer, gravity compaction + top refill after clear, ghost trail CYAN dots of previous chain paths, particle + floating text effects, 3 screens (Title/Playing/GameOver), 612 lines, 58 headless tests, OpenCode CLI first-try success with self-correction",
+    "href": "268_dot_chain.html"
   }
 ]
