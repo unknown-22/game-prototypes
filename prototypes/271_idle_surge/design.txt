@@ -1,0 +1,248 @@
+# IDLE SURGE — Design Spec for OpenCode CLI
+## Concept: First idle/incremental clicker in the collection
+Power plant theme: click generators → same-color COMBO chain → SUPER SURGE → automation (idle).
+"Log/replay as asset" → previous clicks become AUTOMATED generators (idle income).
+"UI chain effects" → COMBO chain + SUPER SURGE visual cascade.
+
+## Game: "IDLE SURGE" (271_idle_surge)
+
+## Core Mechanic
+- 4 colored generators on screen (RED=8, LIME=11, DARK_BLUE=5, YELLOW=10)
+- Mouse click a generator → power produced (score += 10 * combo * super_mult)
+- Same-color consecutive clicks → COMBO chain (combo increases)
+- Wrong-color click → COMBO reset + HEAT+15
+- Every 30 seconds (SHIFT_DURATION=900 frames=30s at 30fps): AUTO-ASSIGN — the most-clicked generator becomes automated
+- Automated generators produce power every 30 frames automatically (same-color, builds COMBO)
+- AUTO generators are visually distinct (brighter border, spinning indicator)
+- COMBO >= 4 → SUPER SURGE (SUPER_DURATION=150 frames=5s): rainbow mode, any-color match, 3x score, HEAT frozen, ALL generators auto-trigger every 15 frames
+- HEAT risk: mismatch +15, idle heat from automation (+0.02/f per auto gen), decay -0.02/f total, cap 100 → MELTDOWN (game over)
+- 60s timer (1800 frames at 30fps) → game ends, show final score
+
+## Screen: 320x240, 30fps (Pyxel default)
+
+## Data Classes
+```python
+@dataclass
+class Generator:
+    x: int          # center x
+    y: int          # center y  
+    w: int = 48     # width
+    h: int = 48     # height
+    color: int = 8  # RED=8, LIME=11, DARK_BLUE=5, YELLOW=10
+    clicks: int = 0           # clicks this shift
+    auto: bool = False        # automated?
+    auto_timer: int = 0       # countdown to next auto-tick
+    pulse: float = 0.0        # visual pulse 0.0-1.0
+
+@dataclass  
+class Particle:
+    x: float; y: float; vx: float; vy: float
+    color: int; life: int; size: int = 2
+
+@dataclass
+class FloatingText:
+    x: float; y: float; text: str; color: int; life: int
+```
+
+## Phase Machine
+```python
+class Phase(Enum):
+    TITLE = 0
+    PLAYING = 1
+    GAME_OVER = 2
+```
+
+## Screen Layout
+- Title screen: "IDLE SURGE" title text, "CLICK TO START" instruction
+- Game screen: 4 generators in a row at y=120, evenly spaced (x=40,100,160,220) with w=48
+  - Generator rects drawn as filled rectangles with colored borders
+  - HUD at top: SCORE / COMBO / HEAT bar / TIMER / SUPER timer
+  - AUTO generators have brighter border (WHITE=7) and spinning indicator (small circle orbiting)
+  - Click feedback: generator pulse animation (size momentarily increases), particle burst
+- Game Over screen: "MELTDOWN!" or "TIME'S UP!" + final score + "CLICK TO RETRY"
+
+## Color Constants (raw ints, used directly — no pyxel import at module level for headless tests)
+```python
+COLOR_BLACK = 0
+COLOR_NAVY = 1
+COLOR_PURPLE = 2
+COLOR_GREEN = 3
+COLOR_BROWN = 4
+COLOR_DARK_BLUE = 5
+COLOR_LIGHT_BLUE = 6
+COLOR_WHITE = 7
+COLOR_RED = 8
+COLOR_ORANGE = 9
+COLOR_YELLOW = 10
+COLOR_LIME = 11
+COLOR_CYAN = 12
+COLOR_GRAY = 13
+COLOR_PINK = 14
+COLOR_PEACH = 15
+
+GEN_COLORS = (COLOR_RED, COLOR_LIME, COLOR_DARK_BLUE, COLOR_YELLOW)
+```
+
+## Input
+- Mouse click: detect which generator (if any) is clicked via AABB check
+- pyxel.MOUSE_BUTTON_LEFT for click detection
+- TITLE screen: any click → reset() + start game
+- GAME_OVER screen: any click → reset() + restart
+
+## Fixed Pyxel API Names (USE THESE EXACTLY)
+- pyxel.tri (not triangle)
+- pyxel.KEY_RETURN (not KEY_ENTER) 
+- pyxel.MOUSE_BUTTON_LEFT
+- pyxel.mouse_wheel for scroll
+- pyxel.mouse_x, pyxel.mouse_y
+
+## Game Loop (Phase.PLAYING)
+In update():
+1. auto_timer decrement: each AUTO generator ticks every 30 frames → produce power, build COMBO
+2. SUPER SURGE timer decrement if active; when expires, reset multipliers
+3. HEAT update: base decay, +auto_heat (0.02 per auto gen per frame), check >= 100 → GAME_OVER
+4. SHIFT timer: decrement shift_timer, when 0 → auto_assign most-clicked gen, reset clicks, new shift_timer
+5. game_timer: decrement, when 0 → GAME_OVER
+6. particle + floating_text lifecycle
+
+On mouse click (detected via pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)):
+- Hit-test all generators via AABB (gen.x-gen.w//2 <= mouse_x <= gen.x+gen.w//2, same for y)
+- If hit:
+  - If SUPER SURGE active: any color matches, score += 10 * combo * 3
+  - Elif gen.color == active_color: COMBO++, score += 10 * combo * super_mult, gen.clicks++
+  - Else: COMBO = 0, HEAT += 15, floating text "WRONG!"
+  - gen.pulse = 1.0 (decays 0.1/frame)
+  - spawn particles at gen position
+- Track active_color = gen.color of last clicked generator (used for COMBO matching)
+
+SUPER SURGE trigger: when combo >= 4 and not already in SUPER:
+- super_timer = SUPER_DURATION (150)
+- super_mult = 3
+- floating text "SUPER SURGE!"
+
+SUPER SURGE auto-tick: while super_timer > 0, every 15 frames ALL generators auto-produce:
+- score += 10 * combo * 3
+- combo++
+
+Auto-assign (SHIFT end):
+- Find generator with max clicks (ties → first encountered)
+- Set gen.auto = True
+- Reset all gen.clicks = 0
+- shift_timer = SHIFT_DURATION (900)
+
+## Rendering (Phase.PLAYING)
+- Background: COLOR_NAVY (1)
+- HUD bar at top (y=0 to y=30, COLOR_BROWN bg):
+  - "SCORE: 12345" at (4,4), COLOR_WHITE
+  - "COMBO: x3" at (4,14), COLOR_WHITE  
+  - "TIME: 45s" at (200,4), COLOR_WHITE
+  - "HEAT:" + heat bar (80px wide) at (200,14), COLOR_ORANGE fill, COLOR_RED when >70
+  - If SUPER active: "SUPER 3.2s" in COLOR_YELLOW at (100,4)
+- Generators:
+  - Fill rect: gen.color (darker shade: gen.color itself is fine)
+  - Border: COLOR_WHITE (7) if AUTO, else COLOR_GRAY (13)
+  - If pulse > 0: draw slightly larger rect (gen.w + pulse*8, gen.h + pulse*8)
+  - AUTO indicator: small circle orbiting (use sin/cos with frame_count)
+  - Label: "GEN" in COLOR_WHITE at center
+- Particles: small circles at particle.x, particle.y in particle.color
+- Floating text: pyxel.text(ft.x, ft.y, ft.text, ft.color)
+- Click feedback: brief flash ring (circle outline that expands and fades)
+
+## Particle System
+On click: spawn 5-8 particles:
+- random angle (0 to 2π), speed 1.0-3.0
+- color = gen.color
+- life = 15-25
+- vy -= 0.1 per frame (float upward)
+- life--; remove when life <= 0
+
+On SUPER trigger: spawn 15-20 rainbow particles (random GEN_COLORS)
+
+On AUTO tick: spawn 3-5 particles (gen.color, smaller)
+
+## Floating Text System
+On match: "+SCORE" at gen position, gen.color, life=30, vy=-0.5
+On COMBO: "COMBO xN" at gen position, COLOR_YELLOW, life=25
+On WRONG: "WRONG!" at gen position, COLOR_RED, life=25
+On SUPER: "SUPER SURGE!" at center, COLOR_YELLOW, life=45
+On AUTO-ASSIGN: "AUTO!" at gen position, COLOR_CYAN, life=40
+On MELTDOWN: "MELTDOWN!" at center, COLOR_RED, life=60
+Each frame: ft.y += ft.vy; ft.life--; remove when life <= 0
+
+## Headless Test Pattern
+All game logic methods must NOT call pyxel.btn/btnp/mouse_x/mouse_y directly.
+Instead, provide testable methods:
+- `_find_gen_at(mx, my)` → Generator | None (AABB hit-test)
+- `_click_gen(gen)` → handles COMBO, score, SUPER trigger, HEAT, particles
+- `_update_auto_gens()` → auto-tick logic
+- `_update_heat()` → heat decay, game-over check
+- `_assign_auto()` → shift-end auto-assignment
+- `_update_particles()` / `_update_floating_texts()`
+- `_update_timers()` → game_timer, shift_timer, super_timer
+
+Factory for headless tests:
+```python
+def _make_game() -> Game:
+    g = Game.__new__(Game)
+    # Pre-init all attributes before reset()
+    g._frame_count = 0
+    g.generators = []
+    g.combo = 0
+    g.max_combo = 0
+    g.score = 0
+    g.best_score = 0
+    g.heat = 0.0
+    g.super_timer = 0
+    g.super_mult = 1
+    g.game_timer = 0
+    g.shift_timer = 0
+    g.active_color = -1
+    g.particles = []
+    g.floating_texts = []
+    g.phase = None
+    g._rng = random.Random(42)
+    g.reset()
+    return g
+```
+
+## Edge Cases
+- Clicking during SUPER: any gen matches (rainbow mode)
+- Multiple AUTO gens: all tick independently
+- AUTO gen ticks build COMBO (same-gen auto-ticks are same-color = COMBO chain)
+- AUTO gen tick during SUPER: 3x multiplier applied
+- SHIFT end with 0 clicks on all gens: no new AUTO assigned
+- HEAT cap: exactly 100 triggers game over
+- COMBO reset on wrong click even during SUPER? NO — during SUPER, all clicks match, so no wrong clicks
+- Generator positions: x=40, 100, 160, 220 with w=48, h=48, y=120
+  - AABB: left = x-w//2, right = x+w//2, top = y-h//2, bottom = y+h//2
+  - Verify: gen 0: 16-64, gen 1: 76-124, gen 2: 136-184, gen 3: 196-244 — all within 0-320
+
+## Scoring
+- Base: 10 points per click
+- COMBO multiplier: (1 + combo * 0.5)
+- SUPER multiplier: 3x
+- Formula: score += 10 * combo * super_mult
+  - Actually: score += int(10 * (1 + combo * 0.5) * super_mult)
+  - combo=0: 10 * 1.0 * 1 = 10
+  - combo=1: 10 * 1.5 * 1 = 15
+  - combo=3: 10 * 2.5 * 1 = 25
+  - combo=4 (SUPER): 10 * 3.0 * 3 = 90
+
+## Difficulty Escalation
+- Game timer: 1800 frames (60s at 30fps)
+- Shift duration: always 900 frames (30s) — first shift ends at frame 900, game ends at frame 1800
+- So exactly 1 auto-assign happens during the game (at frame 900)
+- HEAT from automation: 0.02 per auto gen per frame
+
+## Three Screens
+1. TITLE: "IDLE SURGE" title, "POWER PLANT CLICKER", "Click to start", controls hint
+2. PLAYING: generators, HUD, particles, floating text
+3. GAME_OVER: "MELTDOWN!" or "TIME'S UP!", final score, best score, "Click to retry"
+
+## File Structure
+Single file: `prototypes/271_idle_surge/main.py`
+- Config constants at top
+- Data classes
+- Phase enum
+- Game class with __init__, reset(), update(), draw(), and all _helper methods
+- if __name__ == "__main__": Game()
