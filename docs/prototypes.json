@@ -2140,5 +2140,13 @@
     "score": 32.2,
     "status": "Idle/incremental clicker prototype complete",
     "href": "271_idle_surge.html"
+  },
+  {
+    "id": "272_chroma_escape",
+    "title": "CHROMA ESCAPE",
+    "idea": "脱出パズルルームで、6x5のグリッド上の色付きパズル要素（鍵・スイッチ・ロック・ワイヤー）をクリックで解除する色合わせパズル。同色を連続クリックでCOMBOチェインが発生し、BFS連鎖反応で隣接同色要素が次々と自動解除される。COMBOが4以上でSUPER SOLVE（300fレインボーモード、全色マッチ、3倍スコア）が発動。色違いクリックでHEAT+15、HEATが100に達するとMELTDOWNでゲームオーバー。60秒タイムアタック。面白い瞬間は「同色パズル要素を連続クリックで解除し、BFS連鎖反応で部屋中の同色要素が次々と消えていくスコア爆発とパーティクルの連鎖」。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER SOLVEの高報酬、色を見誤るとHEAT急増＋画面シェイクのリスク。初の脱出ゲームジャンル。",
+    "score": 32.35,
+    "status": "Escape room color-match puzzle prototype complete — 6x5 grid (CELL=36, 2px gap), 4 element colors (RED=key/LIME=switch/DARK_BLUE=lock/YELLOW=wire), mouse click to solve, BFS cluster chain (4-dir adjacent same-color auto-solve for +5 each), same-color consecutive COMBO chain, SUPER SOLVE at COMBO>=4 (300f rainbow, any-color match, 3x score), HEAT risk (mismatch +15, time pressure +0.03/frame, decay -0.02/frame, cap 100 MELTDOWN game over), respawn dead elements (30-60f delay, new random color), screen shake on mismatch, particle system (gravity, 4-15 particles per solve), floating text (+score, COMBO xN, WRONG!, SUPER SOLVE!), element icons (key/switch/lock/wire), 3 screens (Title/Playing/GameOver), 618 lines, 69 headless tests, OpenCode CLI first-try success with 1 Hermes fix (last_color=None first-click combo init), ruff+ty OK",
+    "href": "272_chroma_escape.html"
   }
 ]
