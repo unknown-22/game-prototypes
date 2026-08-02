@@ -2156,5 +2156,13 @@
     "score": 32.0,
     "status": "Virtual pet care prototype complete — 320x240 with display_scale=2, 4 action buttons (FEED=GRAY/PLAY=LIME/REST=CYAN/TRAIN=ORANGE), pixel pet face with expressions (happy/hungry/tired/stressed/super), same-color consecutive COMBO chain, SUPER MODE at COMBO>=4 (300f rainbow, 3x effects), 4 stat bars (HAPPY/HUNGR/ENRG/STRS), natural stat decay every 30f, CA spread between stats at boundaries (0 or 100), stress>=100 game over, 60s timer, particle system (action/super), floating text (+score/COMBO/SUPER!/RESET!), screen shake on mismatch, 3 screens (Title/Playing/GameOver), English-only text, 78 headless tests, ruff+ty OK",
     "href": "273_care_chain.html"
+  },
+  {
+    "id": "274_snow_chain",
+    "title": "SNOW CHAIN",
+    "idea": "横スクロールスノーボードゲーム。自動で右に滑走し、色付きゲートが登場。プレイヤーの色とゲートの色を一致させてCOMBOチェインを構築。COMBO>=4でSUPER CARVE（300fレインボーモード、全ゲート自動マッチ、3倍スコア）が発動。左端から雪崩が迫り、逃げ切る必要がある。ミスマッチでHEAT+15、岩衝突でHEAT+25、雪崩に捕まるとHEAT+30。HEATが100でゲームオーバー。60秒サバイバル。面白い瞬間は「同色ゲートを連続通過してCOMBOを4以上に貯め、SUPER CARVEが発動——スノーボーダーが虹色に輝き、全ゲートが自動マッチ、スコアが3倍で爆発し、雪崩を一気に引き離す」。リスクとリターン：色を合わせるCOMBO継続で高倍率スコア＋SUPER CARVEの高報酬、ミスマッチでHEAT急増＋COMBOリセットのリスク。さらにジャンプで岩を回避するか、色合わせに集中するかの判断も発生。ゴーストトレイルでベストランの軌跡が次プレイに表示される。",
+    "score": 32.0,
+    "status": "Snowboard color-match COMBO chain prototype complete — 320x240 with display_scale=2, auto-scroll rightward, 4 gate colors (RED/LIME/DARK_BLUE/YELLOW), player color auto-cycles every 20f (12f at max escalation), COMBO system with SUPER CARVE at combo>=4 (300f rainbow mode, any-color match, 3x score), HEAT risk (mismatch+15/rock+25/avalanche+30, decay 0.02/f, cap 100 game over), avalanche from left edge spreading with escalation, ghost trail recording (best run replay), snow particles (40 white dots), mountains parallax background, rock obstacles (jump to avoid), difficulty escalation over 60s (speed 2.0→5.0, gate interval 90f→30f, rock interval 180f→90f), 3 screens (Title/Playing/GameOver), screen shake, particle bursts, floating text (+score/COMBO/WRONG!/SUPER CARVE!/AVALANCHE!/OUCH!), English-only text, 63 headless tests, ruff+ty OK",
+    "href": "274_snow_chain.html"
   }
 ]
