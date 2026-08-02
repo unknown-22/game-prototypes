@@ -2148,5 +2148,13 @@
     "score": 32.35,
     "status": "Escape room color-match puzzle prototype complete — 6x5 grid (CELL=36, 2px gap), 4 element colors (RED=key/LIME=switch/DARK_BLUE=lock/YELLOW=wire), mouse click to solve, BFS cluster chain (4-dir adjacent same-color auto-solve for +5 each), same-color consecutive COMBO chain, SUPER SOLVE at COMBO>=4 (300f rainbow, any-color match, 3x score), HEAT risk (mismatch +15, time pressure +0.03/frame, decay -0.02/frame, cap 100 MELTDOWN game over), respawn dead elements (30-60f delay, new random color), screen shake on mismatch, particle system (gravity, 4-15 particles per solve), floating text (+score, COMBO xN, WRONG!, SUPER SOLVE!), element icons (key/switch/lock/wire), 3 screens (Title/Playing/GameOver), 618 lines, 69 headless tests, OpenCode CLI first-try success with 1 Hermes fix (last_color=None first-click combo init), ruff+ty OK",
     "href": "272_chroma_escape.html"
+  },
+  {
+    "id": "273_care_chain",
+    "title": "CARE CHAIN",
+    "idea": "バーチャルペットケアゲーム。4色のアクションボタン（FEED/PLAY/REST/TRAIN）をクリックしてペットの世話をする。同色連続アクションでCOMBOチェインが構築され、COMBO>=4でSUPER MODE（虹色進化、300フレーム、全効果3倍）が発動する。4つのステータス（幸福度/満腹度/エネルギー/ストレス）が自然減衰し、いずれかが0または100に達するとCA伝播で隣接ステータスに悪影響が広がる。ストレスが100に達するか60秒経過でゲームオーバー。面白い瞬間は「同じケア行動を連続成功させてCOMBOを繋ぎ、ペットが一気にご機嫌になってSUPER MODEに進化する瞬間。ピクセル絵のペットが虹色に輝き、すべての効果が3倍になる爆発的爽快感」。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER MODEの高報酬が得られるが、同じ行動に固執すると他ステータスがCA伝播で連鎖的に悪化しストレス爆発のリスク。4つのステータスをバランスよく管理するか、COMBOを追ってリスクを取るかのジレンマが中核。初のバーチャルペット/Tamagotchiジャンル。",
+    "score": 32.0,
+    "status": "Virtual pet care prototype complete — 320x240 with display_scale=2, 4 action buttons (FEED=GRAY/PLAY=LIME/REST=CYAN/TRAIN=ORANGE), pixel pet face with expressions (happy/hungry/tired/stressed/super), same-color consecutive COMBO chain, SUPER MODE at COMBO>=4 (300f rainbow, 3x effects), 4 stat bars (HAPPY/HUNGR/ENRG/STRS), natural stat decay every 30f, CA spread between stats at boundaries (0 or 100), stress>=100 game over, 60s timer, particle system (action/super), floating text (+score/COMBO/SUPER!/RESET!), screen shake on mismatch, 3 screens (Title/Playing/GameOver), English-only text, 78 headless tests, ruff+ty OK",
+    "href": "273_care_chain.html"
   }
 ]
