@@ -2180,5 +2180,13 @@
     "score": 32.2,
     "status": "Time-loop crystal collection COMBO chain prototype complete — 320x240 with display_scale=2, 10x8 grid (CELL=24), 4 crystal colors (RED/LIME/DARK_BLUE/YELLOW), arrow key movement with diagonal normalization, time echo system (records player path every 2s, replays as crystal-collecting ghost at 1.2x speed), COMBO chain with SUPER CHRONO at combo>=4 (300f rainbow mode, any-color match, 3x score), HEAT risk (mismatch+15, passive +0.03/f, decay -0.02/f, cap 100 game over), 60s timer (3600f), particle system (8 normal/16 big on SUPER), floating text (+score/COMBO/SUPER CHRONO!/WRONG!), screen shake on HEAT>=30, difficulty escalation (spawn rate 0.5→1.5/s, crystal lifetime 8s→4s, echo interval 120f→60f by 45s), best score persistence, 3 screens (Title/Playing/GameOver), 65 headless tests, ruff+ty OK",
     "href": "276_chrono_chain.html"
+  },
+  {
+    "id": "277_belt_chain",
+    "title": "BELT CHAIN",
+    "idea": "コンベアベルト工場パズルにCOMBOチェインを融合。4色のアイテムが3レーンのベルトコンベアで流れ、プレイヤーは処理マシンの色を切り替えて流入するアイテムと一致させる。同じ色を連続処理するとCOMBOが構築され、COMBO>=4でSUPER CHARGE（300fレインボーモード、全色自動マッチ、3倍スコア）が発動し、全レーンのアイテムを虹色で一気に処理する瞬間が最も面白い。色違い処理でCOMBOリセット＋HEAT+15、HEAT>=100でゲームオーバー。60秒タイムアタック。リスクとリターン：COMBO継続で高倍率スコアとSUPER CHARGEの報酬、色判断ミスでHEAT急増。初のコンベアベルト工場パズルジャンル。",
+    "score": 32.2,
+    "status": "Conveyor belt factory COMBO chain puzzle prototype complete — 320x240 with display_scale=2, 3 conveyor lanes (y=52/100/148), 4 item colors (RED/LIME/DARK_BLUE/YELLOW), color button UI with mouse click/keyboard(1-4/QWER)/wheel, COMBO chain with SUPER CHARGE at combo>=4 (300f rainbow mode, any-color auto-match, 3x score), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), 60s timer (3600f at 60fps), particle system (match/super/wrong), floating text (+score/COMBO/SUPER CHARGE!/WRONG!), screen shake, difficulty escalation (spawn interval 60f→25f, item speed 1.5→3.0 over 60s), animated conveyor belt dots, machine indicator with SUPER glow, 3 screens (Title/Playing/GameOver), best score, 82 headless tests, ruff+ty OK",
+    "href": "277_belt_chain.html"
   }
 ]
