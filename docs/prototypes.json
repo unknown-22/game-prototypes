@@ -2172,5 +2172,13 @@
     "score": 32.0,
     "status": "Mahjong solitaire tile-matching COMBO chain prototype complete — 320x240 with display_scale=2, 3-layer pyramid (12x8 layer0/10x6 layer1/8x4 layer2, 188 tiles total), 4 tile colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive match COMBO chain, SUPER MATCH at COMBO>=4 (300f rainbow, any-color match, 3x score), HEAT risk (mismatch+15, decay 0.02/frame, cap 100 game over), 90s timer (5400f), auto-deselect at 120f, particle system (match/super/wrong), floating text effects, screen shake on mismatch, 3 screens (Title/Playing/GameOver), 65 headless tests, ruff+ty OK",
     "href": "275_tile_chain.html"
+  },
+  {
+    "id": "276_chrono_chain",
+    "title": "CHRONO CHAIN",
+    "idea": "時間操作/リワインドパズルにCOMBOチェインを融合。プレイヤーはグリッド上で4色のタイムクリスタルを収集しながら、過去の移動経路を再生する「タイムエコー」と協力して同色連続COMBOを構築。COMBO>=4でSUPER CHRONO（300fレインボーモード、任意色マッチ、3倍スコア）が発動し、エコーと共に盤面上のクリスタルを一気に回収する瞬間が最も面白い。色違い収集でCOMBOリセット＋HEAT+15、HEAT>=100でゲームオーバー。60秒タイムアタック。初の時間操作/リワインドパズルジャンル。",
+    "score": 32.2,
+    "status": "Time-loop crystal collection COMBO chain prototype complete — 320x240 with display_scale=2, 10x8 grid (CELL=24), 4 crystal colors (RED/LIME/DARK_BLUE/YELLOW), arrow key movement with diagonal normalization, time echo system (records player path every 2s, replays as crystal-collecting ghost at 1.2x speed), COMBO chain with SUPER CHRONO at combo>=4 (300f rainbow mode, any-color match, 3x score), HEAT risk (mismatch+15, passive +0.03/f, decay -0.02/f, cap 100 game over), 60s timer (3600f), particle system (8 normal/16 big on SUPER), floating text (+score/COMBO/SUPER CHRONO!/WRONG!), screen shake on HEAT>=30, difficulty escalation (spawn rate 0.5→1.5/s, crystal lifetime 8s→4s, echo interval 120f→60f by 45s), best score persistence, 3 screens (Title/Playing/GameOver), 65 headless tests, ruff+ty OK",
+    "href": "276_chrono_chain.html"
   }
 ]
