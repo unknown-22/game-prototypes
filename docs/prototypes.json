@@ -2164,5 +2164,13 @@
     "score": 32.0,
     "status": "Snowboard color-match COMBO chain prototype complete — 320x240 with display_scale=2, auto-scroll rightward, 4 gate colors (RED/LIME/DARK_BLUE/YELLOW), player color auto-cycles every 20f (12f at max escalation), COMBO system with SUPER CARVE at combo>=4 (300f rainbow mode, any-color match, 3x score), HEAT risk (mismatch+15/rock+25/avalanche+30, decay 0.02/f, cap 100 game over), avalanche from left edge spreading with escalation, ghost trail recording (best run replay), snow particles (40 white dots), mountains parallax background, rock obstacles (jump to avoid), difficulty escalation over 60s (speed 2.0→5.0, gate interval 90f→30f, rock interval 180f→90f), 3 screens (Title/Playing/GameOver), screen shake, particle bursts, floating text (+score/COMBO/WRONG!/SUPER CARVE!/AVALANCHE!/OUCH!), English-only text, 63 headless tests, ruff+ty OK",
     "href": "274_snow_chain.html"
+  },
+  {
+    "id": "275_tile_chain",
+    "title": "TILE CHAIN",
+    "idea": "麻雀ソリティア牌消しパズルにCOMBOチェインを融合。画面中央の3層ピラミッドに配置された4色の牌をマウスでクリックし、同色の牌を連続で取るとCOMBOが加速。COMBO>=4でSUPER MATCH（300fレインボーモード、任意の2牌がマッチ、3倍スコア）が発動し、虹色の牌で盤面を一気に崩す瞬間が最も面白い。色違いの牌選択でCOMBOリセット＋HEAT+15、HEAT>=100でゲームオーバー。90秒タイムアタック。リスクとリターン：同色COMBO継続で高倍率スコア＋SUPER MATCHの高報酬、色を見誤るとHEAT急増のリスク。初の麻雀ソリティア/牌消しパズルジャンル。",
+    "score": 32.0,
+    "status": "Mahjong solitaire tile-matching COMBO chain prototype complete — 320x240 with display_scale=2, 3-layer pyramid (12x8 layer0/10x6 layer1/8x4 layer2, 188 tiles total), 4 tile colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive match COMBO chain, SUPER MATCH at COMBO>=4 (300f rainbow, any-color match, 3x score), HEAT risk (mismatch+15, decay 0.02/frame, cap 100 game over), 90s timer (5400f), auto-deselect at 120f, particle system (match/super/wrong), floating text effects, screen shake on mismatch, 3 screens (Title/Playing/GameOver), 65 headless tests, ruff+ty OK",
+    "href": "275_tile_chain.html"
   }
 ]
