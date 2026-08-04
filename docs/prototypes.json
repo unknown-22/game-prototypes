@@ -2196,5 +2196,13 @@
     "score": 32.0,
     "status": "UFO catcher COMBO chain prototype complete — 320x240, 4 prize colors (RED/LIME/DARK_BLUE/YELLOW), arrow key claw movement + SPACE/RETURN drop, prize bin (20 prizes, drift physics with wrapping), COMBO chain with SUPER CLAW at combo>=4 (300f rainbow mode, any-color match, 3x score, wider grab radius 20px), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), 60s timer (3600f), particle system (8 normal/16 super grab/4 miss), floating text (+score/COMBO/SUPER CLAW!/WRONG!), difficulty escalation (drift speed 0.3→0.7, spawn interval 60f→30f), best score, 3 screens (Title/Playing/GameOver), 67 headless tests, ruff+ty OK",
     "href": "278_claw_chain.html"
+  },
+  {
+    "id": "279_sumo_chain",
+    "title": "SUMO CHAIN",
+    "idea": "相撲にCOMBOチェインを融合。円形の土俵でプレイヤーとAI力士が対峙し、土俵上に出現する4色の突きゾーン（RED/LIME/DARK_BLUE/YELLOW）に乗ってSPACEで突きを放つ。同じ色のゾーンで連続突き成功するとCOMBOが構築され、COMBO>=4でSUPER PUSH（300fレインボーモード、全色マッチ、2.5倍押し出し力、3倍スコア）が発動し、力士が虹色に輝き相手を一気に土俵外へ吹き飛ばす瞬間が最も面白い。色違いゾーンで突くとCOMBOリセット＋HEAT+15、AIの突きでHEAT+10、HEAT>=100でゲームオーバー。60秒制限時間。相手を土俵外に押し出すとラウンド勝利（+500点）で即座に再配置。リスクとリターン：COMBO継続で高倍率スコアとSUPER PUSHの報酬、色判断ミスでHEAT急増。初の相撲ジャンル。",
+    "score": 32.3,
+    "status": "Sumo wrestling COMBO chain prototype complete — 320x240, circular dohyo ring (radius 90, center 160/120), 4 push zone colors (RED/LIME/DARK_BLUE/YELLOW, 3-5 zones active), arrow key move + rotate + SPACE thrust, AI opponent (moves toward center, periodic pushes), COMBO chain with SUPER PUSH at combo>=4 (300f rainbow mode, 2.5x power, 3x score), HEAT risk (mismatch+15, AI hit+10, decay -0.02/f, cap 100 game over), 60s timer (1800f at 30fps), round system (ring out=round win+500pts, instant reset), particle system (push/Super Push/ring out/ai hit), floating text (+score/COMBO/SUPER PUSH!/WRONG!/PUSHED!/ROUND WIN!), best score, 3 screens (Title/Playing/GameOver) with ROUND_WIN transition, 65 headless tests, ruff+ty OK",
+    "href": "279_sumo_chain.html"
   }
 ]
