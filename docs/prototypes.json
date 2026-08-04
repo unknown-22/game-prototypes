@@ -2212,5 +2212,13 @@
     "score": 32.4,
     "status": "Chess puzzle COMBO chain prototype complete — 320x240 at 30fps with display_scale=2, 8x8 chessboard (CELL=28, BOARD_X=48, BOARD_Y=8), 4 target colors (RED/LIME/DARK_BLUE/YELLOW), knight L-shaped movement (8 valid destinations highlighted, mouse click to move), knight color auto-cycling (90f→40f over 60s), COMBO chain with SUPER KNIGHT at combo>=4 (300f rainbow mode, any-color match, 3x score, click any square to warp), HEAT risk (mismatch+15, cap 100 game over), 60s timer (1800f), target spawn/despawn system (max 5, lifetime 300f→200f), particle system (8 match/20 super/4 miss), floating text (+score/SUPER KNIGHT!/WRONG!), difficulty escalation (spawn interval 60f→20f, cycle speed 90f→40f, target lifetime 300f→200f), best score, 3 screens (Title/Playing/GameOver), ruff+ty OK",
     "href": "280_knight_chain.html"
+  },
+  {
+    "id": "281_word_chain",
+    "title": "WORD CHAIN",
+    "idea": "色合わせワードサーチパズル。8×8の文字グリッドで目標単語の文字を順番になぞり、同色連続クリックでCOMBOチェインを構築。COMBO>=4でSUPER MODE（虹色ボーダー、全色マッチ、非隣接も許可、3倍スコア）が発動し、文字を次々となぞって単語を完成させる瞬間が最も面白い。間違った文字クリックでHEAT+10、色違いでCOMBOリセット+HEAT+15、単語完成でHEAT-20の報酬。60秒タイムアタック、3段階の単語長（3字→4字→5字）。グリッドは定期的に色/文字がリフレッシュ。初のワードパズル / 文字探索ジャンル。宇宙採掘デッキ構築案（Score 32.75）からの再解釈：「効果が合成されて圧縮」→文字が合成されて単語に、「盤面がCAで埋まる」→グリッドリフレッシュ/拡散。",
+    "score": 32.75,
+    "status": "Word search puzzle COMBO chain prototype complete — 320x240 at 60fps, 8x8 letter grid (CELL=24), 4 tile colors (RED/LIME/DARK_BLUE/YELLOW), mouse click to select letters (must be adjacent, correct target letter), same-color consecutive COMBO chain, SUPER MODE at combo>=4 (300f rainbow, any-color match, non-adjacent allowed, 3x score), HEAT risk (wrong letter+10, color mismatch+15, word complete-20, decay -0.02/f, cap 100 game over), 60s timer (3600f), word pools (~200 3-letter, ~400 4-letter, ~500 5-letter words), difficulty escalation (word length progression, grid recolor/refresh interval), particle system (12 burst/20 super/4 wrong), floating text (+score/COMBO/SUPER!/WRONG!/NOT ADJ!), screen shake, trace path line, best score, 3 screens (Title/Playing/GameOver) with WORD_CLEAR transition, 61 headless tests, ruff+ty OK. 1 Hermes fix: heat decay-before-threshold-check reorder. OpenCode first-try success.",
+    "href": "281_word_chain.html"
   }
 ]
