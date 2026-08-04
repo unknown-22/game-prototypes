@@ -2220,5 +2220,13 @@
     "score": 32.75,
     "status": "Word search puzzle COMBO chain prototype complete — 320x240 at 60fps, 8x8 letter grid (CELL=24), 4 tile colors (RED/LIME/DARK_BLUE/YELLOW), mouse click to select letters (must be adjacent, correct target letter), same-color consecutive COMBO chain, SUPER MODE at combo>=4 (300f rainbow, any-color match, non-adjacent allowed, 3x score), HEAT risk (wrong letter+10, color mismatch+15, word complete-20, decay -0.02/f, cap 100 game over), 60s timer (3600f), word pools (~200 3-letter, ~400 4-letter, ~500 5-letter words), difficulty escalation (word length progression, grid recolor/refresh interval), particle system (12 burst/20 super/4 wrong), floating text (+score/COMBO/SUPER!/WRONG!/NOT ADJ!), screen shake, trace path line, best score, 3 screens (Title/Playing/GameOver) with WORD_CLEAR transition, 61 headless tests, ruff+ty OK. 1 Hermes fix: heat decay-before-threshold-check reorder. OpenCode first-try success.",
     "href": "281_word_chain.html"
+  },
+  {
+    "id": "282_tug_chain",
+    "title": "TUG CHAIN",
+    "idea": "綱引き×色合わせCOMBOチェイン。横に流れる色付きの綱の節をSPACEで引き、同色連続マッチでCOMBOを構築する。COMBOが4以上でSUPER PULLが発動（虹色モード、全色マッチ、スコア3倍、10秒間）し、AIを一気に引きずり込む爆発的爽快感が面白い瞬間。色違いを引くとCOMBOリセット＋HEAT+15。HEATが100に達するか60秒タイムアップで敗北。AIも定期的に綱を引き返すため、COMBO継続とHEAT管理の駆け引きが常に生まれる。リスクとリターン：同色COMBO継続で高スコア＋SUPER PULLの高報酬を得るが、ミスマッチでCOMBOリセット＋HEAT急増。SUPER PULL中は全色マッチで安全に引き続けられるが、終了後にCOMBOがリセットされるため次のSUPER構築に時間がかかる",
+    "score": 32.6,
+    "status": "Tug of war COMBO chain prototype complete — 320x240 at 30fps, 12 rope segments scrolling right-to-left (4 colors: RED/LIME/DARK_BLUE/YELLOW), SPACE pull with color match detection, same-color consecutive COMBO chain, SUPER PULL at combo>=4 (300f rainbow mode, any-color match, 3x score, 2x pull force), HEAT risk system (wrong+15, passive+0.02/f, AI success+1, player success-5, super cool-0.05/f, cap 100 game over), AI opponent (intelligent color-matching, adaptive interval 30-60f), difficulty escalation (rope speed 0.8→1.5, AI improves), particle system (8 match/20 super/4 miss), floating text (+score/SUPER PULL!/WRONG!/VICTORY!/DEFEATED!!), screen shake, 60s timer, 3 screens (Title/Playing/GameOver), 41 headless tests, ruff+ty OK",
+    "href": "282_tug_chain.html"
   }
 ]
