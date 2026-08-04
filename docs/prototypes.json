@@ -2204,5 +2204,13 @@
     "score": 32.3,
     "status": "Sumo wrestling COMBO chain prototype complete — 320x240, circular dohyo ring (radius 90, center 160/120), 4 push zone colors (RED/LIME/DARK_BLUE/YELLOW, 3-5 zones active), arrow key move + rotate + SPACE thrust, AI opponent (moves toward center, periodic pushes), COMBO chain with SUPER PUSH at combo>=4 (300f rainbow mode, 2.5x power, 3x score), HEAT risk (mismatch+15, AI hit+10, decay -0.02/f, cap 100 game over), 60s timer (1800f at 30fps), round system (ring out=round win+500pts, instant reset), particle system (push/Super Push/ring out/ai hit), floating text (+score/COMBO/SUPER PUSH!/WRONG!/PUSHED!/ROUND WIN!), best score, 3 screens (Title/Playing/GameOver) with ROUND_WIN transition, 65 headless tests, ruff+ty OK",
     "href": "279_sumo_chain.html"
+  },
+  {
+    "id": "280_knight_chain",
+    "title": "KNIGHT CHAIN",
+    "idea": "チェス盤上のナイトのL字移動に色合わせCOMBOチェインを融合。8x8のチェスボードに現れる4色のターゲットにナイトをL字ジャンプさせ、同色連続着地でCOMBOを構築する。COMBO>=4でSUPER KNIGHT（300fレインボーモード、全色マッチ、3倍スコア、どこでもワープ可能）が発動し、虹色のナイトがボード上の任意のマスにワープして全色マッチでスコアを3倍爆発させる瞬間が最も面白い。色違い着地でCOMBOリセット＋HEAT+15、HEAT>=100でゲームオーバー。60秒タイムアタック、ナイト色自動巡回。リスクとリターン：同色COMBO継続で高倍率スコアとSUPER KNIGHTの報酬、色判断ミスでHEAT急増＋COMBOリセット。初のチェスパズルジャンル。",
+    "score": 32.4,
+    "status": "Chess puzzle COMBO chain prototype complete — 320x240 at 30fps with display_scale=2, 8x8 chessboard (CELL=28, BOARD_X=48, BOARD_Y=8), 4 target colors (RED/LIME/DARK_BLUE/YELLOW), knight L-shaped movement (8 valid destinations highlighted, mouse click to move), knight color auto-cycling (90f→40f over 60s), COMBO chain with SUPER KNIGHT at combo>=4 (300f rainbow mode, any-color match, 3x score, click any square to warp), HEAT risk (mismatch+15, cap 100 game over), 60s timer (1800f), target spawn/despawn system (max 5, lifetime 300f→200f), particle system (8 match/20 super/4 miss), floating text (+score/SUPER KNIGHT!/WRONG!), difficulty escalation (spawn interval 60f→20f, cycle speed 90f→40f, target lifetime 300f→200f), best score, 3 screens (Title/Playing/GameOver), ruff+ty OK",
+    "href": "280_knight_chain.html"
   }
 ]
