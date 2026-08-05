@@ -2228,5 +2228,13 @@
     "score": 32.6,
     "status": "Tug of war COMBO chain prototype complete — 320x240 at 30fps, 12 rope segments scrolling right-to-left (4 colors: RED/LIME/DARK_BLUE/YELLOW), SPACE pull with color match detection, same-color consecutive COMBO chain, SUPER PULL at combo>=4 (300f rainbow mode, any-color match, 3x score, 2x pull force), HEAT risk system (wrong+15, passive+0.02/f, AI success+1, player success-5, super cool-0.05/f, cap 100 game over), AI opponent (intelligent color-matching, adaptive interval 30-60f), difficulty escalation (rope speed 0.8→1.5, AI improves), particle system (8 match/20 super/4 miss), floating text (+score/SUPER PULL!/WRONG!/VICTORY!/DEFEATED!!), screen shake, 60s timer, 3 screens (Title/Playing/GameOver), 41 headless tests, ruff+ty OK",
     "href": "282_tug_chain.html"
+  },
+  {
+    "id": "283_dodge_chain",
+    "title": "DODGE CHAIN",
+    "idea": "ドッジボール×色合わせCOMBOチェイン。アリーナで矢印キー移動、マウスクリックでボールを投げ、飛んでくるボールをキャッチ。同色の敵に連続ヒットでCOMBOを構築。COMBO>=4でSUPER THROW（レインボー自動追尾、3倍スコア）が発動し、相手チームを一掃する爽快感が最も面白い瞬間。被弾でHEAT上昇、HEAT>=100でゲームオーバー。60秒タイムアタック。初のドッジボールジャンル。game_idea_factory #1（Score 31.6、合成圧縮+UI連鎖演出のフック）からの再解釈。",
+    "score": 31.6,
+    "status": "Dodgeball COMBO chain prototype complete — 320x240 at 30fps, top-down arena (player bottom, 3 AI opponents top), arrow keys move + mouse click throw/catch, 4 colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive COMBO chain, SUPER THROW at combo>=4 (300f rainbow, any-color match, 3x score), catch AI balls (+50 score, heat cool), HEAT risk (hit+15, wrong color+5, match-5, catch-10, decay-0.02/f, cap 100 game over), 60s timer, particle system, floating text, screen shake, difficulty scaling, 50 headless tests, ruff+ty OK",
+    "href": "283_dodge_chain.html"
   }
 ]
