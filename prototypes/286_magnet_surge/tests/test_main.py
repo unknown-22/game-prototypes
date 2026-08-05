@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 import random
 import sys
 from pathlib import Path
@@ -8,24 +7,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from main import (
-    ATTRACT_FORCE,
-    ATTRACT_RADIUS,
     BASE_SCORE,
-    BOUNCE_COEFFICIENT,
-    COLLECT_RADIUS,
     COMBO_FOR_SUPER,
-    DAMPING,
     GAME_TIME,
-    HEAT_DECAY,
     HEAT_MISMATCH,
     HEAT_MAX,
     PARTICLE_COUNT,
-    PARTICLE_LIFE,
-    REPEL_RADIUS,
     SCRAP_COLORS,
-    SCRAP_SIZE,
     SUPER_DURATION,
-    FloatingText,
     Game,
     Particle,
     Phase,
