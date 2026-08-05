@@ -2252,5 +2252,13 @@
     "score": 32.0,
     "status": "Skydiving COMBO chain prototype complete — 320x240 at 30fps, LEFT/RIGHT movement, player auto-color-cycles (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive ring pass builds COMBO, SUPER DIVE at combo>=4 (300f rainbow auto-match, 3x multiplier, frozen HEAT), HEAT risk system (wrong+15, match-5, passive drift, screen shake at 70+, blink at 90+, cap 100 game over), parachute deploy (SPACE, earlier=higher bonus), 60s timer with 15s dive cycles, difficulty escalation (fall speed 2→6, ring interval 40→20, color cycle 30→15), particle system, floating text, HUD with HEAT bar, 33 headless tests, ruff+ty OK",
     "href": "285_sky_surge.html"
+  },
+  {
+    "id": "286_magnet_surge",
+    "title": "MAGNET SURGE",
+    "idea": "磁石×色合わせCOMBOチェーン。マウスカーソルで磁石を操作し、同じ色の金属片を連続で引き寄せてCOMBOを構築する。COMBO>=4でSUPER MAGNET（レインボーモード、300fの間全色自動マッチ、3倍スコア、引き寄せ半径拡大）が発動し、画面中の金属片を一気に回収するのが最も面白い瞬間。SPACEで極性をN→Sに切り替え、金属片を反発させて安全に遠ざける防御オプションがある。色を間違えるとHEAT上昇（+15）、HEAT>=100でゲームオーバー。SUPER中は間違いなし。60秒タイマー、難易度が時間と共に上昇（スポーン間隔短縮、漂流速度増加、金属片寿命短縮、最大数増加）。リスク：間違った色の金属片に近づいて誤回収、リターン：COMBOを繋いでSUPER MAGNETを早期発動。Game Idea Factory #1（Score 31.6、合成圧縮+UI連鎖演出のフック）からの再解釈。",
+    "score": 31.6,
+    "status": "Magnet physics COMBO chain prototype complete — 320x240 at 60fps, mouse cursor magnet control, 4 colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive attract builds COMBO, SUPER MAGNET at combo>=4 (300f rainbow, any-color match, 3x multiplier, 120px radius), SPACE polarity toggle (N=attract/S=repel), HEAT risk system (wrong+15, decay-0.02/f, cap 100 game over), 60s timer, difficulty escalation (spawn interval 60→25f, drift speed 0.5→2.0, scrap life 300→180f, max scraps 8→12), inverse-square magnet physics with damping, particle system, floating text, HUD with HEAT bar/timer/combo/polarity, 46 headless tests, ruff+ty OK",
+    "href": "286_magnet_surge.html"
   }
 ]
