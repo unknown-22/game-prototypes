@@ -2244,5 +2244,13 @@
     "score": 32.2,
     "status": "Hangman COMBO chain prototype complete — 320x240 at 30fps, keyboard A-Z letter input, 4 colors (RED/LIME/DARK_BLUE/YELLOW) per letter position, same-color consecutive COMBO chain, SUPER SOLVE at combo>=4 (300f rainbow, any-color match, 3x multiplier, auto-reveal), HEAT risk (wrong+15, decay-0.02/f, cap 100 game over), 60s timer, hangman figure, particle system, floating text, WORD_COMPLETE celebration, difficulty escalation (word length 4→7), 52 headless tests, ruff+ty OK",
     "href": "284_hang_chain.html"
+  },
+  {
+    "id": "285_sky_surge",
+    "title": "SKY SURGE",
+    "idea": "スカイダイビング×色合わせCOMBOチェーン。上空から落下しながら同色リングを連続通過してCOMBOを積み上げる。COMBO>=4でSUPER DIVE（レインボーモード、300fの間全リング自動マッチ、3倍スコア）が発動し、パーティクルと共に一気にスコアを爆発させる瞬間が最も面白い。色を間違えるとHEAT上昇、HEAT>=100でゲームオーバー。パラシュートを早く開くほど着地ボーナスが高いというリスクとリターン。60秒タイマー、4-5回のダイブを繰り返す。Game Idea Factory #1（Score 32.0、発電所デッキ構築ローグライトの連鎖崩壊UI/オーバーロード/熱管理フック）からの再解釈。",
+    "score": 32.0,
+    "status": "Skydiving COMBO chain prototype complete — 320x240 at 30fps, LEFT/RIGHT movement, player auto-color-cycles (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive ring pass builds COMBO, SUPER DIVE at combo>=4 (300f rainbow auto-match, 3x multiplier, frozen HEAT), HEAT risk system (wrong+15, match-5, passive drift, screen shake at 70+, blink at 90+, cap 100 game over), parachute deploy (SPACE, earlier=higher bonus), 60s timer with 15s dive cycles, difficulty escalation (fall speed 2→6, ring interval 40→20, color cycle 30→15), particle system, floating text, HUD with HEAT bar, 33 headless tests, ruff+ty OK",
+    "href": "285_sky_surge.html"
   }
 ]
