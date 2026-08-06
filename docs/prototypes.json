@@ -2268,5 +2268,13 @@
     "score": 32.75,
     "status": "Wrecking ball COMBO chain prototype complete — 320x240 at 60fps, pendulum physics (hold SPACE to build tension, release to launch), 4 colors (RED/LIME/DARK_BLUE/YELLOW), same-color consecutive building hits build COMBO, SUPER WRECK at combo>=4 (300f rainbow, any-color match, 3x multiplier), HEAT risk system (mismatch+15, miss+5, decay-0.02/f, screen shake at 70+, blink at 90+, cap 100 game over), 60s timer, difficulty escalation (spawn 90→30f, color cycle 45→25f), building slot system (5 slots, rise animation, minimum 2), 5-phase machine (SWINGING/FLYING/IMPACT/RETRACT), particle system, floating text, HUD with HEAT bar/timer/combo, 91 headless tests, ruff+ty OK",
     "href": "287_wreck_chain.html"
+  },
+  {
+    "id": "288_glass_chain",
+    "title": "STAINED GLASS — Glass Chain Builder",
+    "idea": "ステンドグラスビルダー×色合わせCOMBOチェーン。グリッドに色ガラス片を配置し、同色隣接でSYNTHESIS（ティアアップ）を連鎖させて高得点を狙う。COMBO>=4でLIGHT SURGE（同色全セルがMAX Tier 4に、300fの間CA光伝播が2倍）が発動し、盤面全体が一気に輝く瞬間が最も面白い。リスク：配置ごとにHEAT上昇（+5）、HEAT>=100でCRACK（ランダムなガラス破壊、-20スコア、コンボリセット）発生、HEATは毎秒-2で自然減衰。リターン：同色隣接でティア2→3→4と合成上位化し、スコア倍率が跳ね上がる（配置+10、合成+ティア^2*20、SURGE+接続数*50）。60秒タイマー、CA光伝播（毎秒25%確率で隣接空セルに同色拡散）。Game Idea Factory #1（Score 32.35、ダイス/バッグ構築の合成圧縮+CA感染/増殖フック）からの再解釈。コレクション初のタイル配置パズル/ステンドグラスジャンル。",
+    "score": 32.35,
+    "status": "Tile-laying stained glass builder COMBO chain prototype complete — 320x240 at 30fps, mouse click placement, 4 colors (RED/DARK_BLUE/YELLOW/GREEN) cycled via right-click or keys 1-4, 8×6 grid (32px cells), BFS connected-cell SYNTHESIS (max tier 4), CA light propagation (25% chance per empty neighbor, 2x during SURGE), COMBO chain + SURGE at combo>=4 (all connected→tier 4, 5s surge timer, 2x CA spread), HEAT risk system (place+5, decay-2/tick, cap 100 triggers CRACK destroying random cell -20 score + combo reset), 60s timer, 5-phase machine (TITLE/PLAYING/ANIM_SYNTH/ANIM_SURGE/GAME_OVER), particle burst system, floating score text, HUD with SCORE/COMBO/HEAT bar/TIMER/color swatches, 54 headless tests, ruff+ty OK",
+    "href": "288_glass_chain.html"
   }
 ]
