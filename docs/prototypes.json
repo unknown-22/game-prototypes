@@ -2283,5 +2283,13 @@
     "idea": "花火打ち上げ — 同色連続COMBOチェイン → SUPER FINALE（ログ/リプレイ＝筒の残光が次色の指標に）",
     "path": "289_blast_chain.html",
     "genre": "Fireworks / Pyrotechnics"
+  },
+  {
+    "id": "290_aqua_surge",
+    "title": "AQUA SURGE",
+    "idea": "ウォータースライド・レーシング — 3レーンのスライダーを高速で駆け抜け、同色ゲートを連続通過してCOMBOチェインを構築。COMBO>=4でSUPER SLIDE（300fレインボーモード、全色一致、スコア3倍）が発動し、虹色のチューブライダーがすべてのゲートを自動マッチで駆け抜ける瞬間が最も面白い。game_idea_factory #1 (Score 32.55、宇宙採掘デッキ構築)の「ログ/リプレイが資産→ウェイクトレイル」「CAグリッド→ウォータータービュランス」を再解釈。コレクション初のウォーターパーク/ウォータースライドジャンル。",
+    "score": 32.55,
+    "status": "Water slide racing prototype complete — 320x240@60fps, 3 lanes (LEFT/RIGHT or A/D to switch, cooldown 8f), player color auto-cycles (RED/LIME/DARK_BLUE/YELLOW, 20f→12f), gate spawning (random lane, random color), same-color consecutive passes = COMBO chain (score=10*combo), COMBO>=4 triggers SUPER SLIDE (300f rainbow, any-color match, 3x score, HEAT frozen, rainbow border), HEAT risk (mismatch+15, cap 100 game over), 60s timer (3600f), difficulty escalation (speed 1.5→4.0, gate interval 90f→30f), water wake ghost trail, particle system (8 match/20 super/4 mismatch), floating text, 3 screens (Title/Playing/GameOver), 73 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "290_aqua_surge.html"
   }
 ]
