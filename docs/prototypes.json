@@ -2318,5 +2318,14 @@
     "status": "Photography COMBO chain prototype complete — 320x240@30fps, 8x6 grid (32px cells), 4 subject colors (RED/LIME/CYAN/YELLOW), mouse click to photograph, same-color consecutive shots = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER FLASH (300f rainbow mode, any-color match, 3x score, clears all fog), fog CA spread (20% chance to 4-dir neighbors every 90f->30f), HEAT risk (mismatch+15, decay-0.2/f, cap 100 game over), 60s timer (1800f), difficulty escalation (fog interval, spawn interval, subject lifetime all scale linearly), particle system (8 match/20 super/4 mismatch), flash overlay animation (15f white->fade), 49 headless tests, ruff+ty OK, OpenCode CLI first-try success (opencode-go/deepseek-v4-pro, no --thinking)",
     "href": "293_flash_chain.html",
     "genre": "Photography / Camera"
+  },
+  {
+    "id": "294_juggle_chain",
+    "title": "JUGGLE CHAIN",
+    "idea": "トップダウン・ジャグリング × 色合わせCOMBOチェイン — 放物線を描くボールをキャッチゾーンで掴み、手の色と同じボールを連続キャッチしてCOMBOを構築。COMBO>=4でSUPER JUGGLE（300fレインボーモード、全色一致、スコア3倍）が発動し、ボールが虹色の軌跡を描きながら自動マッチで連鎖していく瞬間が最も面白い。HEATは間違った色のキャッチやボール落球で上昇（上限100でゲームオーバー）。game_idea_factory #1 (Score 31.6) の「効果が合成されて圧縮される」を同色連続キャッチ → SUPER JUGGLEに再解釈。コレクション初のジャグリングジャンル。",
+    "score": 31.6,
+    "status": "Juggling COMBO chain prototype complete — 320x240@60fps, top-down view: colored balls follow parabolic arcs (GRAVITY=0.25), player catch zone at bottom (CATCH_Y=210, width=60), player hand color auto-cycles (20f→12f), SPACE/CLICK to catch, same-color consecutive catches = COMBO chain (score=10*combo), COMBO>=4 triggers SUPER JUGGLE (300f rainbow, any-color match, 3x score), HEAT risk (mismatch+15, drop+10, decay -0.02/f, cap 100 game over), 60s timer (3600f), difficulty escalation (3→5 max balls, spawn interval 60f→30f, cycle speed 20f→12f), ball wall bounce, particle system (8 match/20 super burst/4 mismatch/4 drop), floating text, vertical HEAT bar, rainbow border in SUPER mode, 3 screens (Title/Playing/GameOver), 57 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "294_juggle_chain.html",
+    "genre": "Juggling / Arcade"
   }
 ]
