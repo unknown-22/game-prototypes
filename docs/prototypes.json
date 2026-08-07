@@ -2309,5 +2309,14 @@
     "status": "Rock climbing COMBO chain prototype complete — 320x240@30fps, 8x10 grid (24px cells), 4 hold colors (RED/LIME/DARK_BLUE/YELLOW), arrow key cursor movement, auto-cycling player color (45f->20f), same-color consecutive grabs = COMBO chain (score=10*combo), COMBO>=4 triggers SUPER GRIP (300f rainbow, any-color match, 3x score), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), 60s timer (1800f), difficulty escalation, particle system (8 match/16 super/4 mismatch), floating text, HEAT bar, TIMER bar, screen shake, 3 screens (Title/Playing/GameOver), 77 headless tests, ruff+ty OK, OpenCode CLI first-try success with 18 self-corrections",
     "href": "292_grip_chain.html",
     "genre": "Rock Climbing / Bouldering"
+  },
+  {
+    "id": "293_flash_chain",
+    "title": "FLASH CHAIN",
+    "idea": "写真撮影×色合わせCOMBOチェイン — 8×6グリッドのビューファインダーで同色の被写体を連続撮影してCOMBOを構築。フォグが画面端からCA的に広がり撮影を妨げる。COMBO>=4でSUPER FLASH（300fレインボーモード、全色一致、スコア3倍、フォグ一掃）が発動。game_idea_factory #1 (Score 32.75、厄災封印デッキ構築)の「合成圧縮→同色COMBO SUPER FLASH」「CAグリッド充填→フォグ拡散制御」を再解釈。コレクション初の写真撮影/カメラジャンル。",
+    "score": 32.75,
+    "status": "Photography COMBO chain prototype complete — 320x240@30fps, 8x6 grid (32px cells), 4 subject colors (RED/LIME/CYAN/YELLOW), mouse click to photograph, same-color consecutive shots = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER FLASH (300f rainbow mode, any-color match, 3x score, clears all fog), fog CA spread (20% chance to 4-dir neighbors every 90f->30f), HEAT risk (mismatch+15, decay-0.2/f, cap 100 game over), 60s timer (1800f), difficulty escalation (fog interval, spawn interval, subject lifetime all scale linearly), particle system (8 match/20 super/4 mismatch), flash overlay animation (15f white->fade), 49 headless tests, ruff+ty OK, OpenCode CLI first-try success (opencode-go/deepseek-v4-pro, no --thinking)",
+    "href": "293_flash_chain.html",
+    "genre": "Photography / Camera"
   }
 ]
