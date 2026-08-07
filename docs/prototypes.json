@@ -2300,5 +2300,14 @@
     "status": "Calligraphy brush COMBO chain prototype complete — 320x240@30fps, 10x8 grid (24px cells), 4 ink colors (RED/LIME/DARK_BLUE/YELLOW) auto-cycling (25f->12f), mouse click to paint, same-color consecutive strokes = COMBO chain (score=10*combo*multiplier), COMBO>=4 triggers SUPER BRUSH (300f rainbow mode, any-color match, 3x score), CA ink bleed (15f interval, 20% spread to adjacent empty), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), 60s timer (1800f), particle system, screen shake, heat bar, timer bar, 3 screens (Title/Playing/GameOver), 25 headless tests, ruff+ty OK, OpenCode CLI first-try success with 2 self-corrections",
     "href": "291_ink_chain.html",
     "genre": "Calligraphy / Brush Stroke"
+  },
+  {
+    "id": "292_grip_chain",
+    "title": "GRIP CHAIN",
+    "idea": "ロッククライミング×色合わせCOMBOチェイン — 8×10グリッドの壁面で同色ホールドを連続グラブしてCOMBOを構築。掴んだホールドが自身の色に変わり、壁面がクライミング履歴（ログ）になる。COMBO>=4でSUPER GRIP（300fレインボーモード、全色一致、スコア3倍）が発動。game_idea_factory #1 (Score 32.2、魔法学院ダイス/バッグ構築)の「ログ/リプレイが資産→壁面塗り替え」「UI連鎖演出→COMBO+SUPER GRIP」を再解釈。コレクション初のロッククライミング/ボルダリングジャンル。",
+    "score": 32.2,
+    "status": "Rock climbing COMBO chain prototype complete — 320x240@30fps, 8x10 grid (24px cells), 4 hold colors (RED/LIME/DARK_BLUE/YELLOW), arrow key cursor movement, auto-cycling player color (45f->20f), same-color consecutive grabs = COMBO chain (score=10*combo), COMBO>=4 triggers SUPER GRIP (300f rainbow, any-color match, 3x score), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), 60s timer (1800f), difficulty escalation, particle system (8 match/16 super/4 mismatch), floating text, HEAT bar, TIMER bar, screen shake, 3 screens (Title/Playing/GameOver), 77 headless tests, ruff+ty OK, OpenCode CLI first-try success with 18 self-corrections",
+    "href": "292_grip_chain.html",
+    "genre": "Rock Climbing / Bouldering"
   }
 ]
