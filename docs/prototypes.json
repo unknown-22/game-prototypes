@@ -2327,5 +2327,14 @@
     "status": "Juggling COMBO chain prototype complete — 320x240@60fps, top-down view: colored balls follow parabolic arcs (GRAVITY=0.25), player catch zone at bottom (CATCH_Y=210, width=60), player hand color auto-cycles (20f→12f), SPACE/CLICK to catch, same-color consecutive catches = COMBO chain (score=10*combo), COMBO>=4 triggers SUPER JUGGLE (300f rainbow, any-color match, 3x score), HEAT risk (mismatch+15, drop+10, decay -0.02/f, cap 100 game over), 60s timer (3600f), difficulty escalation (3→5 max balls, spawn interval 60f→30f, cycle speed 20f→12f), ball wall bounce, particle system (8 match/20 super burst/4 mismatch/4 drop), floating text, vertical HEAT bar, rainbow border in SUPER mode, 3 screens (Title/Playing/GameOver), 57 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "294_juggle_chain.html",
     "genre": "Juggling / Arcade"
+  },
+  {
+    "id": "295_depth_chain",
+    "title": "DEPTH CHAIN",
+    "idea": "深海探査潜水艦 × 色合わせCOMBOチェイン。矢印キーで潜水艦を操作し、4色の生物発光する海洋生物をスキャン／採取。同色連続採取でCOMBOが伸び、COMBOが4以上でSUPER SONAR（レインボーモード、300fの間全色自動マッチ、スコア3倍、HEAT凍結、採取半径2倍）が発動する。深海（画面下部）ほどスコア倍率（最大3倍）が高いがHEAT（熱）の蓄積速度も増加する。面白い瞬間は「深海の高リスク地帯で同色の生物を4連続採取し、SUPER SONARで広範囲の生物を虹色に自動マッチして大量スコアを爆発させる瞬間。酸素と熱がプレッシャーをかける中、上昇タイミングを計って安全圏に戻るスリリングな判断」。リスクとリターン：深海（高倍率）にとどまるか、浅海（安全）に戻ってHEATを冷ますか。同色COMBO継続で高倍率スコアとSUPER SONARの高報酬が得られるが、色違い採取でHEAT+15のリスク。60秒の制限時間。game_idea_factory #1（Score 31.65、錬金ダイス/バッグ構築ローグライト）の「合成圧縮→同色COMBO連鎖→SUPER SONAR」「未来の手札がコスト→深度コミットメント（深く潜ると高リスク）」を深海探査に再解釈。",
+    "score": 31.65,
+    "status": "Submarine deep-sea exploration COMBO chain prototype complete — 320x240@60fps, arrow keys submarine movement (2.0px/f, diagonal normalized), 4 bioluminescent creature colors (RED=8/JELLYFISH, LIME=11/ANGLERFISH, DARK_BLUE=5/SQUID, YELLOW=10/SEA-STAR), depth-based score multiplier (1.0x+player_y/SCREEN_H*2.0, max 3.0x), same-color consecutive collection = COMBO chain, SUPER SONAR at COMBO>=4 (300f rainbow, any-color match, 3x score, HEAT frozen, 2x collection radius), HEAT risk system (mismatch+15, depth pressure +0.02*(depth/100)/f at depth>50, passive decay -0.02/f, screen shake at 70+, blink at 90+, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn interval 90f→30f, max creatures 6→14, drift speed 0.3→1.0, lifespan 600f→300f), depth zones (SURFACE/TWILIGHT/ABYSS), particle system (8 match/12 super/4 mismatch), floating text (+score/SUPER SONAR!/WRONG!), submarine draw (triangle+ellipse+propeller), creature shapes per color, HEAT bar (vertical, right side, color-coded), TIMER bar (top), 3 screens (Title/Playing/GameOver), 41 headless tests, ruff+ty OK",
+    "href": "295_depth_chain.html",
+    "genre": "Submarine / Deep-Sea Exploration"
   }
 ]
