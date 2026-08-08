@@ -2336,5 +2336,14 @@
     "status": "Submarine deep-sea exploration COMBO chain prototype complete — 320x240@60fps, arrow keys submarine movement (2.0px/f, diagonal normalized), 4 bioluminescent creature colors (RED=8/JELLYFISH, LIME=11/ANGLERFISH, DARK_BLUE=5/SQUID, YELLOW=10/SEA-STAR), depth-based score multiplier (1.0x+player_y/SCREEN_H*2.0, max 3.0x), same-color consecutive collection = COMBO chain, SUPER SONAR at COMBO>=4 (300f rainbow, any-color match, 3x score, HEAT frozen, 2x collection radius), HEAT risk system (mismatch+15, depth pressure +0.02*(depth/100)/f at depth>50, passive decay -0.02/f, screen shake at 70+, blink at 90+, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn interval 90f→30f, max creatures 6→14, drift speed 0.3→1.0, lifespan 600f→300f), depth zones (SURFACE/TWILIGHT/ABYSS), particle system (8 match/12 super/4 mismatch), floating text (+score/SUPER SONAR!/WRONG!), submarine draw (triangle+ellipse+propeller), creature shapes per color, HEAT bar (vertical, right side, color-coded), TIMER bar (top), 3 screens (Title/Playing/GameOver), 41 headless tests, ruff+ty OK",
     "href": "295_depth_chain.html",
     "genre": "Submarine / Deep-Sea Exploration"
+  },
+  {
+    "id": "296_dig_chain",
+    "title": "DIG CHAIN",
+    "idea": "考古学発掘 × 色合わせCOMBOチェイン。8x6のグリッド上のセルをクリックして発掘。各セルには4色（赤/黄緑/シアン/黄）の地層色が隠されており、同色を連続発掘するとCOMBOが伸びスコアが倍増する。COMBOが4以上でSUPER EXCAVATION（300fのレインボーモード、全色自動マッチ、スコア3倍、隣接セルに化石ヒント表示）が発動し、次々と化石ボーナスが出現してスコアが爆発する瞬間が最も面白い。色違い発掘でHEAT+15（上限100でゲームオーバー）、60秒の制限時間。約15%のセルに化石ボーナス（+50）が隠されており、120f毎に新しい化石が自然発生する。HEATバー（右縦）とTIMERバー（上横）でリスクを可視化。game_idea_factory #1（Score 32.2）の「log/replay as asset」を発掘履歴グリッド（掘ったセルが探索履歴として残り、隣接確率ヒントが出る）に、「chain collapse/expansion/compression UI」を同色連続発掘→COMBO→SUPER EXCAVATIONに再解釈。コレクション初の考古学/化石発掘ジャンル。",
+    "score": 32.2,
+    "status": "Archaeology excavation COMBO chain prototype complete — 320x240@30fps, mouse click on 8x6 grid (CELL=28), 4 dirt/strata colors (RED=8/LIME=11/CYAN=12/YELLOW=10), same-color consecutive digs = COMBO chain (score=10*combo), COMBO>=4 triggers SUPER EXCAVATION (300f rainbow, any-color match, 3x score), HEAT risk (wrong-color dig +15, passive decay -0.02/f, cap 100 game over), 60s timer (1800f), 15% fossil bonus (+50), fossil auto-spawn every 120f, nearby fossil hints (2-cell radius) during SUPER mode, particle system (8 dig/20 super/4 fossil), floating text (+score/COMBO/FOSSIL!/SUPER EXCAVATION!/WRONG COLOR!), vertical HEAT bar, horizontal TIMER bar, rainbow grid border in SUPER mode, screen shake on mismatch, 3 screens (Title/Playing/GameOver), 70 headless tests, ruff+ty OK",
+    "href": "296_dig_chain.html",
+    "genre": "Archaeology / Fossil Excavation"
   }
 ]
