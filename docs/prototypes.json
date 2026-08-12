@@ -2345,5 +2345,13 @@
     "status": "Archaeology excavation COMBO chain prototype complete — 320x240@30fps, mouse click on 8x6 grid (CELL=28), 4 dirt/strata colors (RED=8/LIME=11/CYAN=12/YELLOW=10), same-color consecutive digs = COMBO chain (score=10*combo), COMBO>=4 triggers SUPER EXCAVATION (300f rainbow, any-color match, 3x score), HEAT risk (wrong-color dig +15, passive decay -0.02/f, cap 100 game over), 60s timer (1800f), 15% fossil bonus (+50), fossil auto-spawn every 120f, nearby fossil hints (2-cell radius) during SUPER mode, particle system (8 dig/20 super/4 fossil), floating text (+score/COMBO/FOSSIL!/SUPER EXCAVATION!/WRONG COLOR!), vertical HEAT bar, horizontal TIMER bar, rainbow grid border in SUPER mode, screen shake on mismatch, 3 screens (Title/Playing/GameOver), 70 headless tests, ruff+ty OK",
     "href": "296_dig_chain.html",
     "genre": "Archaeology / Fossil Excavation"
+  },
+  {
+    "id": "297_bone_chain",
+    "title": "FOSSIL CHAIN",
+    "idea": "考古学の発掘パズル。同色の化石を連続発掘してCOMBO連鎖を作り、隣接同色が3個以上でSYNTHESIS（化石合成）。COMBO>=4でSUPER EXCAVATE（虹色・スコア3倍）。土がセルオートマトンで端から迫る中、60秒で高スコアを目指す。オートシューター案#1の再解釈（Score 32.35）",
+    "score": 32.35,
+    "status": "Archeology / fossil excavation prototype complete",
+    "href": "297_bone_chain.html"
   }
 ]
