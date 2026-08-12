@@ -2353,5 +2353,13 @@
     "score": 32.35,
     "status": "Archeology / fossil excavation prototype complete",
     "href": "297_bone_chain.html"
+  },
+  {
+    "id": "298_wreck_chain",
+    "title": "WRECK CHAIN",
+    "idea": "クレーンと振り子式の解体球を操作する物理ゲーム。同色のビル区画を振り子の勢いで連続破壊しCOMBO連鎖を作る。COMBOが4以上でSUPER WRECK（虹色ボール・スコア3倍）が発動。空振りでHEATが上昇し限界でゲームオーバー。破壊された同色区画が隣接区画を弱体化させ、連鎖的な崩壊を誘発する。面白い瞬間は「振り子のタイミングを完璧に合わせて同色区画を連続破壊し、SUPER WRECKで虹色ボールが全てを粉砕するカタルシス」。リスクとリターン：同色COMBO継続で高倍率スコア（最大x3）が得られるが、異なる色を破壊するとCOMBOが1にリセット。空振りはHEAT上昇。60秒の時間制限内でスコア最大化を目指す。",
+    "score": 32.0,
+    "status": "Physics demolition COMBO chain prototype complete",
+    "href": "298_wreck_chain.html"
   }
 ]
