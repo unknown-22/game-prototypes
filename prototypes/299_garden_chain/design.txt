@@ -1,0 +1,222 @@
+# 299 — GARDEN CHAIN Design Spec
+
+## Concept
+A grid-garden where plants grow, spread, and overgrow. The player is a gardener
+who clicks to harvest same-colored plant clusters, chaining COMBOs for score.
+The garden is alive: seeds sprout from nowhere (CA "growth/infection" hook) and
+existing plants spread to adjacent empty soil, so the board constantly refills
+and threatens to overgrow. Harvesting is the only way to keep the garden under
+control — but the color of each consecutive harvest matters. This is the first
+gardening / plant-breeding genre in the prototype collection.
+
+Reinterpreted from auto-shooter/space-mining idea #1 (Score 31.45):
+  "CA grid fills up (infection/growth) to control" -> plants sprout + spread via CA
+  "synthesis compression" -> same-color COMBO chain -> SUPER HARVEST (rainbow)
+
+## "Most Fun Moment" (面白い瞬間)
+増え続ける庭で、同色の大きな塊（クラスタ）を見極めて一気に収穫し、COMBO連鎖と
+SUPER HARVESTの虹色モードで次々と刈り取っていく快感。
+
+## Core Mechanic
+1. A 10x8 grid of soil cells. Some cells hold a plant of one of 4 colors.
+2. Every GROW interval, each plant has a chance to spread to one adjacent empty
+   cell (same color). Every SPROUT interval, a new random-colored seed sprouts in
+   a random empty cell. The board steadily fills up.
+3. Player clicks a plant cell -> the ENTIRE same-color orthogonally-connected
+   cluster (BFS) is harvested in one click, scoring points per plant.
+4. Consecutive harvests of the SAME color build COMBO (multiplier). Harvesting a
+   different color = mismatch (COMBO resets, HEAT +15). Clicking empty soil = miss
+   (HEAT +5, combo reset).
+5. COMBO >= 4 triggers SUPER HARVEST (300 frames): any color counts as a match,
+   score x3, rainbow border. Lets the player sweep clusters freely.
+6. Risk: if the garden overgrows (occupancy >= threshold), HEAT rises every frame.
+   HEAT reaches 100 -> game over. 60-second timer -> game over (final score).
+7. Decision loop: harvest a cluster now (safe, keeps board clear) vs wait for it
+   to grow bigger (more points per click) — but waiting lets the board overgrow
+   and risks breaking your combo when the color runs out.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x
+- Grid: 10 cols x 8 rows, CELL=24 px. Playfield 240x192 at offset (40, 24).
+- Phase machine: TITLE, PLAYING, GAME_OVER (3 phases)
+- Colors: plants RED=8, LIME=11, DARK_BLUE=5, YELLOW=10; soil BROWN=4;
+  HUD white=7; heat bar gradient RED=8/ORANGE=9/YELLOW=10/LIME=11.
+- EMPTY cell value = -1 (int grid: list[list[int]]).
+
+## Data Classes
+```python
+from dataclasses import dataclass
+from enum import Enum, auto
+
+class Phase(Enum):
+    TITLE = auto()
+    PLAYING = auto()
+    GAME_OVER = auto()
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # Class constants:
+    GRID_COLS=10; GRID_ROWS=8; CELL=24; GRID_X=40; GRID_Y=24
+    EMPTY=-1
+    PLANT_COLORS=(8, 11, 5, 10)  # RED, LIME, DARK_BLUE, YELLOW
+    MISMATCH_HEAT=15.0
+    MISS_HEAT=5.0
+    OVERGROW_HEAT=0.03
+    HEAT_DECAY=0.02
+    HEAT_CAP=100.0
+    SUPER_THRESHOLD=4
+    SUPER_DURATION=300
+    GAME_DURATION=3600  # 60s @ 60fps
+    INITIAL_PLANTS=14
+    # __init__: pyxel.init(320,240,title=...); pyxel.run(self.update, self.draw)
+    # reset(): init all state
+    # update(): phase machine dispatch
+    # draw(): phase machine dispatch
+
+    # Instance state (ALL pre-initialized in Game.__new__ pattern):
+    # phase: Phase
+    # score: int
+    # best_score: int
+    # combo: int
+    # max_combo: int
+    # last_color: int | None
+    # super_active: bool
+    # super_timer: int
+    # heat: float
+    # time_left: int
+    # elapsed: int
+    # grid: list[list[int]]
+    # particles: list[Particle]
+    # texts: list[FloatingText]
+    # _rng: random.Random
+    # _grow_counter: int
+    # _sprout_counter: int
+    # _shake: int
+    # game_over_reason: str
+```
+
+## Key Methods (Testable — NO pyxel input/btn calls inside)
+- `_bfs_cluster(self, col, row, color) -> set[tuple[int, int]]` — orthogonal
+  same-color connected cells starting at (col,row). Returns set of (col,row) tuples.
+- `_harvest(self, col, row) -> int` — harvest cluster at (col,row). Returns points
+  gained (0 if empty cell). Handles match/mismatch/miss, combo, super activation,
+  cluster clearing, particle/text spawning. Does NOT read pyxel input.
+- `_grow(self) -> None` — one CA spread tick: for each plant, with probability
+  SPREAD_CHANCE=0.5 spread to a random adjacent empty cell (same color).
+- `_sprout(self) -> None` — spawn one plant of random color in a random empty cell.
+- `_update_heat(self) -> None` — game-over check FIRST (heat >= 100 -> GAME_OVER),
+  then decay heat = max(0, heat - HEAT_DECAY).
+- `_update_overgrow(self) -> None` — if occupancy >= threshold, heat += OVERGROW_HEAT.
+- `_update_timers(self) -> None` — decrement time_left, increment elapsed, tick
+  grow/sprout counters (call _grow/_sprout when they hit 0 and reset), decrement
+  super_timer (deactivate at 0), update particles/texts, check timer<=0 -> GAME_OVER.
+- `_grow_interval(self) -> int` — 45 -> 20 linear over GAME_DURATION.
+- `_sprout_interval(self) -> int` — 60 -> 35 linear over GAME_DURATION.
+- `_overgrow_threshold(self) -> float` — 0.8 -> 0.6 linear over GAME_DURATION.
+- `_occupancy(self) -> float` — plant_count / (COLS*ROWS).
+- `_plant_count(self) -> int`.
+- `_activate_super(self) -> None`.
+- `_cell_from_xy(self, x, y) -> tuple[int,int] | None` — mouse px -> (col,row) or None.
+- `reset(self) -> None` — init all state, seed INITIAL_PLANTS random plants.
+
+## Phase Machine
+TITLE --(SPACE/RETURN/click)--> PLAYING --(auto: heat>=100 or time<=0)--> GAME_OVER --(SPACE/RETURN)--> PLAYING (fast restart)
+
+## Screens
+1. TITLE: "GARDEN CHAIN" title, 4-color plant legend, "CLICK TO HARVEST / SPACE START"
+2. PLAYING: soil grid + plants (circles), HUD (score, combo, timer bar, heat bar)
+3. GAME_OVER: reason ("OVERGROWN!" or "TIME UP!"), final score, best score, restart prompt
+
+## Rendering Notes
+- Empty soil cell: BROWN(4) filled square inset by 3px.
+- Plant: filled circle (pyxel.circ) radius 7 at cell center in plant color, plus a
+  small lime leaf dot.
+- HUD: score top-left (white), "COMBO xN" top-center (yellow, rainbow during super),
+  TIMER bar top horizontal (white->red as time runs low), HEAT bar vertical right
+  (green->yellow->red by value).
+- SUPER mode: rainbow border around playfield, plants pulse.
+- Screen shake: self._shake frames, applied via pyxel.camera offset (guard with
+  try/except in headless tests).
+
+## Animation / Timing Rules
+- 60fps. game duration 3600 frames.
+- SUPER duration 300 frames, then super_active=False.
+- Particle lifecycle: life decremented each frame; removed when <= 0. Spawn life>=2
+  so tests can observe one update.
+
+## Particle System
+- Harvest: 8 particles, color = plant color, vx/vy random [-1.5,1.5], life 15-25.
+- Super activate: 20 particles, rainbow colors, life 20-30.
+- Mismatch: 4 particles, RED, life 10.
+- Miss: 4 particles, GRAY, life 10.
+- No gravity.
+
+## Floating Text
+- "+{gain}" at cluster center (white/plant color).
+- "COMBO x{n}" (yellow).
+- "SUPER HARVEST!" (rainbow/yellow).
+- "WRONG!" (red) on mismatch, "EMPTY!" (gray) on miss.
+- life starts >= 20, decremented, removed <= 0.
+
+## Input
+- MOUSE_BUTTON_LEFT in PLAYING -> _cell_from_xy(mouse_x, mouse_y) -> _harvest.
+- TITLE: SPACE or KEY_RETURN or click -> reset() + phase=PLAYING.
+- GAME_OVER: SPACE or KEY_RETURN -> reset() + phase=PLAYING.
+- ESC key -> pyxel.quit().
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.rect(), pyxel.text(), pyxel.frame_count
+- pyxel.mouse_x, pyxel.mouse_y, pyxel.camera()
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset() (see Game.__new__ pitfall).
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods.
+- `_harvest`, `_grow`, `_sprout`, `_update_heat`, `_update_overgrow`, `_bfs_cluster`
+  are the primary test targets. Call them directly with state manipulation.
+- Provide `_make_game()` factory in test file: Game.__new__ + pre-init + reset()
+  + seed g._rng = random.Random(42).
+
+## Edge Cases
+- Empty grid (all EMPTY) -> _harvest on any cell = miss.
+- All same color -> cluster BFS returns whole connected region.
+- Full grid (no empty cells) -> _grow/_sprout are no-ops.
+- First harvest ever (last_color None) -> always matches, no penalty.
+- Mismatch when super_active is True -> still matches (no penalty).
+- Heat exactly 100 -> game over BEFORE decay (threshold check first).
+- Timer exactly 0 -> game over.
+
+## Implementation Constraints
+- Single file: prototypes/299_garden_chain/main.py
+- ~500-700 lines, type hints on all methods, @dataclass + Enum.
+- No external dependencies beyond pyxel.
+- English-only text (Pyxel BDF font lacks CJK glyphs).
+- import pyxel directly (no TYPE_CHECKING guard).
+- import random, math as needed.

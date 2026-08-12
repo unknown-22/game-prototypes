@@ -2361,5 +2361,14 @@
     "score": 32.0,
     "status": "Physics demolition COMBO chain prototype complete",
     "href": "298_wreck_chain.html"
+  },
+  {
+    "id": "299_garden_chain",
+    "title": "GARDEN CHAIN",
+    "idea": "増え続ける庭で同色の植物クラスタを一気に収穫するガーデニングゲーム。植物はセルオートマトンで発芽・増殖し、盤面が過密になるとHEATが上昇。同色を連続収穫するとCOMBO連鎖（score=10*クラスタサイズ*combo）になり、COMBO>=4でSUPER HARVEST（虹色モード・スコア3倍）。面白い瞬間は「同色の大きな塊を見極めて一気に刈り取り、虹色モードで次々と収穫する快感」。リスクとリターン：今収穫するか（安全）／大きくなるまで待つか（高得点だが過密とCOMBO断絶のリスク）を選ぶ。60秒の時間制限内でスコア最大化を目指す。オートシューター案#1の再解釈（Score 31.45）",
+    "score": 31.45,
+    "status": "Gardening / plant breeding COMBO chain prototype complete",
+    "href": "299_garden_chain.html",
+    "genre": "Gardening / Plant Breeding"
   }
 ]
