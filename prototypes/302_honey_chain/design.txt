@@ -1,0 +1,201 @@
+# 302 — HONEY CHAIN (Beekeeping / Pollination) Design Spec
+
+## Concept
+A beekeeping game where you steer a bee through a grid of blooming flowers.
+The bee carries POLLEN of a specific color (set by the LAST flower it visited).
+You fly to flowers of the SAME color to pollinate them and build a COMBO chain.
+Flowers constantly bloom and spread across the garden (cellular automaton).
+Risk: touching a wrong-color flower wastes the combo and heats the hive up.
+COMBO >= 4 triggers SUPER POLLEN (rainbow mode, any color matches, 3x score).
+
+## "Most Fun Moment" (面白い瞬間)
+「同じ色の花を次々に辿ってCOMBOを重ね、SUPER POLLENで虹色に咲き乱れる花畑を一気に塗り替えるのが面白い。」
+
+## Core Mechanic
+1. Player moves a bee (free movement, arrow keys, diagonal normalized).
+2. The bee has `pollen_color`. Initially None (first touch always matches).
+3. When the bee touches a flower (within COLLIDE_RADIUS of flower center):
+   - `match = (pollen_color is None or flower.color == pollen_color)`
+   - If match: COMBO += 1; score += 10 * combo * (3 if super_mode else 1); spawn match particles.
+   - If mismatch: HEAT += 15; COMBO = 0; spawn mismatch particles; floating text "WRONG!".
+   - ALWAYS: `pollen_color = flower.color`; remove the flower (respawn later).
+4. COMBO >= 4 sets super_mode = True for SUPER_DURATION=300 frames (rainbow, 3x score, HEAT frozen).
+5. Flowers spread via CA: every CA_INTERVAL frames, each flower has CA_CHANCE probability to
+   sprout a new flower in a random adjacent empty cell (same color as parent).
+6. Game over when HEAT >= 100 (HEAT_MAX) or 60s timer (3600 frames) runs out.
+7. Risk/reward: cutting across wrong-color flowers re-dyes the bee AND resets combo AND adds heat —
+   so routing around them (taking the long way) is safer but slower.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x
+- Grid: 10 cols x 8 rows, CELL=24, offset (OX, OY) = (40, 36). Grid spans x=40..280, y=36..228.
+- Flower center at (OX + col*CELL + CELL/2, OY + row*CELL + CELL/2).
+- Phase machine: TITLE, PLAYING, GAME_OVER
+- Colors: RED=8, LIME=11, DARK_BLUE=5, YELLOW=10 (flower colors)
+  WHITE=7 (bee body), BLACK=0 (bg), NAVY=1, GRAY=13 (HUD), ORANGE=9, CYAN=12 (accents), PINK=14 (super), PEACH=15
+
+## Data Classes
+```python
+from enum import Enum
+from dataclasses import dataclass, field
+
+class Phase(Enum):
+    TITLE = 0
+    PLAYING = 1
+    GAME_OVER = 2
+
+FLOWER_COLORS: tuple[int, int, int, int] = (8, 11, 5, 10)  # RED, LIME, DARK_BLUE, YELLOW
+
+@dataclass
+class Flower:
+    col: int
+    row: int
+    color: int  # one of FLOWER_COLORS
+    # grid position = (OX + col*CELL + CELL//2, OY + row*CELL + CELL//2)
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # Class constants: SCREEN_W=320, SCREEN_H=240, COLS=10, ROWS=8, CELL=24,
+    #   OX=40, OY=36, BEE_SPEED=2.0, BEE_R=7, COLLIDE_RADIUS=13, HEAT_MAX=100,
+    #   HEAT_DECAY=0.02, HEAT_MISMATCH=15, SUPER_DURATION=300, COMBO_SUPER_THRESHOLD=4,
+    #   GAME_DURATION=3600, MAX_FLOWERS=16, SPAWN_INTERVAL=60, CA_INTERVAL=45, CA_CHANCE=0.25
+
+    def __init__(self): pyxel.init(320,240,...); pyxel.run(self.update, self.draw)
+    def reset(self): init all state (below)
+    def update(self): dispatch on phase
+    def draw(self): dispatch on phase
+
+    # State (ALL instance attributes — critical for Game.__new__ pre-init):
+    # phase: Phase = Phase.TITLE
+    # score: int = 0
+    # combo: int = 0
+    # max_combo: int = 0
+    # heat: float = 0.0
+    # timer: int = GAME_DURATION   (frames remaining)
+    # elapsed: int = 0             (frames since start)
+    # super_mode: bool = False
+    # super_timer: int = 0
+    # bee_x: float
+    # bee_y: float
+    # pollen_color: int | None = None
+    # flowers: list[Flower]
+    # particles: list[Particle]
+    # floating_texts: list[FloatingText]
+    # spawn_timer: int
+    # ca_timer: int
+    # rng: random.Random = random.Random()   (assigned in reset; test factory reseeds after)
+    # game_over_reason: str  ("HEAT" or "TIME")
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `_make_grid_pos(col, row) -> tuple[int, int]` — returns (x, y) center for a flower
+- `_spawn_flower() -> None` — add a flower at a random EMPTY cell (respects MAX_FLOWERS)
+- `_empty_cells() -> list[tuple[int, int]]` — cells with no flower
+- `_flower_at(col, row) -> Flower | None`
+- `_try_collect(flower: Flower) -> bool` — the core collect/match/mismatch logic (returns True if match)
+- `_update_bee(dx: float, dy: float) -> None` — move bee by normalized direction, clamp to grid bounds,
+  then check collision against flowers (calls _try_collect). Pure logic (takes explicit dx/dy).
+- `_update_ca_spread() -> None` — CA: each flower may sprout a neighbor flower
+- `_update_timer() -> None` — decrement timer, escalate difficulty (spawn/CA interval shrink)
+- `_update_heat() -> None` — decay heat (unless super_mode), check >= HEAT_MAX -> game over.
+  ORDER: check threshold BEFORE decay (avoid unreachable game-over bug).
+- `_update_particles() -> None` — move, gravity, decrement life, remove dead
+- `_update_floating_texts() -> None` — decrement life, remove dead
+- `_game_over_reason() -> str` — "HEAT" if heat >= HEAT_MAX else "TIME"
+
+## Phase Machine
+```
+TITLE --(SPACE or RETURN)--> PLAYING --(heat>=100 or timer<=0)--> GAME_OVER --(SPACE or RETURN)--> reset -> PLAYING
+```
+
+## Screens
+1. TITLE: title "HONEY CHAIN", subtitle, controls ("ARROWS: move bee / SPACE: start"), "PRESS SPACE".
+2. PLAYING: flower grid, bee (white circle + small pollen-color dot), HUD (SCORE top-left,
+   COMBO, TIMER bar top, HEAT bar right side vertical), SUPER mode = rainbow border + "SUPER!" text.
+3. GAME_OVER: "GAME OVER", reason (HEAT/TIME), final SCORE, best score, "PRESS SPACE TO RETRY".
+
+## Rendering Notes
+- Flower: 8px petal circle in its color + small dark center dot; SUPER mode = rainbow outline.
+- Bee: white filled circle radius 7 + a 3px pollen-color dot in center.
+- HUD: score/combo text (WHITE), timer as horizontal bar across top, heat as vertical bar on right
+  (color shifts green->yellow->red as heat rises).
+- Honeycomb log: a strip of small hex cells along the bottom; each successful pollination lights one
+  cell in the collected color (visual "log/replay" of the chain). Keep simple: draw N small filled
+  circles in a row at the bottom, one per combo step this run (max ~20), color = collected color.
+- Floating text: "+score" (YELLOW), "COMBO xN" (CYAN), "WRONG!" (RED), "SUPER POLLEN!" (PINK).
+- Screen shake on mismatch (few frames).
+
+## Animation / Timing Rules
+- Difficulty escalation over 60s (linear by elapsed): spawn_interval 60->30, ca_interval 45->20,
+  MAX_FLOWERS 10->16.
+- super_timer decrements each frame; when reaches 0, super_mode=False.
+- Pollen color does NOT auto-cycle (it is set by last visited flower).
+
+## Particle System
+- Match: 8 particles, color = flower color, velocity random angle 1..2.5, life 20..35, gravity 0.05.
+- Super match: 20 particles, rainbow colors.
+- Mismatch: 4 particles, color = GRAY(13), velocity 1..2, life 15..25, gravity 0.05.
+
+## Input
+- Arrow keys / WASD: move bee (update() reads pyxel.btn, computes dx/dy, calls _update_bee(dx,dy)).
+- SPACE or RETURN: advance from TITLE and from GAME_OVER.
+- No mouse required.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.frame_count, pyxel.mouse_x/y (only in wrappers, never in testable methods)
+- pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.line(), pyxel.text()
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8 ORANGE=9
+YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes (the full list above) before calling reset().
+- After reset(), reseed `g.rng = random.Random(42)` for determinism (reset assigns an unseeded rng).
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods.
+- `_update_bee(dx, dy)` takes explicit direction — test it directly.
+- Define `_make_game()` factory in test file: pre-init all attrs, call reset(), reseed rng.
+
+## Edge Cases
+- Empty grid (no flowers) — bee moves fine, no collisions.
+- First touch: pollen_color is None -> always a match.
+- All flowers same color -> every touch matches (combo grows; verify SUPER triggers at 4).
+- MAX_FLOWERS cap respected (no infinite growth).
+- Collision at exact grid boundary (clamped bee position).
+- Rapid input: bee clamped to grid bounds each frame.
+- super_mode timer expiry returns pollen to normal matching.
+- Heat threshold check BEFORE decay (heat exactly at HEAT_MAX must trigger game over).
+
+## Implementation Constraints
+- Single file: prototypes/302_honey_chain/main.py
+- ~500-700 lines
+- Type hints on all methods
+- Use @dataclass for data, Enum for phases
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
+- Add `if __name__ == "__main__": Game()` guard at the end so headless import doesn't launch.
