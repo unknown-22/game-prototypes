@@ -1,0 +1,222 @@
+# 303 — STAR CHAIN Design Spec
+
+## Concept
+A stargazing / constellation-observation arcade game. A night sky (320x240) fills with
+twinkling stars of 4 colors. The player controls a telescope crosshair (mouse) and clicks
+stars to observe them. Observing stars of the SAME color consecutively builds a COMBO chain,
+and the observed stars get connected by a growing "constellation" line — the player's
+observation history becomes visible in the sky. COMBO >= 4 triggers SUPER TELESCOPE
+(rainbow mode). Observing a star of a DIFFERENT color forces a "re-alignment" (mismatch):
+HEAT +15 and combo reset. HEAT >= 100 or the 60s timer running out ends the run.
+Reinterpreted from game_idea_factory idea #1 (hacking deckbuilder, Score 32.0):
+'synthesis compression' -> same-color COMBO chain -> SUPER TELESCOPE;
+'chain count visualized across the screen, accelerating' -> constellation trail lines
+connect each consecutive observation across the sky.
+
+## "Most Fun Moment" (面白い瞬間)
+同じ色の星を次々に観測して星座のラインが夜空を横切るように伸び、SUPER TELESCOPEの虹色で一気に
+すべての星を掴み取る瞬間。
+
+## Core Mechanic
+1. Stars spawn at random positions with one of 4 colors (RED/LIME/DARK_BLUE/YELLOW).
+   Each star drifts slowly, twinkles, and fades after a lifetime, then despawns.
+2. Player moves a telescope crosshair (mouse) and LEFT-CLICKS a star to observe it.
+   Observation always consumes the star (removed + respawned elsewhere later).
+3. Consecutive observations of the SAME color = COMBO chain.
+   - The telescope's "align color" = color of the last observed star (starts as RED).
+   - match (star.color == align_color): combo += 1, score += 10 * combo * multiplier
+     (multiplier 1.0 normal, 3.0 in SUPER), a constellation line is drawn from the previous
+     observed star to this star (color = the star's color).
+   - mismatch (star.color != align_color): heat += 15, combo = 0, align_color = star.color
+     (re-aligned), the constellation trail breaks (next observation starts a fresh line).
+4. COMBO >= 4 triggers SUPER TELESCOPE (300 frames, rainbow mode): every star matches
+   regardless of color (any-color), score x3, HEAT frozen (no mismatch penalty).
+5. Risk/reward: stay on one color to grow the combo + constellation, but same-color stars
+   run out and fade — re-aligning to a new color costs HEAT and resets the combo.
+   The sky has a max star capacity; when full, no new stars spawn, forcing re-alignment.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x, FPS=60
+- No grid: stars are free-floating positions (float x, y)
+- Phase machine: Phase(TITLE, PLAYING, GAME_OVER)
+- Colors (raw ints): BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+  WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+- STAR_COLORS = (RED=8, LIME=11, DARK_BLUE=5, YELLOW=10)
+- Star radius = 3 (visual), click radius = 10
+- SUPER_DURATION = 300 frames
+- Timer = 3600 frames (60s), HEAT cap = 100.0
+
+## Data Classes
+```python
+@dataclass
+class Star:
+    x: float
+    y: float
+    color: int
+    life: int        # frames remaining before despawn
+    vx: float        # slow drift
+    vy: float
+    twinkle: int     # phase offset for twinkle animation (0-31)
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, title="STAR CHAIN"), pyxel.mouse(True), pyxel.run(update, draw)
+    # reset(): init all state (called by __init__ and on restart)
+    # update(): phase machine dispatch (TITLE->PLAYING on KEY_RETURN/SPACE, PLAYING logic, GAME_OVER->TITLE)
+    # draw(): phase machine dispatch
+
+    # Key state (ALL instance attributes — critical for Game.__new__ pre-init in tests):
+    # phase: Phase
+    # stars: list[Star]
+    # align_color: int            # starts RED (8)
+    # combo: int
+    # max_combo: int
+    # score: int
+    # best_score: int
+    # heat: float
+    # super_timer: int            # frames remaining in SUPER mode (0 = inactive)
+    # timer: int                  # 3600, counts down
+    # elapsed: int                # frames since PLAYING started
+    # constellation: list[tuple[float, float, float, float, int]]  # (x1,y1,x2,y2,color) segments
+    # last_obs_x: float | None    # previous observed star x (None = trail broken)
+    # last_obs_y: float | None
+    # particles: list[Particle]
+    # floating_texts: list[FloatingText]
+    # shake_frames: int
+    # spawn_timer: int            # countdown to next star spawn
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `reset() -> None` — init all state; assign self.align_color = RED (8) BEFORE anything else.
+- `start_playing() -> None` — reset run state and set phase = PLAYING.
+- `spawn_star() -> None` — add a Star at random pos/color if len(stars) < max_stars.
+- `update_stars() -> None` — drift, twinkle advance, life -= 1, remove dead stars.
+- `observe_star(star: Star) -> int` — core logic; returns the score gained (>= 0).
+    - matched = (star.color == self.align_color) or (self.super_timer > 0)
+    - multiplier = 3.0 if self.super_timer > 0 else 1.0
+    - if matched: combo += 1; max_combo = max(...); gained = int(10 * combo * multiplier);
+      score += gained; if combo >= 4 and super_timer == 0: super_timer = 300;
+      draw constellation segment from (last_obs_x,last_obs_y) to star if last_obs not None;
+      last_obs = (star.x, star.y); spawn match particles (8, or 20 if super); floating text "+N".
+    - else: combo = 0; heat += 15; align_color = star.color; last_obs = None;
+      spawn mismatch particles (4); floating text "WRONG!"; shake_frames = 8.
+    - return gained (0 on mismatch).
+- `handle_click(x: int, y: int) -> None` — find star within click radius (10), observe+remove it;
+  if none found, do nothing.
+- `update_super() -> None` — if super_timer > 0: super_timer -= 1.
+- `update_heat() -> None` — if heat >= 100: phase = GAME_OVER; return (check BEFORE decay);
+  then heat = max(0.0, heat - 0.02).
+- `update_timer() -> None` — timer -= 1; if timer <= 0: phase = GAME_OVER.
+- `update_difficulty() -> None` — derive spawn_interval, star_lifetime, max_stars from elapsed.
+- `update_spawning() -> None` — spawn_timer -= 1; if <= 0: spawn_star(); reset spawn_timer.
+
+## Phase Machine
+```
+TITLE --(KEY_RETURN or SPACE)--> PLAYING --(timer<=0 or heat>=100)--> GAME_OVER --(KEY_RETURN or SPACE)--> TITLE(reset)
+```
+
+## Screens
+1. TITLE: "STAR CHAIN" big text, "STARGAZING CONSTELLATION COMBO" subtitle,
+   controls ("CLICK SAME-COLOR STARS", "4+ COMBO = SUPER TELESCOPE", "ENTER TO START").
+2. GAME: night sky (NAVY background + a few static dim stars), colored twinkling stars,
+   constellation lines, telescope crosshair colored by align_color, HUD (SCORE/COMBO/HEAT/TIMER),
+   floating texts, particles. Rainbow border or tint when SUPER active.
+3. GAME_OVER: "GAME OVER", final score, best score, "ENTER TO RESTART".
+
+## Rendering Notes
+- Background: NAVY (1) filled rect; ~40 static dim stars (GRAY=13 / LIGHT_BLUE=6) for depth.
+- Star: pyxel.circ(int(x), int(y), 3, color); twinkle = alternate radius 3 vs 2 based on
+  (frame_count // 8 + twinkle) % 2; SUPER mode: cycle color through STAR_COLORS each frame.
+- Constellation: pyxel.line(x1, y1, x2, y2, color) for each segment; cap list at 80 segments
+  (drop oldest).
+- Telescope crosshair: pyxel.line horizontal+vertical at mouse, colored align_color; in SUPER
+  draw rainbow (cycle color). Do NOT read pyxel.mouse_x/y inside draw — pass from update via
+  self.mouse_x/self.mouse_y set in update().
+- HUD: score top-left "SCORE 1234", "COMBO x3" below, align-color swatch (small square),
+  HEAT bar on right (vertical), TIMER bar across top.
+- Screen shake: offset all drawing by a small random when shake_frames > 0 (decrement each frame).
+- pyxel.tri NOT needed; use circ/line/rect/text.
+
+## Animation / Timing Rules
+- FPS=60, timer counts down 1/frame from 3600.
+- Star drift: vx,vy in [-0.2, 0.2]; position wraps around screen edges (modulo SCREEN_W/H).
+- Star lifetime: starts at star_lifetime (300), decreases to 150 by 45s (linear via update_difficulty).
+- Twinkle: pure visual, no logic effect.
+
+## Particle System
+- Match: 8 particles, speed 0.5-2.0 in random direction, life 10-20, color = star color.
+- SUPER match: 20 particles, speed 1.0-3.0, life 12-24, rainbow (random STAR_COLORS each).
+- Mismatch: 4 particles, speed 0.5-1.5, life 8-14, color = GRAY (13).
+- No gravity. life -= 1 each frame; remove when life <= 0.
+
+## Floating Text
+- Match: "+{gained}" at star pos, color = star color, life 20.
+- COMBO milestone (combo multiple of 3): "COMBO x{combo}" at star pos, color WHITE, life 25.
+- SUPER activation: "SUPER TELESCOPE!" center-top, color YELLOW, life 40.
+- Mismatch: "WRONG!" at star pos, color GRAY, life 20.
+- Life decrements 1/frame; remove when life <= 0. (Tests need life >= 2 to survive one update.)
+
+## Input
+- Mouse left click (pyxel.MOUSE_BUTTON_LEFT via pyxel.btnp) in PLAYING -> handle_click(mouse_x, mouse_y).
+- KEY_RETURN or KEY_SPACE: TITLE -> start_playing(); GAME_OVER -> reset() + phase TITLE.
+- update() reads pyxel.mouse_x/btnp ONLY in the wrapper, stores mouse into self.mouse_x/self.mouse_y.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.line(), pyxel.rect(), pyxel.rectb(), pyxel.text()
+- pyxel.frame_count, pyxel.mouse_x, pyxel.mouse_y, pyxel.mouse(True)
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8
+ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset() (stars=[], particles=[], etc.).
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods (handle_click takes explicit x,y).
+- Define `_make_game()` factory in test file: g = Game.__new__(Game); <pre-init>; g.reset().
+- Seed any randomness: use self.rng = random.Random(42) in reset()? NO — keep a plain
+  module-level `random` but expose `self.rng` if needed. To keep tests deterministic, tests
+  will construct Star objects directly and call observe_star() — no randomness in that path.
+- observe_star is fully deterministic given a Star and prior state. spawn_star/update_stars
+  use random positions/colors — tests call them with controlled state, or monkey-patch random.
+
+## Edge Cases
+- No stars on screen (empty list) — handle_click does nothing.
+- All stars same color — combo keeps growing (by design).
+- All stars different colors — each click is a mismatch (re-align each time).
+- Max star capacity reached — spawn_star is a no-op.
+- Rapid clicks — btnp edge-triggered; handle_click idempotent per call.
+- Star near screen edge — position wraps; constellation line may span screen (acceptable).
+- super_timer at 0 and combo jumps to 4 — enter SUPER; super_timer counts down each update_super.
+
+## Implementation Constraints
+- Single file: prototypes/303_star_chain/main.py
+- ~500-650 lines
+- Type hints on all methods
+- @dataclass for data, Enum for Phase
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
+- Write ONLY the file. Respond with "DONE" when finished.

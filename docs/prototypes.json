@@ -2397,5 +2397,14 @@
     "status": "Beekeeping / pollination COMBO chain prototype complete — 320x240@60fps, 10x8 flower grid (CELL=24), 4 flower colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10), bee with pollen color = last visited flower (no auto-cycle), arrow-key free movement, same-color consecutive pollination = COMBO chain (score=10*combo*mult), COMBO>=4 triggers SUPER POLLEN (300f rainbow, any-color match, 3x score, HEAT frozen), flowers bloom + spread via CA (every 45f->20f, 25% chance to sprout neighbor), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn 60f->30f, CA 45f->20f, max flowers 10->16), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 549 lines main.py, 44 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "302_honey_chain.html",
     "genre": "Beekeeping / Pollination"
+  },
+  {
+    "id": "303_star_chain",
+    "title": "STAR CHAIN",
+    "idea": "天体観測・星座をテーマに、望遠鏡で夜空の星を観測して同色連続COMBOを伸ばす。観測した星同士が星座のラインでつながり、COMBO>=4でSUPER TELESCOPE(虹色・任意色マッチ・スコア3倍)が発動する。色違いの星を観測すると再調整となりHEAT+15かつCOMBOリセット。面白い瞬間は「同じ色の星を次々に観測して星座のラインが夜空を横切るように伸び、SUPER TELESCOPEの虹色で一気にすべての星を掴み取る瞬間」。リスクとリターン:同色に固執してCOMBOを伸ばすか(同色の星が尽きると待ちでタイマーを消費)、色を切り替えて確実に観測するか(切替=HEAT+15かつコンボ喪失)の駆け引き。60秒の制限時間。game_idea_factory #1(Score 32.0)の「合成圧縮→同色COMBO→SUPER」「チェイン数が画面全体で可視化され加速→星座ライン」を天体観測に再解釈。コレクション初の天体観測/星座ジャンル。",
+    "score": 32.0,
+    "status": "Stargazing / constellation observation COMBO chain prototype complete — 320x240@60fps, 4 star colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10), telescope crosshair (mouse click), same-color consecutive observations = COMBO chain (score=10*combo*mult), COMBO>=4 triggers SUPER TELESCOPE (300f rainbow, any-color match, 3x score), constellation trail lines connect consecutive observations (chain visualization / observation log), HEAT risk (mismatch+15 re-align, decay -0.02/f, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn interval 60->25f, max stars 12->24, lifetime 300->150), star drift+twinkle+fade, particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 487 lines main.py, 31 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "303_star_chain.html",
+    "genre": "Stargazing / Constellation"
   }
 ]
