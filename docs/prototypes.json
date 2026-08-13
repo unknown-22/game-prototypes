@@ -2379,5 +2379,14 @@
     "status": "Clock repair / watchmaking COMBO chain prototype complete",
     "href": "300_clock_chain.html",
     "genre": "Clock Repair / Watchmaking"
+  },
+  {
+    "id": "301_clay_chain",
+    "title": "CLAY CHAIN",
+    "idea": "陶芸・ろくろをテーマに、回転する轆轤(ろくろ)上の色付き粘土を同色連続で投げてCOMBO連鎖を伸ばす。手の色が自動で巡回し、頂点(12時位置)に来た粘土をSPACE/クリックで「投げる」。同色連続でCOMBO(score=10*combo*倍率)が伸び、COMBO>=4でSUPER THROW(虹色・スコア3倍・HEAT凍結)が発動。色違いは割れてHEAT+15(上限100でゲームオーバー)。Fキーで窯焚き(KILN FIRE)=未来の時間(4秒)を消費して棚の壺を一括得点化。面白い瞬間は「回転する轆轤で手の色と合う粘土が頂点に来た一瞬を狙って投げ、同色連続COMBOでSUPER THROWが虹色に爆発する瞬間」。リスクとリターン:色が合わない粘土が迫る時、時間を削って窯焚きで得点を確保するか、ミスを覚悟して投げるか。60秒の制限時間。game_idea_factory #1(Score 31.85)の「log/replayが資産→完成した壺の棚」「1ターン1色→手の色制約」を陶芸に再解釈。コレクション初の陶芸/ろくろジャンル。",
+    "score": 31.85,
+    "status": "Pottery wheel COMBO chain prototype complete — 320x240@60fps, 8 clay blobs on a continuously rotating wheel (speed 2.0->5.0 deg/f, center 160,120, radius 60), 4 clay colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10), hand color auto-cycles (20f->12f), SPACE/CLICK throws the blob at the top marker (angle 270), same-color consecutive throws = COMBO chain (score=10*combo*mult), COMBO>=4 triggers SUPER THROW (300f rainbow, any-color match, 3x score, HEAT frozen), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), KILN FIRE (F) = 'future hand as cost' (timer -240f, banks shelf 25/pot), 60s timer (3600f), difficulty escalation (wheel speed + hand color cycle), shelf of completed pots (log/replay history), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 460 lines main.py, 34 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "301_clay_chain.html",
+    "genre": "Pottery / Clay Sculpting"
   }
 ]

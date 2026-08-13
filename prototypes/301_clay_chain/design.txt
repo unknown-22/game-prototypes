@@ -1,0 +1,185 @@
+# 301 — CLAY CHAIN (Pottery Wheel) Design Spec
+
+## Concept
+A pottery wheel spins with 8 colored clay blobs around its rim. The player's hands
+auto-cycle through 4 colors. Press SPACE/CLICK to "throw" (shape) the clay blob currently
+at the TOP of the wheel. Throwing same-color clay consecutively builds a COMBO chain
+(score = 10 * combo * mult). COMBO >= 4 triggers SUPER THROW (rainbow mode, any color
+matches, 3x score). Mismatches crack the pot and raise HEAT. A KILN FIRE (F) spends
+future time to bank shelf points.
+
+## "Most Fun Moment" (面白い瞬間)
+「回転する轆轤(ろくろ)の上で、手の色と合う粘土が頂点に来た一瞬を狙って投げ、同じ色を
+連続で投げてCOMBOが伸び、SUPER THROWで虹色に変わり全粘土が自動マッチする瞬間。
+色が合わない粘土が迫る時、時間を削って窯で焼いて得点を確保するか、ミスを覚悟して
+投げるか迷う駆け引きが面白い」
+
+## Core Mechanic
+1. Wheel spins continuously (speed escalates 2.0 -> 5.0 deg/frame over 60s).
+2. Hand color auto-cycles (20f -> 12f).
+3. Player times a press so the blob at the top matches the hand color -> COMBO chain.
+4. COMBO >= 4 -> SUPER THROW (300f rainbow, any-color match, 3x score, HEAT frozen).
+5. Mismatch -> pot cracks, HEAT +15, combo reset.
+6. KILN FIRE (F) = "future hand as cost": spend 4s (timer -= 240 frames) to fire the
+   entire shelf for 25 points per pot. Risk/reward: fire now (bank points safely) vs
+   wait for a bigger shelf (more points, but risk running out of time).
+7. HEAT >= 100 or timer <= 0 -> game over. 60s timer.
+
+## Technical Spec
+- Screen: 320x240, Pyxel 2.x, FPS=60
+- Wheel: center (160, 120), radius 60
+- 8 clay blobs, each radius 14, at fixed slots (i * 45 degrees + wheel rotation)
+- Marker (throwing position) at TOP = angle 270 degrees
+- Phase enum: TITLE, PLAYING, GAME_OVER
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+Clay colors (4): RED=8, LIME=11, DARK_BLUE=5, YELLOW=10
+CLAY_COLORS = [8, 11, 5, 10]
+
+## Data Classes
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    color: int
+    life: int
+
+@dataclass
+class FloatingText:
+    text: str
+    x: float
+    y: float
+    color: int
+    life: int
+
+## Game Class Constants
+SCREEN_W=320 SCREEN_H=240 FPS=60
+WHEEL_CX=160 WHEEL_CY=120 WHEEL_RADIUS=60
+CLAY_COUNT=8 CLAY_RADIUS=14
+CLAY_COLORS=[8, 11, 5, 10]  # RED, LIME, DARK_BLUE, YELLOW
+MARKER_ANGLE=270.0          # top of wheel
+WHEEL_SPEED_START=2.0 WHEEL_SPEED_END=5.0
+CYCLE_INTERVAL_START=20 CYCLE_INTERVAL_END=12
+HEAT_MISMATCH=15 HEAT_DECAY=0.02 HEAT_CAP=100
+SUPER_THRESHOLD=4 SUPER_DURATION=300
+KILN_COST=240 KILN_BONUS_PER_POT=25
+GAME_TIME=3600              # 60 seconds
+
+## Instance State (all assigned in reset(); assign self._rng = random.Random(42) FIRST)
+- phase = Phase.TITLE
+- clay: list[int] = [self._rng.randint(0, 3) for _ in range(CLAY_COUNT)]
+- wheel_angle: float = 0.0
+- hand_color: int = 0
+- cycle_timer: int = CYCLE_INTERVAL_START
+- combo = 0; max_combo = 0; score = 0; best_score = 0
+- heat: float = 0.0
+- timer: int = GAME_TIME
+- super_timer: int = 0
+- elapsed: int = 0
+- shelf: list[int] = []        # completed pots (colors), the "log/replay" history
+- particles: list[Particle] = []
+- floating_texts: list[FloatingText] = []
+- shake: int = 0
+- last_color: int | None = None
+
+## Core Methods (pure logic, NO pyxel input calls — headless testable)
+- `_spawn_clay() -> int`: return self._rng.randint(0, 3)
+- `_cycle_interval() -> int`: linear from CYCLE_INTERVAL_START to END over GAME_TIME:
+  int(CYCLE_INTERVAL_START + (CYCLE_INTERVAL_END - CYCLE_INTERVAL_START) * (elapsed / GAME_TIME))
+- `_wheel_speed() -> float`: linear from WHEEL_SPEED_START to END over GAME_TIME:
+  WHEEL_SPEED_START + (WHEEL_SPEED_END - WHEEL_SPEED_START) * (elapsed / GAME_TIME)
+- `_slot_angle(i: int) -> float`: (wheel_angle + i * (360.0 / CLAY_COUNT)) % 360.0
+- `_angular_distance(a: float, b: float) -> float`: d = abs(a - b) % 360.0;
+  return min(d, 360.0 - d)
+- `_active_index() -> int`: index i minimizing _angular_distance(_slot_angle(i), MARKER_ANGLE)
+- `_is_match(color: int) -> bool`: return super_timer > 0 or color == hand_color
+- `_advance_wheel()`: wheel_angle = (wheel_angle + self._wheel_speed()) % 360.0
+- `_advance_hand_color()`: if cycle_timer <= 0: hand_color=(hand_color+1)%4;
+  cycle_timer=self._cycle_interval(); else cycle_timer -= 1
+- `_throw() -> bool`: idx = _active_index(); color = clay[idx];
+  if _is_match(color):
+    combo += 1; max_combo = max(max_combo, combo);
+    mult = 3 if super_timer > 0 else 1; score += 10 * combo * mult;
+    shelf.append(color); last_color = color;
+    if combo >= SUPER_THRESHOLD and super_timer <= 0: super_timer = SUPER_DURATION;
+    clay[idx] = self._spawn_clay(); return True
+  else:
+    heat += HEAT_MISMATCH; combo = 0; last_color = None;
+    clay[idx] = self._spawn_clay(); return False
+- `_kiln_fire() -> bool`: "future hand as cost" — spend future time to bank shelf points.
+  Precondition: len(shelf) > 0 and super_timer <= 0. Returns False if precondition fails.
+  Effect: timer -= KILN_COST; score += len(shelf) * KILN_BONUS_PER_POT; shelf.clear();
+  return True.
+- `_update_heat()`: CHECK FIRST — if heat >= HEAT_CAP: phase = Phase.GAME_OVER; return.
+  Then if super_timer > 0: return (heat frozen). Else heat = max(0.0, heat - HEAT_DECAY).
+  (Order matters: check threshold BEFORE decaying.)
+- `_update_timer()`: timer -= 1; if timer <= 0: phase = Phase.GAME_OVER.
+- `reset()`: reinitialize ALL state as listed above (assign self._rng = random.Random(42) FIRST).
+
+## Scoring / super
+Match scoring: combo incremented first, then score += 10 * combo * mult.
+SUPER (rainbow): during super_timer>0, ANY color matches (_is_match always True), mult=3,
+heat frozen (no decay, no mismatch possible). super_timer decremented in update() while > 0.
+KILN FIRE: score += len(shelf) * KILN_BONUS_PER_POT, shelf cleared, timer -= KILN_COST.
+
+## update() loop (PLAYING)
+- elapsed += 1
+- _advance_wheel()
+- _advance_hand_color()
+- if super_timer > 0: super_timer -= 1
+- _update_timer(); _update_heat()
+- update particles: life -= 1; x += vx; y += vy; drop if life <= 0
+- update floating texts: life -= 1; drop if life <= 0
+- if heat >= HEAT_CAP or timer <= 0: best_score = max(best_score, score)
+
+## Input handling (ONLY in update(), never in testable methods)
+- pyxel.btnp(pyxel.KEY_SPACE) OR pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) -> self._throw()
+- pyxel.btnp(pyxel.KEY_F) -> self._kiln_fire()
+- pyxel.btnp(pyxel.KEY_RETURN): in TITLE -> reset(); phase=PLAYING. In GAME_OVER -> reset(); phase=PLAYING.
+
+## draw() (PLAYING) — English text only, no CJK
+- Pottery wheel: pyxel.circb(160, 120, WHEEL_RADIUS, WHITE) + hub pyxel.circ(160, 120, 10, GRAY)
+- Clay blobs: for each i, angle = _slot_angle(i) radians; x = 160 + WHEEL_RADIUS*cos(rad); y = 120 + WHEEL_RADIUS*sin(rad); pyxel.circ(x, y, CLAY_RADIUS, CLAY_COLORS[clay[i]])
+- Marker at top: small pyxel.tri pointing down at (160, 120 - WHEEL_RADIUS - 14)
+- Shelf along bottom-left: completed pots as small circles (CLAY_COLORS[c]) in a row
+- Hand color swatch top-left (small square, CLAY_COLORS[hand_color])
+- HUD: "SCORE: n" top-left, "COMBO xN" top-center, HEAT bar vertical right side (color-coded),
+  TIMER bar across top (width proportional to timer/GAME_TIME)
+- particles (pyxel.circ or pset), floating text (pyxel.text)
+- SUPER mode: rainbow border (cycle border color by frame_count)
+- screen shake: if shake > 0: pyxel.camera(randint(-2,2), randint(-2,2)); shake -= 1 else pyxel.camera(0,0)
+
+## 3 screens
+TITLE: "CLAY CHAIN" big text + "SPACE: THROW   F: KILN FIRE" + "ENTER: START"
+PLAYING: the game
+GAME_OVER: "GAME OVER" + "SCORE: n" + "BEST: n" + "ENTER: RETRY"
+
+## API constraints (MUST use these exact names)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT pyxel.MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel for scroll
+- pyxel.circb = circle outline, pyxel.circ = filled circle, pyxel.line, pyxel.text, pyxel.rect
+- import math for cos/sin/radians
+- NO non-ASCII characters anywhere in strings (Pyxel BDF lacks CJK glyphs)
+
+## Headless testability
+- `import pyxel` at top is fine (module imports headlessly; only calling Rust functions panics).
+- Use `if __name__ == "__main__":` guard at bottom for pyxel.init + pyxel.run.
+- Tests use `Game.__new__(Game)` to bypass __init__, pre-init ALL attributes reset() touches
+  (or just call reset() which assigns everything), then call logic methods directly.
+- NO pyxel.btn/btnp/mouse_*/play/camera calls inside any logic method (_throw, _kiln_fire,
+  _update_heat, _update_timer, _cycle_interval, _wheel_speed, _slot_angle, _active_index,
+  _advance_wheel, _advance_hand_color, _spawn_clay, _is_match).
+
+## Requirements
+- Single file main.py, Pyxel 2.x, 320x240, 60fps
+- Dataclasses for Particle and FloatingText, typed with hints
+- Phase machine (TITLE, PLAYING, GAME_OVER)
+- Particle system + floating text + screen shake
+- English-only text
+- ~500-700 lines
