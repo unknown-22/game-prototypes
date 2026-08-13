@@ -2370,5 +2370,14 @@
     "status": "Gardening / plant breeding COMBO chain prototype complete",
     "href": "299_garden_chain.html",
     "genre": "Gardening / Plant Breeding"
+  },
+  {
+    "id": "300_clock_chain",
+    "title": "CLOCK CHAIN",
+    "idea": "時計修理をテーマに、色付き歯車を連続で修理してCOMBO連鎖を伸ばす。同色連続修理でCOMBO（score=10*combo*倍率）が伸び、COMBO>=4でSUPER REPAIR（虹色・スコア3倍・HEAT凍結）が発動。面白い瞬間は「歯車の色が合わずCOMBOが途切れそうな瞬間、未来の手札（時間2秒と次の歯車）を消費して巻き戻す（REWIND）か、素直にミスを受け入れるか迷う駆け引き」。リスクとリターン：REWIND（R）で時間と歯車を失いCOMBOを守る／ミスマッチでHEAT+15（上限100でゲームオーバー）。60秒の時間制限内でスコア最大化を目指す。未来の手札をコストに、合成圧縮を同色COMBO→SUPER REPAIRに置き換えたダイス/バッグ構築案#1（Score 31.65）の再解釈。",
+    "score": 31.65,
+    "status": "Clock repair / watchmaking COMBO chain prototype complete",
+    "href": "300_clock_chain.html",
+    "genre": "Clock Repair / Watchmaking"
   }
 ]
