@@ -2424,5 +2424,14 @@
     "status": "Weather forecasting COMBO chain prototype complete — 320x240@60fps, 4 weather types (SUN=YELLOW/RAIN=LIGHT_BLUE/SNOW=WHITE/THUNDER=PURPLE), forecast color auto-cycles (20f->12f), weather fronts drift right-to-left (speed 1.0->2.5), SPACE issues forecast for the armed front (smallest x <= LINE_X=56), same-color consecutive correct forecasts = COMBO chain (score=10*combo*mult), COMBO>=4 triggers SUPER FORECAST (300f rainbow, any-color match, 3x score, HEAT frozen), weather-shift twist (fronts flash '!' then 30% chance to shift to a random different color every 120f — unpredictability/partial observation), HEAT risk (mismatch+15, miss+5, decay -0.02/f, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn 90f->30f, speed 1.0->2.5, cycle 20f->12f), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 345 lines main.py, 45 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "305_weather_chain.html",
     "genre": "Weather Forecasting"
+  },
+  {
+    "id": "306_ice_carve",
+    "title": "ICE CARVE",
+    "idea": "彫刻家が色付きの氷ブロックを削って傑作を作る。8x8グリッドの4色の氷片をクリックして削り、ノミは最後に削った氷片の色を帯びるので、次にどの同色の氷片を削るかを完全にプレイヤーが制御する。同色連続でCOMBO(score=10*combo*倍率)が伸び、COMBO>=4でSUPER CHISEL(虹色・任意色マッチ・スコア3倍・HEAT凍結・融解CA停止)が発動。色違いはHEAT+15、その氷片はMELTED(死んだセル)になり、融解はセルオートマトン(各MELTEDセルが20%で直交隣接セル1つを溶かす)で広がって素材を失う。HEAT>=100または60秒でゲームオーバー。面白い瞬間は「同色の氷片を次々と削り出してコンボを伸ばし、SUPER CHISELの虹色で一気にブロックを削ってスコアが爆発する瞬間」。反面、色を間違えると熱でブロックが溶け出し、溶けが隣接セルへ広がって素材を失う緊張感。リスクとリターン:同色連鎖を追う(欲張り)か、溶けるブロックが素材を食い尽くすか。ミスはCOMBOリセットと盤面の永続縮小を同時に引き起こすので失敗が複利で効く。game_idea_factory #1(Score 31.95)の「連鎖崩壊→融解CA」「1ターン1色→ノミの色制御」を彫刻に再解釈。",
+    "score": 31.95,
+    "status": "Ice sculpting color-match prototype complete — 320x240@60fps, 8x8 grid of 4-color ice shards (RED/LIME/DARK_BLUE/YELLOW), click to chisel (chisel adopts matched shard color), same-color consecutive = COMBO (score=10*combo*mult), COMBO>=4 triggers SUPER CHISEL (300f rainbow, any-color match, 3x score, HEAT frozen, melt CA paused), mismatch = HEAT+15 + shard becomes MELTED dead cell, melt spreads via cellular automaton (45f->20f interval, 20% per orthogonal neighbor) shrinking usable board, HEAT decay -0.02/f (frozen in SUPER), HEAT>=100 (MELTDOWN) or 60s timer (3600f) game over, difficulty escalation (melt 45->20f, spawn 60->30f), auto-spawn maintains 24 shards, particle system + floating text + screen shake + chisel cursor, 3 screens (Title/Playing/GameOver), 523 lines main.py, 26 headless tests, ruff+ty OK",
+    "href": "306_ice_carve.html",
+    "genre": "Ice Sculpting"
   }
 ]

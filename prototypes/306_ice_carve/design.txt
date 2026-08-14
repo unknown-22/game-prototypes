@@ -1,0 +1,209 @@
+# 306 — ICE CARVE Design Spec
+
+## Concept
+You are a sculptor chiseling a block of colored ice into a masterpiece. The ice block is an
+8x8 grid of colored "shards" (4 colors). Click a shard to chisel it away. Your chisel takes on
+the color of the last shard you successfully carved, so the player fully controls which color is
+"in hand" by choosing which shard to hit next. Chisel same-color shards consecutively to build a
+COMBO chain and rack up score. Reach COMBO>=4 to trigger SUPER CHISEL (rainbow mode: any color
+matches, 3x score, heat frozen). But wrong-color chisels overheat the chisel and melt the block:
+a mismatched chisel turns that shard into a MELTED dead cell, and melt SPREADS across the ice via
+a cellular-automaton rule, destroying your material. Heat>=100 or the 60-second timer ends the run.
+
+## "Most Fun Moment" (面白い瞬間)
+同色の氷片を次々と削り出してコンボを伸ばし、SUPER CHISEL の虹色で一気にブロックを削ってスコアが
+爆発する瞬間。反面、色を間違えると熱でブロックが溶け出し、溶けが隣接セルへ広がって素材を失う緊張感。
+
+## Core Mechanic
+1. A board of colored ice shards (4 colors) is always ~24 shards full (of 64 cells).
+2. Player clicks a shard. Input -> match/mismatch resolution -> instant feedback (particles, floating
+   text, score, heat) -> player sees the board update and decides the next same-color shard to hit.
+3. Match (shard color == chisel_color): combo += 1, score += 10*combo*mult (mult=3.0 in SUPER else 1.0),
+   shard removed (particle burst), a fresh shard spawns at a random empty non-melted cell.
+4. Mismatch (shard color != chisel_color): HEAT += 15, combo = 0, that shard becomes MELTED (dead cell).
+5. MELT CA: every MELT_INTERVAL frames each MELTED cell has 20% chance to melt one random orthogonal
+   neighbor (turning it MELTED). Melted cells are dead zones that can't be scored. This is the
+   escalating spatial pressure ("CA grid fills up -> control").
+6. SUPER CHISEL: when combo reaches 4, activate for 300 frames: rainbow (any color matches), 3x score,
+   HEAT frozen (no heat on mismatch), melt CA paused. After 300 frames, return to normal (combo preserved).
+7. Game over when HEAT >= 100 (sculpture collapses / MELTDOWN) or 60-second timer (3600 frames) expires.
+   Show final score + best score. Press KEY_RETURN to restart instantly.
+
+Risk/reward: chase same-color chains for big combo (greedy) vs. the melting block eating your material;
+every mismatch both resets your combo AND permanently shrinks the usable board, so mistakes compound.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x, 60 fps (timer uses 3600 frames = 60s).
+- Grid: 8x8 cells, CELL=24 px, origin (GRID_X=64, GRID_Y=24) so the block is 192x192 centered.
+- Phase machine: TITLE, PLAYING, GAME_OVER.
+- Colors used: background NAVY(1); ice block cells use 4 shard colors RED(8), LIME(11), DARK_BLUE(5),
+  YELLOW(10); MELTED cells drawn GRAY(13) with a CYAN(12) outline; chisel indicator WHITE(7);
+  HUD text WHITE(7)/GRAY(13); heat bar RED(8) on top of GRAY(13) track; timer bar CYAN(12);
+  SUPER mode draws a rainbow border (cycling colors 8/11/5/10/9/12/14/15).
+
+## Data Classes
+```python
+from dataclasses import dataclass
+from enum import Enum, auto
+
+class Phase(Enum):
+    TITLE = auto()
+    PLAYING = auto()
+    GAME_OVER = auto()
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320,240,...), load nothing external, self.reset(), pyxel.run(self.update, self.draw)
+    # reset(): init ALL state (called by __init__ and on restart)
+    # update(): dispatch on self.phase
+    # draw(): dispatch on self.phase
+
+    # Key state (ALL instance attributes — list for Game.__new__ pre-init):
+    # phase: Phase
+    # grid: list[list[int]]          # 8x8; each cell: -1=MELTED, 0..3=shard color index
+    # chisel_color: int              # color index (0..3) of last matched shard; init 0 (RED); always defined
+    # score: int
+    # best_score: int
+    # combo: int
+    # max_combo: int
+    # heat: float                    # 0..100
+    # super_timer: int               # frames remaining of SUPER CHISEL (0 = inactive)
+    # timer: int                     # 3600 down to 0
+    # melt_interval: int             # frames between melt-CA passes (45 -> 20)
+    # melt_countdown: int            # countdown to next melt pass
+    # spawn_interval: int            # frames between auto spawns (60 -> 30)
+    # spawn_countdown: int
+    # target_shards: int             # number of shards to maintain on board (24)
+    # particles: list[Particle]
+    # floats: list[FloatText]
+    # shake: int                     # screen shake frames remaining
+    # shake_mag: int
+    # rng: random.Random             # seeded random generator
+    # last_color: int | None         # helper for matching comparison (capture BEFORE mutation)
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `_shard_color_at(col, row) -> int` — grid value, or -1 if melted/empty.
+- `_click_cell(col, row) -> None` — the main action: given a clicked cell, resolve match/mismatch.
+  MUST capture `color = self.grid[row][col]` BEFORE any mutation; compare `color == self.chisel_color`;
+  then mutate (combo/score/heat/grid). On match also update chisel_color=color and spawn a replacement.
+- `_spawn_shard() -> None` — place a new random-color shard at a random empty non-melted cell (if any).
+- `_spread_melt() -> None` — one melt-CA pass: for each melted cell, 20% chance (rng.random()<0.2)
+  to melt one random orthogonal neighbor (non-melted). Do NOT let newly melted cells spread in the
+  SAME pass (snapshot the set of currently-melted cells first).
+- `_update_heat() -> None` — decay: `if self.heat >= 100: ... game over` check FIRST, then
+  `self.heat = max(0.0, self.heat - 0.02)` (only when not in SUPER mode). CRITICAL ORDERING:
+  threshold check BEFORE decay, so heat exactly 100 triggers game over.
+- `_tick_timer() -> None` — decrement self.timer; if <=0 -> game over.
+- `_escalate() -> None` — melt_interval and spawn_interval scale linearly with elapsed time
+  (melt 45->20, spawn 60->30 over 60s); recompute from self.timer or a frame counter.
+- `_activate_super() -> None` — set super_timer=300 when combo reaches 4.
+- `_check_game_over() -> None` — if heat>=100 or timer<=0: set phase=GAME_OVER, update best_score.
+
+## Phase Machine
+```
+[TITLE] --(KEY_RETURN or MOUSE_BUTTON_LEFT)--> [PLAYING] --(heat>=100 or timer<=0)--> [GAME_OVER] --(KEY_RETURN)--> [TITLE/restart via reset()]
+```
+
+## Screens
+1. TITLE: "ICE CARVE" big title (WHITE), subtitle "Color-match chisel sculptor" (GRAY), controls:
+   "CLICK same-color ice shards", "COMBO>=4 = SUPER CHISEL", "Wrong color melts the block",
+   "ENTER to start". Show best score.
+2. GAME: ice block grid (colored shards / melted gray cells), chisel-color indicator square + label,
+   HUD: SCORE (top-left), COMBO (under score), HEAT bar (right side vertical, red), TIMER bar (top,
+   cyan), SUPER mode rainbow border + "SUPER!" text. Mouse click handled in _update_playing wrapper.
+3. GAME_OVER: "GAME OVER" (or "MELTDOWN!" if heat caused it), final score, best score, "ENTER to retry".
+
+## Rendering Notes
+- Each shard: pyxel.rect(col*CELL+GRID_X+2, row*CELL+GRID_Y+2, CELL-4, CELL-4, color) with a lighter
+  top-left highlight. MELTED cells: GRAY fill + CYAN outline (pyxel.rectb).
+- Chisel indicator: 24x24 square at top-left area (e.g. 16,16) filled with current chisel_color,
+  labeled "CHISEL".
+- Heat bar: vertical bar at x=SCREEN_W-16, from y=24 to y=24+180, RED fill height = heat/100*180.
+- Timer bar: horizontal bar at top, x=64 to 256, y=8, CYAN fill width = timer/3600*192.
+- Super border: pyxel.rectb(GRID_X-4, GRID_Y-4, GRID_W+8, GRID_H+8, cycling rainbow color).
+- Screen shake: if shake>0, apply pyxel.camera(offset) via small random offsets in update only.
+
+## Animation / Timing Rules
+- Timer 3600 frames = 60s at 60fps.
+- SUPER CHISEL lasts 300 frames.
+- Melt CA pass every melt_interval frames (45 -> 20 over 60s).
+- Auto spawn every spawn_interval frames (60 -> 30) to maintain target_shards=24.
+- Particle life decremented each frame; removed at life<=0.
+
+## Particle System
+- Match: 8 particles at the cell center, random velocity -1.5..1.5 px/f, life 15-25, color = shard color.
+- SUPER match: 20 particles, velocity -3..3, life 20-35, rainbow color.
+- Mismatch: 4 "melt drip" particles, slow downward velocity (vy 0.2..0.8), life 20-40, color CYAN(12).
+- No gravity (or tiny gravity 0.05 on melt drips).
+- Floating text: "+N" score at cell, "COMBO xN", "SUPER CHISEL!", "WRONG!", "MELTDOWN!".
+  life starts at 40 frames, rises 0.5 px/f, fades.
+
+## Input
+- TITLE: KEY_RETURN or MOUSE_BUTTON_LEFT -> reset() + phase=PLAYING.
+- PLAYING: MOUSE_BUTTON_LEFT -> compute (col,row) from pyxel.mouse_x/mouse_y; if inside grid, call
+  _click_cell(col,row). Input reading ONLY in the wrapper method _update_playing (never in testable
+  methods). KEY_Q or ESC -> back to title (optional).
+- GAME_OVER: KEY_RETURN -> reset() + phase=PLAYING.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.text(), pyxel.frame_count
+- pyxel.mouse_x, pyxel.mouse_y, pyxel.camera()
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset() (grid, chisel_color, score, best_score,
+  combo, max_combo, heat, super_timer, timer, melt_interval, melt_countdown, spawn_interval,
+  spawn_countdown, target_shards, particles, floats, shake, shake_mag, rng, last_color, phase).
+- Seed rng AFTER reset() if reset() assigns self.rng (mirror _init_state overwrite pitfall):
+  `g = _make_game(); g.rng = random.Random(42)`.
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods — input read in wrappers only.
+- Define `_make_game()` factory in test file: `g = Game.__new__(Game); <pre-init all>; g.reset();
+  g.rng = random.Random(42); return g`.
+
+## Edge Cases
+- Clicking an empty (0-value... note: use -1 for empty/melted, NOT 0) or melted cell -> no-op.
+- Clicking a cell when board has no empty non-melted cells -> no replacement spawn (guard).
+- All cells same color -> matches always succeed (combo grows unbounded until timer).
+- No cells same color as chisel -> every click is a mismatch (board fills with melt).
+- Melt spreading into a cell that is the only remaining shard.
+- Super timer expiring exactly when a mismatch occurs (heat freeze ends).
+- heat exactly 100.0 boundary -> must trigger game over before decay.
+- timer exactly 0 -> game over.
+
+## Implementation Constraints
+- Single file: prototypes/306_ice_carve/main.py
+- ~500-700 lines
+- Type hints on all methods
+- Use @dataclass for data, Enum for phases
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
+- 320x240 resolution, display_scale=2
