@@ -2415,5 +2415,14 @@
     "status": "Kite flying COMBO chain prototype complete — 320x240@60fps, 4 kite/gust colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10), kite color auto-cycles (20f->12f), arrow-key free movement (diagonal normalized, clamped to screen), same-color consecutive gust catches = COMBO chain (score=10*combo*mult), COMBO>=4 triggers SUPER KITE (300f rainbow, any-color match, 3x score, HEAT frozen), ribbon trail records flight path (log/replay as asset), HEAT risk (mismatch+15, decay -0.02/f, cap 100 game over), 60s timer (3600f), difficulty escalation (gust speed 1.5->3.0, spawn interval 60f->25f, max gusts 6->14, color cycle 20f->12f), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 548 lines main.py, 27 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "304_kite_chain.html",
     "genre": "Kite Flying"
+  },
+  {
+    "id": "305_weather_chain",
+    "title": "WEATHER CHAIN",
+    "idea": "気象予報をテーマに、右から流れてくる色付きの気象前線(雲)の色を「予報」する。予報色が自動で巡回し(20f→12f)、予報線(x=56)に到達した前線に対しSPACEで予報を発令。同色連続的中でCOMBO(score=10*combo*倍率)が伸び、COMBO>=4でSUPER FORECAST(虹色・任意色マッチ・スコア3倍・HEAT凍結)が発動。前線は一定間隔で「!」点滅後に30%の確率で別の色に変化する(天気の不確実性=部分観測)。色違いはHEAT+15、前線を逃すとHEAT+5(上限100でゲームオーバー)。面白い瞬間は「巡回する予報色がちょうど合うタイミングでSPACEを押し、次々と的中させてSUPER FORECASTの虹色でスコアが爆発する瞬間」。リスクとリターン:色が合うのを待つと前線が流れて逃げるので、今押すか・待つか・変化を読むかの駆け引き。60秒の制限時間。game_idea_factory #1(Score 32.05)の「合成圧縮→同色COMBO→SUPER FORECAST」「部分観測(確率でしか見えない)→前線の色変化」を気象予報に再解釈。コレクション初の気象予報ジャンル。",
+    "score": 32.05,
+    "status": "Weather forecasting COMBO chain prototype complete — 320x240@60fps, 4 weather types (SUN=YELLOW/RAIN=LIGHT_BLUE/SNOW=WHITE/THUNDER=PURPLE), forecast color auto-cycles (20f->12f), weather fronts drift right-to-left (speed 1.0->2.5), SPACE issues forecast for the armed front (smallest x <= LINE_X=56), same-color consecutive correct forecasts = COMBO chain (score=10*combo*mult), COMBO>=4 triggers SUPER FORECAST (300f rainbow, any-color match, 3x score, HEAT frozen), weather-shift twist (fronts flash '!' then 30% chance to shift to a random different color every 120f — unpredictability/partial observation), HEAT risk (mismatch+15, miss+5, decay -0.02/f, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn 90f->30f, speed 1.0->2.5, cycle 20f->12f), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 345 lines main.py, 45 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "305_weather_chain.html",
+    "genre": "Weather Forecasting"
   }
 ]
