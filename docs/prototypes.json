@@ -2433,5 +2433,14 @@
     "status": "Ice sculpting color-match prototype complete — 320x240@60fps, 8x8 grid of 4-color ice shards (RED/LIME/DARK_BLUE/YELLOW), click to chisel (chisel adopts matched shard color), same-color consecutive = COMBO (score=10*combo*mult), COMBO>=4 triggers SUPER CHISEL (300f rainbow, any-color match, 3x score, HEAT frozen, melt CA paused), mismatch = HEAT+15 + shard becomes MELTED dead cell, melt spreads via cellular automaton (45f->20f interval, 20% per orthogonal neighbor) shrinking usable board, HEAT decay -0.02/f (frozen in SUPER), HEAT>=100 (MELTDOWN) or 60s timer (3600f) game over, difficulty escalation (melt 45->20f, spawn 60->30f), auto-spawn maintains 24 shards, particle system + floating text + screen shake + chisel cursor, 3 screens (Title/Playing/GameOver), 523 lines main.py, 26 headless tests, ruff+ty OK",
     "href": "306_ice_carve.html",
     "genre": "Ice Sculpting"
+  },
+  {
+    "id": "307_origami_chain",
+    "title": "ORIGAMI CHAIN",
+    "idea": "折り紙をテーマに、正方形の折り紙(8x8の色付きマス)を繰り返し折って同色を重ねて融合させる。縦折り(クリック)か横折り(SPACE)かを選び、重なったマス同士が同色なら融合(合成)してCOMBO(score=10*combo*倍率)が伸び、COMBO>=4でSUPER FOLD(虹色・任意色融合・スコア3倍・HEAT凍結)が発動する。色違いで重なると折り目(死んだセル)になりHEAT+10(上限100でゲームオーバー)。紙が1x1になったら折り鶴完成(+500ボーナス)で新しい紙が出現。面白い瞬間は「紙の模様を読んで融合が最大になる折り軸(縦か横か)を選び、重なり合う同色が次々と融合してCOMBOが伸び、SUPER FOLDの虹色で紙全体が光る瞬間」。リスクとリターン:同色融合を狙って折る軸を選ぶか、色違いで折り目(永続デッドセル)を作ってでも早く紙を小さくして鶴完成ボーナスを狙うか、また紙が小さくなるほど折れる軸が限られ追い込まれる駆け引き。game_idea_factory #1(Score 31.95)の「合成圧縮→折って同色融合」「log/replayが資産→折り目(ミスの痕跡)が永続化」を折り紙に再解釈。コレクション初の折り紙/紙折りジャンル。",
+    "score": 31.95,
+    "status": "Origami / paper folding COMBO chain prototype complete — 320x240@60fps, 8x8 grid of colored paper cells (CELL=22), 4 colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10, +ORANGE=9 at higher difficulty), CLICK=fold vertical (right half onto left), SPACE=fold horizontal (bottom half onto top), same-color overlap = FUSION (score=10*combo*mult, synthesis compression), different-color overlap = crease (dead cell) + HEAT+10, COMBO>=4 triggers SUPER FOLD (300f rainbow, any-color fusion, 3x score, HEAT frozen), folding halves the paper (8x8 -> ... -> 1x1), reaching 1x1 = CRANE COMPLETE (+500 live / +100 dead bonus) + new sheet, HEAT risk (mismatch+10, decay -0.02/f frozen in SUPER, cap 100 game over), 60s timer (3600f), difficulty escalation (num_colors 3 -> 4 -> 5 by elapsed time), particle system + floating text + screen shake + fold affordance dashed lines, 3 screens (Title/Playing+CRANE_COMPLETE/GameOver), 448 lines main.py, 26 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "307_origami_chain.html",
+    "genre": "Origami / Paper Folding"
   }
 ]
