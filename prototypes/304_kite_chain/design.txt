@@ -1,0 +1,252 @@
+# 304 — KITE CHAIN Design Spec
+
+## Concept
+A kite-flying arcade game. A bright daytime sky (320x240) with drifting clouds. The player
+controls a colorful kite (tethered by a string) with the arrow keys and flies it around the
+sky. Colored wind gusts (streaks of wind) drift horizontally across the sky. The kite's color
+auto-cycles. Flying the kite INTO a gust of the SAME color builds a COMBO chain; the kite
+leaves a fading ribbon trail that records its flight path (the "log/replay as asset" hook).
+COMBO >= 4 triggers SUPER KITE (rainbow mode). Hitting a gust of a DIFFERENT color buffets the
+kite (mismatch): HEAT +15 and combo reset. HEAT >= 100 (the string snaps / kite crashes) or
+the 60s timer running out ends the run.
+Reinterpreted from game_idea_factory idea #1 (space-mining deckbuilder, Score 31.85):
+'synthesis compression' -> same-color COMBO chain -> SUPER KITE;
+'log/replay as asset' -> the kite's colored ribbon trail (flight history made visible).
+
+## "Most Fun Moment" (面白い瞬間)
+同色の突風を次々に捉えて凧のリボン軌跡が空に虹の帯を描き、SUPER KITEの虹色で一気に風を掴み
+スコアが爆発する瞬間。
+
+## Core Mechanic
+1. Wind gusts spawn at the right edge and drift left (occasionally the reverse) with one of
+   4 colors (RED/LIME/DARK_BLUE/YELLOW). Each gust is a short colored streak.
+2. Player moves the kite with arrow keys (4-dir + diagonal normalized), speed ~2.0 px/f,
+   clamped to screen bounds. The kite has a slight ambient wind drift the player compensates for.
+3. The kite's color auto-cycles every 20f -> 12f (escalating) through the 4 colors.
+4. Kite-gust collision (center distance <= COLLIDE_RAD): the gust is consumed.
+   - match (gust.color == kite_color): combo += 1, max_combo = max(...),
+     gained = int(10 * combo * multiplier), score += gained; if combo >= 4 and not super:
+     super_timer = SUPER_DURATION. Spawn match particles + floating text "+N".
+   - mismatch (gust.color != kite_color): combo = 0, heat += 15, spawn mismatch particles,
+     floating text "WRONG!", shake_frames = 8.
+   - In SUPER mode (super_timer > 0): every gust matches regardless of color, score x3,
+     HEAT frozen (no mismatch penalty).
+5. COMBO >= 4 triggers SUPER KITE (300 frames, rainbow mode): any-color match, score x3,
+   HEAT frozen. The kite is drawn rainbow-cycling during SUPER.
+6. Risk/reward: chase same-color gusts to grow the combo, but matching-color gusts may not be
+   near — flying across the sky to reach them risks colliding with wrong-color gusts. Waiting
+   too long for a color to cycle costs time (60s timer).
+7. Ribbon trail: append the kite position every 3 frames to a capped trail list (fade over
+   time, color = kite color at that moment). The trail is the "log" of the flight.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x, FPS=60
+- No grid: kite + gusts are free-floating positions (float x, y)
+- Phase machine: Phase(TITLE, PLAYING, GAME_OVER)
+- Colors (raw ints): BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+  WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+- KITE_COLORS = (RED=8, LIME=11, DARK_BLUE=5, YELLOW=10)
+- Sky background: LIGHT_BLUE=6 fill; clouds = WHITE=7 rounded rects drifting slowly
+- Kite radius visual ~5, collision radius COLLIDE_RAD = 11
+- Kite speed = 2.0 px/f
+- SUPER_DURATION = 300 frames
+- Timer = 3600 frames (60s), HEAT cap = 100.0
+- Trail: append every 3 frames, cap 200 points, each point lifetime ~45 frames
+
+## Data Classes
+```python
+@dataclass
+class Gust:
+    x: float
+    y: float
+    color: int
+    vx: float        # negative = drift left
+    length: int      # streak length in px (visual)
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+
+@dataclass
+class TrailPoint:
+    x: float
+    y: float
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, title="KITE CHAIN"), pyxel.run(update, draw)
+    # reset(): init all state (called by __init__ and on restart)
+    # update(): phase machine dispatch (TITLE->PLAYING on KEY_RETURN/SPACE, PLAYING logic, GAME_OVER->TITLE)
+    # draw(): phase machine dispatch
+
+    # Key state (ALL instance attributes — critical for Game.__new__ pre-init in tests):
+    # phase: Phase
+    # kite_x: float
+    # kite_y: float
+    # kite_color_idx: int          # index into KITE_COLORS
+    # color_timer: int             # countdown to advance kite color
+    # combo: int
+    # max_combo: int
+    # score: int
+    # best_score: int
+    # heat: float
+    # super_timer: int             # frames remaining in SUPER mode (0 = inactive)
+    # timer: int                   # 3600, counts down
+    # elapsed: int                 # frames since PLAYING started
+    # gusts: list[Gust]
+    # particles: list[Particle]
+    # floating_texts: list[FloatingText]
+    # trail: list[TrailPoint]
+    # trail_tick: int              # countdown to next trail append
+    # shake_frames: int
+    # spawn_timer: int             # countdown to next gust spawn
+    # clouds: list[tuple[float, float, float]]  # (x, y, speed) static-decor clouds
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `reset() -> None` — init all state; set kite_x=160, kite_y=200, kite_color_idx=0, color_timer=20.
+- `start_playing() -> None` — reset run state and set phase = PLAYING.
+- `kite_color() -> int` — return KITE_COLORS[kite_color_idx].
+- `move_kite(dx: int, dy: int) -> None` — move kite by (dx,dy)*speed; if both nonzero, normalize
+  diagonal (divide by sqrt(2)); clamp to screen bounds; returns None. (Called by update() with
+  pyxel.btn values; tests call directly with explicit dx,dy.)
+- `advance_color() -> None` — kite_color_idx = (kite_color_idx + 1) % 4; color_timer = cycle_interval.
+- `spawn_gust() -> None` — add a Gust at right edge (x = SCREEN_W + 10), random y, random color,
+  vx = -(gust_speed) (negative). If len(gusts) < max_gusts.
+- `update_gusts() -> None` — move each gust by vx; remove gusts that exit left (x < -20).
+- `update_trail() -> None` — trail_tick -= 1; if <= 0: append TrailPoint(kite_x, kite_y, life=45,
+  color=kite_color()); reset trail_tick = 3. Decrement each existing point's life; remove <= 0.
+- `collide_gusts() -> None` — for each gust within COLLIDE_RAD of kite: consume it, then call the
+  match/mismatch logic (see below). Only the first colliding gust per call is processed.
+- `resolve_collision(gust: Gust) -> int` — core logic; returns score gained (>= 0).
+    - matched = (gust.color == self.kite_color()) or (self.super_timer > 0)
+    - multiplier = 3.0 if self.super_timer > 0 else 1.0
+    - if matched: combo += 1; max_combo = max(...); gained = int(10 * combo * multiplier);
+      score += gained; if combo >= 4 and super_timer == 0: super_timer = 300;
+      spawn match particles (8, or 20 if super); floating text "+N".
+    - else: combo = 0; heat += 15; spawn mismatch particles (4); floating text "WRONG!";
+      shake_frames = 8.
+    - return gained (0 on mismatch).
+- `update_super() -> None` — if super_timer > 0: super_timer -= 1.
+- `update_heat() -> None` — if heat >= 100: phase = GAME_OVER; return (check BEFORE decay);
+  then heat = max(0.0, heat - 0.02).
+- `update_timer() -> None` — timer -= 1; if timer <= 0: phase = GAME_OVER.
+- `update_difficulty() -> None` — derive gust_speed, spawn_interval, max_gusts, cycle_interval
+  from elapsed (linear interpolation over 60s).
+- `update_spawning() -> None` — spawn_timer -= 1; if <= 0: spawn_gust(); reset spawn_timer.
+- `update_color_cycle() -> None` — color_timer -= 1; if <= 0: advance_color().
+
+## Phase Machine
+```
+TITLE --(KEY_RETURN or SPACE)--> PLAYING --(timer<=0 or heat>=100)--> GAME_OVER --(KEY_RETURN or SPACE)--> TITLE(reset)
+```
+
+## Screens
+1. TITLE: "KITE CHAIN" big text, "WINDY SKY COMBO" subtitle,
+   controls ("ARROWS FLY KITE", "4+ COMBO = SUPER KITE", "ENTER TO START").
+2. GAME: light-blue sky + drifting clouds, colored wind gusts (streaks), the kite (diamond +
+   tail + string to bottom), colored ribbon trail, HUD (SCORE/COMBO/KITE color swatch/HEAT/TIMER),
+   floating texts, particles. Rainbow border + rainbow kite when SUPER active.
+3. GAME_OVER: "GAME OVER", final score, best score, "ENTER TO RESTART".
+
+## Rendering Notes
+- Background: LIGHT_BLUE (6) filled rect; ~6 clouds (WHITE=7) as 2-3 overlapping circles/rounded
+  rects drifting slowly left and wrapping.
+- Gust: a horizontal streak — pyxel.rect(x, y-1, length, 3, color) plus a lighter leading edge;
+  length ~14-22px. Color = the gust's color.
+- Kite: a diamond — pyxel.tri(x, y-5, x-4, y, x+4, y, color) + pyxel.tri(x, y+5, x-4, y, x+4, y, color)
+  (two triangles top+bottom form a kite diamond), a short tail (2-3 small lines) below, and a
+  string line from kite down to bottom-center anchor. In SUPER, cycle kite color through KITE_COLORS
+  each frame (rainbow).
+- Trail: for each TrailPoint, pyxel.pset(int(x), int(y), color) fading toward sky color as life
+  decreases (blend by picking color vs LIGHT_BLUE based on life).
+- HUD: score top-left "SCORE 1234", "COMBO x3" below, kite-color swatch (small square),
+  HEAT bar on right (vertical), TIMER bar across top.
+- Screen shake: offset all drawing by small random when shake_frames > 0 (decrement each frame).
+- Do NOT read pyxel.mouse_x/y inside draw. Keys read only in update() wrapper.
+
+## Animation / Timing Rules
+- FPS=60, timer counts down 1/frame from 3600.
+- Kite color auto-cycles: cycle_interval starts 20f, decreases to 12f by 45s (via update_difficulty).
+- Gust speed: starts 1.5, increases to 3.0 over 60s. Gusts always drift left (vx negative).
+- Gust spawn interval: starts 60f, decreases to 25f over 60s.
+- Max gusts: starts 6, increases to 14 over 60s.
+- Ambient wind: optional tiny rightward push on the kite in update() wrapper only (NOT in
+  move_kite, to keep it testable) — actually omit ambient wind to keep logic deterministic;
+  the challenge is color-matching + timer + gust density.
+
+## Particle System
+- Match: 8 particles, speed 0.5-2.0 random dir, life 10-20, color = gust color.
+- SUPER match: 20 particles, speed 1.0-3.0, life 12-24, rainbow (random KITE_COLORS each).
+- Mismatch: 4 particles, speed 0.5-1.5, life 8-14, color = GRAY (13).
+- No gravity. life -= 1 each frame; remove when life <= 0.
+
+## Floating Text
+- Match: "+{gained}" at gust pos, color = gust color, life 20.
+- COMBO milestone (combo multiple of 3): "COMBO x{combo}" at gust pos, color WHITE, life 25.
+- SUPER activation: "SUPER KITE!" center-top, color YELLOW, life 40.
+- Mismatch: "WRONG!" at gust pos, color GRAY, life 20.
+- Life decrements 1/frame; remove when life <= 0. (Tests need life >= 2 to survive one update.)
+
+## Input
+- Arrow keys (pyxel.btn, held) in PLAYING -> move_kite(dx, dy) where dx=RIGHT-LEFT, dy=DOWN-UP.
+- KEY_RETURN or KEY_SPACE: TITLE -> start_playing(); GAME_OVER -> reset() + phase TITLE.
+- update() reads pyxel.btn ONLY in the wrapper; move_kite takes explicit dx,dy.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.line(), pyxel.rect(), pyxel.rectb(),
+  pyxel.text(), pyxel.pset()
+- pyxel.frame_count, pyxel.KEY_UP/KEY_DOWN/KEY_LEFT/KEY_RIGHT/KEY_SPACE
+- pyxel.mouse NOT needed (no mouse input)
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8
+ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset() (gusts=[], particles=[], trail=[], etc.).
+- Never call pyxel.btn/btnp in testable methods (move_kite takes explicit dx,dy).
+- Define `_make_game()` factory in test file: g = Game.__new__(Game); <pre-init>; g.reset().
+- resolve_collision is fully deterministic given a Gust and prior state — construct Gust
+  objects directly in tests. spawn_gust/update_gusts use random positions/colors — tests call
+  them with controlled state or monkey-patch random.
+
+## Edge Cases
+- No gusts on screen (empty list) — collide_gusts does nothing.
+- All gusts same color — combo keeps growing (by design).
+- All gusts different colors — each collision is a mismatch.
+- Max gust capacity reached — spawn_gust is a no-op.
+- Gust near screen edge — removed when x < -20.
+- super_timer at 0 and combo jumps to 4 — enter SUPER; super_timer counts down each update_super.
+- Kite at screen bounds — move_kite clamps, no off-screen.
+
+## Implementation Constraints
+- Single file: prototypes/304_kite_chain/main.py
+- ~500-650 lines
+- Type hints on all methods
+- @dataclass for data, Enum for Phase
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
+- Write ONLY the file. Respond with "DONE" when finished.
