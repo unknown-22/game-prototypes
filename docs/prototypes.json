@@ -2451,5 +2451,14 @@
     "status": "Tea ceremony / COMBO chain prototype complete — 320x240@60fps, 3 guest seats (x=70/160/250,y=70), 4 tea colors (RED=HIBISCUS/LIME=MATCHA/DARK_BLUE=OOLONG/YELLOW=CHAMOMILE), brew color auto-cycles (20f->12f), steep meter +1/f (STEEP_MAX=45, mult=1+steep//15 up to 3x, over-steep=45 BITTER HEAT+12), CLICK/keys 1-3 to serve matching guest, same-color consecutive serves = COMBO chain (score=10*combo*mult), COMBO>=4 = SUPER BREW (300f rainbow, any-color match, 3x score, HEAT frozen), HEAT risk (mismatch+15/over-steep+12/guest-left+5, decay -0.02/f frozen in SUPER, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn 90f->40f, cycle 20f->12f), guest patience (600f, expiry = HEAT+5 + combo reset), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 438 lines main.py, 34 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "308_tea_chain.html",
     "genre": "Tea Ceremony"
+  },
+  {
+    "id": "309_forge_chain",
+    "title": "FORGE CHAIN",
+    "idea": "鍛冶屋をテーマに、金床の上の金属ビレット(4色:IRON=RED/COPPER=LIME/STEEL=DARK_BLUE/GOLD=YELLOW)を自動巡回するハンマー色と一致させて打撃しCOMBOを伸ばす。打撃が当たるほど金属が熱され(TEMPER上昇)スコア倍率が上がる。COMBO>=4でSUPER FORGE(虹色・任意色マッチ・スコア3倍・HEAT凍結)が発動。色違いはHEAT+15かつCOMBOリセット・TEMPER低下。TEMPER>=1でQUENCH(Q)すると焼き入れ完成:score += temper*100 + combo*20の大ボーナスとHEAT-30を得るがCOMBO/TEMPERがリセットされる。面白い瞬間は「同じ金属を何度も打ち込んでビレットを真っ赤に熱し、コンボとテンパーを最大化してから水に焼き入れ(QUENCH)して高得点を爆発させる瞬間」。リスクとリターン:高コンボ・高テンパーを保持して更に伸ばすか(1回のミスで両方失いHEAT+15)、焼き入れで確定得点とHEAT冷却を得てリセットするかの駆け引き。HEAT>=100で炉がメルトダウン(ゲームオーバー)、60秒の制限時間。game_idea_factory #1(Score 32.35)の「合成圧縮→同色COMBO→SUPER」「未来の手札を消費→焼き入れ(今のコンボを犠牲に確定報酬)」を鍛冶に再解釈。コレクション初の鍛冶/刀鍛冶ジャンル。",
+    "score": 32.35,
+    "status": "Blacksmithing / sword forging COMBO chain prototype complete — 320x240@60fps, 4 metal colors (IRON=RED=8/COPPER=LIME=11/STEEL=DARK_BLUE=5/GOLD=YELLOW=10), single billet on anvil, hammer color auto-cycles (20f->12f), SPACE/CLICK strikes (match=temper+1+combo+1+score=10*combo*(1+temper//3), mismatch=HEAT+15+combo reset+temper-1), COMBO>=4 triggers SUPER FORGE (300f rainbow, any-color match, 3x score, HEAT frozen), QUENCH (Q) at temper>=1 banks score=temper*100+combo*20 + HEAT-30 + resets combo/temper/new billet, HEAT risk (mismatch+15, decay -0.03/f frozen in SUPER, cap 100 MELTDOWN game over), 60s timer (3600f), difficulty escalation (cycle 20f->12f), particle system (8 match/20 super/16 quench/4 mismatch) + floating text + screen shake + temper glow, 3 screens (Title/Playing/GameOver), 403 lines main.py, 38 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "309_forge_chain.html",
+    "genre": "Blacksmithing / Sword Forging"
   }
 ]

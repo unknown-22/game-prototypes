@@ -1,0 +1,198 @@
+# 309 — FORGE CHAIN Design Spec
+
+## Concept
+You are a blacksmith forging blades at a hot forge. A single metal billet (ingot)
+sits on the anvil. The billet has one of 4 metal colors (IRON=RED, COPPER=LIME,
+STEEL=DARK_BLUE, GOLD=YELLOW). Your hammer color auto-cycles through the 4 colors.
+Press SPACE (or click) to STRIKE the anvil. If the hammer color matches the billet
+color, the strike lands: the billet heats up (TEMPER rises), your COMBO grows, and
+you score points. If the colors mismatch, the strike is wasted — HEAT rises and the
+billet cools (temper drops). When the billet is hot enough (temper >= 1) you may
+QUENCH it (dunk in the water barrel) to complete a finished blade: bank a large
+temper-based score bonus and dump HEAT, but this resets your COMBO and temper, and
+a new cold billet arrives. The forge fire is always burning, so HEAT rises from
+mistakes; let it hit 100 and the forge MELTS DOWN (game over).
+
+## "Most Fun Moment" (面白い瞬間)
+同じ金属を何度も打ち込んで鉄塊を真っ赤に熱し、コンボとテンパーを最大化してから水に
+焼き入れ(QUENCH)して高得点を爆発させる瞬間。
+
+## Core Mechanic
+1. Player watches the auto-cycling hammer color and the billet color on the anvil.
+2. Player presses SPACE/CLICK to STRIKE when colors match (input → judgement).
+3. Match: temper += 1, combo += 1, score += 10 * combo * (1 + temper // 3), sparks fly,
+   floating "+score" text, blade glow intensifies (feedback).
+4. Mismatch: HEAT += 15, combo = 0, temper = max(0, temper - 1), "MISS" text, smoke.
+5. QUENCH (Q key) when temper >= 1: score += temper * 100 + combo * 20, HEAT -= 30
+   (clamped >= 0), combo = 0, temper = 0, new random-color billet spawns. Water splash
+   particles + "QUENCH!" text. (decision: cash out now vs keep building combo/temper)
+6. COMBO >= 4 → SUPER FORGE: 300f rainbow mode, any-color match (strike always lands),
+   3x score, HEAT frozen.
+7. HEAT >= 100 → MELTDOWN (game over). 60s timer (3600f) → time-up game over.
+
+Risk/reward: holding a high combo/temper to score more is risky — a single mismatch
+resets both AND adds heat. Quenching banks points and dumps heat but sacrifices your
+momentum. The forge fire means heat only decays slowly, so mistakes are expensive.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x, 60fps.
+- 4 metal colors: IRON=RED(8), COPPER=LIME(11), STEEL=DARK_BLUE(5), GOLD=YELLOW(10).
+- Phase machine: TITLE, PLAYING, GAME_OVER (3 screens). Optionally a QUENCH flash.
+- Frame timing: 60fps. Timer 3600f. Hammer cycle interval 20f → 12f over 60s.
+
+## Data Classes
+```python
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    color: int
+    life: int
+```
+
+## Game Class Structure
+```python
+from enum import Enum
+import random
+
+class Phase(Enum):
+    TITLE = 0
+    PLAYING = 1
+    GAME_OVER = 2
+
+class Game:
+    # class constants:
+    SCREEN_W = 320
+    SCREEN_H = 240
+    METAL_COLORS: tuple[int, ...] = (8, 11, 5, 10)  # IRON, COPPER, STEEL, GOLD
+    METAL_NAMES: tuple[str, ...] = ("IRON", "COPPER", "STEEL", "GOLD")
+
+    # __init__: pyxel.init(SCREEN_W, SCREEN_H, title="FORGE CHAIN", fps=60, display_scale=2)
+    #           pyxel.run(self.update, self.draw)
+    # reset(): init all state (see Key state below)
+    # update(): phase machine dispatch -> _update_playing()
+    # draw(): phase machine dispatch -> _draw_playing()
+
+    # Key state (ALL instance attributes — needed for Game.__new__ pre-init):
+    # phase: Phase
+    # score: int
+    # combo: int
+    # max_combo: int
+    # temper: int
+    # heat: float
+    # timer: int          (frames remaining, 3600)
+    # billet_color: int   (index into METAL_COLORS, current billet metal)
+    # hammer_color: int   (index into METAL_COLORS, current hammer)
+    # hammer_timer: int   (frames until next hammer color advance)
+    # super_timer: int    (frames remaining in SUPER FORGE)
+    # particles: list[Particle]
+    # texts: list[FloatingText]
+    # shake_frames: int
+    # best_score: int
+    # rng: random.Random
+    # frame: int          (elapsed frames for escalation)
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `_advance_hammer() -> None` — advance hammer_color to next metal on timer expiry.
+- `_strike() -> None` — core action: match/mismatch resolution, combo/temper/heat/score
+  updates, particle spawns, super-mode handling. Uses `self.hammer_color` and
+  `self.billet_color` (set externally), NOT pyxel input.
+- `_quench() -> None` — QUENCH action (only valid when temper >= 1): score bonus,
+  heat dump, combo/temper reset, new billet.
+- `_spawn_billet() -> None` — pick a new random billet color via self.rng.
+- `_update_heat() -> None` — passive heat decay; MELTDOWN check FIRST (heat >= 100 ->
+  game over), then decay. Order: check threshold BEFORE decay (see pitfall).
+- `_cycle_interval() -> int` — hammer cycle interval based on elapsed frame (20f->12f).
+- `_update_particles() -> None` — move particles, decrement life, remove dead.
+- `_update_texts() -> None` — decrement floating text life, remove dead.
+- `_best_score_update() -> None` — set best_score = max(best_score, score).
+
+## Phase Machine
+```
+[TITLE] --(SPACE/CLICK/KEY_RETURN)--> [PLAYING] --(heat>=100 OR timer<=0)--> [GAME_OVER]
+[GAME_OVER] --(SPACE/R/KEY_RETURN)--> reset() -> [PLAYING]
+```
+
+## Screens
+1. TITLE: "FORGE CHAIN" title, "STRIKE: SPACE/CLICK", "QUENCH: Q", "Press SPACE to start".
+2. GAME: anvil with glowing billet, hammer with current color indicator, HUD
+   (SCORE top-left, COMBO, TEMPER bar, HEAT bar right side, TIMER bar top, billet name).
+3. GAME_OVER: "MELTDOWN!" (heat) or "TIME UP!", final score, best score, "Press SPACE".
+
+## Rendering Notes
+- Anvil: gray rectangle near bottom center (y ~180). Billet: colored rounded rect on anvil.
+- Billet glow: as temper rises, draw expanding colored ring/glow (radius grows with temper).
+- Hammer: colored rect top-right labeled with current metal name; cycles color.
+- Heat bar: vertical bar on right, color-coded (green->yellow->red as heat rises).
+- Timer bar: horizontal bar top.
+- In SUPER FORGE, draw rainbow border around screen + "SUPER FORGE!" label.
+
+## Animation / Timing Rules
+- Frame-based. 60fps. hammer cycle interval = max(12, 20 - (frame // 450)).
+- SUPER FORGE duration 300f.
+- Particle lifecycle: spawn with life 10-30, decrement 1/frame, remove at life <= 0.
+
+## Particle System
+- Match strike: 8 spark particles (color = metal color), upward/outward velocity, life ~15.
+- SUPER strike: 20 rainbow particles, life ~25.
+- QUENCH: 16 water particles (color 12 CYAN / 6 LIGHT_BLUE), splash, life ~20.
+- Mismatch: 4 gray smoke particles (color 13), life ~15.
+
+## Input
+- SPACE or CLICK = STRIKE (PLAYING).
+- Q = QUENCH (PLAYING, temper >= 1).
+- SPACE/CLICK/KEY_RETURN = start / restart (TITLE, GAME_OVER).
+- R = restart on GAME_OVER.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp()
+- pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.text()
+- pyxel.frame_count
+- pyxel.mouse_x, pyxel.mouse_y
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset().
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods.
+- Test `_strike()`, `_quench()`, `_update_heat()`, `_advance_hammer()` directly by setting
+  `g.hammer_color`, `g.billet_color`, `g.temper`, `g.combo`, `g.heat` externally.
+- Seed `g.rng = random.Random(42)` AFTER reset() for deterministic `_spawn_billet`.
+
+## Edge Cases
+- QUENCH with temper == 0: must be a no-op (no score, no heat change, no new billet).
+- Mismatch with temper == 0: temper stays 0 (clamped via max(0, temper - 1)).
+- Heat exactly at 100 before _update_heat: must trigger MELTDOWN (check BEFORE decay).
+- SUPER FORGE: mismatch is impossible (any color matches); 3x score applied.
+- SUPER FORGE timer expiry: super_timer decrements, returns to normal matching.
+- Timer reaching 0: game over (time up), not meltdown.
+- Empty particles/texts lists: update methods must not crash.
+
+## Implementation Constraints
+- Single file: prototypes/309_forge_chain/main.py
+- ~400-550 lines
+- Type hints on all methods
+- @dataclass for Particle/FloatingText, Enum for Phase
+- import pyxel directly (NO TYPE_CHECKING guard)
+- import random
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- No external dependencies beyond pyxel
+- if __name__ == "__main__": guard around pyxel.init + Game()
