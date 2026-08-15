@@ -1,0 +1,191 @@
+# 311 — BAKE CHAIN (Bakery / Bread Baking) Design Spec
+
+## Concept
+A bakery where colored dough balls rise on a baking tray. The oven's color auto-cycles.
+Click a dough ball whose color matches the oven to bake it. Dough that has risen longer
+is worth more (up to 3x), but over-proofed dough collapses into mold that spreads to
+neighbor slots and spoils other balls. Same-color consecutive bakes build a COMBO;
+COMBO >= 4 triggers SUPER BAKE (rainbow, any-color match, 3x score, clears all mold).
+
+## "Most Fun Moment" (面白い瞬間)
+「色が合った生地をピークまで待って焼き、同色連続ベイクで虹色のSUPER BAKEを発動させ、トレイ一面のモールドを一掃してスコアが爆発する瞬間」
+
+## Core Mechanic
+1. Dough balls (4 colors) rise continuously in a 6x4 tray of bun slots. Rise increases value.
+2. The oven color auto-cycles every CYCLE frames (20f -> 12f over 60s).
+3. Player CLICKS a slot. If the ball color matches the oven color (or SUPER is active), it bakes:
+   value_mult = min(3, 1 + int(rise*3)); score += 10 * combo * value_mult; combo += 1.
+4. COMBO >= 4 activates SUPER BAKE for 300 frames (rainbow border, any-color match, 3x score, HEAT frozen, mold cleared on activation).
+5. MISMATCH (bake wrong color): HEAT += 15, combo reset, ball is discarded (burnt).
+6. OVER-PROOF: a ball whose rise >= 1.0 collapses -> removed, HEAT += 10, combo reset, and its slot becomes MOLD.
+7. MOLD spreads via CA every MOLD_INTERVAL frames (90f -> 40f) to orthogonal neighbor slots: spoils any dough there (HEAT += 5, removed), occupies empty slots as mold.
+8. Risk/reward: bake early (safe, low mult) vs wait for peak (3x, but risk over-proof collapse + mold spread). Chase same-color chain vs switch.
+
+## Technical Spec
+- Screen: 320x240, Pyxel 2.x, display_scale auto, 60fps.
+- Tray grid: 6 cols x 4 rows = 24 slots. CELL = 36. TRAY_X = 40, TRAY_Y = 64 (slot centers at TRAY_X + col*CELL + CELL//2, TRAY_Y + row*CELL + CELL//2).
+- Phase machine: TITLE, PLAYING, GAME_OVER.
+- Dough colors (4): RED=8, LIME=11, DARK_BLUE=5, YELLOW=10.
+- Oven indicator drawn at top (x=160) as a colored bar/icon showing current oven color.
+- Background: NAVY=1; tray slots drawn as BROWN=4 outlines; mold = GRAY=13 cells; SUPER = rainbow border.
+
+## Data Classes
+```python
+@dataclass
+class Dough:
+    color: int   # 0..3 (index into DOUGH_COLORS)
+    rise: float  # 0.0 .. 1.0
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: int
+    y: int
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, title=...), pyxel.run(update, draw)
+    # reset(): init all state
+    # update(): phase machine dispatch (_update_title, _update_playing, _update_gameover)
+    # draw(): phase machine dispatch (_draw_title, _draw_playing, _draw_gameover)
+
+    # State attributes (ALL pre-init-able for Game.__new__ headless pattern):
+    # phase: Phase
+    # score: int
+    # best_score: int
+    # combo: int
+    # max_combo: int
+    # heat: float
+    # timer: int          # frames remaining (3600 at 60s)
+    # elapsed: int        # frames elapsed
+    # oven_color: int     # 0..3 index
+    # cycle_timer: int
+    # super_timer: int    # 0 = inactive, >0 = SUPER active
+    # grid: list[Dough | None]   # 24 slots
+    # mold: list[bool]           # 24 slots
+    # particles: list[Particle]
+    # floats: list[FloatingText]
+    # shake: int          # screen shake frames remaining
+    # rng: random.Random
+    # spawn_timer: int
+    # mold_timer: int
+```
+
+## Key Methods (Testable — NO pyxel input calls inside)
+- `reset()` — init all state; spawn MIN_BALLS (8) dough balls at random empty slots with rise=0.
+- `_cycle_interval() -> int` — max(12, 20 - elapsed // 120)
+- `_spawn_interval() -> int` — max(25, 60 - elapsed // 90)
+- `_mold_interval() -> int` — max(40, 90 - elapsed // 60)
+- `_rise_rate() -> float` — 0.0035 + (elapsed / 3600.0) * 0.0025  (0.0035 -> 0.006)
+- `_max_balls() -> int` — min(14, 8 + elapsed // 180)
+- `_value_mult(rise: float) -> int` — min(3, 1 + int(rise * 3))
+- `_spawn_ball() -> bool` — spawn one random-color ball (rise=0) at a random EMPTY (non-mold, non-dough) slot; return False if no empty slot.
+- `_advance_rise()` — for each dough slot: rise += _rise_rate(); if rise >= 1.0, collapse it (remove, HEAT += 10, combo = 0, set mold, spawn particles). Return number collapsed.
+- `_update_oven_color()` — decrement cycle_timer; on <=0 reset to _cycle_interval() and oven_color = (oven_color + 1) % 4.
+- `_bake(index: int) -> bool` — resolve a bake at slot index (dough present). MATCH -> apply score/combo/super + remove; MISMATCH -> HEAT+15, combo=0, remove. Return True if matched (for testing).
+- `_activate_super()` — set super_timer = 300, clear all mold, spawn burst particles + floating text.
+- `_spread_mold()` — CA step: for each mold slot, for each orthogonal neighbor that is NOT mold: if dough -> spoil (HEAT+5, remove); if empty -> mold=True. (snapshot semantics: use a copy of current mold set, don't cascade newly-added mold in same pass). Return number of newly spoiled/molded cells.
+- `_update_heat()` — threshold check FIRST (if heat >= 100 -> phase = GAME_OVER, return), then decay: if super inactive, heat = max(0, heat - 0.02).
+- `_update_spawns()` — decrement spawn_timer; on <=0 reset to _spawn_interval(); if dough count < _max_balls(): _spawn_ball().
+- `_update_particles()` / `_update_floats()` — advance life, remove dead.
+- `_count_dough() -> int` — number of non-None dough slots.
+
+## Phase Machine
+```
+TITLE --(SPACE/RETURN/click)--> PLAYING
+PLAYING --(heat>=100 OR timer<=0)--> GAME_OVER
+GAME_OVER --(SPACE/RETURN/click)--> PLAYING (reset)
+```
+
+## Screens
+1. TITLE: "BAKE CHAIN" + "Bakery" subtitle + controls ("CLICK matching dough", "COMBO>=4 = SUPER BAKE", "SPACE to start"). Draw a few decorative dough balls.
+2. GAME (PLAYING): tray of rising dough (circle radius scales with rise), oven color bar at top, HEAT bar (right side, vertical), TIMER bar (top), SCORE (top-left), COMBO (bottom-left), SUPER rainbow border when active, mold as gray cells. Particles + floating text + screen shake.
+3. GAME_OVER: "OVEN FIRE!" or "TIME UP!" reason, final SCORE, BEST, "SPACE to retry".
+
+## Rendering Notes
+- Dough circle: radius = 8 + int(rise * 8) (so 8px -> 16px at full rise), filled with its color; draw a lighter inner dot at high rise to show "almost done".
+- Oven color indicator: 20x14 rect at top-center colored with DOUGH_COLORS[oven_color], label "OVEN".
+- Mold: gray (GRAY=13) filled slot with darker cross.
+- HEAT bar: vertical, right side x=312, height 160, color shifts GREEN->YELLOW->RED as heat rises.
+- TIMER bar: horizontal top, width shrinks with timer.
+- SUPER: rainbow border around screen (cycle through colors each few frames).
+
+## Animation / Timing Rules
+- CYCLE: 20f -> 12f (escalates every 120 frames elapsed).
+- SPAWN: 60f -> 25f (escalates every 90 frames).
+- MOLD: 90f -> 40f (escalates every 60 frames).
+- RISE RATE: 0.0035 -> 0.006 linear over 60s (so 0->1 takes ~4.8s -> ~2.8s).
+- SUPER BAKE: 300 frames; HEAT frozen (no decay, no heat gain on match), any-color match, 3x score, mold cleared on activation.
+
+## Particle System
+- Match bake: 8 particles, color = baked dough color, velocity 0.5-1.5 px/f, life 15-30.
+- SUPER activation: 24 rainbow particles (cycle colors), velocity 1-3, life 30-60.
+- Over-proof collapse: 6 gray particles, velocity 0.3-0.8.
+- Mismatch: 4 red particles.
+- No gravity (particles drift outward).
+
+## Floating Text
+- Match: "+{score_gain}" at slot, WHITE, life 30.
+- COMBO: "COMBO x{n}" at slot, YELLOW, life 40 (on combo >= 2).
+- SUPER: "SUPER BAKE!" center, rainbow, life 60.
+- Mismatch: "WRONG!" RED, life 30.
+- Over-proof: "COLLAPSED" GRAY, life 30.
+
+## Input
+- TITLE: SPACE / KEY_RETURN / mouse click -> start.
+- PLAYING: mouse click on a dough slot -> _bake(slot_index). (Detect which slot from pyxel.mouse_x/mouse_y in the wrapper, NOT inside _bake.)
+- GAME_OVER: SPACE / KEY_RETURN / mouse click -> reset + PLAYING.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp()
+- pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.text()
+- pyxel.frame_count
+- pyxel.mouse_x, pyxel.mouse_y
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset().
+- Never call pyxel.btn/btnp/mouse_x/mouse_y/frame_count inside testable methods.
+- Core logic methods take explicit params; input reading happens only in update() wrappers.
+- Seed RNG: g.rng = random.Random(42) AFTER reset() (since reset() re-seeds unseeded).
+- Define `_make_game()` factory in test file for consistent setup.
+
+## Edge Cases
+- Empty grid (no dough) -> _spawn_ball fills; _bake on empty slot = no-op (return False).
+- All same color -> _bake always matches; combo grows; SUPER triggers at 4.
+- All mold -> no dough to bake; _spawn_ball cannot place (all slots mold) -> returns False.
+- Maximum fill (24 dough) -> no spawn.
+- Rapid double-click same frame -> only one bake per frame (guarded by input edge detect in wrapper).
+- rise exactly at boundary (1/3, 2/3) -> value_mult step thresholds.
+- Heat at exactly 100 -> game over BEFORE decay (threshold check first).
+- timer reaching 0 -> game over.
+
+## Implementation Constraints
+- Single file: prototypes/311_bake_chain/main.py
+- ~500-650 lines.
+- Type hints on all methods; use @dataclass for data, Enum for phases.
+- No external dependencies beyond pyxel.
+- English-only text (Pyxel BDF font lacks CJK glyphs).
+- import pyxel directly at top (no TYPE_CHECKING guard).
+- if __name__ == "__main__": Game() guard at the bottom.

@@ -2469,5 +2469,14 @@
     "status": "Barber/hairdressing color-match COMBO chain prototype complete — 320x240@60fps, 8x10 grid (CELL=24), 4 hair colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10), scissors color auto-cycles (20f->12f), click to snip matching lock (match=combo+1+score=10*combo*mult), COMBO>=4 triggers SUPER SNIP (300f rainbow, any-color match, 3x score, HEAT frozen), mismatch=HEAT+15+combo reset (lock remains), hair grows UP from scalp via snapshot CA (grow_interval 60f->30f, GROW_CHANCE 0.35), OVERGROWN (top row reached) game over, HEAT>=100 (NICKED OUT) or 60s timer (3600f) game over, difficulty escalation (cycle 20f->12f, grow 60f->30f), particle system + floating text + screen shake + scissors cursor, 3 screens (Title/Playing/GameOver), 447 lines main.py, 44 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "310_snip_chain.html",
     "genre": "Barber / Hairdressing"
+  },
+  {
+    "id": "311_bake_chain",
+    "title": "BAKE CHAIN",
+    "idea": "パン屋をテーマに、焼き台の色付きパン生地が時間とともに膨らみ、巡回するオーブン色と一致させてクリックで焼き上げる。膨らんだ生地ほど価値が上がり(最大3倍)、同色連続ベイクでCOMBO(score=10*combo*倍率)が伸び、COMBO>=4でSUPER BAKE(虹色・任意色マッチ・スコア3倍・全モールド一掃)が発動する。焼き過ぎ(過発酵)で生地は崩れてモールドになり、セルオートマトンで隣接スロットへ広がって他の生地を腐らせる。面白い瞬間は「色が合った生地をピークまで待って焼き、同色連続ベイクで虹色SUPER BAKEを発動させ、トレイ一面のモールドを一掃してスコアが爆発する瞬間」。リスクとリターン:早焼き(安全・低倍率)かピーク待ち(3倍・過発酵リスク)か、同色連鎖に固執するか。HEAT>=100(オーブン火災)または60秒でゲームオーバー。game_idea_factory #1(Score 32.35)の「合成圧縮→同色COMBO→SUPER」「連鎖崩壊→過発酵崩壊+モールドCA拡散」をパン焼きに再解釈。コレクション初のパン屋/パン焼きジャンル。",
+    "score": 32.35,
+    "status": "Bakery / bread-baking color-match COMBO chain prototype complete — 320x240@60fps, 6x4 tray grid (CELL=36), 4 dough colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10), oven color auto-cycles (20f->12f), click to bake matching dough (rise multiplier 1x/2x/3x), same-color consecutive bakes = COMBO chain (score=10*combo*mult), COMBO>=4 triggers SUPER BAKE (300f rainbow, any-color match, 3x score, clears all mold), over-proof collapse = HEAT+10 + combo reset + mold CA spread (90f->40f, spoils neighbors +5 HEAT), HEAT risk (mismatch+15, decay -0.02/f frozen in SUPER, cap 100 'OVEN FIRE' game over), 60s timer (3600f) 'TIME UP', difficulty escalation (cycle 20->12f, spawn 60->25f, mold 90->40f, rise rate 0.0035->0.006, max balls 8->14), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 478 lines main.py, 37 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "311_bake_chain.html",
+    "genre": "Bakery / Bread Baking"
   }
 ]
