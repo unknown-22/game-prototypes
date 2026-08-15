@@ -2442,5 +2442,14 @@
     "status": "Origami / paper folding COMBO chain prototype complete — 320x240@60fps, 8x8 grid of colored paper cells (CELL=22), 4 colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10, +ORANGE=9 at higher difficulty), CLICK=fold vertical (right half onto left), SPACE=fold horizontal (bottom half onto top), same-color overlap = FUSION (score=10*combo*mult, synthesis compression), different-color overlap = crease (dead cell) + HEAT+10, COMBO>=4 triggers SUPER FOLD (300f rainbow, any-color fusion, 3x score, HEAT frozen), folding halves the paper (8x8 -> ... -> 1x1), reaching 1x1 = CRANE COMPLETE (+500 live / +100 dead bonus) + new sheet, HEAT risk (mismatch+10, decay -0.02/f frozen in SUPER, cap 100 game over), 60s timer (3600f), difficulty escalation (num_colors 3 -> 4 -> 5 by elapsed time), particle system + floating text + screen shake + fold affordance dashed lines, 3 screens (Title/Playing+CRANE_COMPLETE/GameOver), 448 lines main.py, 26 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "307_origami_chain.html",
     "genre": "Origami / Paper Folding"
+  },
+  {
+    "id": "308_tea_chain",
+    "title": "TEA CHAIN",
+    "idea": "茶道をテーマに、茶人の点てる茶色が自動巡回し、客の注文色に一致した茶を供してCOMBOを伸ばす。点てるほど（steep）スコア倍率が上がる（最大3倍）が、点て過ぎると苦くなりHEAT+12。COMBO>=4でSUPER BREW（虹色・任意色一致・3倍・HEAT凍結）が発動する。面白い瞬間は「注文の色を読み、茶が濃くなるのをギリギリまで待って倍率を稼ぎ、同色連続供茶で虹色SUPER BREWを決める瞬間」。リスクとリターン：安全に早く供すか、steepを溜めて高倍率を狙うか（点て過ぎリスク）、また客が待ち切れず帰るとHEAT+5でコンボリセット。game_idea_factory #1(Score 31.8)の「同じものを連続使用で効果が変質(強化/暴発)→steep倍率/点て過ぎ」「UIの連鎖演出→COMBOチェーン」を茶道に再解釈。コレクション初の茶道ジャンル。",
+    "score": 31.8,
+    "status": "Tea ceremony / COMBO chain prototype complete — 320x240@60fps, 3 guest seats (x=70/160/250,y=70), 4 tea colors (RED=HIBISCUS/LIME=MATCHA/DARK_BLUE=OOLONG/YELLOW=CHAMOMILE), brew color auto-cycles (20f->12f), steep meter +1/f (STEEP_MAX=45, mult=1+steep//15 up to 3x, over-steep=45 BITTER HEAT+12), CLICK/keys 1-3 to serve matching guest, same-color consecutive serves = COMBO chain (score=10*combo*mult), COMBO>=4 = SUPER BREW (300f rainbow, any-color match, 3x score, HEAT frozen), HEAT risk (mismatch+15/over-steep+12/guest-left+5, decay -0.02/f frozen in SUPER, cap 100 game over), 60s timer (3600f), difficulty escalation (spawn 90f->40f, cycle 20f->12f), guest patience (600f, expiry = HEAT+5 + combo reset), particle system + floating text + screen shake, 3 screens (Title/Playing/GameOver), 438 lines main.py, 34 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "308_tea_chain.html",
+    "genre": "Tea Ceremony"
   }
 ]
