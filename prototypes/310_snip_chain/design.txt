@@ -1,0 +1,196 @@
+# 310 — SNIP CHAIN Design Spec
+
+## Concept
+A barber/hairdresser color-match arcade game. A head sits at the bottom of the screen
+with colored hair locks growing UP from the scalp. The player's scissors have a color
+that AUTO-CYCLES (like the recent chain games). CLICK a hair lock to snip it: if the
+lock matches the scissors color, it is cut away and the COMBO chain grows
+(score = 10 * combo). Same-color consecutive snips build COMBO; COMBO >= 4 triggers
+SUPER SNIP (300 frames of rainbow mode: ANY color matches, 3x score, HEAT frozen).
+Mismatching a lock is a "nick": HEAT +15, combo reset. Hair GROWS BACK via a cellular
+automaton (the "board fills up" hook) — if the hair overgrows (reaches the top row)
+the client leaves in shame. First barber/hairdressing genre in the collection.
+
+## "Most Fun Moment" (面白い瞬間)
+「伸び続ける髪を、巡回するハサミの色に合わせて次々と刈り込み、コンボを重ねて
+SUPER SNIPの虹色で一気に刈り上げる瞬間」 — racing the growing hair while building
+a same-color chain, then a rainbow SUPER SNIP clears the whole field at 3x.
+
+## Core Mechanic
+1. Hair locks live on a ROWS x COLS grid (row 0 = top, row ROWS-1 = bottom, sitting on
+   the scalp). 0 = empty, 1-4 = hair color (RED/LIME/DARK_BLUE/YELLOW).
+2. Scissors color AUTO-CYCLES among 1-4 every `cycle_interval` frames (starts 20f,
+   shrinks to 12f as time passes). A color swatch shows the current scissors color.
+3. Player CLICKS a hair lock: `_snip(col, row)` resolves the snip.
+   - MATCH (lock color == scissors color, or SUPER active): remove lock, combo += 1,
+     max_combo updated, score += 10 * combo * (3 if super else 1), spawn match particles
+     + "+N" floating text. If combo reaches 4 and not already super, activate SUPER SNIP.
+   - MISMATCH: HEAT += 15, combo = 0, spawn "WRONG!" text. Lock NOT removed.
+   - EMPTY (no lock at that cell): nothing (or a tiny miss feedback; no penalty).
+4. Growth CA (`_grow_hair`): every `grow_interval` frames (60f -> 30f), for each EMPTY
+   cell that sits ON the scalp (bottom row) OR directly ABOVE an existing lock, it has
+   `grow_chance` (0.35) to sprout a new random-colored (1-4) lock. SNAPSHOT semantics:
+   collect candidates first, then fill — newly grown locks must NOT cascade in the same
+   pass.
+5. Risk/reward: keep chaining the same color for a big combo while the hair keeps
+   growing; a mismatched snip both resets the combo AND raises HEAT. Hair overgrowing
+   the top row ends the game, so you cannot safely camp on one color forever.
+
+## Failure Conditions (3)
+- HEAT >= 100 (too many nicks) -> GAME_OVER, reason "NICKED OUT"
+- Any lock in row 0 (overgrown) -> GAME_OVER, reason "OVERGROWN"
+- 60s timer (3600f) -> GAME_OVER, reason "TIME UP"
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x, 60fps assumed
+- Grid: ROWS=8, COLS=10, CELL=24. Grid area = 240x192 px, offset_x=(320-240)//2=40,
+  offset_y=8. Scalp/head drawn in the bottom ~40px (y=200..240).
+- Phase machine: TITLE, PLAYING, GAME_OVER (3 screens)
+- Hair colors (internal 1-4 -> pyxel int): 1=RED(8), 2=LIME(11), 3=DARK_BLUE(5), 4=YELLOW(10)
+
+## Data Classes
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    color: int
+    life: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, title=...), pyxel.run(update, draw)
+    # reset(): init all state below, then seed initial hair
+    # update(): phase dispatch -> _update_playing()
+    # draw(): phase dispatch
+
+    # State (ALL must be pre-inited for Game.__new__ headless pattern):
+    # phase: Phase
+    # grid: list[list[int]]  # ROWS x COLS, 0 empty, 1-4 color
+    # scissors_color: int    # 1-4
+    # color_timer: int       # frames until next cycle
+    # cycle_interval: int    # 20 -> 12
+    # combo: int
+    # max_combo: int
+    # score: int
+    # best_score: int
+    # heat: float
+    # timer: int             # 3600
+    # elapsed: int           # frames since PLAYING start (for difficulty)
+    # grow_timer: int
+    # super_mode: bool
+    # super_timer: int
+    # particles: list[Particle]
+    # floating_texts: list[FloatingText]
+    # shake_frames: int
+    # game_over_reason: str
+    # rng: random.Random
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `reset()` -> None — init all state, clear grid, seed a few starting locks on bottom row.
+- `_cycle_interval() -> int` — returns 20 - (elapsed // 180) clamped to [12, 20].
+- `_update_color_cycle()` -> None — decrement color_timer; on <=0 advance scissors_color
+  (1->2->3->4->1) and reset color_timer = cycle_interval.
+- `_grow_hair()` -> None — snapshot CA growth (see core mechanic step 4).
+- `_snip(col: int, row: int) -> str` — returns "MATCH" / "MISMATCH" / "EMPTY". Core logic.
+- `_check_overgrown() -> bool` — True if any grid[0][col] != 0.
+- `_update_heat()` -> None — CHECK threshold FIRST (if heat >= 100: game over, return),
+  THEN decay (if not super_mode: heat = max(0.0, heat - 0.02)).
+- `_update_timer()` -> None — timer -= 1; if <= 0 game over (TIME UP).
+- `_update_super()` -> None — if super_mode: super_timer -= 1; if <=0 super_mode=False.
+- `_spawn_match_particles(col, row, color)` / `_spawn_mismatch_particles(col, row)` -> None
+- `_add_floating_text(x, y, text, color)` -> None
+- `_update_particles()` / `_update_floating_texts()` -> None (life decrement + removal)
+
+## Phase Machine
+```
+TITLE --(KEY_RETURN or SPACE)--> PLAYING --(auto on loss)--> GAME_OVER --(KEY_RETURN or SPACE)--> PLAYING(reset)
+```
+
+## Screens
+1. TITLE: "SNIP CHAIN" title, one-line how-to (CLICK matching-color hair / don't nick /
+   don't let hair overgrow), best score, "PRESS ENTER". Scissors color legend.
+2. PLAYING: head/scalp at bottom (PEACH), hair grid (colored rects), scissors color swatch
+   (top-left, current color), HUD: SCORE (top-left), COMBO (below score), HEAT bar (right
+   side vertical), TIMER bar (top). SUPER mode draws a rainbow border. Mouse crosshair
+   drawn as small scissors glyph.
+3. GAME_OVER: "GAME OVER" + reason string + final score + best score + "PRESS ENTER".
+
+## Rendering Notes
+- Hair lock: filled rect CELL x CELL with 1px gap (draw CELL-2 sized rect centered).
+- Top-row warning: if row 1 has any lock, flash its outline WHITE to telegraph overgrown.
+- Head: rect + ellipse for scalp/face at bottom, PEACH(15). Scissors: GRAY(13)/WHITE(7).
+- HEAT bar: vertical bar on right, RED(8) fill when heat high (>60 ORANGE(9) mid, GREEN(3) low).
+- Screen shake on mismatch (shake_frames = 6).
+
+## Animation / Timing Rules
+- cycle_interval: 20 -> 12 (linear via _cycle_interval over elapsed).
+- grow_interval: 60 -> 30 (linear over elapsed). grow_chance = 0.35 (constant).
+- SUPER SNIP: super_timer = 300 on activation, any-color match, 3x score, HEAT frozen.
+- Floating text: life starts 30, y drifts up 0.5/frame, removed when life <= 0.
+
+## Particle System
+- Match: 8 particles, color = lock color, velocity random -1.5..1.5, life 15-25, no gravity.
+- SUPER match: 20 particles, rainbow (cycle color), life 15-30.
+- Mismatch: 4 particles, color WHITE(7), life 10-15.
+- Particle update: x+=vx, y+=vy, life-=1, remove when life<=0.
+
+## Input
+- Mouse click (MOUSE_BUTTON_LEFT) in PLAYING -> map (mouse_x - offset_x)//CELL and
+  (mouse_y - offset_y)//CELL to (col,row); call _snip if within grid bounds.
+- KEY_RETURN or KEY_SPACE: advance TITLE -> PLAYING, and GAME_OVER -> restart.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.rect(), pyxel.text(), pyxel.frame_count
+- pyxel.mouse_x, pyxel.mouse_y
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes (see state list) before calling reset().
+- Never call pyxel.btn/btnp/mouse_x/mouse_y inside testable methods.
+- `_snip`, `_grow_hair`, `_update_heat`, `_update_timer`, `_check_overgrown`,
+  `_cycle_interval` are the testable core — call them directly with state manipulation.
+- Define `_make_game()` factory in the test file: Game.__new__, pre-init, reset(),
+  then set g.rng = random.Random(42) AFTER reset (reset may overwrite rng).
+
+## Edge Cases
+- Snip an empty cell -> "EMPTY", no combo/heat change.
+- Snip with SUPER active -> always MATCH (any color), 3x score, combo still increments.
+- SUPER activation: the 4th consecutive match scores 1x and THEN activates super; super
+  affects the 5th and later snips. (Do not apply 3x to the activating snip.)
+- combo reset on mismatch must also happen in the MISMATCH branch only.
+- Heat threshold check runs BEFORE decay (heat exactly 100 triggers game over).
+- Growth must be snapshot-based (no same-pass cascade).
+- max_combo only updates on the MATCH branch.
+
+## Implementation Constraints
+- Single file: prototypes/310_snip_chain/main.py
+- ~500-650 lines
+- Type hints on all methods; @dataclass for data; Enum for Phase
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
+- grid is list[list[int]], indexed grid[row][col] (row 0 = top)

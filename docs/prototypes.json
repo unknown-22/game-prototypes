@@ -2460,5 +2460,14 @@
     "status": "Blacksmithing / sword forging COMBO chain prototype complete — 320x240@60fps, 4 metal colors (IRON=RED=8/COPPER=LIME=11/STEEL=DARK_BLUE=5/GOLD=YELLOW=10), single billet on anvil, hammer color auto-cycles (20f->12f), SPACE/CLICK strikes (match=temper+1+combo+1+score=10*combo*(1+temper//3), mismatch=HEAT+15+combo reset+temper-1), COMBO>=4 triggers SUPER FORGE (300f rainbow, any-color match, 3x score, HEAT frozen), QUENCH (Q) at temper>=1 banks score=temper*100+combo*20 + HEAT-30 + resets combo/temper/new billet, HEAT risk (mismatch+15, decay -0.03/f frozen in SUPER, cap 100 MELTDOWN game over), 60s timer (3600f), difficulty escalation (cycle 20f->12f), particle system (8 match/20 super/16 quench/4 mismatch) + floating text + screen shake + temper glow, 3 screens (Title/Playing/GameOver), 403 lines main.py, 38 headless tests, ruff+ty OK, OpenCode CLI first-try success",
     "href": "309_forge_chain.html",
     "genre": "Blacksmithing / Sword Forging"
+  },
+  {
+    "id": "310_snip_chain",
+    "title": "SNIP CHAIN",
+    "idea": "床屋・理容師をテーマに、伸び続ける色付きの髪を巡回するハサミ色と一致させて刈り込みCOMBOを伸ばす。同色連続でCOMBO(score=10*combo)が伸び、COMBO>=4でSUPER SNIP(虹色・任意色一致・スコア3倍・HEAT凍結)が発動。色違いはHEAT+15かつCOMBOリセット。髪はセルオートマトン(スナップショット方式)で頭皮から上へ生え続け、頂上まで伸びるとOVERGROWNでゲームオーバー。面白い瞬間は「伸び続ける髪を、巡回するハサミ色に合わせて次々と刈り込み、SUPER SNIPの虹色で一気に刈り上げる瞬間」。リスクとリターン:同色連鎖を追う(欲張り)か、色巡回を待つ間に髪が伸びる(放置)か。HEAT>=100または60秒でも終了。game_idea_factory #1(Score 32.75)の「合成圧縮→同色COMBO→SUPER SNIP」「CA盤面充填→髪の成長CA」を理容に再解釈。コレクション初の理容/散髪ジャンル。",
+    "score": 32.75,
+    "status": "Barber/hairdressing color-match COMBO chain prototype complete — 320x240@60fps, 8x10 grid (CELL=24), 4 hair colors (RED=8/LIME=11/DARK_BLUE=5/YELLOW=10), scissors color auto-cycles (20f->12f), click to snip matching lock (match=combo+1+score=10*combo*mult), COMBO>=4 triggers SUPER SNIP (300f rainbow, any-color match, 3x score, HEAT frozen), mismatch=HEAT+15+combo reset (lock remains), hair grows UP from scalp via snapshot CA (grow_interval 60f->30f, GROW_CHANCE 0.35), OVERGROWN (top row reached) game over, HEAT>=100 (NICKED OUT) or 60s timer (3600f) game over, difficulty escalation (cycle 20f->12f, grow 60f->30f), particle system + floating text + screen shake + scissors cursor, 3 screens (Title/Playing/GameOver), 447 lines main.py, 44 headless tests, ruff+ty OK, OpenCode CLI first-try success",
+    "href": "310_snip_chain.html",
+    "genre": "Barber / Hairdressing"
   }
 ]
