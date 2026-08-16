@@ -1,0 +1,156 @@
+# SWISH CHAIN — Color-Match Basketball Shootout (Prototype 314)
+
+## One-line "fun moment"
+Sinking a clean swish into a same-colored hoop from distance (far hoop = 3x) feels great,
+and chaining consecutive swishes into a rainbow SUPER SHOT is the payoff.
+
+## Genre & rationale
+Arcade basketball shootout / free-throw. FIRST basketball genre in the prototype collection
+(313 prior prototypes: no basketball). Reinterpreted from the top-scored generated idea
+(hacking deckbuilder, "log/replay as asset" + "numbers/icons focused", score 31.65):
+  - "log/replay as asset"        -> ball arc trail (shot path persists briefly)
+  - "chain collapse/expansion UI"-> COMBO chain -> SUPER SHOT
+  - "synthesis compression"      -> same-color consecutive swishes build COMBO
+
+## Engine & screen
+- Pyxel 2.x, 320x240, 60 FPS frame-based timing. Single file: prototypes/314_swish_chain/main.py
+- `import pyxel` at the very top (NO TYPE_CHECKING guard).
+- Use RAW int color values (never pyxel.COLOR_*).
+
+## Color constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+BALL_COLORS = (8, 11, 5, 10)  # RED, LIME, DARK_BLUE, YELLOW  (4 hoop/ball colors)
+
+## Phases (enum Phase)
+TITLE, PLAYING, GAME_OVER
+
+## Dataclasses
+- Hoop: x: float, y: float, radius: int, color: int, multiplier: int
+- Ball: x: float, y: float, vx: float, vy: float, active: bool, color: int
+- Particle: x, y, vx, vy, life, color
+- FloatingText: x, y, text, life, color
+
+## Layout
+- 3 hoops, fixed base positions, y=70:
+    hoop[0] x=80  radius=18 mult=1 (near)
+    hoop[1] x=160 radius=18 mult=2 (mid)
+    hoop[2] x=240 radius=18 mult=3 (far)   <- risk/reward via distance
+  Hoops slowly oscillate horizontally: drawn/effective x = base_x + sin(elapsed*freq + phase)*amp,
+  amp grows 0 -> 8 with elapsed. Keep logic simple: store base_x in Hoop.x, compute drift in update.
+- Ball launch point (160, 210). Ball inactive until launched. One ball only.
+- Player color indicator drawn near the ball / top-left.
+
+## Core mechanic
+- player_color auto-cycles every `cycle_interval` frames.
+  cycle_interval = max(12, 20 - elapsed // 120)   (elapsed = 3600 - game_timer)
+  On cycle, player_color = next color in BALL_COLORS (index wraps).
+
+- Aiming (slingshot): when ball is inactive, pressing mouse near the ball (within 40px) starts aim.
+  While holding, record mouse pos; on release compute:
+    vx = (press_x - release_x) * 0.10
+    vy = (press_y - release_y) * 0.10
+    clamp vx to [-6.5, 6.5], clamp vy to [-13.0, -3.0]  (negative = upward)
+    if abs(vx) < 0.4 and abs(vy) < 0.8: cancel (no launch)
+  Launch via `_launch(vx, vy)`: sets ball.active=True, ball.vx=vx, ball.vy=vy, ball.color=player_color,
+  ball.x/y = launch point.
+  NOTE: the drag math lives in update(); `_launch(vx, vy)` is the pure testable seam.
+
+- Physics: GRAVITY = 0.35. Each frame: ball.vy += GRAVITY; ball.x += vx; ball.y += vy.
+  No floor collision (ball is meant to fall off-screen on airball).
+
+- Shot resolution (in _update_ball): for each hoop, when ball is DESCENDING (vy > 0) and the ball
+  crosses the hoop's rim plane (previous_y <= hoop.y < current_y, using effective drifted x):
+    dx = abs(ball.x - hoop_effective_x)
+    if dx <= hoop.radius - 2  ->  RIM SHOT:
+        if hoop.color == ball.color OR super_active -> SWISH
+        else -> CLANK
+    elif dx <= hoop.radius + 4 -> RIM OUT (ball deflects, no score, mild heat)
+    else -> continue (airball keeps falling)
+  Resolve only ONE hoop per frame (first hit wins).
+
+  SWISH: combo += 1 FIRST, then score += 10 * combo * hoop.multiplier * (3 if super_active else 1).
+         update max_combo = max(max_combo, combo). Respawn that hoop's color (new random color,
+         may equal current). Spawn particles (12 normal / 24 super) + floating text "+score"/"SWISH!".
+         If combo reaches SUPER_THRESHOLD (4): activate super (super_timer = SUPER_DURATION = 300).
+         Ball becomes inactive (respawn after delay).
+  CLANK: heat += 8, combo = 0. Ball deflects (vy = -vy * 0.4, vx = vx * 0.5) — ball keeps flying.
+         Floating text "CLANK!". (No hoop color change.)
+  RIM_OUT: heat += 5, ball deflects (vy = -vy*0.4, vx = -vx*0.4). Combo NOT reset. Text "RIM!".
+
+- AIRBALL: if ball.y > SCREEN_H + 8 OR ball.x < -20 OR ball.x > SCREEN_W + 20 -> heat += 15,
+  combo = 0, ball inactive (respawn after delay), text "AIRBALL".
+  After a shot ends, ball respawns at launch point after `respawn_delay` frames
+  (respawn_delay = max(15, 30 - elapsed // 150)).
+
+## SUPER SHOT
+- When combo == SUPER_THRESHOLD (4): super_timer = 300 (SUPER_DURATION), super_active = True.
+- While super_timer > 0: super_active True; each frame super_timer -= 1.
+  During super: any-color swish counts, 3x score, HEAT frozen (no decay AND no heat gain from
+  clank/airball/rim_out? — NO, heat gain still applies on miss; only the passive DECAY is frozen).
+  Draw a rainbow border + ball glow.
+- When super_timer reaches 0: super_active = False, combo = 0.
+
+## HEAT risk
+- heat starts 0, clamped [0, 100].
+- airball +15, clank +8, rim_out +5.
+- passive decay -0.02/frame, EXCEPT while super_active (frozen).
+- CRITICAL ORDER: check `if heat >= 100: phase = GAME_OVER` BEFORE applying decay (never let decay
+  drop heat below threshold before the check). heat decay is applied with heat = max(0.0, heat - 0.02).
+- heat >= 100 -> GAME_OVER (reason "BENCHED").
+
+## Timer & difficulty
+- game_timer starts 3600 (60s). Each PLAYING frame game_timer -= 1. At 0 -> GAME_OVER ("TIME UP").
+- elapsed = 3600 - game_timer.
+- cycle_interval = max(12, 20 - elapsed // 120)
+- respawn_delay   = max(15, 30 - elapsed // 150)
+- hoop drift amp  = min(8, elapsed // 300)
+- These recomputed each frame in _update_difficulty().
+
+## State init (reset)
+- reset() initializes ALL state: phase=PLAYING, score=0, combo=0, max_combo=0, heat=0.0,
+  game_timer=3600, player_color=BALL_COLORS[0], player_color_index=0, cycle_timer=cycle_interval,
+  super_timer=0, super_active=False, ball=Ball(inactive at launch), hoops=list of 3 with random
+  colors, particles=[], floating_texts=[], respawn_timer=0, best_score (load/set 0),
+  self.rng = random.Random(42).
+- __init__ calls pyxel.init(320,240,...) then reset() then pyxel.run(update, draw).
+  (Tests use Game.__new__(Game), pre-init all attributes, then call reset().)
+
+## Rendering (draw)
+- Title: "SWISH CHAIN" + "DRAG TO AIM  RELEASE TO SHOOT" + "MATCH COLOR = COMBO" +
+  "PRESS ENTER TO START" (ASCII only).
+- Game: sky background (NAVY), court line, 3 hoops (rim circle outline + net triangle),
+  ball (filled circle, ball color; while inactive at launch point show player_color),
+  player color swatch + "YOU" label, score top-left, combo counter, HEAT bar (horizontal, top-right,
+  color green->yellow->red as it rises), TIMER bar (top-center), floating texts, particles,
+  aim arrow while dragging (line from ball toward aim direction), ball arc trail (last ~20 positions
+  as fading dots = "log/replay" hook), super mode: rainbow border + glow.
+- Game over: "GAME OVER", reason, final score, best score, "PRESS R TO RETRY".
+- Keyboard: TITLE: ENTER/RETURN or SPACE -> reset() to start. GAME_OVER: R -> reset().
+  (Use pyxel.KEY_RETURN, pyxel.KEY_R, pyxel.KEY_SPACE.)
+
+## Testability requirements (CRITICAL)
+- Logic methods must NEVER call pyxel.btn/btnp/mouse_x/mouse_y/frame_count/play/camera.
+- Pure methods (tests call these directly):
+  - reset()
+  - _launch(vx, vy)
+  - _update_physics()          # gravity + integrate position
+  - _update_ball()             # physics + shot resolution + airball + respawn timer
+  - _resolve_shot(hoop, eff_x) # returns str: "swish"|"clank"|"rim_out"|None; mutates score/combo/heat
+  - _cycle_player_color()
+  - _update_heat()             # threshold-before-decay
+  - _update_difficulty()       # recompute intervals from elapsed
+- Game.__new__(Game) headless pattern: tests pre-init every attribute reset() touches, then reset().
+- Constants as class-level ints/floats (SCREEN_W, SCREEN_H, GRAVITY, SUPER_THRESHOLD, SUPER_DURATION,
+  MAX_HEAT, etc.) so tests can import them without pyxel.
+
+## Mandatory Pyxel API (respect these exactly)
+- pyxel.tri (NOT triangle), pyxel.KEY_RETURN (NOT KEY_ENTER),
+  pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON), pyxel.mouse_wheel.
+- No pyxel.COLOR_* constants. Raw ints only.
+- English/ASCII text only (no CJK, no emoji). Text 4px/char.
+- Do NOT read or explore existing repo files. Write main.py immediately.
+
+## Deliverable
+Write ONLY the file `prototypes/314_swish_chain/main.py` (complete, runnable, ~450-600 lines).
+Respond with exactly "DONE" when finished.
