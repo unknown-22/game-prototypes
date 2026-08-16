@@ -1,0 +1,148 @@
+# Design Spec: 315_glow_chain — "GLOW CHAIN" (Glassblowing)
+
+## Genre
+Glassblowing / Glassmaking — FIRST in the collection. (Do NOT confuse with 288_glass_chain,
+which is stained glass tile-laying.)
+
+## Theme
+You are a glassblower shaping molten glass ("the gather") into customer-ordered vessels. The
+molten glass GLOWS with a color that reflects its TEMPERATURE. You heat it in the furnace and
+blow it the exact moment its color matches the customer's order.
+
+## 体験仮説 (experience hypothesis)
+"炎で温度を操り、注文の色と一致した瞬間に吹いて器を完成させる。勢いよく再加熱して素早く仕上げるか、
+慎重に冷まして安全に進めるかの駆け引きで、コンボが一気に伸びる気持ちよさと、オーバーヒートでガラスが
+溶け落ちるヒヤリを味わう。"
+
+## メカニクス仮説 (mechanics hypothesis)
+- Mechanics: temperature DRIFTS DOWN (cooling) automatically; holding R-key REHEAT drives it UP;
+  SPACE BLOW completes the current order only if the glass temperature band matches the order color.
+- Dynamics: aggressive reheating = faster order completion + longer combos, but risks OVERHEAT
+  (temp >= 100 while reheating → SAG); neglecting the glass risks FREEZE (temp <= 0 → CRACK).
+  The player constantly balances push-vs-wait.
+- Aesthetics: the satisfying "color snaps to match → blow → vessel pops" + combo explosion.
+
+## Core loop (one play = 60 seconds)
+1. Read the current order color (target temperature band).
+2. Hold R to reheat (or release to let it cool), watching the glass color climb
+   COLD(DARK_BLUE) → COOL(GREEN) → WARM(YELLOW) → HOT(RED).
+3. SPACE to blow when the glass color == order color → success: COMBO + score, glass resets,
+   next order appears.
+4. Mismatch / overheat / freeze → HEAT penalty + combo reset + glass resets (order stays).
+5. COMBO >= 4 → SUPER BLOW (300f rainbow: any order matches, 3x score, HEAT frozen, no cooling).
+6. HEAT >= 100 or 60s timer → game over.
+
+## Constants
+- SCREEN_W = 320, SCREEN_H = 240, FPS = 60.
+- 4 temperature bands (cold→hot), each maps to a color:
+  - BAND_COLORS = [5, 3, 10, 8]   # DARK_BLUE(COLD) GREEN(COOL) YELLOW(WARM) RED(HOT)
+  - BAND_NAMES = ["COLD", "COOL", "WARM", "HOT"]
+- TEMP_MIN = 0.0, TEMP_MAX = 100.0.
+- COOL_RATE: 0.25 → 0.55 over 60s (escalation). `_cool_rate() = 0.25 + 0.30 * (self.frame / 3600)`.
+- HEAT_RATE = 0.8 per frame while reheating.
+- START_TEMP_MIN = 15, START_TEMP_MAX = 35 (new gather after blow/penalty).
+- HEAT: mismatch +15, overheat +20, freeze +15, passive decay -0.02/f (frozen in SUPER), cap 100.
+- COMBO >= 4 → SUPER BLOW, SUPER_DURATION = 300 frames.
+- Score per vessel = 10 * combo * mult (mult = 1 normal, 3 in super); combo increments FIRST,
+  so the first blow scores 10, second 20, third 30, ...
+- TIMER = 3600 frames (60s). Difficulty escalation via _cool_rate() only.
+
+## Phase machine (enum Phase)
+- TITLE → PLAYING (press SPACE or RETURN or mouse click)
+- PLAYING → GAME_OVER (HEAT >= 100 or timer <= 0)
+- GAME_OVER → TITLE (press SPACE or RETURN or click) — then reset() and go PLAYING.
+
+## Instance attributes (all assigned in reset() unless noted)
+- self.phase: Phase
+- self.frame: int (elapsed frames in PLAYING)
+- self.temp: float
+- self.order_color: int (one of BAND_COLORS)
+- self.score: int
+- self.combo: int
+- self.max_combo: int
+- self.heat: float
+- self.super_timer: int (0 = not active)
+- self.reheating: bool
+- self.vessels_made: int
+- self.particles: list[Particle]
+- self.floats: list[FloatingText]
+- self.shake_frames: int
+- self._rng: random.Random (seedable)
+- self.best_score: int  (set in __init__ only; reset() must NOT overwrite it)
+
+## Dataclasses
+- Particle: x: float, y: float, vx: float, vy: float, life: int, color: int, size: int
+- FloatingText: x: float, y: float, text: str, life: int, color: int
+
+## Testable methods (NO pyxel.* calls inside any of these — pure logic only)
+- @staticmethod band_index(temp: float) -> int:  `min(3, int(temp // 25))`
+- @staticmethod band_color(temp: float) -> int:  `BAND_COLORS[band_index(temp)]`
+- reset(): init all state listed above (except best_score). MUST NOT call pyxel.init/pyxel.run.
+- _cool_rate() -> float: `0.25 + 0.30 * (self.frame / 3600)`
+- _update_temp(reheating: bool): if reheating and temp >= 100 → overheat (heat += 20, combo = 0,
+  temp = new START_TEMP, spawn "SAG" floating text, particles, shake); elif reheating →
+  temp = min(100, temp + HEAT_RATE); else temp -= cool_rate; if temp <= 0 → freeze (heat += 15,
+  combo = 0, temp = new START_TEMP, "CRACK" text). NOTE: do the >= 100 check BEFORE adding heat;
+  check temp <= 0 AFTER subtracting (decay/update ordering is fine here because overheat is a
+  reheating-only condition and freeze is a cooling-only condition — they never race).
+- _blow() -> bool: if super_timer > 0 or band_color(temp) == order_color → success (combo += 1,
+  score += 10 * combo * (3 if super else 1), max_combo = max(max_combo, combo), vessels_made += 1,
+  temp = new START_TEMP, new random order_color, spawn match particles + "+score" text, start
+  SUPER if combo >= 4 and not already super) return True; else → mismatch (heat += 15, combo = 0,
+  temp = new START_TEMP, "WRONG!" text) return False.
+- _update_heat(): if heat >= 100 → phase = GAME_OVER, update best_score, return (check FIRST —
+  decay-before-threshold pitfall!); else heat = max(0, heat - (0 if super active else 0.02)).
+- _update_super(): if super_timer > 0: super_timer -= 1.
+- _update_particles(): move (x += vx, y += vy, vy += 0.05 gravity), life -= 1, drop life <= 0.
+- _update_floats(): y -= 0.5, life -= 1, drop life <= 0.
+- _advance_order(): order_color = random choice from BAND_COLORS.
+- _start_super(): super_timer = SUPER_DURATION.
+
+## Input handling (ONLY in update(), never inside the testable methods above)
+- update(): dispatch on phase.
+  - TITLE: if pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.KEY_RETURN) or
+    pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): reset(); phase = PLAYING.
+  - PLAYING: self.reheating = pyxel.btn(pyxel.KEY_R); if pyxel.btnp(pyxel.KEY_SPACE): self._blow();
+    then self._update_temp(self.reheating); self._update_super(); self._update_heat();
+    self._update_particles(); self._update_floats(); self.frame += 1;
+    if self.frame >= 3600: phase = GAME_OVER, update best_score.
+  - GAME_OVER: if pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.KEY_RETURN) or
+    pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): phase = TITLE.
+
+## Pyxel API (fixed names — do NOT use any alternative spelling)
+- pyxel.tri (NOT triangle)
+- pyxel.KEY_RETURN (NOT KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.btn, pyxel.btnp, pyxel.mouse_x, pyxel.mouse_y
+- pyxel.circ, pyxel.circb, pyxel.rect, pyxel.rectb, pyxel.text, pyxel.line, pyxel.pset, pyxel.cls
+- AVOID pyxel.play() entirely (keeps headless tests clean; use visual/particle feedback only).
+- Colors (raw ints): BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+  RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Three screens (English-only text; Pyxel BDF font has NO CJK glyphs)
+1. TITLE: "GLOW CHAIN" big title, "GLASSBLOWING" subtitle, controls:
+   "R = REHEAT  SPACE = BLOW", "MATCH THE ORDER COLOR", "PRESS SPACE TO START".
+2. PLAYING:
+   - Glass gather: circle at (160, 150), radius = 10 + temp * 0.3, filled with band_color(temp),
+     a white specular dot, blowpipe line extending down.
+   - Furnace on the right side (x ~ 290): flame (orange/yellow) that intensifies while reheating,
+     emitting flame particles upward.
+   - Order display top-center: "ORDER" label + a small vessel (trapezoid via pyxel.tri/rect)
+     filled with order_color.
+   - HUD: SCORE (top-left), COMBO (below), HEAT bar (horizontal, color-coded green→yellow→red),
+     TIMER bar (top).
+   - SUPER: rainbow border (cycle all 15 colors each frame) + "SUPER BLOW!" text.
+   - Floating text for +score / COMBO / SAG! / CRACK! / WRONG!.
+3. GAME_OVER: "GAME OVER", "SCORE", best score, "PRESS SPACE TO RETRY".
+
+## Headless test requirements (for test_imports.py, written AFTER reading main.py)
+- Use Game.__new__(Game) to bypass __init__ (which calls pyxel.init/pyxel.run).
+- Pre-init ALL instance attrs reset() touches, then call g.reset().
+- Seed g._rng = random.Random(42) AFTER reset() (reset may overwrite _rng).
+- Call _update_temp(reheating=True/False), _blow(), _update_heat(), _update_super() directly —
+  NEVER call update() or anything touching pyxel.btn/btnp/mouse_x/frame_count.
+
+## Constraints
+- Single file main.py, ~450-550 lines, Python 3.12, full type hints, dataclasses for entities.
+- English-only text. 320x240 resolution. `import pyxel` at top (NO TYPE_CHECKING guard).
+- ruff and ty must pass (ty is pyright-based).
