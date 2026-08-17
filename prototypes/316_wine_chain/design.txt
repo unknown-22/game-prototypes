@@ -1,0 +1,308 @@
+# WINE CHAIN — Grape Crush & Wine Fermentation (Pyxel Prototype)
+
+**Prototype number:** 316
+**Directory:** `prototypes/316_wine_chain/`
+**Output file:** `prototypes/316_wine_chain/main.py` (SINGLE FILE, complete)
+
+## Genre & Theme
+First **winemaking / fermentation** genre in the collection. The player runs a grape
+press: crush grapes of the matching color, fill the fermentation tank, then BOTTLE the
+wine to cash out a big score.
+
+## THE MOST FUN MOMENT (one sentence)
+「発酵タンクをギリギリまで満たしてコンボを伸ばし、溢れる寸前で瓶詰め(放電)して
+一気に大得点を爆発させる瞬間が面白い」
+
+## Core Loop (per action, ~1 second)
+1. The **crusher color** auto-cycles through 4 colors (RED → LIME → DARK_BLUE → YELLOW).
+2. Player CLICKS a grape whose color matches the crusher color.
+3. Match → +1 juice into the tank, +1 combo, score += 10*combo; the grape respawns later.
+4. Mismatch → HEAT+15, combo reset (grape stays).
+5. When the tank is FULL (6 juice), further matches cause OVERFLOW (penalty).
+6. Player presses **B** to BOTTLE: bank `juice × combo × 10` score, empty tank, reset combo.
+
+## RISK / REWARD
+- **Greedy**: keep crushing matching grapes to raise combo and fill the tank (max juice 6),
+  bottle at the last moment for `6 × 6 × 10 = 360` points.
+- **Safe**: bottle early (low juice × low combo = small payout).
+- **Overflow risk**: crush while tank is full → OVERFLOW (HEAT+20, combo reset, juice stays 6,
+  grape wasted). The auto-cycling color and clicking rhythm make over-crushing a real hazard.
+- **Bottle cooldown**: after bottling, a 45-frame cooldown during which crushing is disabled
+  (the crusher keeps cycling) — this is the "cooldown" resource from the source idea.
+
+## Source Idea (game_idea_factory #1, Score 31.95)
+Power-plant overload/discharge deckbuilder. Reinterpreted hooks:
+- "combo + cooldown resources" → TANK CAPACITY (finite, forces periodic BOTTLE discharge) + bottle cooldown
+- "effect multiplies and propagates across the whole board when chain condition met" → SUPER FERMENT yeast bloom (auto-crush bonus)
+- "one color per turn" → crusher color constraint (must match crusher color)
+
+---
+
+## TECHNICAL CONSTRAINTS (MUST FOLLOW EXACTLY)
+
+- **Python 3.12**, Pyxel 2.x, single file `main.py`, resolution **320×240** (display_scale 3 optional).
+- **NO CJK text anywhere** — all strings English (titles, labels, messages). Check every draw string.
+- **NO emoji / special characters.**
+- Use `import pyxel` directly at the top (NO `TYPE_CHECKING` guard).
+- Type hints everywhere. Use `@dataclass` (NOT on NamedTuple) for entity dataclasses.
+- Use `enum.Enum` for `Phase`.
+- Use `random.Random` instance (`self._rng = random.Random()`) for ALL randomness so tests can seed it.
+
+### Pyxel API — use these EXACT names (ty checker will reject alternatives)
+- Colors as **raw int constants** (do NOT use `pyxel.COLOR_*` in game-logic constants):
+  `BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15`
+- `pyxel.tri` (NOT `pyxel.triangle`), `pyxel.KEY_RETURN` (NOT `pyxel.KEY_ENTER`),
+  `pyxel.MOUSE_BUTTON_LEFT` (NOT `MOUSE_LEFT_BUTTON`), `pyxel.mouse_wheel` (for scroll),
+  `pyxel.mouse_x`, `pyxel.mouse_y`, `pyxel.btnp`, `pyxel.btn`, `pyxel.frame_count`,
+  `pyxel.text`, `pyxel.rect`, `pyxel.rectb`, `pyxel.circ`, `pyxel.circb`, `pyxel.line`,
+  `pyxel.pset`, `pyxel.blt`, `pyxel.play`, `pyxel.stop`, `pyxel.camera`.
+
+### Headless-testability (MUST)
+- `Game.__init__` calls `pyxel.init` + `pyxel.run(update, draw)` ONLY in the
+  `if __name__ == "__main__":` guard at the bottom. The `Game` class must be importable
+  WITHOUT triggering `pyxel.init`/`pyxel.run`.
+- Testable logic methods MUST NOT read `pyxel.btn/btnp/mouse_x/mouse_y/frame_count`.
+  Instead: `update()`/input-handler methods read pyxel input and delegate to pure methods
+  like `_handle_crush(index)`, `_bottle()`, `_super_bloom()`, `_update_heat()`,
+  `_update_timer()`, `_spawn_grape(index)`.
+- Provide `_init_state()` (state init, called by `__init__` AND callable directly in tests
+  after `Game.__new__(Game)`). Pre-init pattern: tests do `g = Game.__new__(Game)`,
+  assign every attribute `_init_state()` touches (see below), then call `g._init_state()`.
+
+---
+
+## DATA MODEL
+
+```python
+class Phase(enum.Enum):
+    TITLE = 0
+    PLAYING = 1
+    GAME_OVER = 2
+
+@dataclass
+class Grape:
+    color: int            # 8, 11, 5, or 10
+    x: int                # fixed screen x
+    y: int                # fixed screen y
+    alive: bool = True    # False while awaiting respawn
+    respawn_timer: int = 0  # frames until respawn (0 = alive)
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## CONSTANTS (class-level on Game, or module-level)
+
+```python
+SCREEN_W = 320
+SCREEN_H = 240
+COLORS: tuple[int, ...] = (8, 11, 5, 10)     # RED, LIME, DARK_BLUE, YELLOW
+COLOR_NAMES: tuple[str, ...] = ("RED", "LIME", "BLUE", "GOLD")
+NUM_GRAPES = 8
+GRAPE_XS = (24, 60, 96, 132, 168, 204, 240, 276)   # fixed x positions
+GRAPE_Y = 120
+GRAPE_RADIUS = 10
+CRUSHER_Y = 50
+TANK_MAX = 6              # fermentation tank capacity (juice)
+BOTTLE_COOLDOWN = 45      # frames of crush-disable after bottling
+SUPER_DURATION = 300      # frames of SUPER FERMENT
+SUPER_THRESHOLD = 4       # combo >= 4 triggers SUPER
+HEAT_MAX = 100
+GAME_DURATION = 3600      # 60s at 60fps
+HEAT_DECAY = 0.02         # per frame, frozen in SUPER
+MISMATCH_HEAT = 15
+OVERFLOW_HEAT = 20
+BASE_SCORE = 10
+```
+
+## GAME STATE (all instance attributes set in `_init_state()`)
+
+```python
+self.phase: Phase = Phase.TITLE
+self.frame: int = 0               # elapsed frames in PLAYING (drives escalation + timer)
+self.score: int = 0
+self.best_score: int = 0
+self.combo: int = 0
+self.max_combo: int = 0
+self.juice: int = 0               # 0..TANK_MAX
+self.heat: float = 0.0            # 0..HEAT_MAX
+self.crusher_color: int = COLORS[0]
+self.crusher_index: int = 0       # index into COLORS
+self.cycle_timer: int = 0         # frames until next color advance
+self.super_mode: bool = False
+self.super_timer: int = 0
+self.bottle_cooldown: int = 0     # >0 = crushing disabled
+self.grapes: list[Grape] = []
+self.particles: list[Particle] = []
+self.float_texts: list[FloatText] = []
+self.shake_frames: int = 0
+self._rng: random.Random = random.Random()
+```
+
+## ESCALATION (functions of `self.frame`, linear over 60s = 3600 frames)
+
+```python
+def _cycle_interval(self) -> int:
+    # 20 -> 12 frames over the game
+    return max(12, 20 - (self.frame // 450))     # 20,19,...,12
+
+def _respawn_delay(self) -> int:
+    # 60 -> 25 frames over the game
+    return max(25, 60 - (self.frame // 100))
+```
+
+## CORE LOGIC METHODS (pure, testable, NO pyxel input)
+
+```python
+def _handle_crush(self, index: int) -> str:
+    """Handle a player click on grapes[index]. Returns 'match'|'overflow'|'mismatch'|'blocked'.
+    - 'blocked' if self.bottle_cooldown > 0 or grape not alive or phase != PLAYING.
+    - If self.juice >= TANK_MAX: OVERFLOW path -> heat += OVERFLOW_HEAT, combo = 0,
+      kill grape (start respawn), return 'overflow'. (No juice/combo/score gain.)
+    - Else if grape.color == crusher_color or self.super_mode: MATCH path ->
+      juice += 1, combo += 1, score += BASE_SCORE * combo * (3 if super_mode else 1),
+      kill grape (start respawn), trigger SUPER if combo >= SUPER_THRESHOLD,
+      return 'match'.
+    - Else: MISMATCH path -> heat += MISMATCH_HEAT, combo = 0, return 'mismatch'.
+    """
+```
+
+Detailed ordering for `_handle_crush` (important for tests):
+1. Guard: if phase != PLAYING → 'blocked'; if bottle_cooldown > 0 → 'blocked';
+   if not (0 <= index < NUM_GRAPES) → 'blocked'; grape = self.grapes[index]; if not grape.alive → 'blocked'.
+2. `matched = (grape.color == self.crusher_color) or self.super_mode`
+3. If `self.juice >= TANK_MAX`:
+   - `self.heat += OVERFLOW_HEAT`; `self.combo = 0`; kill grape (respawn); spawn particles+float text ("OVERFLOW!"); `_check_game_over()`; return 'overflow'.
+4. If `matched`:
+   - `self.juice += 1`; `self.combo += 1`;
+   - `self.max_combo = max(self.max_combo, self.combo)`;
+   - `mult = 3 if self.super_mode else 1`;
+   - `self.score += BASE_SCORE * self.combo * mult`;
+   - kill grape (respawn); spawn particles + float text (f"+{score}");
+   - if (not self.super_mode) and self.combo >= SUPER_THRESHOLD: `self._activate_super()` then `self._super_bloom()`;
+   - `_check_game_over()`; return 'match'.
+5. Else (mismatch):
+   - `self.heat += MISMATCH_HEAT`; `self.combo = 0`; spawn particles + float text ("WRONG!");
+   - `_check_game_over()`; return 'mismatch'.
+
+```python
+def _bottle(self) -> int:
+    """Discharge: bank juice*combo*10, empty tank, reset combo. Returns points gained.
+    - If phase != PLAYING or bottle_cooldown > 0: return 0.
+    - gained = self.juice * self.combo * BASE_SCORE
+    - if gained > 0: self.score += gained; spawn float text "+{gained} BOTTLED!"
+    - self.juice = 0; self.combo = 0; self.bottle_cooldown = BOTTLE_COOLDOWN
+    - return gained
+    """
+
+def _activate_super(self) -> None:
+    """self.super_mode = True; self.super_timer = SUPER_DURATION; spawn particles."""
+
+def _super_bloom(self) -> None:
+    """Yeast propagation (source hook 'multiply/propagate'): immediately auto-crush up to 2
+    alive grapes at random. Each auto-crush follows the MATCH path (juice+1 if tank has room,
+    combo+1, score += BASE_SCORE*combo*3) and kills the grape. If tank is already full, skip
+    (do NOT trigger overflow). Use self._rng for grape selection. Must be deterministic when
+    self._rng is seeded."""
+
+def _check_game_over(self) -> None:
+    """if self.heat >= HEAT_MAX: self.phase = Phase.GAME_OVER; update best_score."""
+
+def _update_heat(self) -> None:
+    """Decay heat over time. IMPORTANT ORDER: check game-over FIRST, then decay.
+    if self.heat >= HEAT_MAX: self.phase = GAME_OVER; return
+    if not self.super_mode: self.heat = max(0.0, self.heat - HEAT_DECAY)"""
+
+def _update_timer(self) -> None:
+    """self.frame += 1; if self.frame >= GAME_DURATION: self.phase = GAME_OVER; update best_score."""
+
+def _kill_grape(self, index: int) -> None:
+    """grape.alive = False; grape.respawn_timer = self._respawn_delay()"""
+
+def _spawn_grape(self, index: int) -> None:
+    """grapes[index] gets a new random color from COLORS (via self._rng), alive=True, respawn_timer=0."""
+
+def _update_grapes(self) -> None:
+    """For each not-alive grape: decrement respawn_timer; when <= 0 call _spawn_grape(index)."""
+
+def _update_cycle(self) -> None:
+    """Advance crusher color: decrement cycle_timer; when <= 0: crusher_index = (crusher_index+1) % 4,
+    crusher_color = COLORS[crusher_index], cycle_timer = self._cycle_interval()."""
+
+def _update_particles(self) -> None:
+    """Move particles (x+=vx, y+=vy), decrement life, remove life<=0."""
+
+def _update_float_texts(self) -> None:
+    """y -= 0.5, decrement life, remove life<=0."""
+
+def _update_super(self) -> None:
+    """If super_mode: decrement super_timer; if <= 0: super_mode = False."""
+
+def _update_bottle_cooldown(self) -> None:
+    """if bottle_cooldown > 0: bottle_cooldown -= 1."""
+```
+
+## INITIALIZATION (`_init_state()`)
+- Set all state attributes listed above to their defaults.
+- `self.frame = 0; self.combo = 0; self.juice = 0; self.heat = 0.0; self.crusher_index = 0;
+  self.crusher_color = COLORS[0]; self.cycle_timer = self._cycle_interval();
+  self.super_mode = False; self.super_timer = 0; self.bottle_cooldown = 0;`
+- IMPORTANT: assign `self.frame = 0` BEFORE any call to `self._cycle_interval()` /
+  `self._respawn_delay()` (they read `self.frame`).
+- `self.grapes = [Grape(color=self._rng.choice(COLORS), x=GRAPE_XS[i], y=GRAPE_Y) for i in range(NUM_GRAPES)]`
+- `self.particles = []; self.float_texts = []; self.shake_frames = 0;`
+- `self.score = 0; self.max_combo = 0;` (keep best_score across runs — do NOT reset best_score)
+- Do NOT change `self._rng` in `_init_state` (tests seed it AFTER calling `_init_state`).
+
+## INPUT HANDLING (in `update()`, NOT testable directly)
+- Title: `pyxel.btnp(pyxel.KEY_RETURN)` or `pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)` → `_init_state(); self.phase = Phase.PLAYING`.
+- Playing: CLICK (`pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)`) → find grape index under cursor
+  (distance from (mouse_x, mouse_y) to (grape.x, grape.y) <= GRAPE_RADIUS + 4) → call `self._handle_crush(index)`.
+  - `pyxel.btnp(pyxel.KEY_B)` → `self._bottle()`.
+- Game over: `pyxel.btnp(pyxel.KEY_RETURN)` or `pyxel.btnp(pyxel.KEY_R)` → `_init_state(); self.phase = Phase.PLAYING` (fast restart).
+- Each frame in PLAYING: `_update_cycle(); _update_grapes(); _update_heat(); _update_timer();
+  _update_super(); _update_bottle_cooldown(); _update_particles(); _update_float_texts();`
+  (order matters: heat decay uses super_mode state; timer increments frame).
+
+## SCREENS (3, all English text)
+1. **TITLE**: "WINE CHAIN" title, "Crush grapes, fill the tank, BOTTLE the wine!", controls:
+   "CLICK: crush grape   B: bottle   ENTER: start", "Match the crusher color to build COMBO!"
+2. **PLAYING**: 
+   - Crusher (press) at top center (y=CRUSHER_Y): a colored rectangle/circle showing crusher_color,
+     label "PRESS" above it, cycling color.
+   - 8 grapes in a row at y=GRAPE_Y (circle radius 10, colored, outline when alive, dim/gone when respawning).
+   - Fermentation tank: vertical bar on right (x=296..308), showing juice level 0..6 as filled
+     segments (LIME), red "FULL!" warning when juice>=TANK_MAX, label "TANK".
+   - HUD top: "SCORE {score}" (left), "COMBO x{combo}" (below score), "BEST {best_score}".
+   - Timer bar (top, full width) shrinking; "TIME" label.
+   - HEAT bar (bottom or left side) color-coded (GREEN→YELLOW→RED as heat rises), label "HEAT".
+   - SUPER FERMENT: rainbow border + "SUPER FERMENT!" text, grape outlines glow.
+   - Bottle cooldown: show "COOLING..." when bottle_cooldown > 0.
+3. **GAME OVER**: "GAME OVER", reason line ("VINEGAR RUIN!" if heat>=100 else "TIME UP"),
+   "SCORE {score}" big, "BEST {best_score}", "COMBO x{max_combo}", "ENTER/R: retry".
+
+## EFFECTS
+- Particles: on match (8 particles, crusher color), mismatch (4, RED), overflow (12, ORANGE),
+  bottle (16, LIME burst from tank), super bloom (20, rainbow).
+- Floating text: "+{score}" (match), "WRONG!" (mismatch), "OVERFLOW!" (overflow),
+  "+{gained} BOTTLED!" (bottle), "SUPER FERMENT!" (super).
+- Screen shake: shake_frames=8 on overflow, 12 on bottle.
+
+## WRITE THE COMPLETE FILE NOW
+Produce `prototypes/316_wine_chain/main.py` as a single, complete, runnable file. Do NOT
+explore existing files. Do NOT write tests (Hermes writes those). After writing the file,
+respond with exactly "DONE".
