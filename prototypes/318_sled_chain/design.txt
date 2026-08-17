@@ -1,0 +1,132 @@
+# SLED RUNAWAY — Pyxel Prototype Design Spec (318_sled_chain)
+
+## Theme
+Bobsled / luge run. A sled descends an icy track. Colored gates (flags) line the track.
+Pass through gates matching your sled's current color to build COMBO and MOMENTUM.
+Push MOMENTUM past the RUNAWAY threshold for 3x score — but runaway speed makes matching harder.
+
+## Experience hypothesis (体験仮説)
+"危険な暴走状態に踏み込んでからも制御し続けると、怖いが得をした感じがする"
+(Stepping into the runaway state and keeping control feels scary but rewarding.)
+
+## Core mechanic (the ONE thing to demonstrate)
+MOMENTUM -> RUNAWAY. Successful matches build a MOMENTUM meter (0..100). Cross RUNAWAY_THRESHOLD
+(>=70) to enter RUNAWAY: 3x score, color cycle interval HALVED (harder), and momentum drains FAST.
+You must keep matching to stay in runaway. This is "earn while controlling" — high reward, high risk.
+
+## Screen
+- 320 x 240, 60fps, Pyxel 2.x
+- In `__main__`: `pyxel.init(320, 240, title="SLED RUNAWAY", fps=60)` then `pyxel.run(game.update, game.draw)`
+- NO display_scale needed in code (keep it minimal).
+
+## Colors (raw ints — do NOT use pyxel.COLOR_* constants in logic, only in draw())
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+GATE_COLORS: tuple[int, ...] = (8, 11, 5, 10)   # RED, LIME, DARK_BLUE, YELLOW
+
+## Entities (frozen dataclasses)
+Gate: x:int, y:int, color:int, radius:int=12, active:bool=True, respawn_timer:int=0
+Particle: x:float, y:float, vx:float, vy:float, color:int, life:int
+FloatingText: x:float, y:float, text:str, color:int, life:int
+
+## Phase enum
+class Phase(Enum):
+    TITLE = auto()
+    PLAYING = auto()
+    GAME_OVER = auto()
+
+## Game class constants (class-level)
+SCREEN_W=320, SCREEN_H=240, FPS=60
+GATE_COLORS=(8,11,5,10), GATE_XS=(40,84,128,172,216,260), GATE_YS=(130,100,82,82,100,130)
+GATE_RADIUS=12, GATE_COUNT=6
+SLED_X=160, SLED_Y=210
+HEAT_MAX=100.0, HEAT_MISMATCH=15.0, HEAT_DECAY=0.02
+MOMENTUM_GAIN=8.0, MOMENTUM_MAX=100.0, RUNAWAY_THRESHOLD=70.0
+MOMENTUM_DECAY_IDLE=0.1, MOMENTUM_DECAY_RUNAWAY=0.35
+COMBO_SUPER=4, SUPER_DURATION=300
+TIMER_MAX=3600
+CYCLE_BASE=20, CYCLE_MIN=12
+
+## Game instance attributes (ALL assigned in reset(); tests use Game.__new__(Game) then reset())
+sled_color:int, color_timer:int, combo:int, max_combo:int, score:int, best_score:int
+heat:float, momentum:float, runaway:bool, super_timer:int, timer:int, elapsed:int
+gates:list[Gate], particles:list[Particle], floating_texts:list[FloatingText]
+shake:int, phase:Phase, rng:random.Random
+
+## Methods (logic methods MUST be pure — no pyxel.* calls; only update()/draw() touch pyxel)
+- __init__(): pyxel.init(...); self.reset(); pyxel.run(self.update, self.draw)  [only under __main__]
+- reset(): assign rng=random.Random(42), then ALL instance attributes above, then self._spawn_gates()
+- _spawn_gates(): create GATE_COUNT Gate objects at GATE_XS[i], GATE_YS[i] with random colors (use self.rng), active=True
+- _cycle_interval() -> int: max(CYCLE_MIN, CYCLE_BASE - self.elapsed // 120)   # 20f -> 12f over 60s
+- _current_cycle() -> int: (self._cycle_interval() // 2) if self.runaway else self._cycle_interval()
+- _update_sled_color(): self.color_timer -= 1; if <= 0: advance sled_color to next in GATE_COLORS; reset timer = _current_cycle()
+- _update_momentum(): decay = MOMENTUM_DECAY_RUNAWAY if runaway else MOMENTUM_DECAY_IDLE;
+    self.momentum = max(0.0, self.momentum - decay); self.runaway = self.momentum >= RUNAWAY_THRESHOLD
+    (NOTE: when super_timer > 0, skip decay entirely — SUPER freezes momentum)
+- _update_heat(): if super_timer <= 0: self.heat = max(0.0, self.heat - HEAT_DECAY)
+    if self.heat >= HEAT_MAX: self.phase = Phase.GAME_OVER   (check threshold BEFORE decay — do not decay past)
+- _hit_gate(idx:int) -> bool: click handler.
+    - g = self.gates[idx]; if not g.active: return False
+    - matched = (g.color == self.sled_color) or (self.super_timer > 0)
+    - if matched:
+        self.combo += 1; self.max_combo = max(self.max_combo, self.combo)
+        mult = 3 if (self.runaway or self.super_timer > 0) else 1
+        self.score += 10 * self.combo * mult
+        self.momentum = min(MOMENTUM_MAX, self.momentum + MOMENTUM_GAIN)
+        if self.combo >= COMBO_SUPER and self.super_timer <= 0: self.super_timer = SUPER_DURATION
+        g.active = False; g.respawn_timer = self._respawn_delay()
+        spawn match particles + floating text ("+SCORE" or "SUPER SLIDE!" if just triggered)
+        return True
+    - else:
+        self.heat = min(HEAT_MAX, self.heat + HEAT_MISMATCH); self.combo = 0; self.momentum = 0.0
+        spawn mismatch particles + "WRONG!" floating text; return False
+- _respawn_delay() -> int: max(25, 60 - self.elapsed // 120)   # 60f -> 25f
+- _update_gates(): for each inactive gate, tick respawn_timer; when <=0 reactivate with new random color (use self.rng)
+- _update_timer(): self.timer -= 1; if self.timer <= 0: self.phase = Phase.GAME_OVER
+- _update_particles(): vx,vy += no gravity; x+=vx; y+=vy; life-=1; filter life>0
+- _update_floating_texts(): y -= 0.5; life -= 1; filter life>0
+- _update_playing(): (pure, safe to test) call _update_sled_color, _update_momentum, _update_heat, _update_gates, _update_timer, _update_particles, _update_floating_texts; also decrement super_timer (if >0, -=1)
+- update(): (pyxel-dependent) if phase==TITLE: if pyxel.btnp(pyxel.KEY_RETURN): phase=PLAYING; reset()
+    elif phase==PLAYING: self.elapsed += 1; self._update_playing();
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): find clicked gate via mouse_x/mouse_y and _hit_gate(idx)
+        if pyxel.btnp(pyxel.KEY_SPACE): _hit_gate(front-most active gate = smallest x)
+    elif phase==GAME_OVER: if pyxel.btnp(pyxel.KEY_R): self.best_score=max(best,score); phase=TITLE; reset()
+- draw(): 3 screens. TITLE: title text + controls. PLAYING: bg, gates (circles colored, inactive=GRAY), sled (triangle/ellipse at SLED_X,SLED_Y colored sled_color, rainbow in super), HUD (score top-left, combo, HEAT bar right, TIMER bar top, MOMENTUM bar bottom cyan, "RUNAWAY!" label when active). GAME_OVER: "GAME OVER", final score, best score, restart hint.
+
+## Input
+- Mouse click a gate -> _hit_gate
+- SPACE -> hit front-most active gate
+- ENTER (pyxel.KEY_RETURN) -> start from title
+- R -> restart from game over
+
+## Headless-testability (CRITICAL)
+- `import pyxel` at top, NO TYPE_CHECKING guard.
+- `if __name__ == "__main__":` guard wraps pyxel.init/run.
+- All logic methods pure. Tests use `Game.__new__(Game)` + pre-init nothing (reset assigns everything) + `g.reset()`.
+- Tests must NOT call update()/draw() (they touch pyxel input/render).
+- Seed rng deterministically: reset() sets rng=random.Random(42); tests may overwrite g.rng=random.Random(42) AFTER reset().
+
+## Feel-good moment
+- COMBO>=4 -> SUPER SLIDE: rainbow sled, 300f, any-color match, 3x score, HEAT frozen, momentum frozen.
+- Entering RUNAWAY: flash + "RUNAWAY!" floating text + screen shake (6f).
+
+## Risk/reward
+- RUNAWAY (momentum>=70): 3x score, but cycle interval halves and momentum drains 0.35/f — greed vs control.
+- Mismatch: momentum -> 0 AND combo -> 0 AND heat +15 (triple penalty).
+
+## Difficulty escalation
+- color cycle 20f -> 12f
+- gate respawn 60f -> 25f
+- (momentum idle decay stays 0.1 — keep simple)
+
+## Pitfalls to avoid (IMPORTANT)
+- Use pyxel.KEY_RETURN (NOT KEY_ENTER), pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON), pyxel.mouse_wheel, pyxel.tri (NOT triangle).
+- No CJK/emoji in any string — English only.
+- No pyxel.COLOR_* in logic methods; use raw ints there.
+- score computation: combo increments FIRST, so first match = 10 * 1 * mult (never 0).
+- heat threshold check BEFORE decay (use max(0,...) after, and if heat>=MAX set game over).
+- Ensure `_hit_gate` captures `matched` and uses it for both branches without mutating sled_color before compare.
+- reset() must assign rng BEFORE calling _spawn_gates() (which uses self.rng).
+- super_timer decrement happens in _update_playing, once per frame.
+
+Write the FULL main.py now. DO NOT overthink. Produce complete, working code immediately.
