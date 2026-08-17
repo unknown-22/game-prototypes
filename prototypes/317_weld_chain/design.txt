@@ -1,0 +1,150 @@
+# WELD CHAIN — Design Spec (prototype 317_weld_chain)
+
+Arc-welding color-match arcade. Single-file Pyxel prototype at `prototypes/317_weld_chain/main.py`.
+
+## Core concept (面白い瞬間)
+「トーチの色を亀裂(シーム)の最後のセグメントにピタッと合わせて溶接し、亀裂全体が塞がって SEAM COMPLETE ボーナスが爆発する瞬間」が面白い。
+Risk/reward: 今のトーチ色に合わせて即座に溶接してコンボを伸ばすか、正しい色を待つか(待つと亀裂が伸びて仕事が増える)。
+
+## Theme & distinct mechanic
+- Theme: アーク溶接(鋼板の亀裂修理)。Collection 初の溶接ジャンル。
+- Distinct mechanic 1: 色合わせ溶接 — トーチ色が自動巡回し、シームのアクティブセグメント色と一致したら溶接(融合)。一致で COMBO、COMBO>=4 で SUPER ARC。
+- Distinct mechanic 2: CRACK PROPAGATION(亀裂進展)— 未完成のシームは時間経過で +1 セグメントずつ伸びる(最大7)。放置すると仕事が増える。「CA grid fills up (infection/growth)」フックの再解釈。
+- Reinterpreted from game_idea_factory idea #1 (Score 32.75, space-mining deckbuilder): 'synthesis compression' → same-color COMBO → SUPER ARC, 'CA grid infection/growth to control' → crack propagation.
+
+## Screen
+320 x 240, 60fps, display_scale default.
+
+## Color constants (raw ints, do NOT use pyxel.COLOR_* for game data — use raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+Target/torch colors (the 4): COLORS = [RED=8, LIME=11, DARK_BLUE=5, YELLOW=10]  (order matters for the cycle)
+Welded segment color = GRAY = 13. Background = NAVY=1. Plate = BROWN=4 or DARK_BLUE=5.
+
+## Data classes (typed, @dataclass)
+- `Segment`: `color: int`, `welded: bool = False`
+- `Seam`: `y: int`, `segments: list[Segment]`  (a seam is a horizontal row of same-color segments; all segments share the same color = segments[0].color)
+  - `@property length` -> int (len(segments))
+  - `@property color` -> int (segments[0].color)
+  - `@property complete` -> bool (all welded)
+  - `@property active_index` -> int | None (index of leftmost unwelded segment, else None if complete)
+- `Particle`: `x: float, y: float, vx: float, vy: float, life: int, color: int`
+- `FloatingText`: `x: float, y: float, text: str, life: int, color: int`
+
+## Phase enum
+```
+class Phase(Enum):
+    TITLE = 0
+    PLAYING = 1
+    GAME_OVER = 2
+```
+(3 screens only. No sub-phases.)
+
+## Layout constants
+- SCREEN_W=320, SCREEN_H=240
+- SEAM_ROWS = [40, 75, 110, 145, 180]  (5 rows, MAX_SEAMS=5, one seam per row)
+- SEG_W=22, SEG_H=16, SEG_X_START=40  (segments drawn at x = SEG_X_START + i*SEG_W, y = seam.y)
+- SEGS_START=4, SEGS_MAX=7
+- HEAT_MAX=100.0, GAME_TIME=3600 (frames)
+
+## Game class
+- `__init__`: `pyxel.init(SCREEN_W, SCREEN_H, "WELD CHAIN", fps=60)`, `pyxel.run(self.update, self.draw)`. MUST be guarded so headless import does NOT call pyxel.init/run:
+  ```
+  if __name__ == "__main__":
+      Game()
+  ```
+  The class `__init__` may call pyxel.init/run; tests use `Game.__new__(Game)` to bypass.
+- `reset(self, seed: int | None = None)`:
+  - `self.rng = random.Random(seed) if seed is not None else random.Random()`
+  - score=0, combo=0, max_combo=0
+  - heat=0.0, timer=GAME_TIME, frame=0
+  - torch_index=0, torch_timer=0 (first _update_torch will set it)
+  - super_timer=0
+  - crack_timer=CRACK_INTERVAL_START
+  - shake=0
+  - seams: list[Seam] = []
+  - particles: list[Particle] = []
+  - floats: list[FloatingText] = []
+  - spawn 4 initial seams at rows 0,1,2,3, each length 4, random color via self.rng
+- `_spawn_seam(self, row: int, color: int | None = None, length: int | None = None) -> Seam`:
+  - color = self.rng.randint(0,3) if None else color (an index into COLORS)
+  - length = SEGS_START if None else length
+  - build `Seam(y=SEAM_ROWS[row], segments=[Segment(color=COLORS[color_index], welded=False) for _ in range(length)])`, append to self.seams, return it. Clamp length to SEGS_MAX.
+  - (Note: color param is an INDEX 0..3; store COLORS[color] in the Segment.)
+- `_torch_color(self) -> int`: return COLORS[self.torch_index]
+- `_cycle_interval(self) -> int`: `max(12, 20 - self.frame // 360)`
+- `_crack_interval(self) -> int`: `max(100, 240 - self.frame // 25)`
+- `_update_torch(self)`: torch_timer -= 1; if torch_timer <= 0: torch_index = (torch_index+1)%4; torch_timer = self._cycle_interval()
+- `_update_cracks(self) -> int`: crack_timer -= 1; if crack_timer <= 0: crack_timer = self._crack_interval(); grown=0; for each seam NOT complete: if seam.length < SEGS_MAX: seam.segments.append(Segment(color=seam.color, welded=False)); grown += 1. return grown.
+- `_seam_at(self, x: int, y: int) -> Seam | None`: return the seam whose active segment's rect contains (x,y). Rect for active segment i: x in [SEG_X_START + i*SEG_W, SEG_X_START + (i+1)*SEG_W), y in [seam.y, seam.y+SEG_H). If seam complete (no active segment) → None.
+- `_weld_seam(self, seam: Seam) -> str`: the core action. Returns "complete" | "match" | "mismatch" | "none".
+  - idx = seam.active_index; if idx is None: return "none" (already complete).
+  - matched = (self.super_timer > 0) or (seam.segments[idx].color == self._torch_color())
+  - if matched:
+    - seam.segments[idx].welded = True
+    - self.combo += 1; self.max_combo = max(self.max_combo, self.combo)
+    - mult = 3 if self.super_timer > 0 else 1
+    - gained = 10 * self.combo * mult; self.score += gained
+    - spawn match particles at segment center (color = segment color)
+    - if seam.complete:
+      - bonus = 50 * self.combo * mult; self.score += bonus
+      - spawn completion particles + FloatingText "SEAM COMPLETE!" (+bonus)
+      - remove seam from self.seams (or keep but it is complete — choose: KEEP completed seams in list but mark complete, and never re-weld them). DECISION: remove completed seam from self.seams, and spawn 1 new seam at the SAME row (fresh random color, length 4) so the board stays populated. Return "complete".
+    - else: return "match"
+  - else (mismatch):
+    - self.heat += 15.0
+    - self.combo = 0
+    - spawn spatter particles + FloatingText "WRONG!" 
+    - if self.heat >= HEAT_MAX: self.phase = Phase.GAME_OVER
+    - return "mismatch"
+  - (Note the combo increment ordering: combo increments BEFORE score uses it, so first match scores 10.)
+- `_update_heat(self)`: threshold check FIRST (pitfall: never decay before the >= check): if self.heat >= HEAT_MAX: self.phase = Phase.GAME_OVER; return. Then if self.super_timer <= 0: self.heat = max(0.0, self.heat - 0.02).
+- `_update_timer(self)`: if self.super_timer > 0: self.super_timer -= 1. self.timer -= 1; if self.timer <= 0: self.phase = Phase.GAME_OVER. (Super ends when super_timer hits 0.)
+- `_update_particles(self)`: for each particle: x+=vx; y+=vy; life-=1; remove if life<=0.
+- `_update_floats(self)`: for each floating text: y -= 0.5; life -= 1; remove if life<=0.
+- `update(self)` (wrapper, NOT unit-tested — reads pyxel input):
+  - if phase == TITLE: if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE): self.reset(); self.phase = Phase.PLAYING
+  - elif phase == GAME_OVER: if pyxel.btnp(pyxel.KEY_RETURN): self.reset(); self.phase = Phase.TITLE  (fast restart)
+  - elif phase == PLAYING:
+    - self.frame += 1
+    - self._update_torch(); self._update_cracks(); self._update_heat(); self._update_timer(); self._update_particles(); self._update_floats()
+    - if self.phase != Phase.PLAYING: return  (game over set by heat/timer)
+    - input: if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): seam = self._seam_at(pyxel.mouse_x, pyxel.mouse_y); if seam: self._weld_seam(seam)
+    - elif pyxel.btnp(pyxel.KEY_SPACE): weld the topmost incomplete seam (first seam in self.seams with active_index is not None) via self._weld_seam(that seam)
+    - trigger SUPER: after a weld, if self.combo >= 4 and self.super_timer <= 0: self.super_timer = 300; spawn super particles
+  - (shake decrement in update/draw)
+
+## SUPER ARC
+When combo reaches 4 and super_timer==0 → super_timer = 300 (5s rainbow). While active: any-color match, 3x score, HEAT decay frozen (no heat gain effect — mismatches still add heat? DECISION: mismatch still adds HEAT+15 even in SUPER, but decay is frozen). Simplify: in SUPER, matched is always True, so mismatch can't happen; heat is frozen (no decay) for the duration. super_timer decrements in _update_timer.
+
+## Scoring summary
+- match: combo += 1 (first), score += 10*combo*mult
+- seam complete: bonus += 50*combo*mult (in addition to the final segment's match score)
+- mismatch: heat += 15, combo = 0, segment stays unwelded
+
+## Difficulty escalation (over 60s)
+- torch cycle interval 20f -> 12f (`max(12, 20 - frame//360)`)
+- crack growth interval 240f -> 100f (`max(100, 240 - frame//25)`)
+
+## Rendering (draw)
+- TITLE: title "WELD CHAIN", subtitle, controls text: "CLICK crack to weld / SPACE = topmost crack", "RETURN to start". English text ONLY (no CJK).
+- PLAYING:
+  - plate background (BROWN or NAVY fill), 5 row guides
+  - each seam: draw each segment as a filled rect: unwelded = segment color, welded = GRAY=13. Active segment (leftmost unwelded) gets a WHITE outline/glow.
+  - torch indicator: bottom-left swatch showing current torch color + "TORCH" label + next color preview (COLORS[(torch_index+1)%4]).
+  - HUD top: "SCORE {score}" left, "COMBO x{combo}" center, TIMER bar top (width shrinks with timer/GAME_TIME), HEAT bar right (vertical or horizontal, red, height = heat/HEAT_MAX).
+  - SUPER: rainbow border (cycle through COLORS by frame), "SUPER ARC!" text.
+  - particles, floating texts, screen shake (pyxel.camera offset when shake>0).
+- GAME_OVER: "GAME OVER", final score, max combo, reason ("BURN THROUGH!" if heat>=100 else "TIME UP"), "RETURN = retry".
+
+## Headless-testability rules (CRITICAL)
+- `import pyxel` at top of main.py (no TYPE_CHECKING guard).
+- No pyxel input/rendering calls inside the testable methods listed above (_update_torch, _update_cracks, _update_heat, _update_timer, _weld_seam, _seam_at, _spawn_seam, reset, _cycle_interval, _crack_interval, _torch_color).
+- All pyxel.btnp/mouse_x/mouse_y/pyxel.camera/play calls live ONLY in update()/draw() and helper draw functions.
+- `Game.__new__(Game)` must work: tests pre-init nothing (reset(seed=...) sets everything), so reset() must assign EVERY attribute it reads BEFORE reading it. Ensure `self.rng` is assigned FIRST in reset (before spawning seams).
+- Provide `if __name__ == "__main__": Game()` guard.
+
+## API names (Pyxel fixed) — use EXACTLY these
+- `pyxel.tri` (not triangle), `pyxel.KEY_RETURN` (not KEY_ENTER), `pyxel.MOUSE_BUTTON_LEFT` (not MOUSE_LEFT_BUTTON), `pyxel.mouse_wheel` for scroll (not used here), `pyxel.btnp`, `pyxel.btn`, `pyxel.mouse_x`, `pyxel.mouse_y`, `pyxel.camera`, `pyxel.rect`, `pyxel.rectb`, `pyxel.text`, `pyxel.cls`, `pyxel.pset`, `pyxel.circ`, `pyxel.circb`, `pyxel.blt`/`pyxel.pal` (avoid if possible).
+
+## Deliverable
+Write ONE file: `prototypes/317_weld_chain/main.py`. Aim ~450-550 lines. Use type hints throughout. Keep logic pure/testable. Respond with "DONE" when the file is written.
