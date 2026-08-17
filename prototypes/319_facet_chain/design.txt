@@ -1,0 +1,122 @@
+# FACET CHAIN — Gem Cutting / Lapidary (宝石研磨) Prototype Design Spec
+
+## Concept (one sentence)
+「宝石のファセット（研磨面）を研ぎ、同色を連続で研いでCOMBOを伸ばすか、全ファセットをバランスよく研いで輝き（BRILLIANCE）倍率を上げるか、その判断が面白い」— a color-match COMBO chain game where the score multiplier is gated by the WEAKEST facet (min depth), forcing a tension between same-color chains and balanced polishing.
+
+## Theme & Core Mechanic
+Player is a gem cutter polishing a rough gemstone on a spinning lap wheel. A gem has 6 facets (arranged in a hexagon ring around the gem center). Each facet has a COLOR (one of 4) and a DEPTH (0..MAX_DEPTH = 0..3). The lap wheel's color auto-cycles. Click a facet to polish it with the current wheel color.
+
+- MATCH (facet.color == wheel color, or SUPER active): combo += 1, facet.depth += 1 (capped), score += 10 * combo * brilliance * (3 if SUPER). Facet at MAX_DEPTH becomes BRILLIANT (locked, can't be polished further).
+- MISMATCH: heat += 15, combo = 0, facet.depth -= 1 (min 0, "chip" the facet — hurts brilliance).
+- BRILLIANCE (the distinct mechanic) = min(facet.depth over all 6 facets) + 1, range 1..4. The gem's score multiplier is capped by its weakest facet, so the player must eventually polish every facet to raise it — but polishing different colors breaks the same-color COMBO. This is the core risk/reward.
+- COMBO >= 4 triggers SUPER BRILLIANCE (300f rainbow: any-color match, 3x score, heat frozen, wheel cycle frozen).
+- GEM COMPLETE (all 6 facets at MAX_DEPTH): score += 100 * combo, gems_completed += 1, spawn a NEW rough gem (6 fresh random-color facets, depth 0), combo PRESERVED (chain carries across gems).
+
+## Failure conditions
+- HEAT >= 100 = "GEM SHATTERED" game over (mismatch +15, passive decay -0.02/f, frozen in SUPER; threshold check BEFORE decay).
+- 60s timer (3600 frames) = "TIME UP" game over.
+
+## Difficulty escalation
+- Lap wheel color cycle interval: `max(12, 20 - frame // 150)` — 20 frames → 12 frames over 60s (linear).
+
+## Pyxel specifics
+- Single file `main.py`. `import pyxel` at top (NO TYPE_CHECKING guard).
+- Resolution 320x240, display_scale=2, FPS=60, title "FACET CHAIN".
+- ALL game text in ENGLISH (Pyxel BDF font has no CJK glyphs).
+
+## Colors (raw ints — Pyxel 16-color palette)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+- FACET_COLORS = [8, 11, 5, 10]  # RED, LIME, DARK_BLUE, YELLOW (indices 0..3)
+- Use `pyxel.tri` (NOT triangle), `pyxel.KEY_RETURN` (NOT KEY_ENTER), `pyxel.MOUSE_BUTTON_LEFT`, `pyxel.mouse_wheel` (NOT KEY_WHEEL_*), `pyxel.btnp`, `pyxel.btn`.
+
+## API notes
+- `pyxel.mouse_x`, `pyxel.mouse_y` for cursor.
+- Particle/float text use raw color ints.
+- For module-level constants that would reference pyxel, use raw ints (e.g. FACET_COLORS above).
+
+## Phase machine
+`class Phase(Enum)`: TITLE, PLAYING, GAME_OVER.
+
+## Data classes
+```python
+@dataclass
+class Facet:
+    color: int   # index 0..3 into FACET_COLORS
+    depth: int   # 0..MAX_DEPTH
+
+@dataclass
+class Particle:
+    x: float; y: float; vx: float; vy: float; life: int; color: int; gravity: float = 0.0
+
+@dataclass
+class FloatingText:
+    x: float; y: float; text: str; life: int; color: int
+```
+
+## Game class structure
+- `__init__`: pyxel.init(...); pyxel.run(self.update, self.draw). State init via `self.reset()`.
+- `reset()`: sets frame=0, score=0, combo=0, max_combo=0, heat=0.0, gems_completed=0, super_timer=0, lap_color=0, lap_timer=_cycle_interval(), shake_frames=0, particles=[], floating_texts=[], then `self.facets = self._new_gem()`. (Assign frame=0 BEFORE calling `_cycle_interval()` — init-order pitfall.)
+- `_new_gem() -> list[Facet]`: 6 facets with random color (use `self.rng` seeded Random), depth 0.
+- `_cycle_interval() -> int`: `max(12, 20 - self.frame // 150)`.
+- `brilliance() -> int`: `min(f.depth for f in self.facets) + 1`.
+- `_polish_facet(idx: int) -> None`: the core action (see rules above). Combo increments FIRST so first match scores 10*1*brilliance. Capture `was_super = self.super_timer > 0` at top; score multiplier uses `3 if was_super else 1`; activate SUPER (super_timer = 300) AFTER incrementing combo when `self.combo >= 4 and not was_super`. Mismatch branch: heat += 15, combo = 0, facet.depth = max(0, depth-1). If facet.depth >= MAX_DEPTH after a match, check gem complete: `if all(f.depth >= MAX_DEPTH for f in self.facets): self._complete_gem()`.
+- `_complete_gem() -> None`: gems_completed += 1; score += 100 * self.combo; self.facets = self._new_gem() (combo NOT reset — preserved across gems).
+- `_update_lap() -> None`: if super_timer > 0: return (frozen). lap_timer -= 1; if lap_timer <= 0: lap_color = (lap_color + 1) % 4; lap_timer = _cycle_interval().
+- `_update_heat() -> None`: if super_timer > 0: return. If heat >= 100: phase = GAME_OVER (return). Else heat = max(0.0, heat - 0.02).
+- `_update_timer() -> None`: frame += 1; if frame >= 3600: phase = GAME_OVER.
+- `_update_super() -> None`: if super_timer > 0: super_timer -= 1.
+- `_facet_at(mx: int, my: int) -> int | None`: pure geometry — facet centers on a hexagon ring (center 160,120, radius 60, angles i*60 - 90 degrees), hit radius 24; return index or None.
+- `_spawn_match_particles(idx)`, `_spawn_mismatch_particles(idx)`, `_spawn_super_particles()`: spawn particles/floating text (do NOT call pyxel.play directly in these — see sound note).
+- `update()`: input handling (reads pyxel.btnp/btn/mouse) + per-frame updates in PLAYING phase (timer, lap, super, heat, particles, floating text).
+- `draw()`: title / playing / game-over rendering.
+
+## Sound note
+Wrap `pyxel.play(...)` calls in a helper `_sfx(ch)` that is a no-op-safe method, OR call pyxel.play inside `update()` only (not in testable logic methods). In headless tests, methods like `_polish_facet` must NOT call pyxel.play — route sound through a thin `_sfx` helper that headless tests monkeypatch to a no-op.
+
+## Input mapping
+- TITLE: press SPACE or R or click → PLAYING (reset()).
+- PLAYING: mouse click on a facet → `_polish_facet(idx)`. (R = restart anytime.)
+- GAME_OVER: press R → reset() → TITLE (or straight to PLAYING). SPACE → restart to PLAYING.
+
+## HUD (playing)
+- Top-left: "SCORE <n>" (WHITE).
+- Below: "COMBO x<n>" (YELLOW, hidden if 0), "BRILL x<mult>" (CYAN).
+- Right edge: vertical HEAT bar (color-coded: GREEN->YELLOW->RED as heat rises; label "HEAT").
+- Top: horizontal TIMER bar shrinking right-to-left.
+- SUPER active: rainbow border + "SUPER BRILLIANCE!" flashing text.
+- Lap wheel: a colored disc (bottom area, e.g. circle at (160, 210) radius 16) showing current lap_color, plus a small "current color" swatch; label "LAP".
+
+## Drawing the gem
+- Gem center (160, 120). Draw 6 facets as filled polygons (pyxel.tri or quad) around the center at angles i*60-90, radius ~34 inner to ~60 outer, colored by FACET_COLORS[facet.color]. Facet DEPTH shown by drawing 1..MAX_DEPTH small white pips (or progressively larger/brighter facet) — a facet with depth 0 is dim (draw with GRAY overlay), depth>0 full color, depth==MAX_DEPTH (BRILLIANT) draws a white sparkle cross + white outline. Draw facet "depth" as a small number of dots near the facet.
+- Clicking a BRILLIANT facet is a no-op (silent, no penalty).
+
+## Title screen
+Title "FACET CHAIN" (large), subtitle "Gem Cutting Puzzle", controls text:
+"CLICK a facet to polish it"
+"Match the LAP wheel color"
+"Same color = COMBO / Balance all facets = BRILLIANCE"
+"COMBO>=4 : SUPER BRILLIANCE"
+"SPACE or R to start"
+
+## Game over screen
+"GAME OVER" + reason ("GEM SHATTERED" if heat else "TIME UP"), final SCORE, BEST (tracked in-memory), "GEMS: <n>", "R to restart".
+
+## Headless-testable requirements (CRITICAL)
+- `Game.__new__(Game)` bypass must work: pre-init all attrs used by reset() before calling reset(). Provide NO module-level pyxel.init side effects on import (pyxel.init only inside `__init__`, which is only run under `if __name__ == "__main__":`).
+- All logic methods (`_polish_facet`, `brilliance`, `_complete_gem`, `_update_heat`, `_update_timer`, `_update_lap`, `_update_super`, `_cycle_interval`, `_facet_at`, `_new_gem`) must be pure Python — NO `pyxel.btn`, `pyxel.btnp`, `pyxel.mouse_x`, `pyxel.frame_count`, `pyxel.play`, `pyxel.camera` inside them.
+- `self.rng = random.Random()` (seeded for tests) used for facet colors.
+
+## Test targets (write test_imports.py to cover)
+1. Import Game, Facet, Phase, FACET_COLORS, constants without pyxel init (guard under __main__).
+2. `_make_game()` factory: `g = Game.__new__(Game)`, pre-init attrs, `g.rng = random.Random(42)`, `g.reset()`.
+3. brilliance starts at 1; after raising ONE facet depth, brilliance still 1; after raising ALL facets to depth>=1, brilliance becomes 2.
+4. Match increments combo, depth, score (score = 10*combo*brilliance, combo incremented first).
+5. Mismatch adds heat+15, resets combo, chips facet (depth-1 min 0).
+6. COMBO>=4 activates super_timer=300; SUPER makes any color match; SUPER freezes heat decay and lap cycle.
+7. Facet at MAX_DEPTH: further polish is no-op (no score/heat/combo change).
+8. All facets MAX → gem complete: gems_completed+1, score += 100*combo, new gem spawned (depth 0), combo preserved.
+9. Heat threshold: set heat=100, call _update_heat → phase GAME_OVER (check BEFORE decay).
+10. Timer: frame>=3600 → GAME_OVER.
+11. _cycle_interval monotonic non-increasing from 20 to 12.
+12. Chip can lower brilliance (min depth facet chipped to 0 → brilliance drops).
+13. _facet_at returns correct index for a facet center and None for far-away point.
