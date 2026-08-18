@@ -1,0 +1,233 @@
+# 323 — RULE FLUX Design Spec
+
+## Concept
+RULE FLUX is a fast single-button GO/NO-GO reflex game. A single token (a number 0-9
+plus one of four colors) is displayed large in the center of the screen and is replaced
+on a rapid cycle. A "rule" banner at the top declares the current clearance rule. The
+player's job is to PRESS the button only when the current token satisfies the rule (a
+"GO" token) and to REFRAIN when it does not (a "NO-GO" token). The rule itself MUTATES
+on a timer, forcing the player to constantly re-read which rule is active. The whole
+challenge is switching mental dimension under time pressure: some rules are about the
+NUMBER (HIGH / EVEN) and others are about the COLOR (WARM / COOL).
+
+## "Most Fun Moment" (面白い瞬間)
+「ルールが切り替わった直後の1〜2個目で、古いルールの反射をこらえて新しいルールを読み直し、
+ギリギリで正しく押せる（あるいは我慢できる）瞬間が面白い」
+
+## Core Mechanic
+1. A token (number + color) is shown in the center and cycles every `cycle_interval` frames.
+2. The active RULE is shown in a banner at the top. Rules: HIGH (num>=5), EVEN (num%2==0),
+   WARM (color in {RED,YELLOW}), COOL (color in {BLUE,GREEN}).
+3. The player presses SPACE (or clicks) to make a "PASS" decision on the CURRENT token:
+   - Press on a GO token  = HIT:     combo+1, score += 10*combo*mult + speed_bonus
+   - Press on a NO-GO token= FALSE ALARM: HEAT+15, combo reset, screen shake
+   - No press on a GO token = MISS (when it cycles away): HEAT+8, combo reset
+   - No press on a NO-GO token = CORRECT RESTRAINT (when it cycles away): score+5, combo unchanged
+4. Every `rule_interval` frames the rule mutates to the next rule (deterministic order),
+   preceded by a 60-frame warning flash ("RULE CHANGE!").
+5. Build combo to 4 → FLUX mode (300 frames): 3x score on hits, rule mutation frozen,
+   heat decay frozen. When FLUX ends, combo resets to 0.
+6. Fail when HEAT reaches 100 ("OVERLOAD") or the 60-second timer expires ("TIME UP").
+
+## Risk / Reward
+- Pressing is risky (FALSE ALARM = +15 HEAT) but HIT builds combo toward FLUX.
+- Refraining is safe on NO-GO but MISS on a GO token costs +8 HEAT.
+- Speed bonus: pressing within the first half of a token's window grants +5 points,
+  rewarding fast reaction (which also raises misread risk).
+- FLUX (combo>=4) is the payout: a 300-frame 3x window where the rule stops shifting.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x
+- Phase machine: TITLE, PLAYING, GAME_OVER (FLUX is a boolean flag, not a phase)
+- Colors:
+  - Token colors: RED=8, YELLOW=10, LIGHT_BLUE=6, GREEN=3
+  - WARM = {RED, YELLOW}; COOL = {LIGHT_BLUE, GREEN}
+  - Background: NAVY=1
+  - Rule banner / text: WHITE=7
+  - HEAT bar fill: ORANGE=9 (hot) / YELLOW=10; TIMER bar: CYAN=12
+  - FLUX mode: rainbow border, token tinted CYAN=12 or PINK=14
+- Layout:
+  - Rule banner: top area y=8..24, centered text
+  - Token number: large text centered at (160, 110)
+  - Token color: filled rect/circle behind the number, centered (160,120)
+  - HEAT bar: vertical on right (x=300, y=30..210)
+  - TIMER bar: horizontal at top (x=10..310, y=2..6)
+
+## Data Classes
+```python
+@dataclass
+class Token:
+    number: int   # 0-9
+    color: int    # one of 4 color ints (8,10,6,3)
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Rule Enum
+```python
+class Rule(Enum):
+    HIGH = auto()   # num >= 5
+    EVEN = auto()   # num % 2 == 0
+    WARM = auto()   # color in {RED=8, YELLOW=10}
+    COOL = auto()   # color in {LIGHT_BLUE=6, GREEN=3}
+```
+Rule rotation order (deterministic): HIGH -> EVEN -> WARM -> COOL -> HIGH ...
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, ...), pyxel.run(self.update, self.draw)
+    # reset(): init all state
+    # update(): phase dispatch
+    # draw(): phase dispatch
+
+    # Key state (ALL instance attributes, typed — critical for Game.__new__ pre-init):
+    # phase: Phase
+    # score: int
+    # best_score: int
+    # combo: int
+    # max_combo: int
+    # heat: float
+    # timer: int        # frames remaining (3600 at start)
+    # elapsed: int      # frames since start
+    # rule: Rule
+    # rule_timer: int   # frames until next mutation
+    # rule_warning: int # frames remaining in the pre-mutation warning flash (0 = no warning)
+    # token: Token
+    # cycle_timer: int  # frames until current token cycles away
+    # token_elapsed: int# frames current token has been displayed
+    # flux_active: bool
+    # flux_timer: int   # frames remaining in FLUX
+    # particles: list[Particle]
+    # floats: list[FloatingText]
+    # shake_frames: int
+    # rng: random.Random
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `_is_go(token: Token, rule: Rule) -> bool` — pure rule evaluation. HIGH: number>=5;
+  EVEN: number%2==0; WARM: color in {8,10}; COOL: color in {6,3}.
+- `_next_rule(rule: Rule) -> Rule` — next rule in deterministic rotation order.
+- `_make_token() -> Token` — random number 0-9 + random color from (8,10,6,3), using self.rng.
+- `_handle_press() -> None` — resolve the current press decision (HIT vs FALSE ALARM). Must NOT
+  read pyxel; the caller passes nothing, it acts on self.token + self.rule.
+- `_handle_token_expiry() -> None` — resolve a token cycling away (MISS vs CORRECT RESTRAINT),
+  then generate a new token via `_make_token()` and reset cycle_timer/token_elapsed.
+- `_cycle_interval() -> int` — difficulty curve: max(12, 30 - elapsed//200).
+- `_rule_interval() -> int` — difficulty curve: max(240, 480 - elapsed//15).
+- `_update_heat() -> None` — decay -0.02/f (frozen in FLUX), then threshold check. IMPORTANT:
+  check `heat >= 100` BEFORE applying decay, and return early on game over.
+- `_maybe_mutate_rule() -> None` — decrement rule_timer/warning; when rule changes, set
+  rule = _next_rule(rule), rule_timer = _rule_interval(). FROZEN during FLUX.
+- `_update_flash() / _update_flux() -> None` — manage FLUX trigger/expiry; when combo reaches 4,
+  start FLUX (flux_active=True, flux_timer=300); when flux_timer expires, flux_active=False,
+  combo=0.
+- `_spawn_particles(x, y, color, count, vmax)`, `_spawn_float(x, y, text, color)` — feedback helpers.
+
+## Scoring / Combo (exact formulas — tests will assert these)
+- HIT: combo += 1 (increment FIRST), then score += 10 * combo * (3 if flux_active else 1)
+  + (5 if token_elapsed < cycle_interval//2 else 0). max_combo = max(max_combo, combo).
+  Then if combo >= 4 and not flux_active: start FLUX.
+- FALSE ALARM: heat += 15, combo = 0.
+- MISS: heat += 8, combo = 0.
+- CORRECT RESTRAINT: score += 5, combo unchanged.
+- FLUX end: combo = 0, flux_active = False.
+
+## Phase Machine
+```
+TITLE --(SPACE/CLICK/KEY_RETURN)--> PLAYING --(heat>=100 or timer<=0)--> GAME_OVER
+GAME_OVER --(SPACE/CLICK/KEY_RETURN)--> PLAYING (reset())
+```
+
+## Screens
+1. TITLE: title "RULE FLUX" + instructions ("PRESS WHEN THE TOKEN MATCHES THE RULE",
+   "SPACE / CLICK", "RULES: HIGH EVEN WARM COOL"). Press SPACE/CLICK/RETURN to start.
+2. GAME: rule banner (flashing during rule_warning), large token (number + color block),
+   HEAT bar (right), TIMER bar (top), score/combo (top-left), FLUX rainbow border when active.
+3. GAME_OVER: "OVERLOAD" or "TIME UP", final score, best score, "PRESS SPACE TO RETRY".
+
+## Rendering Notes
+- Token number: pyxel.text at ~(156, 108), large (use text with a scale feel via size; default 4px/char is fine).
+- Token color: a filled rect (e.g., 40x40) centered at (160, 120) tinted token.color, with the
+  number overlaid in WHITE.
+- Rule banner: text centered at top; during rule_warning, alternate color WHITE/ORANGE every 10 frames.
+- HEAT bar: vertical, from y=210 (empty) up to y=30 (full), color ORANGE when >50 else YELLOW.
+- TIMER bar: horizontal width proportional to timer/3600, color CYAN.
+- FLUX mode: rainbow border (rect with color cycling) + token number tinted PINK=14.
+
+## Animation / Timing Rules
+- cycle_interval: 30f -> 12f (max(12, 30 - elapsed//200)).
+- rule_interval: 480f -> 240f (max(240, 480 - elapsed//15)).
+- rule_warning: 60f before each mutation (set when rule_timer reaches 60, then mutation at 0).
+- FLUX duration: 300f.
+- Particle lifecycle: life decremented each frame; removed when life <= 0. Apply gravity to
+  vy (e.g., +0.2/f) BEFORE updating position; update position after gravity.
+- Floating text: rises (y -= 1/f); removed when life <= 0.
+
+## Particle System
+- HIT: 8 particles at token position, color token.color, vmax 2.0, life 15-25, gravity 0.15.
+- FLUX start: 20 particles, CYAN=12, vmax 3.0, life 20-30.
+- FALSE ALARM: 4 particles, ORANGE=9, vmax 1.5, life 10-15.
+- MISS: 4 particles, GRAY=13, vmax 1.5, life 10-15.
+
+## Input
+- SPACE (pyxel.KEY_SPACE), pyxel.MOUSE_BUTTON_LEFT, pyxel.KEY_RETURN: advance TITLE/GAME_OVER.
+- During PLAYING: SPACE or CLICK = press decision (call `_handle_press()`).
+- No other keys needed.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp()
+- pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.text()
+- pyxel.frame_count, pyxel.mouse_x, pyxel.mouse_y
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes (from the state list above) before calling reset().
+- Never call pyxel.btn/btnp/mouse_x/mouse_y/frame_count in testable methods.
+- `_handle_press()` and `_handle_token_expiry()` and `_is_go()` and `_update_heat()` must not
+  touch pyxel — they act purely on self state.
+- Define `_make_game(seed=42)` factory in the test file: `g = Game.__new__(Game); pre-init; g.rng = random.Random(seed); g.reset()`.
+
+## Edge Cases
+- FLUX active when a FALSE ALARM occurs: still +15 heat and combo reset, but FLUX continues
+  until its 300f timer ends (simplest). [Or: end FLUX immediately — pick the simplest and
+  document it.] CHOSEN: FLUX continues; only its timer ends it.
+- rule mutation timer expiring exactly when FLUX starts: FLUX freezes mutation (rule_timer not
+  decremented during FLUX).
+- heat threshold check must run BEFORE decay so heat==100 triggers game over (see pitfall).
+- Pressing with no token (should not happen during PLAYING, but guard: if token is None, ignore).
+- Combo reaching 4 on the same frame FLUX is about to end: re-trigger only if flux_active is False.
+
+## Implementation Constraints
+- Single file: prototypes/323_rule_flux/main.py
+- ~450-600 lines
+- Type hints on all methods
+- Use @dataclass for data, Enum for phases/rules
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (no TYPE_CHECKING guard)
+- import random (use random.Random instance for determinism)
+- `if __name__ == "__main__": Game()` guard at the bottom
