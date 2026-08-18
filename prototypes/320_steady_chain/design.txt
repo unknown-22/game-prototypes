@@ -1,0 +1,236 @@
+# Design Spec: STEADY CHAIN (320_steady_chain) — Surgical Steady-Hand Arcade
+
+## 体験仮説 (experience hypothesis)
+「狭い切開ラインの上を、巡回するメス色に合わせて震えずになぞり、同色を連続切断して
+COMBOを爆発させる。手元が狂うとSLIP(出血)して患者が危険に陥る」— 細い線の上を正確に
+なぞる緊張と、同色連鎖が決まった時の快感が同居する。
+
+## メカニクス仮説 (mechanics hypothesis)
+Mechanics: 曲がりくねった切開ライン(ポリライン)を構成する色付きセグメントを、自動巡回する
+メス色と一致させてクリックで順番に切断する。Dynamics: 順番どおりに切る必要があるため、
+「今のメス色に合わせて切るか、色が巡回するまで待つか」の判断と、狭いラインから外れると
+SLIPする手元の正確さが同時に要求される。Aesthetics: 同色連続切断でCOMBOが伸び、
+SUPER STEADYの虹色で一気に切断が決まる爽快感と、ラインを外した時のヒヤリ。
+
+## 面白い瞬間 (the fun moment, 1 sentence)
+同色の切開セグメントを震えずに順番に切断し、COMBO>=4で虹色SUPER STEADYに突入して
+残りのセグメントを一気に切り開く瞬間。
+
+## Core mechanic (must demonstrate)
+1. A winding surgical incision = a polyline split into N colored segments (in-order cutting).
+2. Scalpel color auto-cycles; you cut the ACTIVE segment (first uncut) by clicking it while
+   your cursor is ON the corridor (within HALF_WIDTH of the segment centerline) and the
+   color matches. Consecutive matching cuts = COMBO chain. COMBO>=4 -> SUPER STEADY.
+3. STEADY-HAND twist: clicking while OFF the corridor (distance > half_width) = SLIP
+   (HEAT+15 + combo reset). The corridor NARROWS over time (steady hand gets harder).
+4. Cutting the LAST segment = INCISION COMPLETE (+100*combo bonus, new incision spawns,
+   combo PRESERVED).
+
+## Technical constraints (MANDATORY — follow exactly)
+
+- Single file `main.py`, Pyxel 2.x, resolution 320x240, 60fps.
+- `import pyxel` directly at top (NO `if TYPE_CHECKING:` guard).
+- English-only text (Pyxel default font has NO CJK glyphs). Use short ASCII strings only.
+- Color constants are RAW INTEGERS, never pyxel.COLOR_* at module level:
+  BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8
+  ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15.
+  Game colors: SCALPEL/PATIENT colors = RED=8, LIME=11, DARK_BLUE=5, YELLOW=10.
+- Pyxel API names (ty checker enforces these): `pyxel.tri` (NOT triangle),
+  `pyxel.KEY_RETURN` (NOT KEY_ENTER), `pyxel.MOUSE_BUTTON_LEFT`, `pyxel.mouse_wheel`,
+  `pyxel.btn`, `pyxel.btnp`, `pyxel.mouse_x`, `pyxel.mouse_y`, `pyxel.frame_count`,
+  `pyxel.rect`, `pyxel.rectb`, `pyxel.line`, `pyxel.circ`, `pyxel.circb`, `pyxel.text`,
+  `pyxel.pset`, `pyxel.pal`, `pyxel.blt` (avoid blt), `pyxel.play`, `pyxel.stop`.
+- Phase machine: `class Phase(Enum): TITLE, PLAYING, GAME_OVER` (importable, tested).
+
+## Headless-testability (MANDATORY)
+
+- The `Game.__init__` calls `pyxel.init` + `pyxel.run` (NOT testable). All game STATE is
+  initialized in `self.reset()`.
+- `reset()` MUST use `getattr(self, attr, default)` for `rng`, `best_score`, `_sfx_enabled`
+  so the headless factory can do `g = Game.__new__(Game); g.rng = random.Random(seed); g.reset()`
+  WITHOUT pre-initializing every attribute. Example:
+      self.rng = getattr(self, "rng", random.Random())
+      self.best_score = getattr(self, "best_score", 0)
+      self._sfx_enabled = getattr(self, "_sfx_enabled", True)
+- Testable methods take coordinates as ARGUMENTS and NEVER touch pyxel input/mouse state.
+  The wrapper `_update_playing()` reads `pyxel.mouse_x`/`pyxel.mouse_y`/`pyxel.btnp` and
+  passes them into the testable methods. Tests call the testable methods directly.
+- Sound: wrap every `pyxel.play(...)` call in a helper `self._sfx(ch, s)` that is a no-op
+  when `not self._sfx_enabled`. Headless tests set `g._sfx_enabled = False`.
+
+## Game state (instance attributes set in reset())
+
+- `self.phase: Phase = Phase.TITLE`
+- `self.segments: list[Segment]` — the incision (each Segment has x1,y1,x2,y2,color,cut)
+- `self.active_idx: int` — index of the first uncut segment
+- `self.scalpel_color: int` — current scalpel color (one of the 4 colors)
+- `self.scalpel_timer: int` — frames until next color cycle
+- `self.combo: int = 0`, `self.max_combo: int = 0`
+- `self.score: int = 0`, `self.best_score: int` (persist across reset)
+- `self.heat: float = 0.0`
+- `self.time_left: int = 3600` (60s), `self.elapsed: int = 0`
+- `self.super_mode: bool = False`, `self.super_timer: int = 0`
+- `self.particles: list[Particle] = []`
+- `self.floating_texts: list[FloatingText] = []`
+- `self.shake_frames: int = 0`
+- `self.cursor_x: int = 160`, `self.cursor_y: int = 120`
+- `self.rng: random.Random`
+- `self._sfx_enabled: bool`
+
+## Dataclasses (use @dataclass, type hints on all fields)
+
+```python
+@dataclass
+class Segment:
+    x1: float
+    y1: float
+    x2: float
+    y2: float
+    color: int
+    cut: bool = False
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Constants (class-level on Game)
+
+```python
+SCREEN_W = 320
+SCREEN_H = 240
+COLORS = (RED, LIME, DARK_BLUE, YELLOW) = (8, 11, 5, 10)
+WAYPOINTS = [(30,130),(70,80),(110,170),(150,90),(190,170),(230,80),(270,130)]  # 6 segments
+HALF_WIDTH_BASE = 10
+HALF_WIDTH_MIN = 7
+MAX_HEAT = 100
+SUPER_DURATION = 300
+TIMER_START = 3600
+```
+
+## Key methods (implement EXACTLY these signatures; tests will call them)
+
+- `def _cycle_interval(self) -> int:` returns `max(12, 20 - self.elapsed // 150)`.
+- `def _half_width(self) -> float:` returns `max(HALF_WIDTH_MIN, HALF_WIDTH_BASE - self.elapsed // 450)`.
+- `def _distance_point_segment(self, px: float, py: float, s: Segment) -> float:` standard
+  point-to-line-segment distance (clamp projection t to [0,1]).
+- `def _active_segment(self) -> Segment | None:` returns `self.segments[self.active_idx]` if
+  active_idx < len else None.
+- `def _try_cut(self, px: float, py: float) -> str:` the core action (returns "cut"/"wrong"/"slip"/"none"):
+  1. if phase != PLAYING: return "none"
+  2. active = self._active_segment(); if None: return "none"
+  3. d = self._distance_point_segment(px, py, active)
+  4. if d > self._half_width():  # OFF-PATH -> SLIP
+       self.combo = 0; self.heat += 15; self._spawn_particles(px, py, 6, RED); self._shake(8)
+       self._add_floating_text(px, py, "SLIP!", RED); return "slip"
+  5. match = (active.color == self.scalpel_color) or self.super_mode
+  6. if match: self._cut_active(px, py); return "cut"
+  7. else:  # WRONG color
+       self.combo = 0; self.heat += 15
+       self._add_floating_text(px, py, "WRONG!", RED); return "wrong"
+- `def _cut_active(self, px: float, py: float) -> None:`
+  - combo increments FIRST: `self.combo += 1`; `self.max_combo = max(self.max_combo, self.combo)`
+  - `mult = 3 if self.super_mode else 1`
+  - `self.score += 10 * self.combo * mult`
+  - mark `self.segments[self.active_idx].cut = True`
+  - spawn match particles + floating text "+{score}" (color = segment color)
+  - `self.active_idx += 1`
+  - `self._update_super_for_cut()` (see below)
+  - if `self.active_idx >= len(self.segments)`: INCISION COMPLETE ->
+      `self.score += 100 * self.combo`; floating text "INCISION COMPLETE!"; `self._spawn_incision()`
+      (combo NOT reset — preserved across incisions)
+- `def _update_super_for_cut(self) -> None:` if `self.combo >= 4 and not self.super_mode`:
+  set `self.super_mode = True; self.super_timer = SUPER_DURATION`; floating text "SUPER STEADY!".
+- `def _spawn_incision(self) -> None:` build `self.segments` from WAYPOINTS: for each adjacent
+  pair, `color = self.rng.choice(COLORS)`; set `self.active_idx = 0`. (Waypoints fixed, colors random.)
+- `def _cycle_color(self) -> None:` `self.scalpel_timer -= 1`; when <= 0, advance
+  `self.scalpel_color` to the next color in COLORS (wrap around), reset timer to `self._cycle_interval()`.
+  Frozen during super_mode (do nothing if super_mode).
+- `def _update_heat(self) -> None:` threshold check FIRST: `if self.heat >= MAX_HEAT: self.phase =
+  Phase.GAME_OVER; return`. Then (if not super_mode) `self.heat = max(0.0, self.heat - 0.02)`.
+- `def _update_super(self) -> None:` if super_mode: `self.super_timer -= 1`; if <= 0:
+  `self.super_mode = False`.
+- `def _update_timer(self) -> None:` `self.elapsed += 1; self.time_left -= 1`; if `self.time_left <= 0`:
+  `self.phase = Phase.GAME_OVER`.
+- `def _update_particles(self) -> None:` move each particle (x+=vx, y+=vy, life-=1), drop when life<=0.
+- `def _update_floating_texts(self) -> None:` y -= 0.5 per frame, life -= 1, drop when life<=0.
+- `def _spawn_particles(self, x, y, count, color) -> None:` burst of count particles with random
+  velocity (use self.rng), life ~20-40.
+- `def _add_floating_text(self, x, y, text, color) -> None:` life=40.
+- `def _shake(self, frames: int) -> None:` `self.shake_frames = max(self.shake_frames, frames)`.
+- `def _sfx(self, ch: int, s: int) -> None:` if self._sfx_enabled: `pyxel.play(ch, s)`.
+- `def start(self) -> None:` set phase=PLAYING and call `self.reset()` first (fresh run state),
+  preserving best_score.
+- `def _restart(self) -> None:` `self.best_score = max(self.best_score, self.score); self.reset();
+  self.phase = Phase.PLAYING`.
+
+## Input wrapper (pyxel — NOT tested directly)
+
+```python
+def _update_playing(self) -> None:
+    self.cursor_x = pyxel.mouse_x
+    self.cursor_y = pyxel.mouse_y
+    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+        self._try_cut(self.cursor_x, self.cursor_y)
+    self._cycle_color()
+    self._update_heat()
+    self._update_super()
+    self._update_timer()
+    self._update_particles()
+    self._update_floating_texts()
+    if self.shake_frames > 0: self.shake_frames -= 1
+```
+
+## Phase flow in update()
+
+```python
+def update(self) -> None:
+    if self.phase == Phase.TITLE:
+        if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            self.start()
+    elif self.phase == Phase.PLAYING:
+        self._update_playing()
+    elif self.phase == Phase.GAME_OVER:
+        if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.KEY_R):
+            self._restart()
+```
+
+## Draw requirements (3 screens)
+
+- TITLE: game title "STEADY CHAIN" + subtitle "SURGICAL STEADY HAND", and instructions:
+  "CLICK: cut matching segment", "Stay on the incision - don't slip!",
+  "PRESS SPACE TO START".
+- PLAYING: 
+  - dark background (NAVY=1)
+  - draw the incision corridor: for each segment draw a thin line (its color, or GRAY=13 if cut)
+    width ~half_width; draw a brighter guide (the active segment flashes/pulses) + scalpel cursor
+    (small crosshair or knife shape near cursor_x/cursor_y, in scalpel_color; rainbow in super_mode)
+  - HUD: SCORE (top-left), COMBO xN (below score), HEAT bar (right side vertical, color-coded
+    green->yellow->red), TIMER bar (top), SUPER indicator ("SUPER STEADY!" + rainbow border when active)
+  - particles + floating texts
+  - apply screen shake if shake_frames>0 via pyxel.camera offset
+- GAME_OVER: "GAME OVER", cause ("PATIENT LOST" if heat>=100 else "TIME UP"), final SCORE,
+  BEST score, "PRESS R TO RETRY".
+
+## Color palette reference (16 raw ints, for OpenCode's convenience)
+0 BLACK, 1 NAVY, 2 PURPLE, 3 GREEN, 4 BROWN, 5 DARK_BLUE, 6 LIGHT_BLUE, 7 WHITE,
+8 RED, 9 ORANGE, 10 YELLOW, 11 LIME, 12 CYAN, 13 GRAY, 14 PINK, 15 PEACH
+
+## Self-check before you finish (OpenCode MUST do this)
+- `grep -n "pyxel.triangle\|KEY_ENTER\|MOUSE_LEFT_BUTTON\|COLOR_" main.py` -> must return nothing.
+- `grep -nE "[^\x00-\x7F]" main.py` -> must return nothing (no CJK/emoji).
+- All testable methods listed above exist with the exact signatures.
+- `python3 -c "import ast; ast.parse(open('main.py').read())"` -> parses (well-formed).
