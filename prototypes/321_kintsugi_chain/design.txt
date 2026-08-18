@@ -1,0 +1,242 @@
+# 321 — KINTSUGI CHAIN Design Spec
+
+## Concept
+Kintsugi (金継ぎ) — the Japanese art of repairing broken pottery by filling the cracks with
+gold lacquer, making the piece MORE beautiful and valuable than before the break. The player is
+a kintsugi artisan: a cracked ceramic vessel sits center-screen. Cracks radiate from the vessel's
+center, each crack made of 4 colored segments. An auto-cycling gold-brush color (20f→12f) sweeps
+through 4 colors. CLICK a segment whose color matches the brush to fill it with gold. Same-color
+consecutive successful fills build a COMBO chain (score = 10×combo×mult). COMBO≥4 triggers
+SUPER KINTSUGI (300f rainbow, any-color match, 3× score, HEAT frozen). Filling ALL 4 segments of
+a crack COMPLETES it: the crack sets into a permanent GOLD VEIN and awards a bonus that GROWS
+with how many veins you have already completed ("log/replay as asset": your past repairs
+literally amplify your future rewards). Completing every crack on the vessel = VESSEL RESTORED
+(+500, a fresh cracked vessel spawns, COMBO preserved). Over time the vessel keeps cracking —
+new cracks appear (difficulty escalation + more scoring opportunity). Mismatch (click a segment
+whose color ≠ brush) = HEAT+15 + combo reset. HEAT≥100 (VESSEL SHATTERED) or 60s timer (TIME UP)
+= game over.
+
+## "Most Fun Moment" (面白い瞬間)
+「割れ目を一つずつ金で継いでいくほど、あとから完成する割れ目ほど大きなボーナスになり、
+最後の一継ぎで器全体に金色の流れが走って大得点が弾ける瞬間」
+
+## Core Mechanic
+1. Player watches the auto-cycling brush color and scans the vessel's cracks.
+2. CLICK an unfilled segment whose color == brush color (or SUPER active) → segment turns GOLD,
+   combo+1, score += 10×combo×(3 if SUPER else 1), particles + floating text.
+3. When all 4 segments of a crack are gold → CRACK COMPLETE: crack becomes a solid gold vein,
+   bonus = 50 × combo × completed_veins (completed_veins increments FIRST, so first crack = ×1,
+   second = ×2, …), floating text + screen shake. This is the "log/replay as asset" hook: the
+   more veins already completed, the bigger each new completion.
+4. When every crack is complete → VESSEL RESTORED: +500, fresh vessel with 4 new cracks spawns,
+   combo PRESERVED (snowball), completed_veins resets to 0.
+5. New cracks spawn over time (240f→120f interval, up to MAX_CRACKS=6) — escalation + opportunity.
+6. Mismatch = HEAT+15 + combo reset (segment stays unfilled). HEAT decays -0.02/f (frozen in
+   SUPER). HEAT≥100 → game over.
+7. Risk/reward: chase the current brush color for combo vs. deliberately target a specific crack
+   to complete it (bank a growing vein bonus); keep clicking to maintain combo vs. wait for the
+   right color to complete a crack before a new crack makes the board busier.
+
+## Technical Spec
+- Screen: 320×240, display_scale=2, Pyxel 2.x (fps default 60)
+- Vessel center: (160, 120), drawn as a plate (BROWN rim + GRAY body, radius ~96)
+- Cracks: 4 initial cracks at angles [45°, 135°, 225°, 315°]; each crack = 4 segments at radii
+  [30, 54, 78, 102] from center (spacing 24px). Additional cracks (5th/6th) spawn at random angles
+  (seeded RNG).
+- Segment: 12×12 px square, click detection = circular radius 10 around segment center
+  (math.hypot ≤ 10). Adjacent segments are 24px apart so click radii never overlap.
+- Phase machine: TITLE, PLAYING, GAME_OVER
+- Colors: crack colors = RED(8)/LIME(11)/DARK_BLUE(5)/PURPLE(2); GOLD(repaired) = YELLOW(10);
+  vessel rim = BROWN(4), body = GRAY(13); background = NAVY(1); HUD text = WHITE(7)
+
+## Data Classes
+```python
+from enum import Enum, auto
+from dataclasses import dataclass, field
+
+class Phase(Enum):
+    TITLE = auto()
+    PLAYING = auto()
+    GAME_OVER = auto()
+
+@dataclass
+class Segment:
+    x: float
+    y: float
+    color: int        # crack color (RED/LIME/DARK_BLUE/PURPLE)
+    filled: bool      # True when repaired -> GOLD
+
+@dataclass
+class Crack:
+    angle: float             # radians
+    segments: list[Segment]  # 4 segments, inner -> outer
+    complete: bool           # all segments filled
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatText:
+    x: float
+    y: float
+    text: str
+    color: int
+    life: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320,240,title=...), pyxel.mouse(True), pyxel.run(update, draw)
+    # reset(): init all state (called by __init__ and restart)
+    # update(): phase machine dispatch
+    # draw(): phase machine dispatch
+
+    # Key state (ALL attributes; CRITICAL for Game.__new__ pre-init):
+    # phase: Phase
+    # frame: int
+    # score: int
+    # best_score: int
+    # combo: int
+    # max_combo: int
+    # heat: float
+    # brush_color: int            # auto-cycling
+    # brush_timer: int            # frames until next brush color change
+    # super_timer: int            # >0 while SUPER active
+    # super_active: bool          # derived convenience (super_timer > 0)
+    # cracks: list[Crack]
+    # completed_veins: int        # completed cracks on CURRENT vessel
+    # restored_count: int         # how many vessels fully restored
+    # next_crack_spawn: int       # frame at which next crack spawns
+    # particles: list[Particle]
+    # floats: list[FloatText]
+    # shake: int                  # screen shake frames remaining
+    # rng: random.Random
+    # _sfx_enabled: bool
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `reset() -> None` — init all state; use `getattr(self, 'attr', default)` for rng/best_score/
+  _sfx_enabled so a minimal `Game.__new__` + `reset()` works. Seed cracks via `_spawn_crack`.
+- `_cycle_interval() -> int` — `max(12, 20 - self.frame // 150)` (brush cycle 20f→12f).
+- `_crack_spawn_interval() -> int` — `max(120, 240 - self.frame // 30)` (240f→120f).
+- `_brush_cycle() -> None` — decrement brush_timer; on ≤0 advance brush_color to next of the 4
+  crack colors and reset timer (skip when super_active).
+- `_spawn_crack(angle: float) -> None` — build a Crack with 4 Segments at radii [30,54,78,102],
+  each segment color = rng.choice of the 4 crack colors, filled=False, complete=False. Append to
+  self.cracks (respect MAX_CRACKS).
+- `_try_fill(x: float, y: float) -> None` — find nearest UNFILLED segment within CLICK_RADIUS 10;
+  if none, no-op. If seg.color == brush_color or super_active: fill it (seg.filled=True),
+  combo+1, max_combo update, score += 10*combo*(3 if super_active else 1), particles+floats,
+  then `_check_crack_complete(crack)` and `_check_vessel_restored()`. Else mismatch:
+  heat+=15, combo=0, floats+shake.
+- `_check_crack_complete(crack: Crack) -> int` — if all segments filled and not crack.complete:
+  mark complete, completed_veins += 1, bonus = 50 * self.combo * self.completed_veins, add to
+  score, return bonus. Else return 0.
+- `_check_vessel_restored() -> bool` — if cracks non-empty and all(crack.complete for crack in
+  cracks): score += 500, restored_count += 1, completed_veins = 0, replace cracks with 4 fresh
+  cracks (spawn at the 4 base angles), return True (combo PRESERVED — do NOT reset combo).
+- `_update_crack_spawn() -> None` — if frame >= next_crack_spawn and len(cracks) < MAX_CRACKS:
+  spawn a new crack at a random angle, set next_crack_spawn = frame + _crack_spawn_interval().
+- `_update_heat() -> None` — threshold check FIRST: if heat >= 100: phase=GAME_OVER; return;
+  then heat = max(0.0, heat - 0.02) (skip decay when super_active).
+- `_update_timer() -> None` — if frame >= 3600: phase = GAME_OVER (TIME UP).
+- `_update_particles()`, `_update_floats()`, `_update_shake()` — standard lifecycle updates
+  (life decrement, remove at ≤0).
+
+## Phase Machine
+```
+TITLE → (KEY_RETURN or MOUSE_BUTTON_LEFT) → PLAYING
+PLAYING → (heat≥100 or timer) → GAME_OVER
+GAME_OVER → (KEY_RETURN or R) → PLAYING (reset + restart)
+```
+
+## Screens
+1. TITLE: title "KINTSUGI CHAIN", subtitle "REPAIR THE BROKEN VESSEL WITH GOLD",
+   controls ("CLICK matching segments to fill gold", "COMBO>=4 = SUPER KINTSUGI",
+   "Complete a crack = gold vein bonus", "PRESS ENTER TO START"), press ENTER/click to start.
+2. GAME: vessel plate center-screen with radiating cracks; unfilled segments drawn in their crack
+   color, filled segments drawn GOLD (YELLOW) with a small ORANGE glint; a brush indicator at top
+   showing current brush color (colored square + label). HUD: SCORE (top-left), COMBO (top-right),
+   HEAT bar (vertical, right edge), TIMER bar (top edge). SUPER active = rainbow border + brush
+   shows rainbow.
+3. GAME_OVER: "VESSEL SHATTERED" (heat) or "TIME UP", final score, best score,
+   "PRESS R TO RESTART".
+
+## Rendering Notes
+- Vessel: pyxel.circ(160,120,96, GRAY) then pyxel.circb(160,120,96, BROWN) rim.
+- Crack segments: 12×12 rects at (seg.x-6, seg.y-6). Unfilled = crack color; filled = YELLOW.
+- Completed crack vein: draw a thick line (pyxel.line or rect) from center outward through the
+  segment centers in YELLOW to show the solid gold vein.
+- Brush indicator: 16×16 colored square near (160, 12) showing brush_color (rainbow if SUPER).
+- HEAT bar: vertical rect x=304..312, y=20..220, fill height = heat/100; color GREEN→YELLOW→RED.
+- TIMER bar: horizontal rect x=8..312, y=6, width = (3600-frame)/3600*304.
+- Screen shake: if shake>0, offset all drawing by rng.randint(-2,2).
+
+## Animation / Timing Rules
+- Brush cycle: brush_timer init 20, decrement each PLAYING frame; on ≤0 advance color.
+- SUPER: set super_timer=300 when combo reaches ≥4 after a match; decrement each frame; super_active
+  = super_timer>0. On expiry (super_timer hits 0) combo is NOT reset (only mismatch resets combo).
+- Crack spawn: next_crack_spawn init 240; new crack spawns at random angle when due.
+
+## Particle System
+- Match fill: 8 particles (color = segment color), vx/vy ±1.5, life 20-30.
+- Crack complete: 16 particles (YELLOW), vx/vy ±2.5, life 25-40.
+- Vessel restored: 30 particles (YELLOW+ORANGE mix), radial burst, life 30-50.
+- Mismatch: 4 particles (GRAY), vx/vy ±1.0, life 15-25.
+- No gravity (screen-space burst), particles fade via life.
+
+## Floating Text
+- Match: "+{score}" WHITE, life 30.
+- COMBO milestone: "COMBO x{n}" when combo≥4, life 40.
+- Crack complete: "GOLD VEIN +{bonus}" YELLOW, life 50.
+- Vessel restored: "VESSEL RESTORED +500" YELLOW, life 60.
+- Mismatch: "WRONG!" RED, life 30.
+- SUPER start: "SUPER KINTSUGI!" rainbow (YELLOW), life 50.
+
+## Input
+- MOUSE_BUTTON_LEFT click → _try_fill(pyxel.mouse_x, pyxel.mouse_y) (PLAYING).
+- KEY_RETURN → start from TITLE; R → restart from GAME_OVER.
+- (Title also accepts click to start.)
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.circb(), pyxel.rect(), pyxel.line(),
+  pyxel.text(), pyxel.frame_count, pyxel.mouse_x, pyxel.mouse_y, pyxel.mouse(True)
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- `reset()` uses `getattr(self, 'attr', default)` for rng/best_score/_sfx_enabled, so the test
+  factory can be just: `g = Game.__new__(Game); g.rng = random.Random(seed); g.reset()`.
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods; `_try_fill` takes explicit
+  (x, y) coordinates.
+- `_make_game()` factory in test file seeds rng AFTER reset() for deterministic cracks.
+
+## Edge Cases
+- Click on empty space (no segment within radius 10) = no-op, no heat.
+- Click on an already-filled (gold) segment = no-op (ignore, no heat, no combo).
+- All cracks complete → VESSEL RESTORED resets cracks; combo preserved.
+- MAX_CRACKS=6: no new crack spawns beyond 6.
+- Heat decay frozen during SUPER; heat threshold (≥100) checked BEFORE decay.
+- Timer: frame 3600 = 60s = TIME UP game over.
+
+## Implementation Constraints
+- Single file: prototypes/321_kintsugi_chain/main.py
+- ~400-550 lines, type hints on all methods, @dataclass for data, Enum for phases
+- No external dependencies beyond pyxel; `import pyxel` directly (no TYPE_CHECKING guard)
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- 3 screens: Title / Playing / Game Over
+- A `main()` entry point: `if __name__ == "__main__": main()`
