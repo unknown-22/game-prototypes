@@ -1,0 +1,185 @@
+# LOOM CHAIN — Pyxel Game Prototype Design Spec
+
+## Theme & Fantasy
+You are a weaver operating a hand loom. Warp threads (vertical) have FIXED colors.
+A shuttle carries the weft thread whose color AUTO-CYCLES. Shoot the shuttle to weave
+a cell: if the weft color matches that column's warp color, it is a PERFECT weave
+(COMBO chain). Mismatches leave a permanent gray FLAW (a visible log of mistakes).
+Completed rows scroll off into a fabric archive — the woven cloth IS your log
+("log/replay as asset"). This is the FIRST weaving/loom genre in the collection.
+
+## The One "Fun Moment" (must deliver this)
+"Move the shuttle to the column whose warp color matches the current weft color and
+shoot just before the color cycles — chaining perfect weaves into a rainbow SUPER
+SHUTTLE and banking a PERFECT ROW whose bonus snowballs with consecutive perfect rows."
+
+## Reinterpretation source
+game_idea_factory idea #1 (Score 32.55, logistics/delivery deckbuilder):
+- "log/replay as asset (previous action becomes next card)" -> the woven fabric is a
+  permanent visual log; consecutive PERFECT ROWS amplify future row bonuses (snowball).
+- "CA grid fills up (infection/growth) to control" -> the fabric accumulates row by row
+  into the archive; a fully-flawed row TANGLES the loom (extra HEAT).
+
+## Distinct mechanic (what makes this NOT another grid-click game)
+A SINGLE ACTIVE ROW of 6 cells + a fixed per-column warp color + a spatially-moving
+shuttle cursor + a row-completion bonus that scales with CONSECUTIVE PERFECT ROWS.
+The player must (a) move the cursor to the right column, (b) time the shot to the
+auto-cycling weft color, and (c) keep rows PERFECT to protect the snowball bonus.
+
+## Hard Constraints (Pyxel 2.x)
+- Single file: prototypes/322_loom_chain/main.py. Screen 320x240, @60fps (FPS=60).
+- English-only text (Pyxel BDF font has NO CJK glyphs). NO emoji.
+- Colors (raw ints): BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+  WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15.
+- Weave colors: RED=8, LIME=11, DARK_BLUE=5, YELLOW=10. FLAW color = GRAY=13.
+- API: pyxel.tri (NOT triangle), pyxel.KEY_RETURN (NOT KEY_ENTER),
+  pyxel.MOUSE_BUTTON_LEFT, pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN).
+- Just `import pyxel` at top (NO TYPE_CHECKING guard).
+
+## Constants
+SCREEN_W=320, SCREEN_H=240, FPS=60.
+COLS=6, CELL=40, BOARD_X=(320 - COLS*CELL)//2 = 40, BOARD_Y=150 (single active row).
+GAME_DURATION=3600 (60s, decremented every frame). HEAT_MAX=100.
+COMBO_SUPER=4 (COMBO>=4 triggers SUPER SHUTTLE). SUPER_DURATION=300 frames.
+CYCLE_START=20, CYCLE_MIN=12. HEAT_DECAY=0.02 per frame.
+
+## Phase enum (class Phase(Enum))
+TITLE, PLAYING, GAME_OVER.
+
+## Game class structure
+class Game:
+    # __init__: pyxel.init(320,240,...); self.reset(); pyxel.run(self.update, self.draw)
+    # All game state lives in reset() so headless tests can bypass __init__ via
+    # Game.__new__(Game) and call reset() directly.
+
+    def reset(self):  # assign EVERY instance attribute here, no pyxel.* calls
+        self.phase = Phase.TITLE
+        self.frame = 0
+        self.score = 0
+        self.combo = 0
+        self.max_combo = 0
+        self.heat = 0.0
+        self.super_timer = 0
+        self.consecutive_perfect = 0
+        self.rng = random.Random()   # use random.Random, seeded in tests
+        self.warp_colors = [self.rng.choice(WEAVE_COLORS) for _ in range(COLS)]
+        self.cells = [-1] * COLS        # -1 = empty, else color int or FLAW(13)
+        self.cursor_col = 0
+        self.weft_color = WEAVE_COLORS[0]
+        self.cycle_timer = 0
+        self.fabric_log: list[list[int]] = []   # completed rows (each length COLS)
+        self.best_score = 0                     # persists across resets via getattr default
+        # NOTE: best_score should survive reset (high-score persistence). Use
+        #   self.best_score = getattr(self, "best_score", 0)  at the TOP of reset()
+
+    WEAVE_COLORS = (RED=8, LIME=11, DARK_BLUE=5, YELLOW=10) — module-level tuple.
+
+## Core (testable) methods — MUST NOT call pyxel.btn/btnp/mouse_x/mouse_y/frame_count
+    def cycle_interval(self) -> int:
+        # difficulty ramp: return max(12, 20 - self.frame // 150)   (20f at start -> 12f)
+
+    def _advance_weft(self) -> None:
+        # called every frame in PLAYING. self.cycle_timer += 1;
+        # if cycle_timer >= self.cycle_interval(): cycle_timer = 0;
+        #   self.weft_color = WEAVE_COLORS[(WEAVE_COLORS.index(self.weft_color)+1) % 4]
+        # (cycle only when NOT in SUPER; in SUPER weft freezes)
+
+    def _weave(self, col: int) -> None:
+        # Weave the active-row cell at column `col` (0..COLS-1). Pure logic.
+        # If col out of range or self.cells[col] != -1 (already woven): return (no-op).
+        # was_super = self.super_timer > 0  (capture BEFORE any mutation)
+        # match = (self.weft_color == self.warp_colors[col]) or was_super
+        # if match:
+        #     self.cells[col] = self.weft_color
+        #     self.combo += 1
+        #     self.max_combo = max(self.max_combo, self.combo)
+        #     mult = 3 if was_super else 1
+        #     self.score += 10 * self.combo * mult     # combo increments first: first weave = 10
+        #     if self.combo >= COMBO_SUPER and self.super_timer == 0:
+        #         self.super_timer = SUPER_DURATION     # trigger SUPER (rainbow)
+        # else:
+        #     self.cells[col] = FLAW                  # GRAY=13, permanent mistake
+        #     self.heat = min(HEAT_MAX, self.heat + 15)
+        #     self.combo = 0
+        # # row completion check (after the weave):
+        # if all(c != -1 for c in self.cells):
+        #     self._complete_row()
+
+    def _complete_row(self) -> None:
+        # perfect = sum(1 for c in self.cells if c != FLAW)
+        # if perfect == 0: self.heat = min(HEAT_MAX, self.heat + 15)   # TANGLED
+        # if perfect == COLS:
+        #     self.consecutive_perfect += 1
+        #     self.score += 100 * self.consecutive_perfect   # PERFECT ROW snowball bonus
+        # else:
+        #     self.consecutive_perfect = 0                   # a flaw breaks the streak
+        # self.score += perfect * 20 * (1 + self.consecutive_perfect)
+        # self.fabric_log.append(list(self.cells))           # archive (the "log")
+        # self.cells = [-1] * COLS                            # new empty row
+        # # combo is PRESERVED across rows (rewards maintaining a streak)
+
+    def _update_heat(self) -> None:
+        # threshold check BEFORE decay (pitfall: decay-before-check makes game over
+        # unreachable). if self.heat >= HEAT_MAX: self.phase = Phase.GAME_OVER; return
+        # if self.super_timer == 0: self.heat = max(0.0, self.heat - HEAT_DECAY)
+
+    def _update_super(self) -> None:
+        # if self.super_timer > 0: self.super_timer -= 1
+
+    def _update_playing(self) -> None:   # the per-frame update; may touch pyxel input
+        # self.frame += 1
+        # if self.frame >= GAME_DURATION: self.phase = Phase.GAME_OVER; return
+        # self._advance_weft()
+        # self._update_super()
+        # self._update_heat()
+        # cursor: LEFT/A -> cursor_col -= 1 (clamp 0..COLS-1); RIGHT/D -> += 1
+        #         (pyxel.btnp for discrete move)
+        # weave: if pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+        #            col = mouse column if mouse inside board else cursor_col; self._weave(col)
+        # (mouse: col = (pyxel.mouse_x - BOARD_X)//CELL if BOARD_X<=x<BOARD_X+COLS*CELL)
+
+## Screens / draw
+- TITLE: title "LOOM CHAIN" + controls text + "PRESS ENTER" (use pyxel.KEY_RETURN).
+  Also show best_score.
+- PLAYING: draw warp threads (vertical lines per column, colored), the active row cells
+  (colored squares or GRAY flaws; empty cells = dark outline), the shuttle cursor
+  (highlight outline on cursor_col, and a small shuttle block), weft color indicator
+  (a colored square + label "WEFT"), HEAT bar (right side, red at high heat),
+  TIMER bar (top), SCORE + COMBO text (top-left), SUPER = rainbow border + flashing.
+  Draw fabric_log archive as thin horizontal strips scrolling below the board
+  (each completed row = a 6-cell strip; perfect rows draw a gold/yellow tint).
+- GAME_OVER: "GAME OVER" + final score + best score + "PRESS ENTER TO RETRY".
+
+## Risk / Reward (must be clearly felt)
+- Matching = COMBO + score scales with combo; COMBO>=4 = SUPER SHUTTLE (300f rainbow,
+  any-color match, 3x score, HEAT decay frozen, weft frozen).
+- Mismatch = permanent GRAY flaw + HEAT+15 + combo reset. A flaw in a row breaks the
+  consecutive_perfect streak (forfeits the snowball). An all-flaw row = TANGLED (+15 HEAT).
+- Keeping rows PERFECT builds the snowball (each perfect row banks 100*streak + 120),
+  so "risk a shot for the snowball vs wait for the safe color" is the tension.
+
+## Headless-testing requirements (CRITICAL for test_imports.py)
+- import pyxel normally. Tests use Game.__new__(Game) to bypass __init__ (avoiding
+  pyxel.init/pyxel.run). Then g = Game.__new__(Game); g.reset(); g.rng = random.Random(42).
+- reset() must be self-contained and NOT touch any pyxel.* function.
+- Tests call _weave / _complete_row / _advance_weft / _update_heat / cycle_interval
+  directly with controlled state (set g.weft_color, g.warp_colors, g.cells manually).
+- NEVER call _update_playing or any method touching pyxel.btn/btnp/mouse in tests.
+
+## Test scenarios the author should verify (write test_imports.py covering at least):
+1. reset() inits: cells all -1, combo 0, heat 0, phase TITLE, warp_colors length 6.
+2. _weave match: weft==warp[col] -> cells[col]==weft_color, combo==1, score==10.
+3. _weave mismatch: cells[col]==FLAW, heat==15, combo==0, score unchanged.
+4. _weave no-op when cell already woven (cells[col] != -1).
+5. COMBO>=4 triggers SUPER (super_timer==300).
+6. SUPER 3x score and any-color match.
+7. _complete_row all-perfect: consecutive_perfect==1, score gets 100 + 6*20*2 bonus,
+   fabric_log length 1, cells reset to all -1, combo preserved.
+8. _complete_row with one flaw: consecutive_perfect==0, flaw breaks streak.
+9. _complete_row all-flaw: heat +15 (TANGLED).
+10. _update_heat: heat>=100 -> GAME_OVER (and threshold checked BEFORE decay).
+11. cycle_interval ramps 20 -> 12 with frame.
+12. _advance_weft cycles weft color through WEAVE_COLORS in order.
+
+## File-size / scope
+Single main.py, ~400-500 lines. Keep it tight — ONE mechanic. No map, no meta-progression.
