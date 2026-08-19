@@ -1,0 +1,217 @@
+# 325 — FISSION (Nuclear Reactor Press-Your-Luck) Design Spec
+
+## Concept
+You operate a nuclear reactor. Press CHARGE to inject a random burst of energy (a
+die roll, 1–6) into the core accumulator. Each reactor has a HIDDEN MELTDOWN
+THRESHOLD T — if your accumulated energy exceeds T, the core melts down: you lose
+the unbanked energy AND one life (3 lives total). Press BANK at any time to
+"cash out" the accumulated energy into your score and start a fresh reactor.
+
+The twist (partial observation / runaway control): a SENSOR GAUGE shows a
+"danger band" [T - w, T + w] — an approximate location of the meltdown line. You
+do not know T exactly, only that it lies somewhere inside the band. Each CHARGE
+narrows the sensor window w (6 → 5 → 4 → 3 → 2), so charging both risks meltdown
+AND reveals information about where the line is. Banking when your energy is
+within EDGE_MARGIN of the true T pays a 2× "CLOSE CALL!" bonus — thread the needle
+between "safe" and "meltdown" to score big.
+
+## "Most Fun Moment" (面白い瞬間)
+センサーの危険帯ギリギリまでエネルギーを溜めて、メルトダウン直前で回収して
+2倍ボーナス（CLOSE CALL!）を取れたときの「ヒヤッとしたけど大儲けした」感覚。
+
+## Core Mechanic
+1. Reactor starts with energy=0, hidden threshold T ∈ [MIN_T, MAX_T], sensor
+   window w = SENSOR_START.
+2. Player chooses:
+   - CHARGE (SPACE / click): roll = rng.randint(1,6); energy += roll; w = max(2, w-1);
+     if energy > T → MELTDOWN (lose 1 life, lose energy, spawn new reactor);
+     else → energy bar grows, small spark particles, sensor narrows.
+   - BANK (B / click): if energy <= 0 → no-op. bank_value = energy * (2 if energy >= T - EDGE_MARGIN else 1);
+     score += bank_value; spawn new reactor. "CLOSE CALL!" + 2× if edge bonus.
+3. Risk/reward: more energy = bigger bank (and 2× edge bonus), but each charge
+   risks crossing T. The sensor band narrows as you charge, so early charges are
+   blind-ish and later charges are informed — you decide how deep to push.
+4. Failure: 3 meltdowns (lives=0) OR 60s timer expires → GAME_OVER. Score = total
+   banked energy; best_score persisted.
+
+## Technical Spec
+- Screen: 320×240, display_scale=2, Pyxel 2.x, 60fps
+- Phase machine: TITLE, PLAYING, GAME_OVER
+- Colors: BG=NAVY(1), core=GREEN(3)→YELLOW(10)→ORANGE(9)→RED(8) by energy,
+  gauge track=GRAY(13), energy fill=YELLOW(10)→ORANGE(9)→RED(8), danger band=RED(8)
+  semi-transparent, text=WHITE(7), buttons=GRAY(13)/DARK_BLUE(5), lives=PEACH(15)
+- Layout: reactor core circle at (160, 80) r=28; energy gauge bar at
+  (GAUGE_X=60, GAUGE_Y=150, GAUGE_W=200, GAUGE_H=24); CHARGE button bottom-left,
+  BANK button bottom-right; HUD: SCORE top-left, LIVES top-right, TIMER bar top.
+
+## Data Classes
+```python
+class Phase(Enum):
+    TITLE = 0
+    PLAYING = 1
+    GAME_OVER = 2
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320,240,...); pyxel.mouse(True); pyxel.run(self.update, self.draw)
+    # reset(): init ALL state, spawn first reactor
+    # update(): phase machine dispatch (TITLE/PLAYING/GAME_OVER)
+    # draw(): phase machine dispatch
+    #
+    # Key state (ALL must be pre-inited for Game.__new__ headless pattern):
+    #   phase: Phase
+    #   frame: int            # elapsed frames (timer)
+    #   energy: int           # current unbanked accumulator
+    #   threshold: int        # hidden meltdown threshold T
+    #   sensor_window: int    # w, half-width of danger band
+    #   score: int
+    #   lives: int
+    #   best_score: int
+    #   last_roll: int        # last die roll (for display)
+    #   last_bank: int        # last bank value (for display)
+    #   close_calls: int      # count of edge-bonus banks (flavor)
+    #   total_banks: int      # count of banks (flavor)
+    #   shake: int            # screen shake frames remaining
+    #   flash: int            # meltdown flash frames remaining
+    #   particles: list[Particle]
+    #   floats: list[FloatingText]
+    #   rng: random.Random
+    #   _sfx_enabled: bool
+    #   _game_over_reason: str  # "MELTDOWN" or "TIME UP"
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `reset() -> None` — set all state to defaults, `self.rng` is seeded OUTSIDE
+  (keep existing rng if already set; use `getattr(self, "rng", None)` guard so
+  `_make_game()` can seed then call reset). Then `_spawn_reactor()`.
+- `_spawn_reactor() -> None` — threshold = rng.randint(MIN_T, _max_t()); energy=0;
+  sensor_window=SENSOR_START; last_roll=0.
+- `_max_t() -> int` — MAX_T_BASE + frame // 600 (escalation, +1 per 10s).
+- `charge() -> str` — die roll; energy += roll; last_roll = roll;
+  sensor_window = max(SENSOR_MIN, sensor_window - 1);
+  if energy > threshold: `_meltdown()`; return "meltdown"; else return "charged".
+- `_meltdown() -> None` — lives -= 1; energy lost (reset to 0, NOT banked);
+  spawn new reactor; if lives <= 0: phase = GAME_OVER, _game_over_reason="MELTDOWN".
+- `bank() -> str` — if energy <= 0: return "empty";
+  bv = _bank_value(energy, threshold); score += bv; last_bank = bv;
+  if edge bonus (energy >= threshold - EDGE_MARGIN): close_calls += 1; 
+  total_banks += 1; _spawn_reactor(); return "banked".
+- `_bank_value(energy: int, threshold: int) -> int` — PURE: energy * (EDGE_MULT if
+  energy >= threshold - EDGE_MARGIN else 1).
+- `sensor_band() -> tuple[int, int]` — (threshold - sensor_window, threshold + sensor_window).
+- `in_danger() -> bool` — energy >= threshold - sensor_window (entered danger band).
+- `_update_particles() -> None` / `_update_floats() -> None` — age/remove by life.
+
+## Phase Machine
+```
+[TITLE] → (SPACE/ENTER/click) → [PLAYING] → (lives==0 or frame>=TIMER_MAX) → [GAME_OVER] → (SPACE/ENTER/R) → [TITLE]
+```
+
+## Screens
+1. TITLE: game title "FISSION", subtitle, controls text (SPACE=CHARGE, B=BANK),
+   "PRESS SPACE TO START", best_score if > 0.
+2. GAME: reactor core (glows by energy), energy gauge with danger band + energy
+   fill, HUD (score/lives/timer), CHARGE & BANK buttons, last roll pips,
+   floating text, particles, "DANGER" indicator + red pulse when in_danger().
+3. GAME_OVER: reason ("MELTDOWN" or "TIME UP"), final score, best score,
+   "PRESS SPACE TO RETRY".
+
+## Rendering Notes
+- Energy gauge: track GRAY(13) rect; danger band = semi-transparent RED overlay
+  rect over the band's x-range (use pyxel.pal to set an alpha color, or draw the
+  band as a RED(8) outline + lighter RED fill via pset/rectb); energy fill = solid
+  YELLOW(10)/ORANGE(9)/RED(8) rect from gauge left to energy/MAX_ENERGY.
+- Reactor core: color = GREEN(3) if energy < T-w; YELLOW(10) if in danger; 
+  RED(8) pulsing if in_danger(); radius grows slightly with energy.
+- Buttons: rounded rect + label; hover = lighter fill (track mouse_x/mouse_y in
+  the update wrapper only, not in testable methods).
+- Screen shake: pyxel.camera offset by small random int while shake > 0 (wrap in
+  try/except in draw; set shake=0 on draw end).
+
+## Animation / Timing Rules
+- Timer: frame += 1 each PLAYING update; game over at frame >= TIMER_MAX (3600).
+- shake: set to 12 on meltdown; decrement each frame.
+- flash: set to 20 on meltdown; white/red overlay flash while > 0.
+
+## Particle System
+- charge: 4 sparks at core, vx/vy random ±1.5, life 8–16, color YELLOW(10).
+- bank: 12 green burst, vx/vy ±3, life 12–24, color LIME(11).
+- close call: 20 burst, color PINK(14).
+- meltdown: 40 burst, vx/vy ±4, life 20–40, colors ORANGE(9)/RED(8).
+- No gravity (explosions in a reactor room); life decrements 1/frame, remove at 0.
+
+## Input
+- SPACE / click CHARGE button → charge()
+- B / click BANK button → bank()
+- TITLE & GAME_OVER: SPACE / ENTER (KEY_RETURN) / R / click → reset() & start.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.rect(), pyxel.rectb(),
+  pyxel.text(), pyxel.frame_count, pyxel.mouse_x, pyxel.mouse_y, pyxel.pal()
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Constants
+- W=320, H=240, FPS=60
+- MIN_T=12, MAX_T_BASE=22, MAX_ENERGY=36
+- CHARGE_MIN=1, CHARGE_MAX=6
+- SENSOR_START=6, SENSOR_MIN=2, EDGE_MARGIN=2, EDGE_MULT=2
+- LIVES=3, TIMER_MAX=3600
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset(), OR rely on reset()
+  using getattr guards for every attribute (preferred, mirrors facet-chain).
+- Never call pyxel.btn/btnp/mouse_x/mouse_y in testable methods (charge, bank,
+  _meltdown, _spawn_reactor, _bank_value, sensor_band, in_danger, _max_t).
+- Define `_make_game(seed=42)` factory in test file: g = Game.__new__(Game);
+  g.rng = random.Random(seed); g.reset(); return g.
+- Monkey-patch g.rng.randint to control die rolls deterministically where needed.
+
+## Edge Cases
+- bank() with energy==0 → "empty", no score change.
+- energy exactly == threshold → NOT meltdown (strictly greater); edge bonus applies
+  if energy >= threshold - EDGE_MARGIN.
+- charge() that rolls past threshold → meltdown; energy must reset to 0 and NOT
+  be scored.
+- lives reaches 0 → phase GAME_OVER with reason "MELTDOWN".
+- frame reaches TIMER_MAX → GAME_OVER with reason "TIME UP" (check in update only).
+- sensor band clamped to [0, MAX_ENERGY] for rendering (no negative x).
+- rapid double-trigger: charge()/bank() are idempotent per call; no hidden
+  per-frame guard needed (input wrapper handles one action per frame).
+
+## Implementation Constraints
+- Single file: prototypes/325_fission/main.py
+- ~450–600 lines
+- Type hints on all methods; `@dataclass` for Particle/FloatingText; `Enum` for Phase
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- `import pyxel` directly at top (NO TYPE_CHECKING guard)
+- Module-level color constants as raw ints (no pyxel.COLOR_* references that would
+  break headless import)
+- `if __name__ == "__main__": Game()` guard at bottom
