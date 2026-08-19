@@ -1,0 +1,211 @@
+# 326 — ANTIQUE AUCTION Design Spec
+
+## Concept
+An antiques auction house game. Antique lots of HIDDEN true value come up for auction one at
+a time. The player must BID (buy) at the right moment to earn a profit. The true value V is
+only partially observable — an "appraisal band" [lo, hi] is shown and NARROWS toward V over
+time, but never fully reveals it (residual uncertainty remains). Meanwhile the auction PRICE
+climbs continuously. Bid early = cheap but blind (high variance). Bid late = informed but
+expensive (price may exceed value = guaranteed loss). This is a pure value-estimation +
+timing risk/reward game. It deliberately BREAKS the saturated color-match COMBO/HEAT formula
+(following the 323_rule_flux / 324_ticker_surge / 325_fission breakaway precedent): there is
+NO color matching, NO COMBO, and NO HEAT meter — just bankroll, price, and a narrowing
+appraisal band.
+
+## "Most Fun Moment" (面白い瞬間)
+「価値の絞り込み」と「価格の上昇」を天秤にかけ、ギリギリで掘り出し物を安く競り落として大儲けする瞬間。
+
+## Core Mechanic (loop per lot, a few seconds each)
+1. A lot appears with hidden true value V = rng.randint(MIN_V, MAX_V). V is NOT shown.
+2. Appraisal band [lo, hi] is shown, starting at [BAND_LO_START, BAND_HI_START] (wide, hides V),
+   and narrowing linearly toward [V - RESIDUAL, V + RESIDUAL] over OBSERVE_FRAMES. After that the
+   band stays at [V - RESIDUAL, V + RESIDUAL]. So the player sees the range shrink around the true
+   value but never learns it exactly.
+3. Auction price P climbs linearly from PRICE_START toward PRICE_END over LOT_FRAMES:
+   P = PRICE_START + (PRICE_END - PRICE_START) * (age / LOT_FRAMES), integer, capped at PRICE_END.
+4. Player presses SPACE (or clicks the BID button) to BID at the current price P. V is revealed.
+   profit = V - P. bankroll += profit. Show a floating text "+$N" (profit>=0, LIME=11) or
+   "-$N" (profit<0, RED=8).
+5. If the player does NOT bid before age >= LOT_FRAMES, the lot is "SOLD TO RIVAL" (missed):
+   lots_passed += 1, no bankroll change, next lot. Floating text "SOLD" (GRAY=13).
+6. bankroll <= 0 -> BANKRUPT game over. frame >= GAME_DURATION -> TIME UP game over.
+   Score = final bankroll. best_bankroll persisted across resets.
+
+## Risk / Reward
+- Early bid: P is low (potential big profit) but band is wide (blind, could be a low-value trap).
+- Late bid: band is narrow (informed) but P is high (profit margin shrinks; P can exceed V -> loss).
+- Residual uncertainty (RESIDUAL half-width) means even a late bid carries real risk — you can
+  never perfectly know V, so every bid is a judgement call.
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, Pyxel 2.x
+- Phase machine: TITLE, PLAYING, GAME_OVER
+- Fixed values:
+  - MIN_V = 40, MAX_V = 200
+  - BAND_LO_START = 10, BAND_HI_START = 230   (initial band fully hides V)
+  - RESIDUAL = 25                              (final half-width; band never fully reveals V)
+  - PRICE_START = 120, PRICE_END = 220          (starts at E[V]=120: fair opening bid — blind
+    instant bids are a coin-flip, so reading the band is what earns profit; late price exceeds
+    MAX_V -> waiting forever is a guaranteed loss)
+  - OBSERVE_FRAMES = 90                        (band narrowing duration)
+  - LOT_FRAMES = 150                           (sold-to-rival deadline)
+  - START_BANKROLL = 1000
+  - GAME_DURATION = 3600                       (60s at 60fps)
+
+## Data Classes
+```python
+@dataclass
+class Lot:
+    value: int     # hidden true value V
+    age: int       # frames since lot appeared
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    color: int
+    life: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, ...), pyxel.run(self.update, self.draw)
+    # reset(): init all state, call _new_lot()
+    # update(): phase machine dispatch
+    # draw(): phase machine dispatch
+
+    # Key state (all instance attributes; pre-init needed for Game.__new__):
+    #   phase: Phase
+    #   frame: int            # elapsed frames in PLAYING (used for timer + escalation)
+    #   bankroll: int
+    #   best_bankroll: int
+    #   lots_bid: int
+    #   lots_passed: int      # sold-to-rival count
+    #   lot: Lot | None
+    #   particles: list[Particle]
+    #   floats: list[FloatingText]
+    #   shake: int
+    #   flash: int
+    #   game_over_reason: str
+    #   rng: random.Random
+```
+
+## Key Methods (Testable — NO pyxel input/sound calls)
+- `_new_lot() -> None` — lot = Lot(value=rng.randint(MIN_V, MAX_V), age=0); lots_bid/lots_passed not touched here
+- `_residual(frame: int) -> int` — escalation: 25 + 15 * (frame / GAME_DURATION)  -> int 25..40
+- `_lot_frames(frame: int) -> int` — 150 - 50 * (frame / GAME_DURATION)           -> int 150..100
+- `_observe_frames(frame: int) -> int` — 90 - 40 * (frame / GAME_DURATION)        -> int 90..50
+- `_band_lo(lot: Lot, frame: int) -> int` — lower band bound (see Band Math below)
+- `_band_hi(lot: Lot, frame: int) -> int` — upper band bound
+- `_current_price(lot: Lot, frame: int) -> int` — PRICE_START + (PRICE_END-PRICE_START)*age/_lot_frames(frame), capped at PRICE_END
+- `_bid() -> None` — resolve current lot: compute price, profit = V - price, bankroll += profit,
+  lots_bid += 1, spawn floating text, particles, shake if loss, then _new_lot(), check bankrupt
+- `_resolve_sold_to_rival() -> None` — lots_passed += 1, "SOLD" floating text, _new_lot()
+- `_update_playing() -> None` — advance frame, lot.age; if lot.age >= _lot_frames(frame) -> _resolve_sold_to_rival();
+  update particles/floats; decrement shake/flash; if bankroll<=0 or frame>=GAME_DURATION -> phase=GAME_OVER, set reason
+- `_game_over_reason() -> str` — "BANKRUPT" if bankroll<=0 else "TIME UP"
+- `_update_particles() -> None`, `_update_floats() -> None` — lifecycle helpers
+
+## Band Math (deterministic, testable)
+```
+p = min(1.0, lot.age / _observe_frames(frame))
+half_width = lerp((BAND_HI_START - BAND_LO_START) / 2.0, _residual(frame), p)
+center     = lerp((BAND_LO_START + BAND_HI_START) / 2.0, float(lot.value), p)
+lo = int(center - half_width)
+hi = int(center + half_width)
+```
+At p=1 (age >= observe_frames) band == [V - residual, V + residual].
+
+## Phase Machine
+TITLE -> (SPACE or KEY_RETURN) -> PLAYING -> (auto: bankroll<=0 or frame>=GAME_DURATION) -> GAME_OVER
+GAME_OVER -> (SPACE or KEY_RETURN) -> TITLE (reset() then go to PLAYING directly for fast restart,
+   OR go back to TITLE — pick fast restart: SPACE in GAME_OVER calls reset() and sets phase=PLAYING)
+
+## Screens
+1. TITLE: "ANTIQUE AUCTION" title, subtitle "BID LOW. BUY TREASURE.", controls
+   ("SPACE = BID", "R = RESTART"), prompt "PRESS SPACE TO START".
+2. GAME: mystery lot box (center ~160,80, shows "?" and a hidden-value silhouette), appraisal band
+   rendered as a horizontal bar [lo..hi] around a 0..250 scale with the band shrinking; a "price"
+   readout showing the climbing $P; bankroll top-left ("CASH $1000"); TIMER bar top; recent-results
+   strip at bottom (last N lots as small colored squares: LIME=profit, RED=loss, GRAY=sold-to-rival).
+3. GAME_OVER: reason ("BANKRUPT" or "TIME UP"), final bankroll, best bankroll,
+   "PRESS SPACE TO RETRY".
+
+## Rendering Notes
+- Appraisal band bar: draw a horizontal scale line from x=40 to x=280 at y=150, mark 0..250.
+  Draw the band [lo..hi] as a filled rect (CYAN=12) on that scale, and the true-value marker hidden.
+  Draw the climbing price as a vertical marker line (YELLOW=10) at the price position.
+- After a bid, reveal V: draw the V marker (LIME if profit>=0, RED if loss) and keep it visible ~45f.
+- Bankroll color: WHITE normally, RED when < 300 (danger).
+- Timer bar: top of screen, width 300, shrinks; color GREEN->YELLOW->RED as time runs low.
+
+## Animation / Timing Rules
+- Band narrows over _observe_frames(frame) then holds at [V-residual, V+residual].
+- Price climbs over _lot_frames(frame).
+- Escalation over GAME_DURATION: residual 25->40, lot_frames 150->100, observe_frames 90->50.
+- Recent-results strip keeps last 12 results.
+
+## Particle System
+- DEAL (profit >= 0): 12 particles LIME=11 + YELLOW=10 burst at lot box, gravity 0.2, life 20-40
+- OVERPAID (profit < 0): 8 particles RED=8, gravity 0.2, life 20-40
+- SOLD TO RIVAL: 4 particles GRAY=13, gravity 0.1, life 15-30
+- Particle velocity range +/-2.0 each axis.
+
+## Floating Text
+- "+$<profit>" (LIME=11) on deal; "-$<loss>" (RED=8, use abs) on overpay; "SOLD" (GRAY=13) on rival.
+- life set to 30 (>=2 so it survives one headless update tick).
+
+## Input
+- SPACE = BID (PLAYING only)
+- SPACE / KEY_RETURN = start (TITLE) / retry (GAME_OVER)
+- R = restart (any phase: reset() then phase=PLAYING)
+- Mouse click on BID button (optional; mirrors SPACE)
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.line(), pyxel.text()
+- pyxel.frame_count, pyxel.mouse_x, pyxel.mouse_y
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use Game.__new__(Game) to bypass __init__ (avoids pyxel.init/run panic).
+- reset() should use getattr(self, "rng", None) / getattr(self, "best_bankroll", 0) style defaults so
+  a factory only needs to set rng + call reset(). Pattern:
+    self.rng = getattr(self, "rng", random.Random())
+  Then in the test factory: g = Game.__new__(Game); g.rng = random.Random(42); g.reset()
+- Never call pyxel.btn/btnp/mouse_x/mouse_y/pyxel.play in testable methods (only in update/draw wrappers).
+- The bid/band/price/escalation logic is all pure numeric -> highly testable.
+
+## Edge Cases
+- bankroll exactly 0 -> BANKRUPT (<=).
+- profit == 0 (price == value) -> treat as DEAL (profit 0, no loss).
+- rng.randint boundary: MIN_V and MAX_V are inclusive.
+- Rapid double BID: _bid() only fires when phase==PLAYING and self.lot is not None.
+- Band never goes out of [0, 255] range (clamp lo >= 0, hi <= 255 if needed for rendering only).
+
+## Implementation Constraints
+- Single file: prototypes/326_antique_auction/main.py
+- ~450-600 lines
+- Type hints on all methods (return annotations included)
+- Use @dataclass for data, Enum for phases
+- No external dependencies beyond pyxel
+- English-only text (Pyxel BDF font lacks CJK glyphs)
+- import pyxel directly (NO TYPE_CHECKING guard)
+- Guard the entry point: if __name__ == "__main__": Game()
