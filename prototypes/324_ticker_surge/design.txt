@@ -1,0 +1,196 @@
+# TICKER SURGE — Stock Market Day Trading Prototype (324_ticker_surge)
+
+## Genre (FIRST in collection)
+Stock Market / Day Trading. NOT a color-match COMBO chain game. This deliberately
+breaks from the saturated "same-color COMBO -> SUPER mode + HEAT" formula.
+
+## The one-sentence fun moment
+Buy the dip right before a rally, then sell at the peak just before the telegraphed
+crash — and watch your P&L explode green.
+
+## Experience hypothesis
+"Holding through a rally feels scary-but-profitable, and cashing out just before the
+crash makes you feel clever." The bubble meter makes danger visible and the timing
+skill-based rather than luck.
+
+## Core mechanic (ONE mechanic)
+Buy low / sell high a single volatile asset whose price oscillates between BULL and
+BEAR phases, with a visible BUBBLE meter that fills during the bull run and triggers
+a TELEGRAPHED CRASH when full. The player reads the bubble to time entries and exits.
+
+## Screen
+320x240, 60fps, display_scale not set (leave default). English-only text (Pyxel font
+has no CJK glyphs). NO emoji/special chars.
+
+## Phase machine
+```python
+class Phase(Enum):
+    TITLE = auto()
+    PLAYING = auto()
+    GAME_OVER = auto()
+```
+Real-time updates happen in PLAYING. No turn-based phases needed.
+
+## State (instance attributes, initialized in reset())
+- cash: float  (start 1000.0)  — liquid money
+- shares: int  (start 0)       — shares held
+- price: float (start 100.0)   — current asset price
+- trend: int   (start +1)      — +1 bull, -1 bear
+- bubble: float (start 0.0)    — 0..BUBBLE_MAX, fills in bull, drains in bear
+- warning: bool (start False)  — crash warning active
+- warn_frames: int (start 0)   — countdown until crash executes
+- crashing: bool (start False) — crash drop in progress
+- crash_frames: int (start 0)  — crash duration countdown
+- frame: int (start 0)         — elapsed frames in PLAYING
+- score: int (start 0)         — display score = int(portfolio_value())
+- best_score: int               — persisted high score (use getattr default 0 in reset)
+- rng: random.Random            — seeded; reset() should use getattr(self,'rng',random.Random()) pattern
+- particles: list[Particle]    — visual only
+- floats: list[FloatingText]   — floating +$ text
+- shake_frames: int (start 0)  — screen shake counter
+- last_action: str              — "BUY"/"SELL"/"" for feedback
+- _sfx_enabled: bool            — use getattr default True (tests set False)
+- price_history: list[float]    — rolling list of past prices for the chart (max ~120 points)
+
+## Dataclasses (frozen=False, mutable)
+```python
+@dataclass
+class Particle:
+    x: float; y: float; vx: float; vy: float; life: int; color: int
+
+@dataclass
+class FloatingText:
+    x: float; y: float; text: str; life: int; color: int
+```
+
+## Price dynamics (the CORE — must be deterministic given rng)
+Config (module-level ints/floats):
+- START_PRICE = 100.0, MIN_PRICE = 20.0, MAX_PRICE = 400.0
+- TREND_SPEED = 0.35   # base drift per frame
+- VOLATILITY = 0.18    # noise amplitude per frame (rng.uniform(-VOL, VOL))
+- BUBBLE_MAX = 100.0
+- BUBBLE_FILL = 0.9    # bubble += per frame in bull
+- BUBBLE_DRAIN = 0.7   # bubble -= per frame in bear
+- CRASH_WARN_MIN = 40, CRASH_WARN_MAX = 90  # warn_frames = rng.randint(min,max)
+- CRASH_MULT = 2.5     # crash drop speed = CRASH_MULT * TREND_SPEED
+- CRASH_FRAMES = 45    # crash duration
+- GAME_DURATION = 3600 # frames = 60s
+
+`_update_market()` order of operations (write EXACTLY this order):
+1. If `crashing`: price -= CRASH_MULT * TREND_SPEED; else: price += trend*TREND_SPEED + rng.uniform(-VOL, VOL). Clamp price to [MIN_PRICE, MAX_PRICE].
+2. Bubble: if trend > 0: bubble = min(BUBBLE_MAX, bubble + BUBBLE_FILL); else: bubble = max(0.0, bubble - BUBBLE_DRAIN).
+3. Transitions (mutually exclusive, in this order):
+   a. if (not warning and not crashing and trend > 0 and bubble >= BUBBLE_MAX): warning=True; warn_frames = rng.randint(CRASH_WARN_MIN, CRASH_WARN_MAX).
+   b. elif warning: warn_frames -= 1; if warn_frames <= 0: warning=False; crashing=True; crash_frames=CRASH_FRAMES.
+   c. elif crashing: crash_frames -= 1; if crash_frames <= 0: crashing=False; trend=-1.
+   d. elif trend < 0 and bubble <= 0.0: trend=+1  (recovery, no warning needed).
+
+This produces a clean cycle: BULL (bubble fills) -> CRASH WARNING (price keeps rising) ->
+CRASH (fast drop) -> BEAR (bubble drains, price drifts down) -> recovery to BULL.
+
+## Actions
+- BUY (SPACE key or click the BUY button): all-in. If cash >= price: qty = int(cash // price);
+  shares += qty; cash -= qty * price; last_action="BUY"; record entry feedback.
+- SELL (B key or click the SELL button): all-out. proceeds = shares * price;
+  cash += proceeds; shares = 0; last_action="SELL".
+
+`_portfolio_value() -> float` returns `cash + shares * price`.
+`_buy()` and `_sell()` are the testable action methods (no pyxel calls inside).
+`score` is recomputed each frame in PLAYING as `int(_portfolio_value())`.
+
+## Risk / Reward
+- Holding shares through the crash loses unrealized value (shares drop with price).
+- Selling during the warning locks in the peak (reward for reading the telegraph).
+- The bubble IS the telegraph: high bubble = crash coming = sell; low bubble = rally coming = buy.
+
+## Failure conditions (PLAYING -> GAME_OVER)
+1. MARGIN CALL: `_portfolio_value() < 400.0` (portfolio dropped below 40% of start).
+2. TIME UP: frame >= GAME_DURATION (3600 frames).
+On game over: best_score = max(best_score, score); phase = GAME_OVER.
+
+## Escalation (difficulty rises over the 60s)
+- Volatility and trend speed ramp: effective trend speed = TREND_SPEED * (1.0 + frame/3600 * 0.8);
+  effective volatility = VOLATILITY * (1.0 + frame/3600 * 1.0). (price gets choppier)
+- Implement via two helper methods `_trend_speed() -> float` and `_volatility() -> float`
+  that read `self.frame`. Use them inside `_update_market()` instead of the raw constants.
+
+## Feedback (visual)
+- Price line chart: draw price_history as a polyline across the bottom 80px, green (LIME=11)
+  when last price > previous, red (RED=8) when falling.
+- Bubble meter: vertical bar on the right side, color YELLOW=10 -> ORANGE=9 -> RED=8 as it fills.
+  Label "BUBBLE" (text) above it.
+- CRASH WARNING: flash "CRASH!" in RED + screen shake while warning active.
+- P&L: big number center-top "P&L +123" in LIME (profit) or RED (loss), computed vs 1000 start.
+- Floating text on BUY/SELL: "+$123" green on profitable sell, red on loss sell, white on buy.
+- Particle burst (green) on profitable sell, (red) on crash.
+- Screen shake (shake_frames) on crash and on losing sell.
+- HUD: CASH, SHARES, PRICE, TIME (seconds remaining) all English labels.
+- Buttons: two rectangles bottom-left labeled "BUY [SPACE]" and "SELL [B]" with hover highlight.
+
+## Colors (raw ints, use these exact numbers — no pyxel.COLOR_* constants in code)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8 ORANGE=9
+YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Pyxel API names (use these EXACT names)
+- pyxel.tri(x1,y1,x2,y2,x3,y3,col)   # NOT pyxel.triangle
+- pyxel.KEY_RETURN                    # NOT pyxel.KEY_ENTER
+- pyxel.MOUSE_BUTTON_LEFT             # NOT MOUSE_LEFT_BUTTON
+- pyxel.mouse_wheel                   # for scroll (not needed here, but do not use KEY_WHEEL_*)
+- pyxel.btnp, pyxel.btn, pyxel.mouse_x, pyxel.mouse_y, pyxel.frame_count, pyxel.play
+- pyxel.circ, pyxel.rect, pyxel.rectb, pyxel.line, pyxel.text, pyxel.cls, pyxel.text
+- Do NOT use pyxel.COLOR_* constants anywhere (headless import fails); use raw ints with a comment.
+
+## Structure (single file main.py, ~450-550 lines)
+```python
+import random
+import pyxel
+from dataclasses import dataclass
+from enum import Enum, auto
+
+# ── Config constants (raw ints/floats) ──
+# ── Phase enum ──
+# ── Dataclasses (Particle, FloatingText) ──
+# ── Game class ──
+class Game:
+    def __init__(self): pyxel.init(...); self.reset(); pyxel.run(self.update, self.draw)
+    def reset(self): ...  # init ALL state; use getattr(self,'rng',random.Random()) so tests can inject
+    def _make_sound(self, *a, **k): pass  # sfx wrapper; tests can stub
+    def update(self): ...  # reads pyxel.btnp/btn/mouse — NOT called headless
+    def draw(self): ...
+    def _update_market(self): ...  # TESTABLE (no pyxel calls)
+    def _buy(self): ...            # TESTABLE
+    def _sell(self): ...           # TESTABLE
+    def _portfolio_value(self) -> float: ...  # TESTABLE
+    def _trend_speed(self) -> float: ...
+    def _volatility(self) -> float: ...
+    def _spawn_particle(...): ...  # TESTABLE (just appends to self.particles)
+    def _spawn_float(...): ...
+if __name__ == "__main__":
+    Game()
+```
+
+## Testability requirements (CRITICAL)
+- `import pyxel` at module top (no TYPE_CHECKING guard).
+- All game logic (market update, buy/sell, portfolio, bubble/trend transitions, game-over
+  conditions) lives in methods that do NOT touch pyxel. Pyxel is only called in __init__,
+  update(), draw(), and the sound/particle spawn wrappers.
+- reset() must use `self.rng = getattr(self, "rng", random.Random())` so a headless test can do
+  `g = Game.__new__(Game); g.rng = random.Random(42); g.reset()` for determinism.
+- reset() must set every attribute WITHOUT assuming prior existence: use plain assignment
+  (self.cash = 1000.0 etc.), not self.particles.clear(). (Tests use Game.__new__ with no pre-init.)
+- __init__ must NOT run when the module is imported (guard with `if __name__ == "__main__": Game()`).
+- Do NOT call pyxel.init/pyxel.run at module import time.
+
+## Three screens (required)
+- TITLE: game title "TICKER SURGE", one-line controls ("SPACE BUY  B SELL"), "PRESS ENTER" hint.
+  ENTER (KEY_RETURN) or SPACE starts the game.
+- PLAYING: the market chart + bubble meter + HUD + BUY/SELL buttons.
+- GAME_OVER: final score (P&L), best score, "MARGIN CALL!" or "TIME UP!" reason, "PRESS R TO RESTART".
+  R key restarts (reset + phase=PLAYING).
+
+## Constraints checklist
+- Single file main.py only.
+- English text only, no CJK, no emoji.
+- 320x240.
+- Score increments should be float-safe (use round() for display).
+- Keep it ~450-550 lines. Do NOT over-engineer.
