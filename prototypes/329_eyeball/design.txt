@@ -1,0 +1,138 @@
+# EYEBALL — Carnival Estimation Arcade (prototype 329_eyeball)
+
+## One-line fun moment
+「一瞬しか見えない量（点の数・バーの割合）を素早く見積もり、RISKY（自信あり）で賭けてズバリ的中させたときの快感」— eyeball a flashed quantity, bet RISKY, and nail it for a 3x PERFECT.
+
+## Experience hypothesis
+Giving the player a brief visual flash of a quantity, then letting them commit an
+estimate with a confidence bet, produces a "I read it correctly and it paid off"
+rush when a risky guess lands dead-on, and a clear "next time look more carefully"
+signal when it misses. The decision is CALIBRATION (how confident am I?), not value
+estimation or ordering — distinct from the 323-328 breakaway series.
+
+## Mechanics hypothesis
+Mechanics: flash a stimulus (dots count / bar fill %), player sets a slider estimate,
+chooses confidence SAFE (1x, loose ±tolerance) vs RISKY (3x, tight ±tolerance), locks.
+Dynamics: the player weighs how sure they are against the multiplier — risky nets 3x
+but only within a tiny window; safe nets 1x but forgives sloppiness. A streak bonus
+rewards sustained accuracy. Aesthetics: the calibration rush (nail a risky guess),
+plus regret when a risky guess is just one off.
+
+## Engine & screen
+- Pyxel 2.x, 320x240, 60fps. Single file main.py.
+- English text ONLY (no CJK/emoji). Default Pyxel 8x8 font.
+
+## Color constants (raw ints — USE THESE EXACTLY)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Fixed Pyxel API names (USE THESE — they are non-negotiable)
+- `pyxel.tri` (NOT pyxel.triangle), `pyxel.trib` for outline triangle
+- `pyxel.KEY_RETURN` (NOT KEY_ENTER)
+- `pyxel.MOUSE_BUTTON_LEFT` (NOT MOUSE_LEFT_BUTTON)
+- `pyxel.mouse_wheel` for scroll
+- `pyxel.btnp(key)`, `pyxel.btn(key)`, `pyxel.mouse_x`, `pyxel.mouse_y`, `pyxel.frame_count`
+- `import pyxel` directly at top (NO TYPE_CHECKING guard)
+
+## Phase machine (Enum `Phase`, defined in main.py)
+- TITLE, PLAYING, GAME_OVER
+
+## Within PLAYING, a task sub-state (plain attribute `self.task_state`, type `TaskState` enum)
+- SHOW: stimulus is visible (dots drawn / bar filled). Lasts `_flash_frames(frame)` frames.
+- GUESS: stimulus hidden. Player adjusts slider + confidence, presses SPACE/click LOCK.
+- REVEAL: result shown for REVEAL_FRAMES=45 frames (score float + particle burst), then next task.
+
+## Task types (Enum `TaskType`)
+- COUNT: dots flash. Truth = random int in `_count_range(frame)`. Slider domain 0..MAX_COUNT(40).
+- FRACTION: horizontal bar filled to X% (truth = random int in 10..90). Slider domain 0..100.
+
+## Confidence (Enum `Confidence`)
+- SAFE: multiplier 1, tolerance ±4
+- RISKY: multiplier 3, tolerance ±1
+
+## Scoring (MUST be exact — write tests against these)
+- On LOCK during GUESS (or SPACE), call `_resolve_guess()`:
+  - `within = abs(self.estimate - self.truth) <= self._tolerance()`
+  - if within:
+    - `mult = 3 if self.confidence is Confidence.RISKY else 1`
+    - `self.streak += 1`
+    - `points = 20 * mult + self.streak * 10`  (streak increments FIRST, so 1st hit = 20*mult + 10)
+    - if `self.estimate == self.truth`: `points += 30` and result label "PERFECT!"
+    - else: result label "HIT!"
+    - `self.score += points`, update `self.best_score = max(best_score, score)`
+  - else:
+    - `self.streak = 0`
+    - `points = 0`, result label "MISS"
+  - advance: `self.tasks_done += 1`; if `self.frame >= GAME_DURATION(3600)` -> GAME_OVER, else `_new_task()`
+- `_tolerance() -> int`: returns 4 if SAFE else 1 (or use a helper `_tolerance_for(conf)`).
+- `_score_guess(estimate, truth, confidence) -> tuple[int, str]` — a PURE function version of the
+  above scoring (points, label) that does NOT mutate self, so tests can call it directly.
+  It must NOT read self.streak; instead accept `streak` as an arg:
+  `_score_guess(estimate, truth, confidence, streak) -> tuple[int, str]`.
+
+## Escalation helpers (pure functions, testable, all take `frame` int)
+- `_flash_frames(frame) -> int` = `max(12, 40 - frame // 90)`  (40f at start -> 12f at 60s)
+- `_count_range(frame) -> tuple[int, int]` = `(5, min(40, 16 + frame // 200))`  (5..16 -> 5..34)
+- `_solve_window(frame) -> int` = `max(120, 260 - frame // 30)`  (260f -> 120f per task)
+
+## Timer & failure
+- GAME_DURATION = 3600 frames (60s). A top TIMER bar depletes.
+- If a task is not locked within `_solve_window(frame)` frames (tracked via
+  `self.task_clock`), auto-resolve as a MISS: streak=0, tasks_done+=1, then advance.
+- Failure = TIME UP (frame >= 3600). Score = total points, best_score persisted via
+  `getattr(self, "best_score", 0)` pattern in reset (do NOT crash if attribute missing).
+
+## State (all reset in `reset()`; use getattr-with-default for rng/best_score/sfx)
+- self.rng = random.Random() (seed injectable; reset() must NOT overwrite a pre-seeded rng)
+- self.frame = 0, self.score = 0, self.streak = 0, self.tasks_done = 0, self.best_score
+- self.phase = Phase.TITLE
+- self.task_type, self.truth, self.estimate, self.confidence = Confidence.SAFE
+- self.task_state, self.task_clock = 0
+- self.particles: list[Particle], self.floats: list[FloatingText]
+- IMPORTANT: assign self.frame=0 and self.rng BEFORE any helper call that reads them.
+
+## Dataclasses
+- `@dataclass class Particle:` x: float, y: float, vx: float, vy: float, life: int, color: int
+- `@dataclass class FloatingText:` x: float, y: float, text: str, life: int, color: int
+
+## Controls
+- TITLE: SPACE or click -> start (reset + phase=PLAYING + _new_task())
+- PLAYING GUESS: LEFT/RIGHT or A/D adjust estimate (wrap/clamp within slider domain);
+  UP/DOWN or W/S toggle confidence; SPACE or ENTER (KEY_RETURN) or click LOCK button -> _resolve_guess()
+- Mouse: clicking on the slider sets estimate = value at click x; clicking SAFE/RISKY buttons
+  sets confidence; clicking LOCK button locks. Left-click only (MOUSE_BUTTON_LEFT).
+- GAME_OVER: SPACE or click -> reset to TITLE (fast restart).
+
+## UI layout (320x240)
+- Top: TIMER bar (x=8,y=6,w=304,h=8) GREEN->YELLOW->RED as it depletes.
+- SCORE top-left (x=8,y=18), BEST top-center, STREAK top-right.
+- Stimulus area: center region y ~ 60..130. COUNT: draw `truth` dots (4px radius) at
+  rng-chosen positions within (x 20..300, y 60..120), no overlap concern. FRACTION: draw an
+  empty bar (x=40,y=95,w=240,h=20, GRAY outline) filled to truth% in the active color (YELLOW
+  or PINK). During GUESS/REVEAL the stimulus is hidden (dots not drawn / bar drawn empty).
+- Task type label: "COUNT THE DOTS" or "GUESS THE %" centered near top of stimulus area.
+- Slider: x=40,y=150,w=240,h=10. Track GRAY, fill LIGHT_BLUE up to estimate fraction, a WHITE
+  marker at the estimate position. Min/max labels at ends.
+- Confidence buttons: two boxes at y=170: "SAFE 1x" (x=60,w=80,h=22) and "RISKY 3x" (x=180,w=80,h=22).
+  Active one has GREEN fill; inactive GRAY.
+- LOCK button: "LOCK (SPACE)" centered at y=200 (x=110,w=100,h=24), hover highlight.
+- REVEAL: floating text (+points / "MISS") + particle burst (8 on hit, 4 on miss) + result label
+  "PERFECT!" in YELLOW / "HIT!" in LIME / "MISS" in RED near the stimulus area.
+- GAME_OVER screen: "TIME UP", "SCORE: N", "BEST: N", "TASKS: N", "SPACE to retry".
+
+## Headless-testability requirements (CRITICAL)
+- `Game.__new__(Game)` bypass pattern: pre-init every attribute `reset()` touches, then call reset().
+  Use `getattr(self, "best_score", 0)` and `getattr(self, "rng", None)` guards in reset() so the
+  factory can be minimal: `g = Game.__new__(Game); g.rng = random.Random(42); g.reset()`.
+- NO pyxel calls in: `_new_task`, `_resolve_guess`, `_score_guess`, `_flash_frames`,
+  `_count_range`, `_solve_window`, `_tolerance`, `reset`, and any scoring/state logic.
+- pyxel input (btnp/btn/mouse_x/mouse_y) may ONLY appear inside `update()` and `_update_playing()`.
+- `_new_task()` MUST use self.rng (not the global random module) for truth + dot positions,
+  so seeded tests are deterministic.
+
+## Three screens
+TITLE (title + controls), PLAYING (stimulus/slider/buttons + SHOW/GUESS/REVEAL), GAME_OVER
+(score + retry). All reachable, fast restart.
+
+## File outputs
+Write ONLY `main.py`. Respond with "DONE" when finished. Do NOT write tests (Hermes writes them).
