@@ -1,0 +1,208 @@
+# Design Spec: 327_photo_finish — Horse Racing Value Betting (Pari-Mutuel)
+
+## Concept (the fun moment, one sentence)
+Spot the gap between a horse's HIDDEN true form and its PUBLIC odds, bet on the
+undervalued long-shot, then watch it charge from behind to WIN at the finish line.
+
+This is the FIRST horse-racing / pari-mutuel betting genre in the collection. It
+DELIBERATELY BREAKS the saturated color-match COMBO/HEAT formula (continuing the
+323/324/325/326 breakaway series): NO color matching, NO COMBO, NO HEAT — pure
+partial-observation value betting + a live simulated race.
+
+## Genre positioning (why this is novel vs existing prototypes)
+- vs 324_ticker_surge (stock trading): no bubble/crash, no all-in/out; this is a
+  multi-horse RACE with betting allocation and a dramatic animated finish.
+- vs 326_antique_auction (value estimation): no static lot; the payoff is resolved
+  by a LIVE RACE (tension + upset + photo-finish), not a number reveal.
+- vs 325_fission (press-your-luck): the decision is WHERE to bet (which horse at
+  what price), informed by a narrowing form gauge, not a single die roll.
+- vs 179/180 (blackjack/poker) and spin_chain (slots): no cards, no reels.
+
+## Screen & constants
+- Pyxel 2.x, 320x240, 60fps, `pyxel.init(320, 240, "Photo Finish", fps=60)`.
+- GAME_DURATION = 3600 frames (60s).
+- HORSES = 5 lanes, LANE_Y = [40, 78, 116, 154, 192] (each lane 38px tall).
+- Track X: START_X = 24, FINISH_X = 280 (finish line drawn at FINISH_X).
+- Horse color per lane (16-color palette ints):
+  RED=8, LIME=11, DARK_BLUE=5, YELLOW=10, PURPLE=2.
+- START_BANK = 1000. MIN_BET = 50. MAX_BET = 1000. STAKE_STEP = 50.
+- FORM_MIN = 50.0, FORM_MAX = 100.0 (hidden true ability, float).
+
+## 16-color palette reference (raw ints — use these, NOT pyxel.COLOR_* constants in logic)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Phase machine
+`class Phase(Enum)`: TITLE, PADDOCK, RACE, RESULT, GAME_OVER.
+Driven by `self.phase`. `update()` dispatches to a per-phase method; `draw()`
+renders per-phase. All logic methods below must NOT call pyxel input functions
+(pyxel.btn/btnp/mouse_x/etc.) — input is handled only in the thin update wrappers.
+
+## Entities (dataclasses, typed)
+```python
+@dataclass
+class Horse:
+    lane: int
+    color: int
+    form: float          # hidden true ability, FORM_MIN..FORM_MAX
+    true_odds: float     # odds the market "should" price (1.5 .. 8.0)
+    odds: float          # current public odds (starts mispriced, drifts to true_odds)
+    gauge_lo: float      # player's uncertain low estimate of form
+    gauge_hi: float      # player's uncertain high estimate of form
+    race_speed: float    # set at race start: form + U(-RACE_SPREAD, +RACE_SPREAD)
+    pos_x: float         # track position, START_X -> FINISH_X
+
+@dataclass
+class Particle:
+    x: float; y: float; vx: float; vy: float; life: int; color: int
+
+@dataclass
+class FloatingText:
+    x: float; y: float; text: str; life: int; color: int
+```
+
+## Game state (instance attributes, initialized in reset())
+- `self.rng: random.Random` — seeded in reset(), injectable for determinism.
+- `self.phase: Phase`, `self.frame: int` (global 60s timer), 
+  `self.bankroll: int`, `self.stake: int`, `self.selected: int` (0..4),
+  `self.horses: list[Horse]`, `self.best_bankroll: int`, `self.score: int`.
+- `self.paddock_frames: int` — countdown within PADDOCK phase.
+- `self.particles: list[Particle]`, `self.floating_texts: list[FloatingText]`.
+- `self.winner_lane: int | None` — set when a horse finishes.
+- `self._last_result: str` — "WIN"/"LOSE"/"" for RESULT screen.
+- `self._game_over_reason: str` — "BANKRUPT" or "TIME UP".
+- `self._bet_placed: bool` — whether the player locked a bet this race.
+
+## Core logic (each must be a separate testable method)
+
+### _generate_horses()
+Create HORSES Horse objects. For each:
+- `form = rng.uniform(FORM_MIN, FORM_MAX)`
+- `true_odds = round(8.0 - (form - FORM_MIN) * (6.5 / (FORM_MAX - FORM_MIN)), 1)`
+  (form 50 -> 8.0, form 100 -> 1.5, linear)
+- initial mispricing: `odds = round(clamp(true_odds * rng.uniform(0.75, 1.45), 1.5, 8.0), 1)`
+- `gauge_lo = FORM_MIN; gauge_hi = FORM_MAX` (full uncertainty)
+- `race_speed = 0.0; pos_x = START_X`
+
+### _gauge_band() -> float
+Returns the current uncertainty half-width, shrinking with paddock progress:
+`band = GAUGE_BAND_START - (GAUGE_BAND_START - GAUGE_BAND_MIN) * progress`
+where `progress = 1 - paddock_frames / PADDOCK_FRAMES_START` (0..1), clamped.
+GAUGE_BAND_START = 25.0, GAUGE_BAND_MIN = 8.0. Use `max(GAUGE_BAND_MIN, band)`.
+
+### _narrow_gauges()
+For each horse, tighten the gauge toward true form:
+`band = _gauge_band()`; `h.gauge_lo = max(h.gauge_lo, h.form - band)`;
+`h.gauge_hi = min(h.gauge_hi, h.form + band)`. (true form is never exactly revealed:
+band stays >= GAUGE_BAND_MIN.)
+
+### _drift_odds()
+Move each horse's `odds` toward `true_odds` (the market corrects mispricing):
+`h.odds += (h.true_odds - h.odds) * ODDS_DRIFT` (ODDS_DRIFT = 0.004 per frame).
+Clamp to [1.5, 8.0]. This makes EARLY bets lock in mispriced value, while LATE
+bets (after observing the gauge) get a worse price on value horses.
+
+### _lock_bet()
+Deduct the stake and start the race:
+- `stake = min(self.stake, self.bankroll)`; `self.bankroll -= stake`; 
+  store `self._bet_stake = stake`, `self._bet_odds = self.horses[self.selected].odds`.
+- Set `race_speed = form + rng.uniform(-race_spread, race_spread)` for EVERY horse
+  (using current `_race_spread()`).
+- `self._bet_placed = True`; `self.phase = Phase.RACE`; `self._last_result = ""`.
+- Spawn a small particle burst at the selected horse.
+
+### _race_spread() -> float
+Escalation: `14.0 + (20.0 - 14.0) * (self.frame / GAME_DURATION)` -> 14.0 to 20.0.
+(Higher spread = more upsets = noisier results.)
+
+### _paddock_frames_start() -> int
+Escalation: `int(240 - (240 - 160) * (self.frame / GAME_DURATION))` -> 240 to 160.
+(Shorter observation window as time passes.)
+
+### _update_paddock() (logic part — do NOT call pyxel input)
+- `self.paddock_frames -= 1`
+- `self._narrow_gauges()`; `self._drift_odds()`
+- if `paddock_frames <= 0`: `self._lock_bet()` (auto-lock at current selection/stake).
+
+### _update_race()
+- For each horse: `h.pos_x += h.race_speed * SPEED_K` (SPEED_K = 0.008).
+  Optionally add tiny per-tick jitter `* rng.uniform(0.98, 1.02)` for visual life.
+- Winner = first horse with `pos_x >= FINISH_X`. Set `self.winner_lane = h.lane`,
+  `self.phase = Phase.RESULT`, call `self._resolve_result()`.
+
+### _resolve_result()
+- If `winner_lane == selected`: WIN.
+  `net = round(_bet_stake * _bet_odds)`; `self.bankroll += net`;
+  `self._last_result = "WIN"`; spawn victory particles + floating text "+{net}".
+  `self.best_bankroll = max(self.best_bankroll, self.bankroll)`.
+- Else: LOSE. `self._last_result = "LOSE"`; floating text "-{_bet_stake}"; screen shake.
+- If `self.bankroll < MIN_BET` and not already over: set `_game_over_reason = "BANKRUPT"`,
+  `self.phase = Phase.GAME_OVER` (skip RESULT lingering). Otherwise stay in RESULT
+  for a short pause (RESULT_FRAMES = 90) then start next race.
+
+### _update_result() (logic part)
+- Decrement `self.result_frames`; when <= 0: if bankroll < MIN_BET -> GAME_OVER
+  ("BANKRUPT"); else `self._start_paddock()` (new race).
+
+### _start_paddock()
+- `self._generate_horses()`; `self.paddock_frames = self._paddock_frames_start()`;
+  `self.phase = Phase.PADDOCK`; `self._bet_placed = False`; `self.winner_lane = None`.
+
+### _update_timer() (called each frame in PLAYING-ish phases)
+- `self.frame += 1`; if `self.frame >= GAME_DURATION`: `_game_over_reason = "TIME UP"`,
+  `self.phase = Phase.GAME_OVER`, `self.score = self.bankroll`.
+
+### _game_over_reason() -> str
+Return the stored reason string.
+
+## Input (thin wrappers in update(), the ONLY place pyxel input is read)
+- TITLE: SPACE or RETURN (KEY_RETURN) -> reset into first PADDOCK.
+- PADDOCK: LEFT/A and RIGHT/D change `self.selected` (wrap 0..4);
+  UP/W increases stake by STAKE_STEP, DOWN/S decreases (clamp [MIN_BET, min(MAX_BET, bankroll)]);
+  SPACE/RETURN -> `_lock_bet()` immediately (lock early = keep mispriced odds).
+- RACE: no input.
+- RESULT: no input (auto-advance).
+- GAME_OVER: SPACE/RETURN -> reset().
+
+## reset()
+Set `self.rng = random.Random()` (or reuse a passed seed), `self.frame = 0`,
+`self.bankroll = START_BANK`, `self.stake = 200`, `self.selected = 0`,
+`self.best_bankroll = START_BANK`, `self.score = 0`, `self.winner_lane = None`,
+`self._last_result = ""`, `self._game_over_reason = ""`, `self._bet_placed = False`,
+`self.particles = []`, `self.floating_texts = []`, then `self._start_paddock()`.
+IMPORTANT: assign rng and all container attributes BEFORE any helper call that uses
+them (the `_start_paddock()` -> `_generate_horses()` -> `rng` chain). Use
+`getattr(self, attr, default)` for rng/best_score so `Game.__new__` headless tests
+can either pre-init or not.
+
+## Drawing (all text in ENGLISH — Pyxel's font has no CJK glyphs)
+- TITLE: game title "PHOTO FINISH" centered, subtitle "Value betting on the turf",
+  instructions "SPACE: start / lock bet", "LEFT/RIGHT: horse", "UP/DOWN: stake".
+- PADDOCK: 5 lanes; for each horse draw a colored rectangle/sprite at START_X,
+  the odds as text (e.g. "x4.2"), and a form gauge bar (vertical or horizontal)
+  showing [gauge_lo, gauge_hi] as an uncertain band (draw the band in GREEN=3 with
+  the midpoint marker). Highlight the selected lane (WHITE outline). Show bankroll,
+  stake, and timer at top.
+- RACE: horses advance left->right; finish line (WHITE vertical line at FINISH_X);
+  draw a small trail/ghost behind each horse (log/replay flavor: past positions).
+- RESULT: "WIN +{net}" in LIME or "LOSE -{stake}" in RED, centered, for 90 frames.
+- GAME_OVER: reason ("BANKRUPT" or "TIME UP"), final score, "SPACE: retry".
+- HUD: bankroll (top-left), timer bar (top), current stake + selected horse.
+
+## Testability requirements (CRITICAL for headless tests)
+- ALL logic methods must be importable and callable WITHOUT a running Pyxel App.
+  They must NOT touch pyxel.btn/btnp/mouse/frame_count/play/etc.
+- `import pyxel` at the TOP of main.py (do NOT use a TYPE_CHECKING guard).
+- Provide `if __name__ == "__main__": Game()` at the bottom so import doesn't run.
+- Use `Game.__new__(Game)` in tests to bypass `pyxel.init`.
+- Use `random.Random(seed)` injectable via `reset()` or a `_make_game(seed)` factory.
+
+## Difficulty escalation summary (over 60s)
+- race_spread 14.0 -> 20.0 (more upsets)
+- paddock window 240 -> 160 frames (less observation time)
+- gauge band min 8.0 (constant; the shrinking start 25 -> 8 already narrows)
+
+## Deliverable
+A SINGLE FILE: `prototypes/327_photo_finish/main.py`. ~400-600 lines.
+Write it completely. Do NOT explore other files in the repo. Do NOT overthink.
+After writing, respond only with "DONE".
