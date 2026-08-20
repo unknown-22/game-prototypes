@@ -1,0 +1,209 @@
+# Rune Break (魔法解析) — Mastermind-style code deduction
+
+## Genre / Concept
+Mastermind-style logic-deduction game. The player is a wizard breaking magical
+rune-locks. Each lock is a HIDDEN sequence of 4 colored runes. The player makes
+guesses, receives feedback (how many runes are "exact" = right color right
+position; how many are "misplaced" = right color wrong position), and must
+logically deduce the code before running out of guesses.
+
+This is the FIRST pure logic-deduction / code-breaking genre in the collection.
+It deliberately BREAKS the saturated color-match COMBO/HEAT formula (8th in the
+323-329 breakaway series): no color matching reflex, no COMBO, no HEAT — pure
+deduction + a limited-resource hint trade.
+
+## Experience hypothesis (体験仮説)
+「限られたフィードバックから隠された符呪の並びを推理し、候補が1つに絞り込めた
+瞬間に解錠する快感」 — the joy of narrowing down the hidden code and cracking it.
+
+## Most fun moment (一番面白い瞬間)
+直前のフィードバックを頼りに候補を1つに絞り込み、ラスト1推測で正解を撃ち抜いて
+「CRACKED!」が弾ける瞬間。
+
+## Mechanics → Dynamics → Aesthetics
+- Mechanics: hidden 4-rune code (distinct colors, no repeats), guess-and-feedback
+  loop (exact/misplaced counts), limited guesses per lock (MAX_GUESSES=8), an
+  ORACLE hint that costs 1 guess, 3 lives, escalating color count.
+- Dynamics: the player decides between (a) submitting an early guess to test a
+  hypothesis (risk: wastes a guess if wrong; reward: higher solve bonus if right),
+  (b) spending a guess on an ORACLE hint for guaranteed information (safe but
+  reduces the solve bonus), or (c) systematic elimination probes. Skill = efficient
+  information gathering.
+- Aesthetics: the "aha" of deduction, the tension of a dwindling guess budget,
+  the payoff of the crack.
+
+## Risk / reward
+- ORACLE HINT: press H (or click HINT button) to spend 1 guess and reveal the true
+  rune color at the currently-selected slot (cursor position). Revealed slots are
+  locked and show the true color. Spending a guess lowers the solve bonus AND
+  brings you one step closer to failing the lock — the player must judge whether
+  guaranteed info is worth the cost. Hinting a slot that is already revealed is a
+  no-op (do not spend a guess).
+- Solve bonus scales with efficiency: fewer guesses used = more points.
+
+## Core constants
+- SCREEN 320x240 @60fps. Use pyxel directly.
+- CODE_LEN = 4 (positions).
+- MAX_GUESSES = 8 (per lock).
+- START_LIVES = 3.
+- Color palette (Pyxel raw ints, order matters):
+  RED=8, LIME=11, DARK_BLUE=5, YELLOW=10, PURPLE=2, CYAN=12
+- Difficulty (num colors available) escalates by codes broken:
+  codes_broken 0 -> 4 colors (RED, LIME, DARK_BLUE, YELLOW)
+  codes_broken 1 -> 5 colors (+ PURPLE)
+  codes_broken >=2 -> 6 colors (+ CYAN)
+  (All codes have DISTINCT colors — no repeats within a code.)
+- Color names for labels (English only, Pyxel font has no CJK): RED, LIME, BLUE,
+  YELLOW, PURPLE, CYAN.
+
+## Phase machine (Phase enum)
+TITLE -> PLAYING -> (SOLVED brief celebration) -> PLAYING (next code) ... ->
+GAME_OVER.
+Use enum members: TITLE, PLAYING, SOLVED, GAME_OVER.
+- TITLE: show title + controls, SPACE/ENTER/click to start.
+- PLAYING: the deduction loop.
+- SOLVED: brief (e.g. 60f) celebration with particle burst + floating text
+  "CRACKED!" + solve bonus, then auto-advance to PLAYING with a new harder code.
+- GAME_OVER: show final score / codes broken / best score, SPACE/ENTER/click to
+  restart.
+
+## Hidden code
+- `self.code: list[int]` of length CODE_LEN, sampled WITHOUT replacement from the
+  currently-available color palette (first `_num_colors()` colors of the palette
+  list). Use `self.rng.sample(palette[:n], CODE_LEN)`.
+- `_num_colors()` returns 4/5/6 based on `self.codes_broken`.
+
+## Feedback algorithm (module-level pure function)
+```python
+def compute_feedback(guess: list[int], code: list[int]) -> tuple[int, int]:
+    # exact = positions where guess[i] == code[i]
+    # total = sum over distinct colors c: min(guess.count(c), code.count(c))
+    # misplaced = total - exact
+    # returns (exact, misplaced)
+```
+This is the canonical Mastermind scoring. It MUST be a module-level function
+(not a method) so it is trivially headless-testable. Handle empty/invalid slots
+gracefully (treat -1 as no color).
+
+## Data classes
+- `@dataclass` `GuessRow`: `slots: list[int]` (length CODE_LEN, -1 = empty),
+  `exact: int`, `misplaced: int`.
+- `@dataclass` `Particle`: `x: float`, `y: float`, `vx: float`, `vy: float`,
+  `life: int`, `color: int`.
+- `@dataclass` `FloatText`: `x: float`, `y: float`, `text: str`, `life: int`,
+  `color: int`.
+
+## Game state (reset() / _init_state())
+Use a `reset()` method (called by `__init__`). Use the getattr-guard pattern for
+persisted attrs so headless tests can use `Game.__new__` + set rng + reset():
+```python
+def reset(self):
+    self.rng = getattr(self, "rng", random.Random())
+    self.best_score = getattr(self, "best_score", 0)
+    # ... full state reset below
+```
+State initialized in reset(): score=0, lives=START_LIVES, codes_broken=0,
+streak=0, max_streak=0, guesses_used=0, current_guess=list of -1 (length CODE_LEN),
+history=[] (list of GuessRow), revealed=set() (positions revealed by hints),
+cursor=0 (selected slot index), phase=Phase.TITLE, frame=0, particles=[],
+floats=[].
+IMPORTANT: `self.rng` MUST be assigned BEFORE calling `_new_code()` (which samples
+from it) inside reset(). Assign `self.rng = getattr(...)` first.
+
+## Core methods (testable, NO pyxel input/btn/mouse access inside)
+- `_new_code()`: generate a fresh `self.code` via rng.sample; reset guesses_used=0,
+  current_guess=[-1]*CODE_LEN, history=[], revealed=set().
+- `_num_colors()` -> int (4/5/6 by codes_broken).
+- `_place_color(slot: int, color: int)`: if slot not in revealed, set
+  current_guess[slot]=color (ignore if slot already revealed).
+- `_clear_slot(slot: int)`: if slot not in revealed, set current_guess[slot]=-1.
+- `_select_slot(slot: int)`: set cursor (clamp 0..CODE_LEN-1).
+- `_submit_guess() -> bool`: if any slot is -1, return False (incomplete). Else
+  compute feedback, append GuessRow, guesses_used+=1. If exact==CODE_LEN ->
+  return True (solved) after calling `_on_solve()`. If guesses_used>=MAX_GUESSES
+  -> return False after calling `_on_fail()`. (Handle "solved on last guess"
+  correctly: solve wins over fail.)
+- `_on_solve()`: streak+=1, max_streak=max(...), codes_broken+=1, compute bonus,
+  add score, set phase=SOLVED, spawn particles/floating text. Solve bonus formula:
+  `bonus = (MAX_GUESSES - guesses_used + 1) * 150` (guesses_used is 1..MAX_GUESSES),
+  plus `streak * 100` streak bonus. Return bonus.
+- `_on_fail()`: lives-=1, streak=0, if lives<=0 -> phase=GAME_OVER (and update
+  best_score) else -> generate a NEW code (`_new_code()`) and stay in PLAYING.
+- `_hint_reveal() -> bool`: if cursor slot already in revealed, return False (no
+  spend). Else guesses_used+=1, add cursor to revealed, set current_guess[cursor]
+  = code[cursor] (show true color). Return True. Do NOT solve/fail on a hint even
+  if guesses_used reaches MAX_GUESSES (the hint is guaranteed info; the player
+  still must submit the final guess). However, if guesses_used already ==
+  MAX_GUESSES before the hint, reject (return False) — cannot spend a guess you
+  don't have.
+
+## update() / draw() wrappers
+The `update()` method reads pyxel input (btn/btnp/mouse). The `draw()` method
+renders. KEEP ALL LOGIC OUT of update/draw — they only translate input to the
+core methods above and render state. This is required for headless testing.
+
+Input mapping (in update(), for PLAYING phase):
+- LEFT/RIGHT or A/D: move cursor between slots (`_select_slot`).
+- 1/2/3/4/5/6 keys: place currently-available palette color into cursor slot
+  (`_place_color(cursor, palette[i-1])`). Ignore colors beyond `_num_colors()`.
+- BACKSPACE or X: clear cursor slot (`_clear_slot`).
+- SPACE / KEY_RETURN: `_submit_guess()`.
+- H key: `_hint_reveal()`.
+- Mouse: clicking a slot selects it; clicking a palette swatch places its color
+  into the selected slot; SUBMIT button submits; HINT button hints. (Mouse is
+  secondary; keyboard is primary and must be fully functional.)
+
+## Scoring summary (for HUD + game over)
+- score = accumulated solve bonuses (+ streak bonuses). best_score persisted.
+- codes_broken and max_streak displayed as progression metrics.
+- Failure: lives reaches 0 -> GAME_OVER (score = final). No timer (pure deduction;
+  time pressure would punish thoughtful play).
+
+## Rendering guidance (320x240)
+- Top HUD bar (18px): SCORE (left), LIVES (hearts/numbers), CODE # (codes_broken+1),
+  STREAK (right).
+- Guess history: up to MAX_GUESSES=8 rows, top-to-bottom, each row = 4 rune
+  squares (~16px, 4px gap) + feedback pegs on the right (exact = small filled
+  WHITE=7 squares, misplaced = small filled GRAY=13 circles; exact pegs listed
+  first). Rows that have a submitted guess show the guess colors + pegs; the
+  current (unsubmitted) guess is the row right below history showing the in-
+  progress slots + a cursor highlight.
+- Revealed slots (from hints) are locked: draw them with a distinct border (e.g.
+  WHITE thick outline) and their true color.
+- Bottom palette bar (~40px): the available color swatches (up to 6), a SUBMIT
+  button, a HINT button. Swatches are squares (~20px). Draw swatch color = the
+  palette color. Highlight the selected slot via cursor.
+- Particles + floating text + a subtle screen shake on SOLVED and on GAME_OVER.
+- Title screen: game title "RUNE BREAK" + one-line controls text (English only).
+- Game over screen: "GAME OVER" + final score + codes broken + best score +
+  "PRESS SPACE TO RESTART".
+
+## Fixed Pyxel API names (MUST use these exactly)
+- `pyxel.tri` (NOT `pyxel.triangle`).
+- `pyxel.KEY_RETURN` (NOT `pyxel.KEY_ENTER`).
+- `pyxel.MOUSE_BUTTON_LEFT`.
+- `pyxel.mouse_wheel` for any scroll (not needed here, but never KEY_WHEEL_*).
+- Only these 16 color constants exist (use raw ints to be safe):
+  BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7
+  RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15.
+  (There is NO COLOR_BLUE, NO COLOR_DARK_RED.)
+
+## Headless-testability requirements (CRITICAL)
+- `import pyxel` at top of main.py (no TYPE_CHECKING guard).
+- Guard `if __name__ == "__main__":` around `Game()` construction / pyxel.run so
+  importing the module headlessly does not call pyxel.init.
+- All game logic lives in methods that do NOT touch pyxel input (btn/btnp/mouse)
+  or pyxel.camera/play. Those are called only from update()/draw().
+- `Game.__new__(Game)` + set `g.rng = random.Random(seed)` + `g.reset()` must
+  yield a fully-initialized, deterministic game (use getattr guards in reset()).
+- Provide `compute_feedback` as a module-level pure function.
+- Provide the raw color palette as a module-level tuple: `PALETTE: tuple[int, ...]
+  = (8, 11, 5, 10, 2, 12)`.
+
+## Constraints
+- Single file: prototypes/330_rune_break/main.py
+- Python 3.12, type hints throughout.
+- English-only text (no CJK in any string).
+- Keep it focused: ONE core mechanic (deduction) + ONE risk/reward (hint trade).
+  No extra systems.
+- ruff and ty (pyright) must pass.
