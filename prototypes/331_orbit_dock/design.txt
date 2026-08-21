@@ -1,0 +1,166 @@
+# SPACE DOCK — Orbital Traffic Control (Pyxel Prototype)
+
+Write a SINGLE-FILE Pyxel 2.x game at `prototypes/331_orbit_dock/main.py`.
+Do NOT read or explore the repo. Do NOT run any commands. Just write the file.
+
+## Core premise (the one fun moment)
+ギリギリまで航路を詰めて、衝突しそうな宇宙船をすれすれで避けながら次々とドッキングさせるのが面白い。
+(Threading ships tightly past each other and docking them one after another is the fun.)
+
+## Experience hypothesis
+Rush to dock as many spacecraft as possible under a 60-second clock, while every
+ship you are NOT currently steering keeps drifting — so ignoring a ship is dangerous.
+
+## Mechanics hypothesis (MDA)
+- Mechanics: ships drift on a fixed heading/speed; the player steers ONE selected ship
+  at a time (rotate heading left/right, throttle up/down); ships dock by reaching a bay
+  slowly; collisions and fuel-out lose ships.
+- Dynamics: juggling multiple drifting ships creates near-miss deconfliction tension and a
+  "who do I save first" priority decision under the clock.
+- Aesthetics: white-knuckle near-misses + the relief of a successful dock.
+
+## Screen / engine
+- 320x240, 60fps, `pyxel.init(320, 240, title="SPACE DOCK", fps=60)`.
+- English-only text (Pyxel's built-in font has NO CJK glyphs). Never use Japanese/emoji
+  in any draw/print string.
+
+## Colors (raw ints — pyxel 16-color palette)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6 WHITE=7 RED=8 ORANGE=9
+YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+Use raw ints directly (e.g. `8` for RED). Do NOT reference `pyxel.COLOR_*` constants.
+
+## Fixed Pyxel API names (must use exactly these)
+- `pyxel.tri(x1,y1,x2,y2,x3,y3,col)`  (NOT `pyxel.triangle`)
+- `pyxel.KEY_RETURN`  (NOT `pyxel.KEY_ENTER`)
+- `pyxel.MOUSE_BUTTON_LEFT`  (NOT `MOUSE_LEFT_BUTTON`)
+- `pyxel.mouse_wheel`  (scroll delta; not needed but do not invent KEY_WHEEL_*)
+- `pyxel.btn`, `pyxel.btnp`, `pyxel.mouse_x`, `pyxel.mouse_y`, `pyxel.frame_count`
+- `pyxel.rect`, `pyxel.rectb`, `pyxel.circ`, `pyxel.circb`, `pyxel.line`, `pyxel.text`,
+  `pyxel.pset`, `pyxel.blt` (only if needed), `pyxel.cls`, `pyxel.play`/`pyxel.stop`
+
+## Data model (dataclasses, type-hinted)
+- `@dataclass class Ship:` fields: `x: float, y: float, heading: float` (degrees, 0 = right,
+  clockwise positive), `speed: float` (px/frame), `fuel: float` (frames remaining),
+  `color: int`, `trail: list[tuple[float,float]]`, `id: int`. Provide `vx/vy` computed
+  via `math.cos(math.radians(heading))*speed` and `math.sin(...)*speed` in a helper
+  `def ship_velocity(heading, speed) -> tuple[float,float]` (module-level pure function).
+- `@dataclass class Bay:` fields: `x: int, y: int, radius: int` (a docking bay).
+- `@dataclass class Particle:` fields: `x, y, vx, vy, life, color`.
+- `@dataclass class FloatingText:` fields: `x, y, text, life, color`.
+- `@dataclass class Spark:` (optional) — can reuse Particle.
+
+## Game class `Game`
+- `__init__`: `pyxel.init(320,240,...)`, load nothing external, `pyxel.run(self.update,
+  self.draw)`. Do NOT load BDF fonts.
+- `reset()`: (re)initialize ALL state. Called by `__init__` and on restart.
+  State fields: `phase`, `ships: list[Ship]`, `bays: list[Bay]`, `particles`,
+  `floating_texts`, `score`, `lives`, `docked`, `lost`, `near_misses`,
+  `frame`, `spawn_timer`, `next_ship_id`, `selected_index: int` (-1 = none),
+  `best_score`, `shake`, `flash`, `rng` (use `random.Random()`; make it easy to seed in tests).
+  Use `getattr(self, "best_score", 0)` guard so `reset()` can be called without pre-init.
+- IMPORTANT init-order: assign `self.rng` BEFORE any helper that reads it.
+
+## Game constants (class-level)
+- `SCREEN_W=320, SCREEN_H=240`
+- `BAYS`: 3 docking bays at fixed positions, e.g. `[(40,60),(160,40),(280,60)]` radius 16
+  (top edge is the "station").
+- `SHIP_RADIUS=4`, `COLLIDE_DIST=8` (two ships within this center distance collide).
+- `DOCK_RADIUS=16`, `DOCK_SPEED_MAX=0.9` (ship must be slower than this to dock).
+- `FUEL_START=1800` (30s of fuel), `FUEL_LOW=300`, `FUEL_CRIT=120`.
+- `LIVES_START=3`, `GAME_DURATION=3600` (60s).
+- `TURN_RATE=3.0` (deg/frame while key held), `THROTTLE_ACCEL=0.03`, `SPEED_MIN=0.0`,
+  `SPEED_MAX=2.5`.
+- Spawn escalation: `spawn_interval(frame)` module-level pure fn returning
+  `max(50, 200 - frame // 24)` (starts 200f, ramps to 50f). Also `spawn_speed(frame)`
+  returning `min(2.2, 0.8 + frame / 1800)` (entry speed ramps up).
+
+## Phases
+`class Phase(Enum):` with members `TITLE, PLAYING, GAME_OVER`. Real-time game, so the
+phase machine is simple. (Do NOT use a turn-based DRAW/PLAYER_TURN/ENEMY_TURN machine.)
+
+## Gameplay rules (implement as pure, testable methods — no pyxel input inside them)
+- `_spawn_ship()`: create a Ship entering from a random screen edge (x=0, x=320, y=0,
+  or y=240) with heading pointing roughly toward screen center, `speed=spawn_speed(frame)`,
+  `fuel=FUEL_START`, color WHITE. Append to `self.ships`. Cap concurrent ships at 6.
+- `_update_ships(dt_frames=1)`: for each ship, integrate position:
+  `vx,vy = ship_velocity(ship.heading, ship.speed)`; `ship.x += vx; ship.y += vy`;
+  wrap position around screen edges (x,y modulo 320/240); decrement `fuel -= 1`;
+  append current pos to `trail` (keep last ~24 points). Do NOT check collisions here.
+- `_check_collisions()`: for every pair of ships within `COLLIDE_DIST`, both are destroyed
+  (remove from list), `lives -= 1`, spawn an explosion particle burst + floating text
+  "CRASH" + screen shake. Return number of collisions.
+- `_check_fuel()`: any ship with `fuel <= 0` is stranded (removed), `lives -= 1`,
+  floating text "STRANDED". Return count.
+- `_check_docking()`: any ship within `DOCK_RADIUS` of any bay AND `speed <= DOCK_SPEED_MAX`
+  docks: removed, `score += dock_score`, `docked += 1`, particles + "DOCKED" text.
+  `dock_score` module-level pure fn `dock_score(fuel_left, speed)` returning
+  `100 + fuel_left // 60` (docking with more fuel left and slower = higher score).
+  NOTE: only the SELECTED ship can dock (simulate the player aiming it) — actually allow
+  any ship to dock if it meets conditions, since drift may naturally bring it in; this is
+  fine and rewards good passive play. Keep it simple: any ship meeting conditions docks.
+- `_steer_selected()`: called from `update()` with button states as arguments so it stays
+  headless-testable. Signature: `_steer_selected(turn_left: bool, turn_right: bool,
+  accel: bool, decel: bool)`. If `selected_index` valid: adjust `heading += TURN_RATE` /
+  `-= TURN_RATE` (wrap to [0,360)), `speed = clamp(speed + THROTTLE_ACCEL, SPEED_MIN,
+  SPEED_MAX)` or `- THROTTLE_ACCEL`. Update selected ship color to YELLOW; unselected WHITE.
+- `_select_at(mx, my)`: set `selected_index` to the ship within `SHIP_RADIUS+6` of (mx,my),
+  nearest if multiple, else -1 (deselect).
+- `_check_game_over()`: `lives <= 0` -> `phase=GAME_OVER` (reason "ALL SHIPS LOST");
+  `frame >= GAME_DURATION` -> `phase=GAME_OVER` (reason "TIME UP"). Persist best_score.
+
+## Scoring
+- Dock: `score += dock_score(fuel_left, speed)` (see above).
+- Near-miss bonus: after `_check_collisions`, if any surviving ship is within
+  `NEAR_MISS=14` of another surviving ship but not colliding, and hasn't been counted this
+  pass, `near_misses += 1` and `score += 20` (once per pass, tracked via a small set of
+  ship id pairs to avoid double count). Keep simple: count distinct near-miss pairs per frame,
+  +20 each, cap contribution low (it's a small bonus).
+- Final score = `score`; `best_score` persisted across runs.
+
+## Difficulty escalation (1-2 knobs only)
+- `spawn_interval` ramps 200f -> 50f (more ships).
+- `spawn_speed` ramps 0.8 -> 2.2 (faster entry).
+
+## HUD / rendering (draw methods)
+- Radar background: NAVY bg, DARK_BLUE concentric circles + crosshair lines (GRAY).
+- Docking bays: LIME filled circle + GREEN ring; when a selected ship is within DOCK_RADIUS,
+  highlight the bay YELLOW.
+- Ships: small triangle (`pyxel.tri`) rotated by heading, color = YELLOW if selected else
+  WHITE; FUEL_LOW -> ORANGE; FUEL_CRIT -> RED (blink). Trails: LIGHT_BLUE fading dots.
+- HUD top bar: SCORE (left, WHITE), DOCKED/LOST counts, LIVES as RED hearts, TIMER bar
+  (top center, LIME->YELLOW->RED as time runs out).
+- Selected ship: draw a LIGHT_BLUE ring around it.
+- Particles + floating text: standard lightweight systems with life countdown.
+- Screen shake via `pyxel.camera(x,y)` — wrap the shake offset in `try/except BaseException`
+  is NOT needed in draw; instead guard all `pyxel.camera`/`pyxel.play`/`pyxel.stop` calls
+  inside draw/update which run only when Pyxel is live. For headless safety, wrap `pyxel.play`
+  and `pyxel.stop` and `pyxel.camera` calls in `try: ... except BaseException: pass`.
+
+## Screens (3 required)
+1. TITLE: "SPACE DOCK" title, controls text:
+   "CLICK SHIP TO SELECT" / "LEFT/RIGHT = TURN" / "UP/DOWN = THROTTLE" /
+   "DOCK SLOWLY IN A BAY" / "PRESS ENTER TO START". SPACE/RETURN -> reset() -> PLAYING.
+2. PLAYING: the game. 60s timer. ESC -> GAME_OVER (optional).
+3. GAME_OVER: final score, docked count, reason (TIME UP / ALL SHIPS LOST),
+   best score, "PRESS ENTER TO RETRY" -> reset() -> PLAYING.
+
+## Headless-testability requirements (CRITICAL)
+- `import pyxel` at top (no TYPE_CHECKING guard). The module imports fine headlessly; only
+  calling Rust-backed pyxel functions panics. Use `Game.__new__(Game)` in tests to bypass
+  `__init__` (which calls `pyxel.init`/`pyxel.run`).
+- ALL game logic must live in methods that do NOT read pyxel input or touch pyxel globals:
+  `_spawn_ship`, `_update_ships`, `_check_collisions`, `_check_fuel`, `_check_docking`,
+  `_steer_selected`, `_select_at`, `_check_game_over`, plus module-level pure functions
+  `ship_velocity`, `spawn_interval`, `spawn_speed`, `dock_score`.
+- `update()` reads input (pyxel.btn/btnp/mouse) and calls the pure methods; `draw()` renders.
+- Use `random.Random()` stored as `self.rng` for all randomness (spawn position/heading),
+  so tests can seed it: `g.rng = random.Random(42)`.
+
+## Constraints / style
+- Single file `main.py`. Type hints everywhere. `from __future__ import annotations`.
+- No external assets, no CJK text, no emoji. Resolution 320x240.
+- Keep it focused: one core mechanic (command-based deconfliction + docking). No extra
+  systems (no upgrades, no map, no story).
+- Aim for ~450-600 lines, clean and modular.
+
+Write the complete file now. Do NOT overthink. After writing, respond with only: DONE
