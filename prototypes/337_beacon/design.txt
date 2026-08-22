@@ -1,0 +1,132 @@
+# BEACON — Avalanche Beacon Search & Rescue (Pyxel prototype design spec)
+
+## Core concept (one sentence)
+You cannot SEE the buried victims — you only read a scalar signal-strength meter that
+grows as you approach. Walk the snowfield by feel, triangulate the strongest signal,
+and DIG at exactly the right spot to rescue the buried skier before the avalanche closes in.
+
+## "Fun moment" (the thing we are prototyping)
+The signal bar climbs as you close in on an invisible victim; you commit to a DIG with
+the meter pegged, and the rescue pops — score + combo + time bonus — versus digging
+blind at a weak signal and getting a MISS that resets your combo and costs time.
+
+## Genre / distinctiveness
+- First "search & rescue / signal triangulation" genre in the collection.
+- Partial observation: victims are never rendered; only `signal_strength(distance)`
+  (a scalar 0..100) is exposed. Direction is unknown — player must move and watch the meter.
+- Deliberately breaks the color-match COMBO/HEAT formula (continues the 323+ breakaway series).
+
+## Experience hypothesis
+"Not knowing exactly where the victim is, but feeling the signal rise as you approach,
+makes finding + digging feel like earned relief — and greedy early digs feel like gambles."
+
+## Mechanics hypothesis (MDA)
+- Mechanics: scalar signal (distance only, no direction) + dig takes time + miss resets combo/costs time.
+- Dynamics: dig early (weak signal, fast, risky) vs triangulate (slow, safe) — a real risk/reward choice.
+- Aesthetics: tension of invisible targets + relief/reward on rescue.
+
+## Screen / constants
+- 320 x 240 @ 60fps, display_scale = 2.
+- GAME_DURATION = 5400 frames (90s) avalanche timer.
+- PLAYER: radius 5, speed 2.0 px/f (diagonal normalized).
+- VICTIMS: 5 at start, +1 spawned every `spawn_interval(frame)` up to VICTIM_MAX = 8.
+  Each victim radius 6, placed at random x in [20,300], y in [20,220].
+- DIG_RADIUS = 14 (rescue succeeds if any victim within this distance of player at dig end).
+- DIG_TIME = 30 frames (0.5s channel; player is locked while digging).
+- RESCUE_TIME_BONUS = 300 frames (+5s). MISS_TIME_PENALTY = 180 frames (-3s).
+- Obstacles: 4 static ROCKS (radius 10) at fixed positions; player collides with them (circle-circle pushback).
+
+## Colors (raw ints — use these, NOT pyxel.COLOR_*)
+BLACK=0, NAVY=1, PURPLE=2, GREEN=3, BROWN=4, DARK_BLUE=5, LIGHT_BLUE=6, WHITE=7,
+RED=8, ORANGE=9, YELLOW=10, LIME=11, CYAN=12, GRAY=13, PINK=14, PEACH=15.
+- Snowfield background: LIGHT_BLUE(6) base with WHITE(7) speckle.
+- Player: RED(8). Rocks: BROWN(4). Signal bar: GREEN(3) low -> YELLOW(10) mid -> RED(8) high.
+- Dig indicator: CYAN(12) ring while channeling. Rescue flash: YELLOW(10). Miss flash: GRAY(13).
+- HUD text: WHITE(7). All text is English-only ASCII (Pyxel font has no CJK glyphs).
+
+## Phase machine (Phase enum)
+- TITLE -> PLAYING (SPACE/ENTER/RETURN to start)
+- PLAYING -> GAME_OVER when avalanche timer <= 0
+- PLAYING -> VICTORY when all victims rescued
+- GAME_OVER / VICTORY -> TITLE (SPACE) for fast restart, and -> PLAYING (R) for instant retry
+Use `pyxel.KEY_RETURN` (NOT KEY_ENTER), `pyxel.KEY_SPACE`.
+
+## Input (Pyxel API names are FIXED)
+- Arrows / WASD move the player (held; diagonal normalized).
+- SPACE starts a dig (and restarts from title/game-over screens).
+- `pyxel.btn`, `pyxel.btnp` are ONLY called inside `update()` / input wrapper methods.
+  NEVER call them inside logic methods that headless tests invoke.
+- Mouse NOT required.
+
+## Scoring / formulas (must be pure, testable, module-level)
+- `signal_strength(dist: float) -> int` = clamp(int(100 - dist * 0.8), 0, 100)
+  (100 when on top of victim, 0 at >= 125 px). Scalar only, no direction.
+- `combo_multiplier(combo: int) -> float` = min(1.0 + combo * 0.5, 4.0)
+- `rescue_score(combo: int) -> int` = int(100 * combo_multiplier(combo))  (combo increments FIRST)
+- `spawn_interval(frame: int) -> int` = max(300, 720 - frame // 15)  (720f -> 300f escalation)
+
+## Game class structure (single file main.py)
+```python
+import pyxel          # plain import, NO TYPE_CHECKING guard
+import random, math
+from dataclasses import dataclass, field
+from enum import Enum
+
+class Phase(Enum): TITLE, PLAYING, GAME_OVER, VICTORY
+
+@dataclass
+class Victim: x: float; y: float; rescued: bool = False
+
+@dataclass
+class Rock: x: float; y: float; radius: int
+
+@dataclass
+class Particle: x: float; y: float; vx: float; vy: float; life: int; color: int
+
+@dataclass
+class FloatingText: x: float; y: float; text: str; life: int; color: int
+
+class Game:
+    def __init__(self): pyxel.init(320,240,...); ...; pyxel.run(self.update, self.draw)
+    def reset(self): ...          # full state init (seeded RNG self.rng = random.Random(seed))
+    def update(self): ...         # input + phase dispatch (calls pyxel.btn/btnp here only)
+    def draw(self): ...           # all rendering
+```
+
+## Testable methods (NO pyxel input inside these; headless tests call them directly)
+- `reset()` then `_init_state()`-style full re-init (assign self.rng = random.Random(42) for determinism)
+- `_move_player(dx, dy)`  — integrate movement + rock collision (circle pushback, clamp to screen)
+- `_nearest_distance(px, py) -> float` — distance to nearest UNRESCUED victim
+- `_signal_at(px, py) -> int` — signal_strength(nearest_distance)
+- `_start_dig()` — set dig_timer = DIG_TIME (only if not already digging)
+- `_finish_dig()` / `_resolve_dig()` — find nearest victim; if dist <= DIG_RADIUS: mark rescued,
+  score += rescue_score(combo), combo += 1, time += RESCUE_TIME_BONUS, spawn particles + floating text;
+  else: combo = 0, time -= MISS_TIME_PENALTY, miss particles. Update max_combo = max(max_combo, combo).
+- `_spawn_victim()` — append a Victim (respect VICTIM_MAX; deterministic via self.rng)
+- `_update_timers()` — decrement avalanche timer + dig timer; spawn victim on interval
+- `_check_game_over()` — set phase GAME_OVER if timer <= 0; VICTORY if all rescued
+- `_update_particles()`, `_update_floating_texts()` — decrement life, remove dead (life <= 0)
+
+## Headless test pattern (test_imports.py)
+- Use `Game.__new__(Game)` + pre-init ALL attributes reset() touches, then call `g.reset()`.
+- For deterministic behavior, set `g.rng = random.Random(42)` AFTER reset() (reset() may overwrite it).
+- Import Phase/Victim/Rock/Particle/FloatingText from main (never redefine locally).
+- Never call update()/draw() or any method touching pyxel.btn/btnp/mouse in tests.
+
+## Three screens (required)
+1. TITLE: game name "BEACON", one-line how-to ("ARROWS move  SPACE dig"), "Press SPACE".
+2. PLAYING: snowfield + rocks + player + signal bar (bottom) + timer bar + score/combo/max_combo HUD.
+3. GAME_OVER / VICTORY: final score, victims rescued / total, max combo, "SPACE menu  R retry".
+
+## Feedback requirements
+- Rescue: YELLOW burst particles + "RESCUED!" floating text + combo bump.
+- Miss: GRAY puff + "MISS" floating text + combo reset + timer visibly drops.
+- Signal meter: rising GREEN->YELLOW->RED bar + beep-rate visual (a small pulse that flashes faster near target).
+- Avalanche timer bar that visibly shrinks; red when < 10s.
+
+## Constraints / pitfalls to avoid (IMPORTANT)
+- English-only text (no CJK). No emoji.
+- `pyxel.tri` not `pyxel.triangle`; `pyxel.KEY_RETURN` not `KEY_ENTER`; `pyxel.mouse_wheel` (unused here).
+- `pyxel.camera()` / `pyxel.play()` must be wrapped in try/except BaseException (headless-safe), or avoided.
+- Do NOT call pyxel input in logic methods.
+- Keep ONE mechanic (signal search + dig). No upgrades, no shop, no story.
