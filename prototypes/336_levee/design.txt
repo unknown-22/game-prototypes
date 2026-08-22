@@ -1,0 +1,162 @@
+# 336 — LEVEE (Dam / Floodgate Management) Design Spec
+
+## Concept
+You are a levee operator during a violent storm. Rain pours into a vertical stack of 3 reservoirs (tanks). Water cascades downward through sluice gates you open/close. When water exits the bottom gate it flows through a turbine and generates POWER (score). Your goal is to survive the 90-second storm without any tank overflowing (LEVEE BREACH = game over), while banking as much power as possible.
+
+The storm is NOT steady: every ~10 seconds a SURGE wave hits — inflow triples for 3 seconds, with a 2-second warning flash before it lands. You must anticipate surges, pre-drain or pre-fill your tanks, and ride the edge of breach.
+
+## "Most Fun Moment" (面白い瞬間)
+「満タン寸前まで水を貯めてヘッド圧を高め、決壊寸前のギリギリでゲートを開いて一気に放流し、大量発電するのが気持ちいい」
+
+## Risk / Reward (the core decision)
+- Holding water HIGH (near capacity 100) in the bottom tank gives a HEAD PRESSURE bonus: power = flow × (1.0 + level/100), up to 2x power at full tank.
+- But high water = close to breach. A surge or neglect can overflow any tank → LEVEE BREACH (game over).
+- Releasing early is safe but low power. So the player constantly chooses: drain now (safe, weak) vs hold (risky, strong).
+
+## Core Mechanic (per simulation tick)
+1. Rain adds inflow to tank 0 (top). Inflow ramps up over the storm and spikes during surges.
+2. Flow cascades downward: gate 0 (tank0→tank1) → gate 1 (tank1→tank2) → gate 2 (tank2→turbine/out).
+3. Each OPEN gate moves `min(GATE_FLOW, source_level)` water from source to destination (gate 2 moves it OUT).
+4. Water exiting gate 2 generates power: `power += int(flow_out * (1.0 + head_level / CAPACITY))` where `head_level` is tank 2's level captured BEFORE the flow subtracts it.
+5. After all flow, check breach: any tank level > CAPACITY → LEVEE BREACH (game over).
+
+## Technical Spec
+- Screen: 320×240, display_scale=2, Pyxel 2.x, 60fps.
+- Simulation: one `_apply_tick()` per frame.
+- STORM_DURATION = 5400 frames (90 seconds). Timer counts down; at 0 → STORM CLEARED (win).
+- Phase machine: `Phase = TITLE, PLAYING, GAME_OVER` (a `cleared: bool` flag distinguishes win vs breach on the game-over screen).
+- Colors (raw ints): BLACK=0, NAVY=1, PURPLE=2, GREEN=3, BROWN=4, DARK_BLUE=5, LIGHT_BLUE=6, WHITE=7, RED=8, ORANGE=9, YELLOW=10, LIME=11, CYAN=12, GRAY=13, PINK=14, PEACH=15.
+
+## Constants (all module-level, used by pure functions)
+- TANKS = 3
+- CAPACITY = 100.0
+- GATE_FLOW = 5.0  (water moved per open gate per tick)
+- BASE_RAIN_MIN = 1.0, BASE_RAIN_MAX = 2.0 (rain ramps linearly 1.0→2.0 over the storm)
+- SURGE_INTERVAL = 600 (frames between surge starts)
+- SURGE_DURATION = 180 (frames a surge lasts)
+- SURGE_WARNING = 120 (frames of warning before surge starts)
+- SURGE_MULT = 3.0 (inflow multiplier during surge)
+- CLEAR_BONUS_PER_WATER = 2.0 (points per unit of remaining water at clear time)
+
+## Pure Module-Level Functions (headless-testable, NO pyxel)
+- `rain_rate(frame: int) -> float` — returns inflow this frame = base ramp `BASE_RAIN_MIN + (BASE_RAIN_MAX-BASE_RAIN_MIN) * (frame / STORM_DURATION)` multiplied by `SURGE_MULT` when `frame % SURGE_INTERVAL` is in `[SURGE_DURATION_OFFSET, SURGE_DURATION_OFFSET+SURGE_DURATION)` (see surge timing below). Clamp to >= 0.
+- `in_surge(frame: int) -> bool` — True during the surge window.
+- `surge_warning(frame: int) -> bool` — True during the `SURGE_WARNING` frames immediately before a surge starts.
+- `power_gain(flow: float, head_level: float) -> int` — `int(flow * (1.0 + head_level / CAPACITY))`.
+
+## Surge Timing (deterministic, frame-based)
+For frame `f`: `cycle = f % SURGE_INTERVAL`. A surge starts at `cycle == SURGE_INTERVAL - SURGE_DURATION` (i.e. the LAST `SURGE_DURATION` frames of each 600-frame cycle). The warning is the `SURGE_WARNING` frames immediately preceding that: `cycle in [SURGE_INTERVAL - SURGE_DURATION - SURGE_WARNING, SURGE_INTERVAL - SURGE_DURATION)`. `in_surge(f)` is True when `cycle >= SURGE_INTERVAL - SURGE_DURATION`. `surge_warning(f)` is True when `cycle in [SURGE_INTERVAL - SURGE_DURATION - SURGE_WARNING, SURGE_INTERVAL - SURGE_DURATION)`.
+
+## Data Classes
+```python
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, title="LEVEE", display_scale=2); reset(); pyxel.run(update, draw)
+    # reset(): init all state below
+    # update(): phase dispatch — TITLE (KEY_RETURN/click -> PLAYING), PLAYING (input + _apply_tick + timer + win/lose check), GAME_OVER (KEY_RETURN -> reset)
+    # draw(): phase dispatch
+
+    # Key state (ALL must be listed for Game.__new__ pre-init):
+    # phase: Phase = TITLE
+    # frame: int = 0
+    # levels: list[float]  (length TANKS, all 0.0)
+    # gates: list[bool]    (length TANKS, gate[i] open=True/False; start all CLOSED=False)
+    # power: float = 0.0   (accumulated; score = int(power))
+    # score: int = 0
+    # best_score: int = 0
+    # cleared: bool = False
+    # particles: list[Particle] = []
+    # floats: list[FloatText] = []
+    # shake_frames: int = 0
+    # flash_frames: int = 0
+    # surge_flash: int = 0  (non-zero while warning should flash)
+```
+
+## Key Methods (Testable — NO pyxel input calls)
+- `_toggle_gate(i: int) -> None` — flips `gates[i]`; spawns a small particle puff.
+- `_apply_tick() -> None` — one sim step (rain → flow gates 0,1,2 → breach check → power). Does NOT touch pyxel.
+- `_check_breach() -> bool` — True if any `levels[i] > CAPACITY`.
+- `_update_playing() -> None` — called from update() during PLAYING: advances `frame`, calls `_apply_tick()`, decrements timer via frame count, checks breach (→ GAME_OVER + `cleared=False` + shake/flash), checks timer end (→ GAME_OVER + `cleared=True` + bank clear bonus into power), updates particles/floats, sets `score = int(power)`.
+- `_update_particles() -> None`, `_update_floats() -> None` — move/decay/filter (life decremented, removed when <= 0).
+- `_spawn_rain_particles(n: int) -> None` — for visual rain; keep in a separate list or reuse particles.
+
+## Phase Machine
+```
+TITLE → (KEY_RETURN or click) → PLAYING → (breach or timer==0) → GAME_OVER → (KEY_RETURN) → reset() → PLAYING
+```
+
+## Screens
+1. TITLE: "LEVEE" title, "Hold water high for power. Don't overflow." + "Keys 1/2/3 toggle gates. ENTER to start". Advance on KEY_RETURN or click.
+2. PLAYING: 3 tanks stacked vertically, water fills from the bottom of each tank. Gates drawn as horizontal bars between tanks (cyan = open, gray = closed). Rain cloud / rain particles at top. HUD: score top-right, timer bar top-left, "SURGE WARNING!" flashing text during warning. Water color: LIGHT_BLUE; near-full water (>85) tint RED to signal danger.
+3. GAME_OVER: if cleared → "STORM CLEARED!" + final score + best; else → "LEVEE BREACH!" + score + best. "ENTER to retry".
+
+## Geometry (fixed, do not exceed 320×240)
+- Tank rects (x=20, w=280): Tank 0 y=30 h=48; Tank 1 y=94 h=48; Tank 2 y=158 h=48.
+- Gates (clickable, x=20, w=280): Gate 0 y=78 h=12; Gate 1 y=142 h=12; Gate 2 (turbine) y=206 h=12.
+- Rain indicator / cloud: top area y=6..24.
+- HUD: score text top-right (x=200, y=8); timer bar top-left (x=8, y=8, w=80, h=6).
+- Water level drawn as a filled rect from the tank bottom up: height = (level / CAPACITY) * 48.
+
+## Input
+- Keys 1/2/3 → toggle gates 0/1/2 (via `pyxel.btnp`).
+- Click on a gate rect → toggle that gate (via `pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)` + `pyxel.mouse_x/y`).
+- KEY_RETURN → start (title) / retry (game over).
+
+## Rendering Notes
+- Water fill: `pyxel.rect(x, y_bottom - h, w, h, color)`; color LIGHT_BLUE(6) normally, RED(8) when level > 85.
+- Gates: open=CYAN(12), closed=GRAY(13). Small "1/2/3" label next to each gate.
+- Surge warning: flashing "SURGE WARNING" text in RED at center-top (blink on `frame % 30 < 15`).
+- Breach: screen shake (pyxel.camera wrapped in try/except BaseException) + red flash + "BREACH" float text.
+- Particles: rain drops (top, vy>0, LIGHT_BLUE), gate-puff (CYAN), breach burst (RED, 20 particles, radial velocities), power spark (YELLOW when water exits gate 2).
+- Floating text: "+<power>" in YELLOW when gate 2 releases water, "BREACH" in RED, "SURGE" in ORANGE.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.rect(), pyxel.text(), pyxel.frame_count, pyxel.mouse_x, pyxel.mouse_y
+- pyxel.text(x, y, str, color) — text is 4px/char; keep labels short (English only, no CJK).
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern (IMPORTANT)
+- `import pyxel` directly at top of main.py (no TYPE_CHECKING guard).
+- Tests use `Game.__new__(Game)` to bypass `__init__`, pre-init ALL instance attributes, then call `reset()`.
+- `_make_game()` factory in test file: `g = Game.__new__(Game); g.particles=[]; g.floats=[]; g.phase=...; ... ; g.reset()`.
+- Never call pyxel.btn/btnp/mouse_x/mouse_y/frame_count in testable methods. `_apply_tick`, `_toggle_gate`, `_check_breach`, `power_gain`, `rain_rate`, `in_surge`, `surge_warning` are all pyxel-free.
+- `_update_playing` advances `frame` and calls `_apply_tick`; tests may set `g.frame` directly and call `_apply_tick` for deterministic steps.
+
+## Edge Cases
+- Empty tanks (all 0): flow moves 0 water, no power, no breach.
+- Tank at exactly CAPACITY: not a breach (must be `>` not `>=`). One more rain tick breaches.
+- Open gate with source level < GATE_FLOW: moves only `min(GATE_FLOW, level)`, source becomes 0.
+- Multiple gates open: water cascades fully in one tick (top→bottom order).
+- Surge + already-high tanks: breach should trigger and set phase=GAME_OVER, cleared=False.
+- Gate 2 open with head_level = CAPACITY: power_gain(flow, 100) == int(flow * 2.0).
+
+## Implementation Constraints
+- Single file: prototypes/336_levee/main.py
+- ~450-650 lines, type hints on all methods, @dataclass for Particle/FloatText, Enum for Phase.
+- No external deps beyond pyxel. English-only text. import pyxel directly.
