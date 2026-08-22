@@ -2679,7 +2679,20 @@
   },
   {
     "id": "334_shell_chain",
-    "name": "Shell Chain",
-    "path": "334_shell_chain.html"
+    "title": "Shell Chain",
+    "idea": "シェルゲーム（カップの玉当て）をテーマにした視覚追跡ゲーム。カップを混ぜる動きを見て、色付き玉の位置を記憶して当てる。",
+    "score": 31.1,
+    "status": "Shell Game / visual-memory-tracking prototype complete (color-match chain burst).",
+    "href": "334_shell_chain.html",
+    "genre": "Shell Game / Color Tracking"
+  },
+  {
+    "id": "335_scanline",
+    "title": "SCANLINE",
+    "idea": "空港の手荷物X線検査官をテーマにした部分観測ゲーム。ベルトコンベアを流れる荷物の中から、ごちゃごちゃした所持品のシルエットに隠れた危険物（銃・刃物・液体ボトル）を見抜いてFLAGする。面白い瞬間は「ベルトが加速して流れていく中、雑多なシルエットの隙間から危険物を見つけ出し、出口すれすれでFLAGを叩いてコンボを伸ばす瞬間」。リスクとリターン:危険物のFLAGはコンボ倍率（最大4倍）で高得点だが、誤検知(FALSE ALARM)はセキュリティ-10、見逃し(MISS)は-15でどちらもコンボ消失。セキュリティ0でSECURITY BREACH、90秒のシフト終了でSHIFT COMPLETE。スコア=合計得点、best_score記録。game_idea_factory #7(Score 30.75 『部分観測』)のフックを、順序付けや推定ではなく「視覚スキャンによる危険物検出」に再解釈。コレクション初のX線検査/危険物検出ジャンル。",
+    "score": 30.75,
+    "status": "X-ray baggage screening / contraband detection prototype complete — 320x240@60fps (display_scale=2), bags (BAG_W=64,BAG_H=40) scroll left->right at bag_speed(frame)=1.0->3.2, each holding 2..max_items(frame)=2->5 item silhouettes (BOOK=GREEN safe, SHOE=BROWN safe, BOTTLE=LIGHT_BLUE subtle contraband, GUN=DARK_BLUE obvious contraband, KNIFE=WHITE subtle contraband). Click toggles a bag's FLAG; a bag resolves when it exits (x+BAG_W>=320): flagged+contraband=CAUGHT, flagged+safe=FALSE_ALARM, passed+contraband=MISS, passed+safe=PASS. CAUGHT: score+=int(100*combo_multiplier(combo)), combo+1, security=min(100,+5); PASS: +20, combo+1; FALSE_ALARM: combo=0, security-10; MISS: combo=0, security-15. combo_multiplier(combo)=min(1.0+combo*0.5,4.0). SECURITY_START=100; 0=SECURITY BREACH, frame>=5400=SHIFT COMPLETE. Escalation (4 knobs): spawn_interval 90->28f (max(28,90-frame//45)), bag_speed 1.0->3.2, max_items 2->5, contraband_chance 0.30->0.55. Pure module-level fns (combo_multiplier, resolve_outcome, spawn_interval, bag_speed, max_items, contraband_chance) + headless-testable methods (_spawn_bag, _update_bags, _resolve_bag, _apply_outcome, _flag_at, _check_game_over, _update_particles, _update_floating_texts) — no pyxel input in logic. Particles (CAUGHT 10 YELLOW / PASS 4 LIME / FALSE_ALARM 8 GRAY / MISS 8 RED) + floating text + screen shake (pyxel.camera try/except BaseException). 3 screens (Title/Playing/GameOver with fast restart). 434 lines main.py, 34 headless tests, ruff+ty OK. OpenCode CLI (opencode-go/deepseek-v4-pro, no --thinking) — 2nd attempt (1st explored repo instead of writing; fixed with hard 'write immediately' directive); zero Hermes code fixes. First X-ray screening / contraband-detection genre. Deliberately continues the 323+ breakaway series (no color-match, no COMBO/HEAT formula) — partial observation reinterpreted as visual scanning, not ordering or estimation.",
+    "href": "335_scanline.html",
+    "genre": "X-Ray Baggage Screening / Contraband Detection"
   }
 ]

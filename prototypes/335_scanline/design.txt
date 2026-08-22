@@ -1,0 +1,237 @@
+# 335 — SCANLINE: Baggage X-Ray Contraband Scanner Design Spec
+
+## Concept
+You are the X-ray scanner operator at an airport security checkpoint. Suitcases and carry-on bags
+scroll along a conveyor belt from left to right. Each bag contains 2-5 items rendered as simple
+silhouettes (book, shoe, bottle, gun, knife). Some bags contain CONTRABAND (gun, knife, liquid
+bottle); others are SAFE. You must FLAG contraband bags before they exit the scanner, and let
+safe bags pass. Flagging is a single click on a bag (toggle). A bag resolves when it scrolls off
+the right edge: flagged+contraband = CAUGHT (big score), flagged+safe = FALSE ALARM (penalty),
+passed+contraband = MISS (penalty), passed+safe = PASS (small score). Your SECURITY rating drains
+on errors; hit 0 = SECURITY BREACH (game over). A 90-second shift ends with SHIFT COMPLETE and
+your final score. The core tension is reading silhouettes fast enough to catch subtle contraband
+(gun/blade hidden among clutter) without false-alarming on safe bags — flag aggressively to build
+combo, or conservatively to protect your rating.
+
+## "Most Fun Moment" (面白い瞬間)
+ベルトが加速してシルエットが流れていく中、ごちゃごちゃした荷物の隙間から銃や刃物のシルエットを見つけ出し、出口すれすれでFLAGを叩いてコンボを伸ばす瞬間。
+
+## Experience Hypothesis (体験仮説)
+「速く流れる荷物の中から危険物だけを見抜く」という部分観測の判断に、誤検知と見逃しの双方にペナルティがあることで、「怪しいものはFLAGすべきか、安全を優先して通すか」の駆け引きを毎回迫られ、コンボが伸びるほど次の一袋が気持ちよくなる。
+
+## Core Mechanic
+1. Bags spawn on the left edge and scroll right at `bag_speed(frame)` px/frame.
+2. Player clicks a bag (any time on screen) to TOGGLE its FLAG (red border = flagged). Click again to un-flag.
+3. When a bag's right edge passes `RESOLVE_X` (right edge of screen), it resolves:
+   - flagged & has_contraband -> CAUGHT
+   - flagged & safe -> FALSE_ALARM
+   - not flagged & has_contraband -> MISS
+   - not flagged & safe -> PASS
+4. Resolution updates score/combo/security and spawns particles + floating text.
+5. Escalation over the 90s shift: belt speeds up, bags spawn faster, bags hold more items, contraband becomes more common.
+6. Security <= 0 -> GAME_OVER ("SECURITY BREACH"). frame >= 5400 -> GAME_OVER ("SHIFT COMPLETE").
+7. Risk/reward: flagging aggressively maximizes catches (combo multiplier) but risks false alarms; passing conservatively avoids false alarms but risks misses. Both error types reset the combo AND drain security.
+
+## Scoring & Economy (exact, testable)
+- SECURITY_START = 100
+- combo = consecutive correct decisions (CAUGHT or PASS). Reset to 0 on FALSE_ALARM or MISS.
+- combo_multiplier(combo) = min(1.0 + combo * 0.5, 4.0)   # 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0(cap)
+- CAUGHT: score += int(100 * combo_multiplier(combo)); combo += 1; security = min(100, security + 5); caught += 1
+- PASS:   score += 20; combo += 1; passed += 1
+- FALSE_ALARM: score += 0; combo = 0; security -= 10; false_alarms += 1
+- MISS:   score += 0; combo = 0; security -= 15; missed += 1
+- max_combo tracks the highest combo ever reached.
+- best_score persisted across games via `getattr` guard (not reset by reset()).
+
+## Technical Spec
+- Screen: 320x240, display_scale=2, 60fps, Pyxel 2.x
+- Belt: bags travel left->right at y = BAG_Y (bag vertical center ~ 120).
+- Bag size: BAG_W = 64, BAG_H = 40. Bags spaced along x.
+- RESOLVE_X = 320 (bag resolves when x + BAG_W >= 320, i.e. fully exited).
+- Shift length = 5400 frames (90 seconds).
+- Phase machine: TITLE, PLAYING, GAME_OVER.
+- `import pyxel` directly at top (no TYPE_CHECKING guard).
+
+## Data Classes
+```python
+from dataclasses import dataclass
+from enum import Enum, auto
+
+class Phase(Enum):
+    TITLE = auto()
+    PLAYING = auto()
+    GAME_OVER = auto()
+
+@dataclass(frozen=True)
+class ItemDef:
+    kind: str        # "BOOK","SHOE","BOTTLE","GUN","KNIFE"
+    contraband: bool
+    subtle: bool     # True = small/hard to see silhouette
+    color: int
+
+@dataclass
+class Bag:
+    x: float
+    y: float
+    items: list[ItemDef]   # 2..5 items
+    flagged: bool = False
+    resolved: bool = False
+    def has_contraband(self) -> bool:
+        return any(it.contraband for it in self.items)
+
+@dataclass
+class Particle:
+    x: float
+    y: float
+    vx: float
+    vy: float
+    life: int
+    color: int
+
+@dataclass
+class FloatingText:
+    x: float
+    y: float
+    text: str
+    life: int
+    color: int
+```
+
+## Item Definitions (constants)
+ITEMS: dict[str, ItemDef] with raw-int colors:
+- "BOOK"   : safe,      not subtle, GREEN=3
+- "SHOE"   : safe,      not subtle, BROWN=4
+- "BOTTLE" : contraband, subtle,    LIGHT_BLUE=6
+- "GUN"    : contraband, not subtle, DARK_BLUE=5
+- "KNIFE"  : contraband, subtle,    WHITE=7
+
+SAFE_ITEMS = ["BOOK", "SHOE"]; CONTRABAND_ITEMS = ["BOTTLE", "GUN", "KNIFE"].
+
+## Game Class Structure
+```python
+class Game:
+    # __init__: pyxel.init(320, 240, title=..., display_scale=2, fps=60); pyxel.run(self.update, self.draw)
+    # reset(): init all state below (EXCEPT best_score)
+    # update(): phase dispatch (TITLE/PLAYING/GAME_OVER), calls _update_bags/_update_particles/_update_floating_texts
+    # draw(): phase dispatch
+
+    # Key state (list ALL — critical for Game.__new__ pre-init):
+    # phase: Phase
+    # rng: random.Random
+    # bags: list[Bag]
+    # frame: int
+    # spawn_timer: int
+    # score: int
+    # combo: int
+    # max_combo: int
+    # security: int
+    # caught: int
+    # missed: int
+    # false_alarms: int
+    # passed: int
+    # best_score: int      # NOT reset by reset()
+    # end_reason: str      # "SECURITY BREACH" or "SHIFT COMPLETE"
+    # particles: list[Particle]
+    # floating_texts: list[FloatingText]
+```
+
+## Module-level pure functions (testable, no pyxel)
+- `combo_multiplier(combo: int) -> float` = min(1.0 + combo*0.5, 4.0)
+- `resolve_outcome(has_contraband: bool, flagged: bool) -> str` = "CAUGHT"/"FALSE_ALARM"/"MISS"/"PASS"
+- `spawn_interval(frame: int) -> int` = max(28, 90 - frame // 45)
+- `bag_speed(frame: int) -> float` = 1.0 + frame * (2.2 / 5400)
+- `max_items(frame: int) -> int` = min(5, 2 + frame // 1800)
+- `contraband_chance(frame: int) -> float` = min(0.55, 0.30 + frame * (0.25 / 5400))
+
+## Key Methods (testable — NO pyxel input calls)
+- `reset()` — set all state (phase=TITLE, security=100, frame=0, score=0, combo=0, max_combo=0, counters=0, bags=[], particles=[], floating_texts=[], spawn_timer=spawn_interval(0), end_reason=""; preserve best_score via getattr)
+- `start_game()` — reset round state, phase=PLAYING (keeps best_score)
+- `_spawn_bag()` — build a Bag with item_count in [2..max_items(frame)], choose items via self.rng: decide contraband with probability contraband_chance(frame); if contraband, pick 1..2 contraband items from CONTRABAND_ITEMS (weighted subtle), fill rest with safe items; x = -BAG_W - rng range, y = BAG_Y. Appends to self.bags.
+- `_update_bags()` — move each bag x += bag_speed(frame); spawn when spawn_timer<=0 (decrement each call, reset after spawn); resolve bags whose x >= RESOLVE_X.
+- `_resolve_bag(bag: Bag) -> str` — compute resolve_outcome(bag.has_contraband(), bag.flagged); call `_apply_outcome`; mark bag.resolved=True; return outcome.
+- `_apply_outcome(outcome: str, bag: Bag) -> None` — mutate score/combo/max_combo/security/counters per the scoring table; spawn particles + floating text (guarded so it works headless: particles/floating_texts are plain lists, no pyxel calls).
+- `_flag_at(x: float, y: float) -> bool` — if a bag's bounding box contains (x,y), toggle its flag, return True; else False.
+- `_check_game_over() -> None` — if security <= 0: phase=GAME_OVER, end_reason="SECURITY BREACH"; elif frame >= 5400: phase=GAME_OVER, end_reason="SHIFT COMPLETE". Update best_score = max(best_score, score).
+- `_update_particles()` — move by velocity, decrement life, drop dead (life<=0).
+- `_update_floating_texts()` — decrement life, drop dead (life<=0).
+
+## Phase Machine
+```
+[TITLE] --(SPACE/RETURN/click)--> [PLAYING] --(auto: security<=0 or frame>=5400)--> [GAME_OVER] --(SPACE/RETURN/click)--> [TITLE]
+```
+
+## Screens
+1. TITLE: "SCANLINE" big title, subtitle "Baggage X-Ray", controls text (CLICK=flag, SPACE=start), best score. Advance on SPACE/RETURN or click.
+2. PLAYING: conveyor belt (dark band), bags with item silhouettes, flag = RED border highlight, HUD top bar (SCORE, SECURITY bar with color LIME->YELLOW->RED, COMBO, TIME bar), particles + floating text on resolve.
+3. GAME_OVER: "SECURITY BREACH" or "SHIFT COMPLETE", final score, best score, caught/missed/false-alarm counts, "SPACE to retry".
+
+## Rendering Notes
+- Belt: horizontal band y in [BAG_Y-30, BAG_Y+30], NAVY fill + GRAY top/bottom rails; moving dashes via (frame // 4) % spacing for conveyor feel.
+- Bag: GRAY rounded rect (rect + corners), DARK_BLUE fill; flagged -> RED border.
+- Items drawn inside bag left-to-right, each ~14px wide:
+  - BOOK: small GREEN rect (8x12)
+  - SHOE: BROWN rect (10x8) + smaller toe rect
+  - BOTTLE: LIGHT_BLUE rect (6x10) + cap rect (4x3) on top (subtle, small)
+  - GUN: DARK_BLUE "L" shape = two rects (barrel 12x4 + grip 4x8)
+  - KNIFE: WHITE thin line (pyxel.line, 10px diagonal) + handle rect (subtle, small)
+- HUD: score (WHITE text), SECURITY bar (100px, LIME/YELLOW/ORANGE/RED by threshold), COMBO xN, timer bar (bottom), counters.
+- Particles: CAUGHT 10 YELLOW burst; FALSE_ALARM 8 GRAY; MISS 8 RED; PASS 4 LIME.
+- Floating text: "+100" (YELLOW) on CAUGHT, "FALSE ALARM!" (ORANGE), "MISSED!" (RED), "+20" (LIME).
+- Screen shake on MISS and FALSE_ALARM via pyxel.camera guarded by try/except BaseException (headless-safe).
+
+## Animation / Timing Rules
+- spawn_timer decremented once per _update_bags call; when <=0 spawn one bag and reset to spawn_interval(frame).
+- frame incremented once per PLAYING update.
+- Particle life: 15..30 frames; velocity range ~±1.5 px/f; no gravity (flat belt feel), or slight downward gravity 0.03.
+- Floating text life: 40 frames, drift upward 0.5 px/f.
+
+## Particle System (per event)
+- CAUGHT: 10 particles, YELLOW=10, speed 1.5, life 20
+- PASS: 4 particles, LIME=11, speed 0.8, life 15
+- FALSE_ALARM: 8 particles, GRAY=13, speed 1.0, life 20
+- MISS: 8 particles, RED=8, speed 1.2, life 25
+
+## Input
+- SPACE / RETURN: start (TITLE), retry (GAME_OVER)
+- CLICK (MOUSE_BUTTON_LEFT): flag/unflag bag (PLAYING); advance screens (TITLE/GAME_OVER)
+- No keyboard movement needed.
+
+## Fixed Pyxel API Names (CRITICAL — DO NOT DEVIATE)
+- pyxel.tri (NOT pyxel.triangle)
+- pyxel.KEY_RETURN (NOT pyxel.KEY_ENTER)
+- pyxel.MOUSE_BUTTON_LEFT (NOT MOUSE_LEFT_BUTTON)
+- pyxel.mouse_wheel (NOT KEY_WHEEL_UP/DOWN)
+- pyxel.btn(), pyxel.btnp(), pyxel.circ(), pyxel.rect(), pyxel.rectb(), pyxel.line(), pyxel.text()
+- pyxel.frame_count, pyxel.mouse_x, pyxel.mouse_y
+- pyxel.COLOR_* constants: only use the 16 listed below
+
+## Color Constants (raw ints)
+BLACK=0 NAVY=1 PURPLE=2 GREEN=3 BROWN=4 DARK_BLUE=5 LIGHT_BLUE=6
+WHITE=7 RED=8 ORANGE=9 YELLOW=10 LIME=11 CYAN=12 GRAY=13 PINK=14 PEACH=15
+
+## Headless Testing Pattern
+- Use `Game.__new__(Game)` to bypass __init__ (avoids pyxel.init/run panic).
+- Pre-init ALL instance attributes before calling reset().
+- `_make_game()` factory in test file: g = Game.__new__(Game); pre-init; g.reset(); g.rng = random.Random(42); g.start_game().
+- Never call pyxel.btn/btnp/mouse_x/mouse_y/frame_count in testable methods.
+- Test pure functions directly (combo_multiplier, resolve_outcome, spawn_interval, bag_speed, max_items, contraband_chance).
+- Test state methods by constructing bags manually and calling _resolve_bag / _apply_outcome, asserting score/combo/security/counters.
+
+## Edge Cases
+- Empty bag list (update no-ops).
+- Bag with all safe items and flagged -> FALSE_ALARM.
+- Bag with contraband and not flagged -> MISS.
+- combo_multiplier cap at 4.0 (combo >= 6).
+- security clamp at 100 on catch; security can go negative -> game over.
+- resolve_outcome ordering: flagged+contraband wins over any other flag state.
+- Multiple bags overlapping on screen — click resolves to topmost (last in list) first.
+
+## Implementation Constraints
+- Single file: prototypes/335_scanline/main.py
+- ~500-700 lines
+- Type hints on all methods
+- Use @dataclass for data, Enum for phases
+- No external dependencies beyond pyxel and stdlib (random, dataclasses, enum, typing)
+- English-only text (Pyxel BDF font lacks CJK glyphs); no emoji/special chars
+- import pyxel directly (no TYPE_CHECKING guard)
+- Write the full file NOW. Do NOT overthink. After writing respond only with "DONE".
